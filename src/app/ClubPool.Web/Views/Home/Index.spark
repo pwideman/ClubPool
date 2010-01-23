@@ -1,0 +1,11 @@
+﻿<viewdata model="ClubPool.Web.Controllers.HomeIndexViewModel"/>
+
+<content name="title">ClubPool</content>
+
+<h3>Welcome to the Club Pool League Website</h3>
+
+<h4>About the league</h4>
+<p>
+About...
+</p>
+<p>Welcome ${Model.Username}</p>

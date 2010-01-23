@@ -1,0 +1,165 @@
+﻿<error errorId="28ad1a99-6bed-41b7-98a8-237b9631af42" host="BAMA" type="System.Net.Sockets.SocketException" message="No connection could be made because the target machine actively refused it 127.0.0.1:3306" source="System" detail="FluentNHibernate.Cfg.FluentConfigurationException: An invalid or incomplete configuration was used while creating a SessionFactory. Check PotentialReasons collection, and InnerException for more detail.&#xD;&#xA;&#xD;&#xA;  * Database was not configured through Database method.&#xD;&#xA; ---&gt; MySql.Data.MySqlClient.MySqlException: Unable to connect to any of the specified MySQL hosts. ---&gt; System.Net.Sockets.SocketException: No connection could be made because the target machine actively refused it 127.0.0.1:3306&#xD;&#xA;   at System.Net.Sockets.Socket.EndConnect(IAsyncResult asyncResult)&#xD;&#xA;   at MySql.Data.Common.StreamCreator.CreateSocketStream(IPAddress ip, Boolean unix)&#xD;&#xA;   at MySql.Data.Common.StreamCreator.GetStream(UInt32 timeout)&#xD;&#xA;   at MySql.Data.MySqlClient.NativeDriver.Open()&#xD;&#xA;   --- End of inner exception stack trace ---&#xD;&#xA;   at MySql.Data.MySqlClient.NativeDriver.Open()&#xD;&#xA;   at MySql.Data.MySqlClient.Driver.Create(MySqlConnectionStringBuilder settings)&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlPool.CreateNewPooledConnection()&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlPool.GetPooledConnection()&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlPool.TryToGetDriver()&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlPool.GetConnection()&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlConnection.Open()&#xD;&#xA;   at NHibernate.Connection.DriverConnectionProvider.GetConnection()&#xD;&#xA;   at NHibernate.Tool.hbm2ddl.SuppliedConnectionProviderConnectionHelper.Prepare()&#xD;&#xA;   at NHibernate.Tool.hbm2ddl.SchemaMetadataUpdater.GetReservedWords(Dialect dialect, IConnectionHelper connectionHelper)&#xD;&#xA;   at NHibernate.Tool.hbm2ddl.SchemaMetadataUpdater.Update(ISessionFactory sessionFactory)&#xD;&#xA;   at NHibernate.Impl.SessionFactoryImpl..ctor(Configuration cfg, IMapping mapping, Settings settings, EventListeners listeners)&#xD;&#xA;   at NHibernate.Cfg.Configuration.BuildSessionFactory()&#xD;&#xA;   at FluentNHibernate.Cfg.FluentConfiguration.BuildSessionFactory()&#xD;&#xA;   --- End of inner exception stack trace ---&#xD;&#xA;   at FluentNHibernate.Cfg.FluentConfiguration.BuildSessionFactory()&#xD;&#xA;   at SharpArch.Data.NHibernate.NHibernateSession.CreateSessionFactoryFor(String[] mappingAssemblies, AutoPersistenceModel autoPersistenceModel, Configuration cfg, IPersistenceConfigurer persistenceConfigurer)&#xD;&#xA;   at SharpArch.Data.NHibernate.NHibernateSession.AddConfiguration(String factoryKey, String[] mappingAssemblies, AutoPersistenceModel autoPersistenceModel, String cfgFile, IDictionary`2 cfgProperties, String validatorCfgFile, IPersistenceConfigurer persistenceConfigurer)&#xD;&#xA;   at SharpArch.Data.NHibernate.NHibernateSession.Init(ISessionStorage storage, String[] mappingAssemblies, AutoPersistenceModel autoPersistenceModel, String cfgFile, IDictionary`2 cfgProperties, String validatorCfgFile, IPersistenceConfigurer persistenceConfigurer)&#xD;&#xA;   at SharpArch.Data.NHibernate.NHibernateSession.Init(ISessionStorage storage, String[] mappingAssemblies, AutoPersistenceModel autoPersistenceModel)&#xD;&#xA;   at ClubPool.Web.MvcApplication.InitializeNHibernateSession()&#xD;&#xA;   at ClubPool.Web.MvcApplication.&lt;Application_BeginRequest&gt;b__3()&#xD;&#xA;   at SharpArch.Data.NHibernate.NHibernateInitializer.InitializeNHibernateOnce(Action initMethod)&#xD;&#xA;   at ClubPool.Web.MvcApplication.Application_BeginRequest(Object sender, EventArgs e)&#xD;&#xA;   at System.Web.HttpApplication.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)&#xD;&#xA;&#xD;&#xA;  * Database was not configured through Database method.&#xD;&#xA;" time="2010-01-15T12:49:22.4314042Z">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_KEEP_ALIVE:300&#xD;&#xA;HTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;HTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.7&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip,deflate&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:en-us,en;q=0.5&#xD;&#xA;HTTP_COOKIE:.ASPXANONYMOUS=5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00&#xD;&#xA;HTTP_HOST:localhost:1062&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 (.NET CLR 3.5.30729)&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Keep-Alive: 300&#xD;&#xA;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7&#xD;&#xA;Accept-Encoding: gzip,deflate&#xD;&#xA;Accept-Language: en-us,en;q=0.5&#xD;&#xA;Cookie: .ASPXANONYMOUS=5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00&#xD;&#xA;Host: localhost:1062&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 (.NET CLR 3.5.30729)&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="D:\code\clubpool\trunk\ClubPool\app\ClubPool.Web\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="bama\Paul" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="0" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="" />
+    </item>
+    <item name="HTTPS">
+      <value string="" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/favicon.ico" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="D:\code\clubpool\trunk\ClubPool\app\ClubPool.Web\favicon.ico" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="GET" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/favicon.ico" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="1062" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="" />
+    </item>
+    <item name="URL">
+      <value string="/favicon.ico" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_KEEP_ALIVE">
+      <value string="300" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" />
+    </item>
+    <item name="HTTP_ACCEPT_CHARSET">
+      <value string="ISO-8859-1,utf-8;q=0.7,*;q=0.7" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip,deflate" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="en-us,en;q=0.5" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string=".ASPXANONYMOUS=5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:1062" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 (.NET CLR 3.5.30729)" />
+    </item>
+  </serverVariables>
+  <cookies>
+    <item name=".ASPXANONYMOUS">
+      <value string="5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00" />
+    </item>
+  </cookies>
+</error>

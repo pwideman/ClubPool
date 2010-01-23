@@ -1,0 +1,156 @@
+﻿using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using CommonServiceLocator.WindsorAdapter;
+using Microsoft.Practices.ServiceLocation;
+using MvcContrib.Castle;
+using NHibernate.Cfg;
+using SharpArch.Data.NHibernate;
+using SharpArch.Web.NHibernate;
+using SharpArch.Web.Castle;
+using SharpArch.Web.Areas;
+using SharpArch.Web.CommonValidator;
+using SharpArch.Web.ModelBinder;
+using System;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Reflection;
+using ClubPool.Web.Controllers;
+using ClubPool.Data.NHibernateMaps;
+using ClubPool.Web.CastleWindsor;
+using Spark.Web.Mvc;
+using System.Linq;
+using System.Configuration;
+
+namespace ClubPool.Web
+{
+  // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+  // visit http://go.microsoft.com/?LinkId=9394801
+
+  public class MvcApplication : HttpApplication
+  {
+    protected void Application_Start() {
+
+      showCustomErrorPages = Convert.ToBoolean(ConfigurationManager.AppSettings["showCustomErrorPages"]); 
+      
+      log4net.Config.XmlConfigurator.Configure();
+
+      ViewEngines.Engines.Clear();
+
+      // spark stuff
+      RegisterViewEngine(ViewEngines.Engines);
+      LoadPrecompiledViews(ViewEngines.Engines);
+      // end spark stuff
+
+      ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
+
+      InitializeServiceLocator();
+
+      RouteRegistrar.RegisterRoutesTo(RouteTable.Routes);
+
+    }
+
+    /// <summary>
+    /// Instantiate the container and add all Controllers that derive from 
+    /// WindsorController to the container.  Also associate the Controller 
+    /// with the WindsorContainer ControllerFactory.
+    /// </summary>
+    protected virtual void InitializeServiceLocator() {
+      IWindsorContainer container = new WindsorContainer();
+      // set up the ServiceLocator earlier so that we can use it in
+      // ComponentRegistrar
+      ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
+      ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
+
+      container.RegisterControllers(typeof(HomeController).Assembly);
+      ComponentRegistrar.AddComponentsTo(container);
+
+    }
+
+    public override void Init() {
+      base.Init();
+
+      // The WebSessionStorage must be created during the Init() to tie in HttpApplication events
+      webSessionStorage = new WebSessionStorage(this);
+    }
+
+    /// <summary>
+    /// Due to issues on IIS7, the NHibernate initialization cannot reside in Init() but
+    /// must only be called once.  Consequently, we invoke a thread-safe singleton class to 
+    /// ensure it's only initialized once.
+    /// </summary>
+    protected void Application_BeginRequest(object sender, EventArgs e) {
+        NHibernateInitializer.Instance().InitializeNHibernateOnce(
+          () => InitializeNHibernateSession());
+    }
+
+    /// <summary>
+    /// If you need to communicate to multiple databases, you'd add a line to this method to
+    /// initialize the other database as well.
+    /// </summary>
+    private void InitializeNHibernateSession() {
+      NHibernateSession.Init(
+          webSessionStorage,
+          new string[] { Server.MapPath("~/bin/ClubPool.Data.dll"), Server.MapPath("~/bin/ClubPool.SharpArchProviders.dll") },
+          new AutoPersistenceModelGenerator().Generate());
+    }
+
+    protected void Application_Error(object sender, EventArgs e) {
+      // Useful for debugging
+      var exception = Server.GetLastError();
+
+      var context = HttpContext.Current;
+
+      //  Show custom error page if necessary - from Who Can Help Me?
+      if (showCustomErrorPages) {
+        if (exception is HttpRequestValidationException) {
+          this.DisplayErrorPage("InvalidInput");
+          return;
+        }
+
+        this.DisplayErrorPage("Error");
+      }
+    }
+
+    /// <summary>
+    /// Returns a response by executing the Error controller with the specified action. 
+    /// Shamelessly copied from the Who Can Help Me? showcase app
+    /// </summary>
+    /// <param name="action">
+    /// The action.
+    /// </param>
+    private void DisplayErrorPage(string action) {
+      var routeData = new RouteData();
+      routeData.Values.Add("controller", "Error");
+      routeData.Values.Add("action", action);
+
+      this.Server.ClearError();
+      this.Response.Clear();
+
+      var httpContext = new HttpContextWrapper(this.Context);
+      var requestContext = new RequestContext(httpContext, routeData);
+
+      IController errorController = ControllerBuilder.Current.GetControllerFactory().CreateController(new RequestContext(httpContext, routeData), "Error");
+
+      // Clear the query string, in particular to avoid HttpRequestValidationException being re-raised
+      // when the error view is rendered by the Error Controller.
+      httpContext.RewritePath(httpContext.Request.FilePath, httpContext.Request.PathInfo, string.Empty);
+
+      errorController.Execute(requestContext);
+    }
+
+    // spark stuff
+    protected static void RegisterViewEngine(ViewEngineCollection engines) {
+      engines.Add(new SparkViewFactory());
+    }
+
+    public static void LoadPrecompiledViews(ViewEngineCollection engines) {
+      SparkViewFactory factory = engines.OfType<SparkViewFactory>().First();
+      factory.Engine.LoadBatchCompilation(Assembly.Load("ClubPool.Web.Views"));
+    }
+    // end spark stuff
+
+    private WebSessionStorage webSessionStorage;
+    private static bool showCustomErrorPages;
+  }
+}

@@ -1,0 +1,16 @@
+﻿<viewdata model="ClubPool.Web.Controllers.UserLoginViewModel"/>
+
+<content name="title">Login</content>
+
+<p if="!string.IsNullOrEmpty(Model.Message)">${Model.Message}</p>
+
+<h2>Identify yourself!</h2>
+<!-- Simple OpenID Selector -->
+<form method="post">
+	<fieldset>
+		!{this.Html.Hidden("returnUrl", Model.ReturnUrl)}
+		Username: <input type="text" name="username" /><br/>
+		Password: <input type="text" name="password" /><br/>
+		<input type="submit" value="Login" />
+	</fieldset>
+</form>

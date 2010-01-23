@@ -1,0 +1,188 @@
+﻿<error errorId="1a05508c-afe6-41d6-9693-9f74e7e2fef0" host="BAMA" type="MySql.Data.MySqlClient.MySqlException" message="Unknown column 'user0_.Email' in 'field list'" source="MySql.Data" detail="NHibernate.ADOException: could not execute query&#xD;&#xA;[ select user0_.Id as Id0_, user0_.Username as Username0_, user0_.Password as Password0_, user0_.Email as Email0_ from Users user0_ where user0_.Username=?p0 limit 1 ]&#xD;&#xA;  Name:p1 - Value:paul&#xD;&#xA;[SQL: select user0_.Id as Id0_, user0_.Username as Username0_, user0_.Password as Password0_, user0_.Email as Email0_ from Users user0_ where user0_.Username=?p0 limit 1] ---&gt; MySql.Data.MySqlClient.MySqlException: Unknown column 'user0_.Email' in 'field list'&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlStream.ReadPacket()&#xD;&#xA;   at MySql.Data.MySqlClient.NativeDriver.ReadResult()&#xD;&#xA;   at MySql.Data.MySqlClient.ResultSet.NextResult()&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)&#xD;&#xA;   at MySql.Data.MySqlClient.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior)&#xD;&#xA;   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader()&#xD;&#xA;   at NHibernate.AdoNet.AbstractBatcher.ExecuteReader(IDbCommand cmd)&#xD;&#xA;   at NHibernate.Loader.Loader.GetResultSet(IDbCommand st, Boolean autoDiscoverTypes, Boolean callable, RowSelection selection, ISessionImplementor session)&#xD;&#xA;   at NHibernate.Loader.Loader.DoQuery(ISessionImplementor session, QueryParameters queryParameters, Boolean returnProxies)&#xD;&#xA;   at NHibernate.Loader.Loader.DoQueryAndInitializeNonLazyCollections(ISessionImplementor session, QueryParameters queryParameters, Boolean returnProxies)&#xD;&#xA;   at NHibernate.Loader.Loader.DoList(ISessionImplementor session, QueryParameters queryParameters)&#xD;&#xA;   --- End of inner exception stack trace ---&#xD;&#xA;   at NHibernate.Loader.Loader.DoList(ISessionImplementor session, QueryParameters queryParameters)&#xD;&#xA;   at NHibernate.Loader.Loader.ListIgnoreQueryCache(ISessionImplementor session, QueryParameters queryParameters)&#xD;&#xA;   at NHibernate.Loader.Loader.List(ISessionImplementor session, QueryParameters queryParameters, ISet`1 querySpaces, IType[] resultTypes)&#xD;&#xA;   at NHibernate.Hql.Ast.ANTLR.Loader.QueryLoader.List(ISessionImplementor session, QueryParameters queryParameters)&#xD;&#xA;   at NHibernate.Hql.Ast.ANTLR.QueryTranslatorImpl.List(ISessionImplementor session, QueryParameters queryParameters)&#xD;&#xA;   at NHibernate.Engine.Query.HQLQueryPlan.PerformList(QueryParameters queryParameters, ISessionImplementor session, IList results)&#xD;&#xA;   at NHibernate.Impl.SessionImpl.List(IQueryExpression queryExpression, QueryParameters queryParameters, IList results)&#xD;&#xA;   at NHibernate.Impl.SessionImpl.List(IQueryExpression queryExpression, QueryParameters parameters)&#xD;&#xA;   at NHibernate.Impl.ExpressionQueryImpl.List()&#xD;&#xA;   at NHibernate.Linq.NhQueryProvider.Execute(Expression expression)&#xD;&#xA;   at NHibernate.Linq.NhQueryProvider.Execute[TResult](Expression expression)&#xD;&#xA;   at System.Linq.Queryable.SingleOrDefault[TSource](IQueryable`1 source, Expression`1 predicate)&#xD;&#xA;   at SharpArch.Data.NHibernate.LinqRepositoryWithTypedId`2.FindOne(Expression`1 criteria)&#xD;&#xA;   at ClubPool.Web.Security.ClubPoolMembershipProvider.ValidateUser(String username, String password)&#xD;&#xA;   at ClubPool.ApplicationServices.AspNetMembershipService.ValidateUser(String userName, String password)&#xD;&#xA;   at ClubPool.Web.Controllers.UserController.Login(String username, String password, String returnUrl)&#xD;&#xA;   at lambda_method(ExecutionScope , ControllerBase , Object[] )&#xD;&#xA;   at System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)&#xD;&#xA;   at System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.&lt;&gt;c__DisplayClassa.&lt;InvokeActionMethodWithFilters&gt;b__7()&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodFilter(IActionFilter filter, ActionExecutingContext preContext, Func`1 continuation)&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.&lt;&gt;c__DisplayClassa.&lt;&gt;c__DisplayClassc.&lt;InvokeActionMethodWithFilters&gt;b__9()&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters)&#xD;&#xA;   at System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)&#xD;&#xA;   at System.Web.Mvc.Controller.ExecuteCore()&#xD;&#xA;   at System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)&#xD;&#xA;   at System.Web.Mvc.ControllerBase.System.Web.Mvc.IController.Execute(RequestContext requestContext)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.ProcessRequest(HttpContextBase httpContext)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.ProcessRequest(HttpContext httpContext)&#xD;&#xA;   at System.Web.Mvc.MvcHandler.System.Web.IHttpHandler.ProcessRequest(HttpContext httpContext)&#xD;&#xA;   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" time="2010-01-15T05:00:24.5244831Z">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_KEEP_ALIVE:300&#xD;&#xA;HTTP_CONTENT_LENGTH:38&#xD;&#xA;HTTP_CONTENT_TYPE:application/x-www-form-urlencoded&#xD;&#xA;HTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;HTTP_ACCEPT_CHARSET:ISO-8859-1,utf-8;q=0.7,*;q=0.7&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip,deflate&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:en-us,en;q=0.5&#xD;&#xA;HTTP_COOKIE:.ASPXANONYMOUS=5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00; ASP.NET_SessionId=mcslsj45p3iyxyef3jkwexun&#xD;&#xA;HTTP_HOST:localhost:1062&#xD;&#xA;HTTP_REFERER:http://localhost:1062/User/Login&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 (.NET CLR 3.5.30729)&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Keep-Alive: 300&#xD;&#xA;Content-Length: 38&#xD;&#xA;Content-Type: application/x-www-form-urlencoded&#xD;&#xA;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7&#xD;&#xA;Accept-Encoding: gzip,deflate&#xD;&#xA;Accept-Language: en-us,en;q=0.5&#xD;&#xA;Cookie: .ASPXANONYMOUS=5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00; ASP.NET_SessionId=mcslsj45p3iyxyef3jkwexun&#xD;&#xA;Host: localhost:1062&#xD;&#xA;Referer: http://localhost:1062/User/Login&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 (.NET CLR 3.5.30729)&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="D:\code\clubpool\trunk\ClubPool\app\ClubPool.Web\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="bama\Paul" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="38" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="application/x-www-form-urlencoded" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="" />
+    </item>
+    <item name="HTTPS">
+      <value string="" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/User/Login" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="D:\code\clubpool\trunk\ClubPool\app\ClubPool.Web\User\Login" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="POST" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/User/Login" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="1062" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="" />
+    </item>
+    <item name="URL">
+      <value string="/User/Login" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_KEEP_ALIVE">
+      <value string="300" />
+    </item>
+    <item name="HTTP_CONTENT_LENGTH">
+      <value string="38" />
+    </item>
+    <item name="HTTP_CONTENT_TYPE">
+      <value string="application/x-www-form-urlencoded" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" />
+    </item>
+    <item name="HTTP_ACCEPT_CHARSET">
+      <value string="ISO-8859-1,utf-8;q=0.7,*;q=0.7" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip,deflate" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="en-us,en;q=0.5" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string=".ASPXANONYMOUS=5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00; ASP.NET_SessionId=mcslsj45p3iyxyef3jkwexun" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:1062" />
+    </item>
+    <item name="HTTP_REFERER">
+      <value string="http://localhost:1062/User/Login" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 (.NET CLR 3.5.30729)" />
+    </item>
+  </serverVariables>
+  <form>
+    <item name="returnUrl">
+      <value string="" />
+    </item>
+    <item name="username">
+      <value string="paul" />
+    </item>
+    <item name="password">
+      <value string="paul" />
+    </item>
+  </form>
+  <cookies>
+    <item name=".ASPXANONYMOUS">
+      <value string="5PNCeMqyygEkAAAAOTcxOTk1NGUtZmE3OS00YjljLWFlZjktMTdlMTk5MDU5OWE00" />
+    </item>
+    <item name="ASP.NET_SessionId">
+      <value string="mcslsj45p3iyxyef3jkwexun" />
+    </item>
+  </cookies>
+</error>
