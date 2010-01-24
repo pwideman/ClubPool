@@ -1,5 +1,5 @@
 #ignore web logs
-#src/app/ClubPool.Web/logs/*
+src/app/ClubPool.Web/logs/*
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
