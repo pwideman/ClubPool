@@ -138,10 +138,7 @@ namespace Tests.ClubPool.Framework.NHibernate.TestDoubles
       // IList<EntityWithTypedId<IdT>>, even though we've declared T as
       // type EntityWithTypedId<IdT>. Our FindNextId() extension method
       // is not available on IList<T>
-      IList<EntityWithTypedId<IdT>> myData = new List<EntityWithTypedId<IdT>>();
-      foreach (var tEntity in data) {
-        myData.Add(tEntity as EntityWithTypedId<IdT>);
-      }
+      IList<EntityWithTypedId<IdT>> myData = data.OfType<EntityWithTypedId<IdT>>().ToList();
       IdT id = myData.FindNextId();
       return id;
     }

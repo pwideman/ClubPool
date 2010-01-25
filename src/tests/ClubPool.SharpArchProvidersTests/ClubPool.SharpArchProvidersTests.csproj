@@ -139,7 +139,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProviderTestsBase.cs" />
     <Compile Include="TestDoubles\EntityDuplicateCheckerStub.cs" />
-    <Compile Include="TestDoubles\MockRepository.cs" />
     <Compile Include="TestDoubles\MockRoleRepositoryFactory.cs" />
     <Compile Include="TestDoubles\MockUserRepositoryFactory.cs" />
     <Compile Include="TestDoubles\TestSharpArchMembershipProvider.cs" />

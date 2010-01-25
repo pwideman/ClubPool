@@ -14,18 +14,6 @@ namespace Tests.ClubPool.SharpArchProviders.TestDoubles
   public static class MockUserRepositoryFactory
   {
 
-    public static ILinqRepository<User> CreateMockUserRepository() {
-      return CreateMockUserRepository(null);
-    }
-
-    public static ILinqRepository<User> CreateMockUserRepository(IList<User> users) {
-      if (null == users) {
-        users = CreateUsers(4);
-      }
-      ILinqRepository<User> mockedRepository = new MockRepository<User>(users);
-      return mockedRepository;
-    }
-
     public static User CreateTransientUser(string name) {
       if (name.IsNullOrEmptyOrBlank()) {
         name = "user";
