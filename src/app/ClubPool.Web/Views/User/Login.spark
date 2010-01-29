@@ -4,7 +4,7 @@
 
 <p if="!string.IsNullOrEmpty(Model.Message)">${Model.Message}</p>
 
-<h2>Identify yourself!</h2>
+<h2>Login</h2>
 <!-- Simple OpenID Selector -->
 <form method="post">
 	<fieldset>

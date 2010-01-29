@@ -1,4 +1,13 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using System;
+using System.Linq;
+using System.Configuration;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Reflection;
+
+using Spark.Web.Mvc;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
@@ -10,17 +19,11 @@ using SharpArch.Web.Castle;
 using SharpArch.Web.Areas;
 using SharpArch.Web.CommonValidator;
 using SharpArch.Web.ModelBinder;
-using System;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using System.Reflection;
+
 using ClubPool.Web.Controllers;
 using ClubPool.Data.NHibernateMaps;
 using ClubPool.Web.CastleWindsor;
-using Spark.Web.Mvc;
-using System.Linq;
-using System.Configuration;
+using ClubPool.Web.Code;
 
 namespace ClubPool.Web
 {
@@ -43,6 +46,9 @@ namespace ClubPool.Web
       // end spark stuff
 
       ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
+
+      // xVal & the NHValidatorRulesProvider
+      xVal.ActiveRuleProviders.Providers.Add(new NHValidatorRulesProvider());
 
       InitializeServiceLocator();
 
