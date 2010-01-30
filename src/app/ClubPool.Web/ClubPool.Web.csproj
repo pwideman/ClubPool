@@ -254,6 +254,7 @@
     <None Include="Views\Error\NotFound.spark" />
     <None Include="Views\Home\Index.spark" />
     <None Include="Views\Layouts\Application.spark" />
+    <None Include="Views\Shared\_Login.spark" />
     <None Include="Views\Shared\_LoginStatus.spark" />
     <None Include="Views\Shared\_Menu.spark" />
     <None Include="Views\Shared\_Sidebar.spark" />
