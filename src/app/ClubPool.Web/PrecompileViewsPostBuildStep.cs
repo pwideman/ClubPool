@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration.Install;
 using System.Linq;
+
 using ClubPool.Web.Controllers;
+using ClubPool.Web.Code;
+
+using Spark;
 
 namespace ClubPool.Web
 {
@@ -13,6 +17,7 @@ namespace ClubPool.Web
   {
     public PrecompileViewsPostBuildStep() {
       InitializeComponent();
+      precompileInstaller1.SettingsInstantiator = () => SparkInitializer.GetSettings();
     }
 
     // we must manually add the controllers to the batch since they are in a different assembly

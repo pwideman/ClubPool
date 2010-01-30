@@ -2,6 +2,8 @@
 using System.Web.Mvc;
 
 using MvcContrib;
+using MvcContrib.Attributes;
+
 
 using ClubPool.ApplicationServices.Interfaces;
 
@@ -22,27 +24,29 @@ namespace ClubPool.Web.Controllers
         return this.RedirectToAction<HomeController>(x => x.Index());
       }
 
-      return this.RedirectToAction(x => x.Login(null));
+      return this.RedirectToAction(x => x.Login(new UserLoginViewModel()));
     }
 
-    [AcceptVerbs(HttpVerbs.Get)]
+    [AcceptGet]
     public ActionResult Login(string returnUrl) {
       return View(new UserLoginViewModel() { ReturnUrl = returnUrl });
     }
 
-    [AcceptVerbs(HttpVerbs.Post)]
-    public ActionResult Login(string username, string password, string returnUrl) {
-      if (membershipService.ValidateUser(username, password)) {
-        authenticationService.LogIn(username, false);
-        if (!string.IsNullOrEmpty(returnUrl)) {
-          return this.Redirect(returnUrl);
+    [AcceptPost]
+    public ActionResult Login(UserLoginViewModel viewModel) {
+      if (membershipService.ValidateUser(viewModel.Username, viewModel.Password)) {
+        authenticationService.LogIn(viewModel.Username, false);
+        if (!string.IsNullOrEmpty(viewModel.ReturnUrl)) {
+          return this.Redirect(viewModel.ReturnUrl);
         }
         else {
           return this.RedirectToAction<HomeController>(x => x.Index());
         }
       }
       else {
-        return View(new UserLoginViewModel() { Message = "Invalid username/password", ReturnUrl = returnUrl });
+        viewModel.Password = "";
+        viewModel.Message = "Invalid username/password";
+        return View(viewModel);
       }
     }
   }
@@ -51,5 +55,7 @@ namespace ClubPool.Web.Controllers
   {
     public string Message { get; set; }
     public string ReturnUrl { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
   }
 }

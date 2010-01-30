@@ -2,13 +2,12 @@
 
 <content name="title">Login</content>
 
-<p if="!string.IsNullOrEmpty(Model.Message)">${Model.Message}</p>
+<p if="!string.IsNullOrEmpty(Model.Message)" class="error">${Model.Message}</p>
 
 <h2>Login</h2>
-<!-- Simple OpenID Selector -->
 <form method="post">
 	<fieldset>
-		!{this.Html.Hidden("returnUrl", Model.ReturnUrl)}
+		!{Html.Hidden("returnUrl", Model.ReturnUrl)}
 		Username: <input type="text" name="username" /><br/>
 		Password: <input type="text" name="password" /><br/>
 		<input type="submit" value="Login" />

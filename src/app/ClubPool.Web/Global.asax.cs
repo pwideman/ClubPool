@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Reflection;
 
+using Spark;
 using Spark.Web.Mvc;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
@@ -147,7 +148,7 @@ namespace ClubPool.Web
 
     // spark stuff
     protected static void RegisterViewEngine(ViewEngineCollection engines) {
-      engines.Add(new SparkViewFactory());
+      engines.Add(new SparkViewFactory(SparkInitializer.GetSettings()));
     }
 
     public static void LoadPrecompiledViews(ViewEngineCollection engines) {
