@@ -1,9 +1,7 @@
-﻿<viewdata viewModel="ClubPool.Web.Controllers.UserLoginViewModel"/>
-
-<form method="post" class="loginForm">
+﻿<form method="post" class="loginForm">
 	<fieldset>
 	  <legend>Login</legend>
-    <p if="!string.IsNullOrEmpty(viewModel.Message)" class="error">${viewModel.Message}</p>
+    <p if="!string.IsNullOrEmpty(Model.Message)" class="error">${Model.Message}</p>
 		!{this.Hidden(m => m.ReturnUrl)}
 		<div class="formrow">!{this.TextBox(m => m.Username).Label("Username:")}</div>
 		<div class="formrow">!{this.TextBox(m => m.Password).Label("Password:")}</div>

@@ -80,7 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseController.cs" />
-    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="ViewModels\HomeViewModels.cs" />
+    <Compile Include="ViewModels\SharedViewModels.cs" />
+    <Compile Include="ViewModels\UserViewModels.cs" />
     <Compile Include="ControllerEnums.cs" />
     <Compile Include="ErrorController.cs" />
     <Compile Include="HomeController.cs" />

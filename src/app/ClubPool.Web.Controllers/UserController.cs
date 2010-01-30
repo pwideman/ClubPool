@@ -6,6 +6,7 @@ using MvcContrib.Attributes;
 
 
 using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.Web.Controllers.ViewModels;
 
 namespace ClubPool.Web.Controllers
 {
@@ -49,14 +50,10 @@ namespace ClubPool.Web.Controllers
         return View(viewModel);
       }
     }
-  }
 
-  public class UserLoginViewModel : ViewModelBase
-  {
-    public string Message { get; set; }
-    public string ReturnUrl { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public bool RememberMe { get; set; }
+    public ActionResult Logout() {
+      authenticationService.LogOut();
+      return this.RedirectToAction<HomeController>(x => x.Index());
+    }
   }
 }

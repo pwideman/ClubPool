@@ -13,7 +13,7 @@
   <body>
     <div id="header">
       <img src="~/content/images/logo.png" />
-      <div class="loginPanel"><LoginStatus /></div>
+      <div class="loginPanel"><LoginStatus/></div>
       <div id="menucontainer"><Menu /></div>
     </div>
     <div id="container">

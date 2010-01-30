@@ -1,1 +1,6 @@
-﻿your_name <a href="">login</a>
+﻿<if condition="Model.IsLoggedIn">
+  ${Model.Username} !{Html.ActionLink<UserController>(x => x.Logout(), "logout")}
+</if>
+<else>
+  !{Html.ActionLink<UserController>(x => x.Login(string.Empty), "login")}
+</else>

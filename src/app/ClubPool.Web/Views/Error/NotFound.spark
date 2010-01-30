@@ -1,4 +1,4 @@
-﻿<viewdata model="ClubPool.Web.Controllers.ViewModelBase"/>
+﻿<viewdata model="ClubPool.Web.Controllers.ViewModels.ViewModelBase"/>
 
 <content name="title">
 404!

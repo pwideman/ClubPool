@@ -1,4 +1,4 @@
-﻿<viewdata model="ClubPool.Web.Controllers.HomeIndexViewModel"/>
+﻿<viewdata model="ClubPool.Web.Controllers.ViewModels.HomeIndexViewModel"/>
 
 <content name="title">ClubPool</content>
 
@@ -8,4 +8,3 @@
 <p>
 About...
 </p>
-<p>Welcome ${Model.Username}</p>
