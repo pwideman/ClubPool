@@ -24,6 +24,7 @@ namespace ClubPool.Web.Code
         .AddAssembly(typeof(System.Data.Linq.Binary).Assembly) // this is needed because Microsoft.Web.Mvc has a ref to it
         .AddAssembly(typeof(System.Web.Routing.HttpMethodConstraint).Assembly)
         .AddNamespace("Microsoft.Web.Mvc")
+        .AddNamespace("MvcContrib")
         .AddNamespace("MvcContrib.FluentHtml")
         .AddNamespace("ClubPool.Web.Controllers")
         .AddNamespace("System")

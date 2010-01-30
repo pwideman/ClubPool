@@ -60,6 +60,11 @@ h5
   font-size: 120%;
 }
 
+div.spacer
+{
+  clear: both;
+}
+
 
 /* Container
 ---------------------------------------------------------*/
@@ -86,7 +91,7 @@ h5
   margin: 0;
 }
 
-div.loginPanel 
+#header div.loginPanel 
 {
   right: 250px;
   float: right;
@@ -109,6 +114,86 @@ div.loginPanel
 {
   width: 100%;
   padding: 10px 20px;
+}
+
+/* forms
+----------------------------------------------------------*/
+
+fieldset
+{
+  border: 1px solid #074B8A;
+}
+
+div.formrow
+{
+  clear: both;
+  padding-top: 10px;
+}
+
+div.formrow input
+{
+  float:right;
+  width:200px;
+  text-align: left;
+  border: 1px solid #074B8A;
+  height: 25px;
+  padding: 2px;
+}
+
+button
+{
+  clear:both;
+  text-align:center;
+  font-weight:bold;
+}
+
+div.formrow label 
+{
+  margin-top: 5px;
+  text-align:right;
+  width:140px;
+  float:left;
+  padding-right: 5px;
+}
+
+div.formrowspan
+{
+  text-align: right;
+}
+
+/* login form */
+
+form.loginForm
+{
+  margin: 0 auto;
+  width: 225px;
+  padding: 14px;
+  font-size: 80%;
+}
+
+form.loginForm p.error
+{
+  color: Red;
+  text-align: center;
+  width: 100%;
+}
+
+form.loginForm div.formrow label
+{
+  width: 65px;
+}
+
+form.loginForm div.formrow input
+{
+  width: 120px;
+  height: 16px;
+}
+
+form.loginForm button
+{
+  width: 100px;
+  height: 25px;
+  margin-left: 55px;
 }
 
 /* sidebar

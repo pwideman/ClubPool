@@ -1,8 +1,5 @@
 ﻿<viewdata model="ClubPool.Web.Controllers.UserLoginViewModel"/>
 
-<content name="title">Login</content>
-
-
 <form method="post" class="loginForm">
 	<fieldset>
 	  <legend>Login</legend>

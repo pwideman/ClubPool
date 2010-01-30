@@ -9,9 +9,9 @@ using MvcContrib.FluentHtml;
 
 namespace ClubPool.Web.Views
 {
-  // this class mostly copied from the WhoCanHelpMe (http://whocanhelpme.codeplex.com/) SparkModelViewBase
-  // It is needed so that we have a view that implements MvcContrib.FluentHtml.IViewModelContainer, so 
-  // we can use the strongly typed HtmlHelper extensions and such in MvcContrib.FluentHtml
+  // this class mostly copied from the http://lunaverse.wordpress.com/2009/05/18/use-mvccontrib-fluenthtml-with-spark-view-engine/
+  // It is needed so that we have a view that implements MvcContrib.FluentHtml.IViewModelContainer,
+  // so we can use MvcContrib.FluentHtml
   public abstract class SparkViewBase<T> : SparkView<T>, IViewModelContainer<T> where T:class
   {
     protected readonly List<IBehaviorMarker> behaviors = new List<IBehaviorMarker>();

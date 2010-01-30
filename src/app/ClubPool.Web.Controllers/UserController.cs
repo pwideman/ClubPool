@@ -35,7 +35,7 @@ namespace ClubPool.Web.Controllers
     [AcceptPost]
     public ActionResult Login(UserLoginViewModel viewModel) {
       if (membershipService.ValidateUser(viewModel.Username, viewModel.Password)) {
-        authenticationService.LogIn(viewModel.Username, false);
+        authenticationService.LogIn(viewModel.Username, viewModel.RememberMe);
         if (!string.IsNullOrEmpty(viewModel.ReturnUrl)) {
           return this.Redirect(viewModel.ReturnUrl);
         }
@@ -57,5 +57,6 @@ namespace ClubPool.Web.Controllers
     public string ReturnUrl { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
+    public bool RememberMe { get; set; }
   }
 }
