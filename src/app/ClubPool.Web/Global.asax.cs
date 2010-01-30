@@ -42,7 +42,8 @@ namespace ClubPool.Web
       ViewEngines.Engines.Clear();
 
       // spark stuff
-      RegisterViewEngine(ViewEngines.Engines);
+      //RegisterViewEngine(ViewEngines.Engines);
+      SparkEngineStarter.RegisterViewEngine(SparkInitializer.GetSettings());
       LoadPrecompiledViews(ViewEngines.Engines);
       // end spark stuff
 

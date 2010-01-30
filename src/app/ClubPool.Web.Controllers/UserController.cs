@@ -51,7 +51,7 @@ namespace ClubPool.Web.Controllers
     }
   }
 
-  public class UserLoginViewModel : BaseViewModel
+  public class UserLoginViewModel : ViewModelBase
   {
     public string Message { get; set; }
     public string ReturnUrl { get; set; }

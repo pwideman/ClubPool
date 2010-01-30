@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 
 using Spark;
-
 namespace ClubPool.Web.Code
 {
   // we must initialize spark in code because adding the Microsoft.Web.Mvc namespace 
@@ -14,6 +13,7 @@ namespace ClubPool.Web.Code
   {
     public static ISparkSettings GetSettings() {
       var settings = new SparkSettings()
+        .SetPageBaseType("ClubPool.Web.Views.SparkViewBase")
         .SetAutomaticEncoding(true)
         .SetDebug(true)
         .AddAssembly(typeof(System.Web.Mvc.AcceptVerbsAttribute).Assembly)
@@ -22,8 +22,10 @@ namespace ClubPool.Web.Code
         .AddAssembly(typeof(MvcContrib.FluentHtml.ModelStateDictionaryExtensions).Assembly)
         .AddAssembly(typeof(xVal.ActiveRuleProviders).Assembly)
         .AddAssembly(typeof(System.Data.Linq.Binary).Assembly) // this is needed because Microsoft.Web.Mvc has a ref to it
+        .AddAssembly(typeof(System.Web.Routing.HttpMethodConstraint).Assembly)
         .AddNamespace("Microsoft.Web.Mvc")
         .AddNamespace("MvcContrib.FluentHtml")
+        .AddNamespace("ClubPool.Web.Controllers")
         .AddNamespace("System")
         .AddNamespace("System.Collections.Generic")
         .AddNamespace("System.Linq")

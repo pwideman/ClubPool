@@ -10,7 +10,7 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers
 {
-  public class HomeIndexViewModel : BaseViewModel
+  public class HomeIndexViewModel : ViewModelBase
   {
     public string Username { get; set; }
   }

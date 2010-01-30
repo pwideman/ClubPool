@@ -4,12 +4,12 @@
 
 <p if="!string.IsNullOrEmpty(Model.Message)" class="error">${Model.Message}</p>
 
-<h2>Login</h2>
+<h4>Login</h4>
 <form method="post">
 	<fieldset>
-		!{Html.Hidden("returnUrl", Model.ReturnUrl)}
-		Username: <input type="text" name="username" /><br/>
-		Password: <input type="text" name="password" /><br/>
-		<input type="submit" value="Login" />
+		!{this.Hidden(m => m.ReturnUrl)}
+		!{this.TextBox(m => m.Username).Label("Username:")}
+		!{this.TextBox(m => m.Password).Label("Password:")}
+		!{this.SubmitButton("Login")}
 	</fieldset>
 </form>

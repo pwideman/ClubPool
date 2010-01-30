@@ -3,7 +3,7 @@
 		<a href="/home">Home</a>
   </li>
   <li>
-    <a href="/user/login">Login</a>
+    !{Html.ActionLink<UserController>(x => x.Login(string.Empty), "Login")}
   </li>
   <li>
     <a href="#">League</a>

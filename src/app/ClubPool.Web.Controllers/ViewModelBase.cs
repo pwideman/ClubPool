@@ -2,7 +2,7 @@
 
 namespace ClubPool.Web.Controllers
 {
-  public class BaseViewModel
+  public class ViewModelBase
   {
   }
 }

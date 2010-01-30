@@ -1,4 +1,6 @@
-﻿<content name="title">
+﻿<viewdata model="ClubPool.Web.Controllers.ViewModelBase"/>
+
+<content name="title">
 Error
 </content>
 
