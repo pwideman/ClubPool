@@ -9,17 +9,19 @@ using SharpArch.Core.PersistenceSupport;
 
 using ClubPool.Core;
 using ClubPool.Web.Controllers.ViewModels;
+using ClubPool.ApplicationServices.Interfaces;
 
 namespace ClubPool.Web.Controllers
 {
   public class HomeController : BaseController
   {
+    public HomeController(IMembershipService membershipSvc, IRoleService roleSvc)
+      : base(membershipSvc, roleSvc) {
+    }
+
     public ActionResult Index() {
       var viewModel = new HomeIndexViewModel();
-      if (HttpContext.User.Identity.IsAuthenticated) {
-        viewModel.IsLoggedIn = true;
-        viewModel.Username = HttpContext.User.Identity.Name;
-      }
+      InitializeViewModel(viewModel);
       return View(viewModel);
     }
   }

@@ -55,9 +55,11 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AspNetMembershipService.cs" />
+    <Compile Include="AspNetRoleService.cs" />
     <Compile Include="FormsAuthenticationService.cs" />
     <Compile Include="Interfaces\IAuthenticationService.cs" />
     <Compile Include="Interfaces\IMembershipService.cs" />
+    <Compile Include="Interfaces\IRoleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

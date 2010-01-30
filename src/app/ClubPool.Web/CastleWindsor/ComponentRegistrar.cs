@@ -34,6 +34,9 @@ namespace ClubPool.Web.CastleWindsor
       container.Register(
         Component.For<MembershipProvider>()
         .Instance(Membership.Provider));
+      container.Register(
+        Component.For<RoleProvider>()
+        .Instance(Roles.Provider));
     }
 
     private static void AddApplicationServicesTo(IWindsorContainer container) {

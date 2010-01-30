@@ -22,7 +22,7 @@
 		  <li><a href="/user/info">Member Info</a></li>
 		</ul>
 	</li>
-	<li>
+	<li if="Model.Roles.Contains(Roles.Administrators)">
 		<a href="#">Admin</a>
 		<ul>
 			<li><a href="/players">Players</a></li>

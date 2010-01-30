@@ -28,6 +28,7 @@ namespace ClubPool.Web.Code
         .AddNamespace("MvcContrib.FluentHtml")
         .AddNamespace("ClubPool.Web.Controllers")
         .AddNamespace("ClubPool.Web.Controllers.ViewModels")
+        .AddNamespace("ClubPool.Web.Code")
         .AddNamespace("System")
         .AddNamespace("System.Collections.Generic")
         .AddNamespace("System.Linq")

@@ -13,11 +13,10 @@ namespace ClubPool.Web.Controllers
   public class UserController : BaseController
   {
     private IAuthenticationService authenticationService;
-    private IMembershipService membershipService;
 
-    public UserController(IAuthenticationService authSvc, IMembershipService memberSvc) {
+    public UserController(IAuthenticationService authSvc, IMembershipService membershipSvc, IRoleService roleSvc)
+      : base(membershipSvc, roleSvc) {
       authenticationService = authSvc;
-      membershipService = memberSvc;
     }
 
     public ActionResult Index() {

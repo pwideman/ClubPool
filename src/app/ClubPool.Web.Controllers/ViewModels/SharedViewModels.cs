@@ -8,8 +8,13 @@ namespace ClubPool.Web.Controllers.ViewModels
 
   public class ViewModelBase
   {
+    public ViewModelBase() {
+      Roles = new string[0];
+    }
+
     public bool IsLoggedIn { get; set; }
     public string Username { get; set; }
+    public string[] Roles { get; set; }
   }
 
   public class LoginViewModel : ViewModelBase
