@@ -1,4 +1,4 @@
-﻿<viewdata model="ClubPool.Web.Controllers.ViewModels.HomeIndexViewModel"/>
+﻿<viewdata model="ClubPool.Web.Controllers.Home.ViewModels.IndexViewModel"/>
 
 <content name="title">ClubPool</content>
 

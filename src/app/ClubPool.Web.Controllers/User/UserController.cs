@@ -6,17 +6,21 @@ using MvcContrib.Attributes;
 
 
 using ClubPool.ApplicationServices.Interfaces;
-using ClubPool.Web.Controllers.ViewModels;
+using ClubPool.Web.Controllers.User.ViewModels;
+using ClubPool.Web.Controllers.Home;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.User
 {
   public class UserController : BaseController
   {
-    private IAuthenticationService authenticationService;
+    protected IAuthenticationService authenticationService;
+    protected IMembershipService membershipService;
+    protected IRoleService roleService;
 
-    public UserController(IAuthenticationService authSvc, IMembershipService membershipSvc, IRoleService roleSvc)
-      : base(membershipSvc, roleSvc) {
+    public UserController(IAuthenticationService authSvc, IMembershipService membershipSvc, IRoleService roleSvc) {
       authenticationService = authSvc;
+      membershipService = membershipSvc;
+      roleService = roleSvc;
     }
 
     public ActionResult Index() {
@@ -24,16 +28,16 @@ namespace ClubPool.Web.Controllers
         return this.RedirectToAction<HomeController>(x => x.Index());
       }
 
-      return this.RedirectToAction(x => x.Login(new UserLoginViewModel()));
+      return this.RedirectToAction(x => x.Login(new LoginViewModel()));
     }
 
     [AcceptGet]
     public ActionResult Login(string returnUrl) {
-      return View(new UserLoginViewModel() { ReturnUrl = returnUrl });
+      return View(new LoginViewModel() { ReturnUrl = returnUrl });
     }
 
     [AcceptPost]
-    public ActionResult Login(UserLoginViewModel viewModel) {
+    public ActionResult Login(LoginViewModel viewModel) {
       if (membershipService.ValidateUser(viewModel.Username, viewModel.Password)) {
         authenticationService.LogIn(viewModel.Username, viewModel.RememberMe);
         if (!string.IsNullOrEmpty(viewModel.ReturnUrl)) {
@@ -48,6 +52,14 @@ namespace ClubPool.Web.Controllers
         viewModel.Message = "Invalid username/password";
         return View(viewModel);
       }
+    }
+
+    public ActionResult LoginStatus() {
+      var viewModel = new LoginStatusViewModel() {
+        IsLoggedIn = User.Identity.IsAuthenticated,
+        Username = User.Identity.Name
+      };
+      return PartialView(viewModel);
     }
 
     public ActionResult Logout() {

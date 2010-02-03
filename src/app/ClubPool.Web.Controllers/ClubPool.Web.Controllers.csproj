@@ -80,18 +80,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseController.cs" />
-    <Compile Include="ViewModels\HomeViewModels.cs" />
-    <Compile Include="ViewModels\SharedViewModels.cs" />
-    <Compile Include="ViewModels\UserViewModels.cs" />
+    <Compile Include="BaseViewModel.cs" />
+    <Compile Include="Navigation\NavigationController.cs" />
+    <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
+    <Compile Include="Shared\ViewModels\LoginStatusViewModel.cs" />
+    <Compile Include="Home\ViewModels\IndexViewModel.cs" />
+    <Compile Include="User\ViewModels\LoginViewModel.cs" />
     <Compile Include="ControllerEnums.cs" />
-    <Compile Include="ErrorController.cs" />
-    <Compile Include="HomeController.cs" />
+    <Compile Include="Error\ErrorController.cs" />
+    <Compile Include="Home\HomeController.cs" />
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRegistrar.cs" />
-    <Compile Include="UserController.cs" />
+    <Compile Include="User\UserController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.Core\ClubPool.Core.csproj">
@@ -102,6 +105,9 @@
       <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
       <Name>ClubPool.ApplicationServices</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Navigation\ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

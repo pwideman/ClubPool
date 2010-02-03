@@ -4,19 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 
-using ClubPool.ApplicationServices.Interfaces;
-
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.Error
 {
   /// <summary>
   /// This class is based on similar functionality from the Who Can Help Me? showcase app
   /// </summary>
   public class ErrorController : BaseController
   {
-    public ErrorController(IMembershipService membershipSvc, IRoleService roleSvc)
-      : base(membershipSvc, roleSvc) {
-    }
-
     /// <summary>
     /// Action that deals with Unhandled Server Exceptions
     /// </summary>

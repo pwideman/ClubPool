@@ -1,0 +1,1 @@
+﻿#Html.RenderAction<ClubPool.Web.Controllers.User.UserController>(c => c.LoginStatus());

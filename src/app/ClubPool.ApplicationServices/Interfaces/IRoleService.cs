@@ -8,5 +8,6 @@ namespace ClubPool.ApplicationServices.Interfaces
   public interface IRoleService
   {
     string[] GetRolesForUser(string username);
+    bool IsUserInRole(string username, string role);
   }
 }

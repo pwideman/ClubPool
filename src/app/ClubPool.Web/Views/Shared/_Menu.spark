@@ -3,7 +3,7 @@
 		<a href="/home">Home</a>
   </li>
   <li>
-    !{Html.ActionLink<UserController>(x => x.Login(string.Empty), "Login")}
+    !{Html.ActionLink<ClubPool.Web.Controllers.User.UserController>(x => x.Login(string.Empty), "Login")}
   </li>
   <li>
     <a href="#">League</a>
@@ -22,7 +22,7 @@
 		  <li><a href="/user/info">Member Info</a></li>
 		</ul>
 	</li>
-	<li if="Model.Roles.Contains(Roles.Administrators)">
+	<li if="Model.DisplayAdminMenu">
 		<a href="#">Admin</a>
 		<ul>
 			<li><a href="/players">Players</a></li>

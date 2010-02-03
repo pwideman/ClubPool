@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ClubPool.Web.Code
+namespace ClubPool.Core
 {
   public static class Roles
   {

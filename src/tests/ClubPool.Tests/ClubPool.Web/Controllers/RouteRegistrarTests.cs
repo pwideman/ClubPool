@@ -1,7 +1,10 @@
-﻿using NUnit.Framework;
-using ClubPool.Web.Controllers;
+﻿using System.Web.Routing;
+
+using NUnit.Framework;
 using MvcContrib.TestHelper;
-using System.Web.Routing;
+
+using ClubPool.Web.Controllers;
+using ClubPool.Web.Controllers.Home;
 
 namespace Tests.ClubPool.Controllers
 {

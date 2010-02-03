@@ -8,20 +8,18 @@ using Spark;
 using SharpArch.Core.PersistenceSupport;
 
 using ClubPool.Core;
-using ClubPool.Web.Controllers.ViewModels;
+using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.ApplicationServices.Interfaces;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.Home
 {
   public class HomeController : BaseController
   {
-    public HomeController(IMembershipService membershipSvc, IRoleService roleSvc)
-      : base(membershipSvc, roleSvc) {
+    public HomeController() {
     }
 
     public ActionResult Index() {
-      var viewModel = new HomeIndexViewModel();
-      InitializeViewModel(viewModel);
+      var viewModel = new IndexViewModel();
       return View(viewModel);
     }
   }

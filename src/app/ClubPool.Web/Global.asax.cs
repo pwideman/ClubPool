@@ -70,7 +70,7 @@ namespace ClubPool.Web
       ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
       ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
 
-      container.RegisterControllers(typeof(HomeController).Assembly);
+      container.RegisterControllers(typeof(BaseController).Assembly);
       ComponentRegistrar.AddComponentsTo(container);
 
     }

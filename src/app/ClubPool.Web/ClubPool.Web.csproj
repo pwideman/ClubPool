@@ -174,7 +174,6 @@
   <ItemGroup>
     <Compile Include="CastleWindsor\ComponentRegistrar.cs" />
     <Compile Include="Code\NHValidatorRulesProvider.cs" />
-    <Compile Include="Code\Roles.cs" />
     <Compile Include="Code\SparkInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -255,11 +254,15 @@
     <None Include="Views\Error\NotFound.spark" />
     <None Include="Views\Home\Index.spark" />
     <None Include="Views\Layouts\Application.spark" />
+    <None Include="Views\Navigation\Menu.spark.bak" />
+    <None Include="Views\Shared\_LoginStatus.spark.renderaction" />
+    <None Include="Views\Shared\_Menu.spark.renderaction" />
     <None Include="Views\Shared\_Login.spark" />
     <None Include="Views\Shared\_LoginStatus.spark" />
     <None Include="Views\Shared\_Menu.spark" />
     <None Include="Views\Shared\_Sidebar.spark" />
     <None Include="Views\User\Login.spark" />
+    <None Include="Views\User\LoginStatus.spark" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="logs\" />

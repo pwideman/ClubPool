@@ -22,6 +22,10 @@ namespace ClubPool.ApplicationServices
       return roleProvider.GetRolesForUser(username);
     }
 
+    public bool IsUserInRole(string username, string role) {
+      return roleProvider.IsUserInRole(username, role);
+    }
+
     #endregion
   }
 }

@@ -13,8 +13,8 @@
   <body>
     <div id="header">
       <img src="~/content/images/logo.png" />
-      <div class="loginPanel"><LoginStatus/></div>
-      <div id="menucontainer"><Menu /></div>
+      <div class="loginPanel"><LoginStatus Model="ViewModel.LoginStatusViewModel"/></div>
+      <div id="menucontainer"><Menu Model="ViewModel.MenuViewModel"/></div>
     </div>
     <div id="container">
 		  <div id="maincontent" class="column"><use content="view"/></div>
