@@ -1,53 +1,44 @@
-<%@ Master Language="C#" AutoEventWireup="true" 
-    Inherits="System.Web.Mvc.ViewMasterPage" %>
-<%@ Import Namespace="ClubPool.Web.Controllers" %>
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head id="Head1" runat="server">
+    <title><asp:ContentPlaceHolder ID="TitleContentPlaceHolder" runat="server" /></title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
-    <link href="<%= ResolveUrl("~") %>Content/Site.css" rel="stylesheet" type="text/css" />
-
+    <%= Html.Stylesheet("site.css") %>
+  
+    <%= Html.ScriptInclude("jquery-1.3.2.min.js") %>
+    <%= Html.ScriptInclude("jquery.bgiframe.min.js") %>
+    <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
+    <%= Html.ScriptInclude("supersubs.js") %>
+    <%= Html.ScriptInclude("superfish.js") %>
+    <%= Html.ScriptInclude("clubpool.js") %>
+    
     <% // At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded %>
     <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">
-        <title>ClubPool</title>
     </asp:ContentPlaceHolder>
 </head>
-
 <body>
-    <div class="page">
-
-        <div id="mainContent">
-
-            <div class="columnsContainer">
-
-                <div class="leftColumn">
-                    <p>
-                        <%= Html.Image("~/Content/Images/sharp_arch.jpg") %>
-                    </p>
-                    <h2>ClubPool Pages</h2>
-                    <ul>
-                        <!-- We cannot use Html.ActionLink within a master page to link to a controller while using areas -->
-                        <li><%= Html.ActionLinkForAreas<HomeController>(c => c.Index(), "Home") %></li>
-                    </ul>
-                </div>
-                <!--/leftColumn-->
-
-                <div class="rightColumn">
-                    <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server" />
-                </div><!--/rightColumn-->
-
-                <div class="clear">
-                </div>
-
-            </div><!--/columnsContainer-->
-
-            <div id="sharpArchLogo"><%= Html.Image("~/Content/Images/sharp_arch_small.gif")%></div>
-
-        </div><!--/mainContent-->
-
-    </div><!--/page-->
+  <div id="header">
+    <%= Html.Image("~/content/images/logo.png", "Logo") %>
+    <div class="loginPanel">
+      <% Html.RenderAction("LoginStatus", "User", new { controller = "User", action = "LoginStatus" }); %>
+    </div>
+    <div id="menucontainer">
+      <% Html.RenderAction("Menu", "Navigation", new { controller="Navigation", action="Menu"}); %>
+    </div>
+  </div>
+  <div id="container">
+    <div id="maincontent" class="column">
+      <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server" />
+    </div>
+    <div id="sidebar" class="column">
+      <% Html.RenderAction("Index", "Sidebar", new { controller = "Sidebar", action = "Index" }); %>
+    </div>
+  </div>
+  <div id="footer">
+  </div>
 </body>
 </html>

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Web;
 using System.Web.Mvc;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Views
 {
-  public abstract class BaseController : Controller
+  public class AspxViewPage
   {
   }
 }

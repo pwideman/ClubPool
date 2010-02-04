@@ -82,8 +82,10 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Navigation\NavigationController.cs" />
-    <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
-    <Compile Include="Shared\ViewModels\LoginStatusViewModel.cs" />
+    <Compile Include="Navigation\ViewModels\MenuViewModel.cs" />
+    <Compile Include="Sidebar\SidebarController.cs" />
+    <Compile Include="Sidebar\ViewModels\IndexViewModel.cs" />
+    <Compile Include="User\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Home\ViewModels\IndexViewModel.cs" />
     <Compile Include="User\ViewModels\LoginViewModel.cs" />
     <Compile Include="ControllerEnums.cs" />
@@ -107,7 +109,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Navigation\ViewModels\" />
+    <Folder Include="Shared\ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
