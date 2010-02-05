@@ -39,6 +39,14 @@ namespace ClubPool.Web
       
       log4net.Config.XmlConfigurator.Configure();
 
+      ViewEngines.Engines.Clear();
+
+      // spark stuff
+      //RegisterViewEngine(ViewEngines.Engines);
+      SparkEngineStarter.RegisterViewEngine(SparkInitializer.GetSettings());
+      LoadPrecompiledViews(ViewEngines.Engines);
+      // end spark stuff
+
       ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
 
       // xVal & the NHValidatorRulesProvider
@@ -138,6 +146,17 @@ namespace ClubPool.Web
 
       errorController.Execute(requestContext);
     }
+
+    // spark stuff
+    protected static void RegisterViewEngine(ViewEngineCollection engines) {
+      engines.Add(new SparkViewFactory(SparkInitializer.GetSettings()));
+    }
+
+    public static void LoadPrecompiledViews(ViewEngineCollection engines) {
+      SparkViewFactory factory = engines.OfType<SparkViewFactory>().First();
+      factory.Engine.LoadBatchCompilation(Assembly.Load("ClubPool.Web.Views"));
+    }
+    // end spark stuff
 
     private WebSessionStorage webSessionStorage;
     private static bool showCustomErrorPages;
