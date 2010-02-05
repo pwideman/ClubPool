@@ -79,10 +79,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\BaseViewDataAttribute.cs" />
+    <Compile Include="Attributes\MenuViewDataAttribute.cs" />
+    <Compile Include="Attributes\LoginStatusViewDataAttribute.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Navigation\NavigationController.cs" />
     <Compile Include="Navigation\ViewModels\MenuViewModel.cs" />
+    <Compile Include="Shared\ViewModels\LoginStatusViewModel.cs" />
+    <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
+    <Compile Include="Shared\ViewModels\TestPanelViewModel.cs" />
+    <Compile Include="SidebarPanelViewData.cs" />
     <Compile Include="Sidebar\SidebarController.cs" />
     <Compile Include="Sidebar\ViewModels\IndexViewModel.cs" />
     <Compile Include="User\ViewModels\LoginStatusViewModel.cs" />
@@ -107,9 +114,6 @@
       <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
       <Name>ClubPool.ApplicationServices</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Shared\ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

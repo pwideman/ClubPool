@@ -174,12 +174,20 @@
   <ItemGroup>
     <Compile Include="CastleWindsor\ComponentRegistrar.cs" />
     <Compile Include="Code\AppHelper.cs" />
+    <Compile Include="Code\HtmlHelperExtensions.cs" />
     <Compile Include="Code\NHValidatorRulesProvider.cs" />
+    <Compile Include="Code\SparkInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="PrecompileViewsPostBuildStep.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PrecompileViewsPostBuildStep.designer.cs">
+      <DependentUpon>PrecompileViewsPostBuildStep.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\AspxViewPage.cs" />
@@ -248,15 +256,20 @@
     <None Include="Views\Error\NotFound.spark" />
     <None Include="Views\Home\Index.spark" />
     <None Include="Views\Layouts\Application.spark" />
-    <None Include="Views\Navigation\Menu.spark.bak" />
     <None Include="Views\Shared\_LoginStatus.spark.renderaction" />
     <None Include="Views\Shared\_Menu.spark.renderaction" />
     <None Include="Views\Shared\_Login.spark" />
     <None Include="Views\Shared\_LoginStatus.spark" />
     <None Include="Views\Shared\_Menu.spark" />
     <None Include="Views\Shared\_Sidebar.spark" />
+    <None Include="Views\Shared\_TestPanel.spark" />
+    <None Include="Views\Sidebar\Index.spark" />
     <None Include="Views\User\Login.spark" />
-    <None Include="Views\User\LoginStatus.spark" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PrecompileViewsPostBuildStep.resx">
+      <DependentUpon>PrecompileViewsPostBuildStep.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="logs\" />

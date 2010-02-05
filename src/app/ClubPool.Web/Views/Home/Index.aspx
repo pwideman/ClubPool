@@ -7,7 +7,6 @@
     About the league</h4>
   <p>
     About...
-    <%= Html.ActionLink<ClubPool.Web.Controllers.User.UserController>(c => c.Logout(), "login") %>
   </p>
 </asp:Content>
 

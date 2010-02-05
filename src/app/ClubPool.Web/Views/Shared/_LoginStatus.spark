@@ -1,5 +1,7 @@
-﻿<if condition="Model.IsLoggedIn">
-  ${Model.Username} !{Html.ActionLink<User.UserController>(x => x.Logout(), "logout")}
+﻿<var model="ViewData.Get<ClubPool.Web.Controllers.Shared.ViewModels.LoginStatusViewModel>()"
+     type="ClubPool.Web.Controllers.Shared.ViewModels.LoginStatusViewModel"/>
+<if condition="model.UserIsLoggedIn">
+  ${model.Username} !{Html.ActionLink<User.UserController>(x => x.Logout(), "logout")}
 </if>
 <else>
   !{Html.ActionLink<User.UserController>(x => x.Login(string.Empty), "login")}

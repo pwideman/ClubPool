@@ -1,3 +1,5 @@
+<var model="ViewData.Get<ClubPool.Web.Controllers.Shared.ViewModels.MenuViewModel>()" 
+     type="ClubPool.Web.Controllers.Shared.ViewModels.MenuViewModel"/>
 <ul class="sf-menu">
 	<li>
 		<a href="/home">Home</a>
@@ -12,7 +14,7 @@
 			<li><a href="/league/rules">Rules</a></li>
 	  </ul>
 	</li>
-	<li>
+	<li if="model.UserIsLoggedIn">
 	  <a href="#">My</a>
     <ul>
 		  <li><a href="/dashboard">Home</a></li>
@@ -22,7 +24,7 @@
 		  <li><a href="/user/info">Member Info</a></li>
 		</ul>
 	</li>
-	<li if="Model.DisplayAdminMenu">
+	<li if="model.DisplayAdminMenu">
 		<a href="#">Admin</a>
 		<ul>
 			<li><a href="/players">Players</a></li>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 
 using Spark;
+
 namespace ClubPool.Web.Code
 {
   // we must initialize spark in code because adding the Microsoft.Web.Mvc namespace 

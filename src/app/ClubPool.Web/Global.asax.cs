@@ -35,17 +35,14 @@ namespace ClubPool.Web
   {
     protected void Application_Start() {
 
-      showCustomErrorPages = Convert.ToBoolean(ConfigurationManager.AppSettings["showCustomErrorPages"]); 
+      showCustomErrorPages = Convert.ToBoolean(ConfigurationManager.AppSettings["showCustomErrorPages"]);
       
       log4net.Config.XmlConfigurator.Configure();
 
-      ViewEngines.Engines.Clear();
-
-      // spark stuff
-      //RegisterViewEngine(ViewEngines.Engines);
-      SparkEngineStarter.RegisterViewEngine(SparkInitializer.GetSettings());
-      LoadPrecompiledViews(ViewEngines.Engines);
-      // end spark stuff
+      var spark = Convert.ToBoolean(ConfigurationManager.AppSettings["useSparkViewEngine"]);
+      if (spark) {
+        InitSparkViewEngine();
+      }
 
       ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
 
@@ -148,11 +145,13 @@ namespace ClubPool.Web
     }
 
     // spark stuff
-    protected static void RegisterViewEngine(ViewEngineCollection engines) {
-      engines.Add(new SparkViewFactory(SparkInitializer.GetSettings()));
+    public void InitSparkViewEngine() {
+      ViewEngines.Engines.Clear();
+      SparkEngineStarter.RegisterViewEngine(SparkInitializer.GetSettings());
+      LoadPrecompiledViews(ViewEngines.Engines);
     }
 
-    public static void LoadPrecompiledViews(ViewEngineCollection engines) {
+    public void LoadPrecompiledViews(ViewEngineCollection engines) {
       SparkViewFactory factory = engines.OfType<SparkViewFactory>().First();
       factory.Engine.LoadBatchCompilation(Assembly.Load("ClubPool.Web.Views"));
     }

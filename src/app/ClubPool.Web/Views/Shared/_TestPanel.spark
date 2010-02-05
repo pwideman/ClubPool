@@ -1,0 +1,2 @@
+﻿<viewdata model="ClubPool.Web.Controllers.Shared.ViewModels.TestPanelViewModel"/>
+<p>${Model.Title}</p>

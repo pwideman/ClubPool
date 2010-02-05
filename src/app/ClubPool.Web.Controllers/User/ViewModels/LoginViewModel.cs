@@ -6,7 +6,7 @@ using System.Text;
 namespace ClubPool.Web.Controllers.User.ViewModels
 {
 
-  public class LoginViewModel : BaseViewModel
+  public class LoginViewModel
   {
     public string Username { get; set; }
     public string Message { get; set; }
