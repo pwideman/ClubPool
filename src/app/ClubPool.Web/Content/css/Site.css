@@ -65,12 +65,11 @@ div.spacer
   clear: both;
 }
 
-
 /* Container
 ---------------------------------------------------------*/
 #container 
 {
-  padding-right: 310px;
+  padding-right: 330px;
   overflow: hidden;
   clear: both;
 }
@@ -107,7 +106,6 @@ div.spacer
   font-size: 12px;
 }
 
-
 /* main content
 ----------------------------------------------------------*/
 #maincontent
@@ -116,12 +114,81 @@ div.spacer
   padding: 10px 20px;
 }
 
+/* sidebar
+----------------------------------------------------------*/
+#sidebarContainer
+{
+  width: 270px;
+  margin-right: -330px;
+  padding: 0;
+}
+
+#sidebar
+{
+  background: #E2E2E2;
+  padding: 6px 6px 2px 6px;
+}
+
+div.sidebarGadgetContainer
+{
+  margin-bottom: 4px;
+  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
+  padding: 6px;
+}
+
+div.sidebarGadgetTitle
+{
+  padding: 4px;
+  color: #FFFFFF;
+}
+
+div.sidebarGadgetContent
+{
+  margin: 0 auto;
+  /*width: 225px;*/
+  padding: 4px;
+  font-size: 80%;
+  background-color: #8EB1DF; /*#F2F2F2;*/
+}
+
+/* footer
+----------------------------------------------------------*/
+#footer
+{
+  clear: both;
+  background: #999;
+  position: relative;
+}
+
 /* forms
 ----------------------------------------------------------*/
 
-fieldset
+div.formContainer
 {
-  border: 1px solid #074B8A;
+  margin-bottom: 4px;
+  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
+  padding: 6px;
+  display:inline-block;
+}
+
+div.formTitle
+{
+  padding: 4px;
+  color: #FFFFFF;
+  font-size: 120%;
+}
+
+div.formContent
+{
+  margin: 0 auto;
+  /*width: 225px;*/
+  padding: 4px;
+  background-color: #8EB1DF; /*#F2F2F2;*/
+}
+
+fieldset 
+{
+  border: 0;
 }
 
 div.formrow
@@ -151,43 +218,17 @@ div.formrow label
 {
   margin-top: 5px;
   text-align:right;
-  width:140px;
+  /*width:140px;*/
   float:left;
   padding-right: 5px;
 }
 
 div.formrowspan
 {
-  text-align: right;
-}
-
-div.formTitle
-{
-  padding: 4px;
-  color: #FFFFFF;
+  text-align: center;
 }
 
 /* sidebar login form */
-
-div.sidebarLoginForm
-{
-  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
-  padding: 6px;
-}
-
-form.sidebarLoginForm
-{
-  margin: 0 auto;
-  width: 225px;
-  padding: 4px;
-  font-size: 80%;
-  background-color: #8EB1DF; /*#F2F2F2;*/
-}
-
-form.sidebarLoginForm fieldset
-{
-  border: 0;
-}
 
 form.sidebarLoginForm p.error
 {
@@ -198,7 +239,7 @@ form.sidebarLoginForm p.error
 
 form.sidebarLoginForm div.formrow label
 {
-  width: 65px;
+  width: 55px;
 }
 
 form.sidebarLoginForm div.formrow input
@@ -214,24 +255,38 @@ form.sidebarLoginForm button
   margin-left: 55px;
 }
 
-/* sidebar
-----------------------------------------------------------*/
-#sidebar 
+/* normal login form */
+
+form.loginForm
 {
-  width: 250px;
-  padding: 0 10px;
-  margin-right: -310px;
+  width: 300px;
 }
 
-/* footer
-----------------------------------------------------------*/
-#footer
+form.loginForm p.error
 {
-  clear: both;
-  background: #999;
-  position: relative;
+  color: Red;
+  text-align: center;
+  width: 100%;
 }
 
+form.loginForm div.formrow label
+{
+  padding-top: 4px;
+  width: 80px;
+}
+
+form.loginForm div.formrow input
+{
+  width: 160px;
+  /*height: 16px;*/
+}
+
+form.loginForm button
+{
+  width: 100px;
+  height: 25px;
+  margin-left: 100px;
+}
 
 /* MISC  
 ----------------------------------------------------------*/

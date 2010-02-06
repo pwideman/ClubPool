@@ -17,6 +17,18 @@
     <%= Html.ScriptInclude("clubpool.js") %>
     <%= Html.ScriptInclude("jquery.corner.js") %>
     
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var sidebarCornerRadius = "8px";
+        $("#sidebar").corner(sidebarCornerRadius);
+        $(".sidebarGadgetContainer").corner(sidebarCornerRadius);
+        $(".sidebarGadgetContent").corner(sidebarCornerRadius);
+        var formCornerRadius = "12px";
+        $(".formContainer").corner(formCornerRadius);
+        $(".formContent").corner(formCornerRadius);
+      });
+    </script>
+    
     <% // At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded %>
     <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">
     </asp:ContentPlaceHolder>
@@ -35,18 +47,22 @@
       <div id="maincontent" class="column">
         <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server" />
       </div>
-      <div id="sidebar" class="column">
-        <%
-        if (ViewData.Contains<SidebarCollection>()) {
-          var sidebarCollection = ViewData.Get<SidebarCollection>();
-          foreach (var sidebar in sidebarCollection) {
-            sidebar.Action.Invoke(ViewContext);
-          }
-        }
-        %>
-      </div>
+      <%
+      if (ViewData.Contains<SidebarCollection>()) {
+        var sidebarCollection = ViewData.Get<SidebarCollection>();
+        if (sidebarCollection.Count > 0) { %>
+          <div id="sidebarContainer" class="column">
+            <div id="sidebar">
+              <%
+              foreach (var sidebar in sidebarCollection) {
+                sidebar.Action.Invoke(ViewContext);
+              }
+              %>
+            </div>
+          </div>
+        <% }
+      } %>
     </div>
-    <div id="footer">
-    </div>
+    <div id="footer"></div>
   </body>
 </html>

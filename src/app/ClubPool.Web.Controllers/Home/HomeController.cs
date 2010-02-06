@@ -29,7 +29,7 @@ namespace ClubPool.Web.Controllers
       var sidebarCollection = new SidebarCollection();
       if (!HttpContext.User.Identity.IsAuthenticated) {
         var loginControlRequest = new PartialRequest();
-        loginControlRequest.SetAction<ClubPool.Web.Controllers.UserController>(c => c.LoginControl());
+        loginControlRequest.SetAction<ClubPool.Web.Controllers.UserController>(c => c.LoginGadget());
         var loginViewData = new SidebarPanelViewData() {
           Name = "Login",
           Action = loginControlRequest

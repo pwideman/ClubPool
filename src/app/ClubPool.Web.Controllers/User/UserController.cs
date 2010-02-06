@@ -61,7 +61,7 @@ namespace ClubPool.Web.Controllers
       return PartialView(viewModel);
     }
 
-    public ActionResult LoginControl() {
+    public ActionResult LoginGadget() {
       return PartialView(new LoginViewModel() { IsInSidebar = true });
     }
 
