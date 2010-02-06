@@ -9,7 +9,7 @@ using ClubPool.ApplicationServices.Interfaces;
 using ClubPool.Web.Controllers.User.ViewModels;
 using ClubPool.Web.Controllers.Home;
 
-namespace ClubPool.Web.Controllers.User
+namespace ClubPool.Web.Controllers
 {
   public class UserController : BaseController
   {
@@ -56,10 +56,14 @@ namespace ClubPool.Web.Controllers.User
 
     public ActionResult LoginStatus() {
       var viewModel = new LoginStatusViewModel() {
-        IsLoggedIn = User.Identity.IsAuthenticated,
+        UserIsLoggedIn = User.Identity.IsAuthenticated,
         Username = User.Identity.Name
       };
       return PartialView(viewModel);
+    }
+
+    public ActionResult LoginControl() {
+      return PartialView(new LoginViewModel() { IsInSidebar = true });
     }
 
     public ActionResult Logout() {

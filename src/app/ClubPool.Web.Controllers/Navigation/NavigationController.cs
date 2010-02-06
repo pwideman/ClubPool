@@ -8,7 +8,7 @@ using ClubPool.Core;
 using ClubPool.ApplicationServices.Interfaces;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
 
-namespace ClubPool.Web.Controllers.Navigation
+namespace ClubPool.Web.Controllers
 {
   public class NavigationController : BaseController
   {
@@ -22,9 +22,11 @@ namespace ClubPool.Web.Controllers.Navigation
       var viewModel = new MenuViewModel();
       if (User.Identity.IsAuthenticated) {
         viewModel.DisplayAdminMenu = roleService.IsUserInRole(User.Identity.Name, Roles.Administrators);
+        viewModel.UserIsLoggedIn = true;
       }
       else {
         viewModel.DisplayAdminMenu = false;
+        viewModel.UserIsLoggedIn = false;
       }
       return PartialView(viewModel);
     }

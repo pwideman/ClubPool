@@ -10,9 +10,9 @@ using ClubPool.Web.Controllers.Attributes;
 
 namespace ClubPool.Web.Controllers
 {
-  [Precompile]
-  [LoginStatusViewData]
-  [MenuViewData]
+  //[Precompile]
+  //[LoginStatusViewData]
+  //[MenuViewData]
   public abstract class BaseController : Controller
   {
   }

@@ -35,5 +35,15 @@ namespace ClubPool.Web.Code
       }
       helper.RenderRoute(rvd);
     }
+
+    public static string ContentImage(this HtmlHelper helper, string image, string alt) {
+      return helper.Image("~/content/images/" + image, alt);
+    }
+
+    //public static void RenderPartialRequest(this HtmlHelper html, string viewDataKey) {
+    //  PartialRequest partial = html.ViewContext.ViewData.Eval(viewDataKey) as PartialRequest;
+    //  if (partial != null)
+    //    partial.Invoke(html.ViewContext);
+    //}
   }
 }

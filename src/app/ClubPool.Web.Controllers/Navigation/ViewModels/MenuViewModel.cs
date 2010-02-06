@@ -8,5 +8,6 @@ namespace ClubPool.Web.Controllers.Navigation.ViewModels
   public class MenuViewModel
   {
     public bool DisplayAdminMenu { get; set; }
+    public bool UserIsLoggedIn { get; set; }
   }
 }

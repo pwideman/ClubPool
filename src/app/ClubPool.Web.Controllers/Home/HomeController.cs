@@ -4,18 +4,15 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Web;
 
-using MvcContrib.Filters;
-using Spark;
 using SharpArch.Core.PersistenceSupport;
 
 using ClubPool.Core;
-using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.ViewModels;
 
-namespace ClubPool.Web.Controllers.Home
+namespace ClubPool.Web.Controllers
 {
-  [Precompile("_TestPanel")]
   public class HomeController : BaseController
   {
     public HomeController() {
@@ -23,16 +20,23 @@ namespace ClubPool.Web.Controllers.Home
 
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
-      ViewData["SidebarPanels"] = GetSidebarViewDataForIndex();
+      var sidebarCollection = GetSidebarCollectionForIndex();
+      ViewData[sidebarCollection.GetType().FullName] = sidebarCollection;
       return View(viewModel);
     }
 
-    protected IList<SidebarPanelViewData> GetSidebarViewDataForIndex() {
-      var sidebarViewData = new SidebarPanelViewData() {
-        Name = "_TestPanel",
-        ViewModel = new TestPanelViewModel() { Title = "Test Sidebar Panel" }
-      };
-      return new List<SidebarPanelViewData>() { sidebarViewData };
+    protected SidebarCollection GetSidebarCollectionForIndex() {
+      var sidebarCollection = new SidebarCollection();
+      if (!HttpContext.User.Identity.IsAuthenticated) {
+        var loginControlRequest = new PartialRequest();
+        loginControlRequest.SetAction<ClubPool.Web.Controllers.UserController>(c => c.LoginControl());
+        var loginViewData = new SidebarPanelViewData() {
+          Name = "Login",
+          Action = loginControlRequest
+        };
+        sidebarCollection.Add(loginViewData);
+      }
+      return sidebarCollection;
     }
   }
 }

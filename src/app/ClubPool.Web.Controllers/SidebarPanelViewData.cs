@@ -5,10 +5,13 @@ using System.Text;
 
 namespace ClubPool.Web.Controllers
 {
+  public class SidebarCollection : List<SidebarPanelViewData>
+  {
+  }
+
   public class SidebarPanelViewData
   {
     public string Name { get; set; }
-    public object ViewModel { get; set; }
-
+    public PartialRequest Action { get; set; }
   }
 }

@@ -4,13 +4,14 @@
 	<li>
 		<a href="/home">Home</a>
   </li>
-  <li><%= Html.ActionLink<ClubPool.Web.Controllers.User.UserController>(x => x.Login(string.Empty), "Login") %></li>
+  <li><%= Html.ActionLink<ClubPool.Web.Controllers.UserController>(x => x.Login(string.Empty), "Login") %></li>
   <li><a href="#">League</a>
     <ul>
       <li><a href="/league/regulations">Regulations</a></li>
       <li><a href="/league/rules">Rules</a></li>
     </ul>
   </li>
+  <% if (Model.UserIsLoggedIn) { %>
   <li><a href="#">My</a>
     <ul>
       <li><a href="/dashboard">Home</a></li>
@@ -20,7 +21,8 @@
       <li><a href="/user/info">Member Info</a></li>
     </ul>
   </li>
-  <% if (Model.DisplayAdminMenu) { %>
+  <% } 
+    if (Model.DisplayAdminMenu) { %>
   <li><a href="#">Admin</a>
     <ul>
       <li><a href="/players">Players</a></li>

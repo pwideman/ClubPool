@@ -7,7 +7,7 @@ namespace ClubPool.Web.Controllers.User.ViewModels
 {
   public class LoginStatusViewModel
   {
-    public bool IsLoggedIn { get; set; }
+    public bool UserIsLoggedIn { get; set; }
     public string Username { get; set; }
   }
 }

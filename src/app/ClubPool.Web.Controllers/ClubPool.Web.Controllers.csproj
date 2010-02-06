@@ -35,6 +35,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8c4e07fba554c96f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Microsoft.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="MvcContrib, Version=0.0.1.96, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MvcContrib.dll</HintPath>
@@ -86,6 +90,7 @@
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Navigation\NavigationController.cs" />
     <Compile Include="Navigation\ViewModels\MenuViewModel.cs" />
+    <Compile Include="PartialRequest.cs" />
     <Compile Include="Shared\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
     <Compile Include="Shared\ViewModels\TestPanelViewModel.cs" />

@@ -24,7 +24,6 @@ namespace ClubPool.Web
     // we must manually add the controllers to the batch since they are in a different assembly
     private void precompileInstaller1_DescribeBatch(object sender, Spark.Web.Mvc.Install.DescribeBatchEventArgs e) {
       e.Batch.FromAssembly(typeof(BaseController).Assembly);
-      //e.Batch.For<HomeController>().Include("_Menu").Include("_LoginStatus");
     }
   }
 }

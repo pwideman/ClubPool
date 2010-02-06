@@ -21,12 +21,12 @@
   </head>
   <body>
     <div id="header">
-      <%= Html.Image("~/content/images/logo.png", "Logo") %>
+      <%= Html.ContentImage("logo.png", "Logo") %>
       <div class="loginPanel">
-        <% Html.RenderActionForAreas<ClubPool.Web.Controllers.User.UserController>(c => c.LoginStatus()); %>
+        <% Html.RenderActionForAreas<ClubPool.Web.Controllers.UserController>(c => c.LoginStatus()); %>
       </div>
       <div id="menucontainer">
-        <% Html.RenderActionForAreas<ClubPool.Web.Controllers.Navigation.NavigationController>(c => c.Menu()); %>
+        <% Html.RenderActionForAreas<ClubPool.Web.Controllers.NavigationController>(c => c.Menu()); %>
       </div>
     </div>
     <div id="container">
@@ -34,7 +34,14 @@
         <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server" />
       </div>
       <div id="sidebar" class="column">
-        <% Html.RenderActionForAreas<ClubPool.Web.Controllers.Sidebar.SidebarController>(c => c.Index()); %>
+        <%
+        if (ViewData.Contains<SidebarCollection>()) {
+          var sidebarCollection = ViewData.Get<SidebarCollection>();
+          foreach (var sidebar in sidebarCollection) {
+            sidebar.Action.Invoke(ViewContext);
+          }
+        }
+        %>
       </div>
     </div>
     <div id="footer">

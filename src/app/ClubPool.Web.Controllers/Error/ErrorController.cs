@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 
-namespace ClubPool.Web.Controllers.Error
+namespace ClubPool.Web.Controllers
 {
   /// <summary>
   /// This class is based on similar functionality from the Who Can Help Me? showcase app
