@@ -8,12 +8,14 @@
 
     <%= Html.Stylesheet("site.css") %>
 
-    <%= Html.ScriptInclude("jquery-1.3.2.min.js") %>
+    <%= Html.ScriptInclude("jquery-1.4.1.min.js") %>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
     <%= Html.ScriptInclude("jquery.bgiframe.min.js") %>
     <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
     <%= Html.ScriptInclude("supersubs.js") %>
     <%= Html.ScriptInclude("superfish.js") %>
     <%= Html.ScriptInclude("clubpool.js") %>
+    <%= Html.ScriptInclude("jquery.corner.js") %>
     
     <% // At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded %>
     <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">

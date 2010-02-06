@@ -7,7 +7,6 @@ using MvcContrib.Attributes;
 
 using ClubPool.ApplicationServices.Interfaces;
 using ClubPool.Web.Controllers.User.ViewModels;
-using ClubPool.Web.Controllers.Home;
 
 namespace ClubPool.Web.Controllers
 {

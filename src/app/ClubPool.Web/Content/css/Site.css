@@ -103,7 +103,7 @@ div.spacer
 #menucontainer
 {
   margin-top: -3px;
-  margin-left: 1px;
+  margin-left: 0;
   font-size: 12px;
 }
 
@@ -161,14 +161,32 @@ div.formrowspan
   text-align: right;
 }
 
-/* login form */
+div.formTitle
+{
+  padding: 4px;
+  color: #FFFFFF;
+}
+
+/* sidebar login form */
+
+div.sidebarLoginForm
+{
+  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
+  padding: 6px;
+}
 
 form.sidebarLoginForm
 {
   margin: 0 auto;
   width: 225px;
-  padding: 14px;
+  padding: 4px;
   font-size: 80%;
+  background-color: #8EB1DF; /*#F2F2F2;*/
+}
+
+form.sidebarLoginForm fieldset
+{
+  border: 0;
 }
 
 form.sidebarLoginForm p.error
@@ -320,7 +338,7 @@ ul.sf-menu li li li.sfHover ul {
 	color:			black;
 }
 .sf-menu li {
-	background: #8EB1DF
+	background: #8EB1DF;
 }
 /*
 .sf-menu li li {

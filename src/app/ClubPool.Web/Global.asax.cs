@@ -39,13 +39,9 @@ namespace ClubPool.Web
       
       log4net.Config.XmlConfigurator.Configure();
 
-      ViewEngines.Engines.Clear();
       var spark = Convert.ToBoolean(ConfigurationManager.AppSettings["useSparkViewEngine"]);
       if (spark) {
         InitSparkViewEngine();
-      }
-      else {
-        ViewEngines.Engines.Add(new AreaViewEngine());
       }
 
       ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
