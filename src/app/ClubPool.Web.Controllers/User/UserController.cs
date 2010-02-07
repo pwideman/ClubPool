@@ -65,6 +65,16 @@ namespace ClubPool.Web.Controllers
       return PartialView(new LoginViewModel() { IsInSidebar = true });
     }
 
+    [AcceptGet]
+    public ViewResult ResetPassword() {
+      return View();
+    }
+
+    [AcceptPost]
+    public ActionResult ResetPassword(ResetPasswordViewModel viewModel) {
+      return View();
+    }
+
     public ActionResult Logout() {
       authenticationService.LogOut();
       return this.RedirectToAction<HomeController>(x => x.Index());

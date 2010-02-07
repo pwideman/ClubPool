@@ -17,26 +17,14 @@
     <%= Html.ScriptInclude("clubpool.js") %>
     <%= Html.ScriptInclude("jquery.corner.js") %>
     
-    <script type="text/javascript">
-      $(document).ready(function() {
-        var sidebarCornerRadius = "8px";
-        $("#sidebar").corner(sidebarCornerRadius);
-        $(".sidebarGadgetContainer").corner(sidebarCornerRadius);
-        $(".sidebarGadgetContent").corner(sidebarCornerRadius);
-        var formCornerRadius = "12px";
-        $(".formContainer").corner(formCornerRadius);
-        $(".formContent").corner(formCornerRadius);
-      });
-    </script>
-    
     <% // At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded %>
     <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">
     </asp:ContentPlaceHolder>
   </head>
   <body>
     <div id="header">
-      <%= Html.ContentImage("logo.png", "Logo") %>
-      <div class="loginPanel">
+      <%= Html.ContentImage("HeaderLogoHarlow.png", "Logo") %>
+      <div id="loginStatusPanel">
         <% Html.RenderActionForAreas<ClubPool.Web.Controllers.UserController>(c => c.LoginStatus()); %>
       </div>
       <div id="menucontainer">

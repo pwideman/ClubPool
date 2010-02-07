@@ -217,7 +217,6 @@
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\DebugFormSubmission.ascx" />
     <Content Include="Views\Shared\LoginControl.ascx" />
-    <Content Include="Views\Shared\LoginGadget.ascx" />
     <Content Include="Views\Sidebar\Index.ascx" />
     <Content Include="Views\User\Login.aspx" />
     <Content Include="Views\User\LoginGadget.aspx" />

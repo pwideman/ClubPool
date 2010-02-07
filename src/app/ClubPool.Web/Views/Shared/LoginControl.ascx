@@ -16,8 +16,10 @@
   <div class="formrowspan">
     <%= this.CheckBox(m => m.RememberMe).LabelAfter("Remember me next time") %>
   </div>
-  <div class="formrow">
-    <button type="submit">
-      Login</button>
+  <div class="formrowspan">
+    <%= Html.ActionLinkForAreas<ClubPool.Web.Controllers.UserController>(c => c.ResetPassword(), "I forgot my password") %>
+  </div>
+  <div class="submitrow">
+    <button type="submit">Login</button>
   </div>
 </fieldset>

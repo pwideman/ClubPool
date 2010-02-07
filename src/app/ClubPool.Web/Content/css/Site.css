@@ -90,13 +90,26 @@ div.spacer
   margin: 0;
 }
 
-#header div.loginPanel 
+#loginStatusPanel
 {
-  right: 250px;
+  right: 25px;
   float: right;
   display: inline;
   position: relative;
+  background: #E0ECF8;/*#648ABD;*/
+  padding: 4px 20px 10px 20px;
+  color: black; /*#FFFFFF;*/
+  width: 220px;
+  text-align: center;
+  border: 1px solid #648ABD; /*#074B8A;*/
+  border-top: 0;
 }
+
+#loginStatusPanela a
+{
+  color: #E0ECF8/* #8EB1DF;*/
+}
+
 /* menu
 ----------------------------------------------------------*/
 #menucontainer
@@ -148,7 +161,7 @@ div.sidebarGadgetContent
   /*width: 225px;*/
   padding: 4px;
   font-size: 80%;
-  background-color: #8EB1DF; /*#F2F2F2;*/
+  background-color: #E0ECF8; /*#8EB1DF; /*#F2F2F2;*/
 }
 
 /* footer
@@ -163,12 +176,12 @@ div.sidebarGadgetContent
 /* forms
 ----------------------------------------------------------*/
 
-div.formContainer
+form.normal
 {
   margin-bottom: 4px;
   background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
   padding: 6px;
-  display:inline-block;
+  display: inline-block;
 }
 
 div.formTitle
@@ -178,12 +191,13 @@ div.formTitle
   font-size: 120%;
 }
 
-div.formContent
+form.normal fieldset
 {
+  border: 0;
   margin: 0 auto;
   /*width: 225px;*/
-  padding: 4px;
-  background-color: #8EB1DF; /*#F2F2F2;*/
+  padding: 8px;
+  background-color: #E0ECF8; /*#8EB1DF; /*#F2F2F2;*/
 }
 
 fieldset 
@@ -218,7 +232,6 @@ div.formrow label
 {
   margin-top: 5px;
   text-align:right;
-  /*width:140px;*/
   float:left;
   padding-right: 5px;
 }
@@ -226,16 +239,23 @@ div.formrow label
 div.formrowspan
 {
   text-align: center;
+  padding: 2px;
 }
 
-/* sidebar login form */
-
-form.sidebarLoginForm p.error
+div.submitrow
 {
-  color: Red;
+  text-align: center;
+  padding-top: 8px;
+}
+
+form p.error
+{
+  color: #DF0101;
   text-align: center;
   width: 100%;
 }
+
+/* sidebar login form */
 
 form.sidebarLoginForm div.formrow label
 {
@@ -252,7 +272,7 @@ form.sidebarLoginForm button
 {
   width: 100px;
   height: 25px;
-  margin-left: 55px;
+  /*margin-left: 55px;*/
 }
 
 /* normal login form */
@@ -260,13 +280,6 @@ form.sidebarLoginForm button
 form.loginForm
 {
   width: 300px;
-}
-
-form.loginForm p.error
-{
-  color: Red;
-  text-align: center;
-  width: 100%;
 }
 
 form.loginForm div.formrow label
@@ -285,7 +298,7 @@ form.loginForm button
 {
   width: 100px;
   height: 25px;
-  margin-left: 100px;
+  /*margin-left: 100px;*/
 }
 
 /* MISC  
