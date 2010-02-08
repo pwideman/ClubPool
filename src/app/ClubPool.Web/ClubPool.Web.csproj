@@ -190,6 +190,8 @@
       <DependentUpon>PrecompileViewsPostBuildStep.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\AspxViewMasterPageBase.cs">
+    </Compile>
     <Compile Include="Views\AspxViewPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

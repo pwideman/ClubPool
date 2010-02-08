@@ -8,6 +8,7 @@ using Microsoft.Web.Mvc.Internal;
 
 namespace ClubPool.Web.Controllers
 {
+  // this code based on Steve Sanderson's PartialRequest class from: http://blog.stevensanderson.com/2008/10/14/partial-requests-in-aspnet-mvc/
   public class PartialRequest
   {
     public RouteValueDictionary RouteValues { get; private set; }

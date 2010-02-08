@@ -348,7 +348,7 @@ form.loginForm button
 .sf-menu li:hover ul,
 .sf-menu li.sfHover ul {
 	left:			-1px;
-	top:			2.55em; /* match top ul list item height */
+	top:			2.65em; /* match top ul list item height */
 	z-index:		99;
 }
 ul.sf-menu li:hover li ul,
@@ -370,7 +370,7 @@ ul.sf-menu li li li.sfHover ul {
 	top:			0;
 }
 
-/*** DEMO SKIN ***/
+/*** BLUE SKIN ***/
 .sf-menu {
 	float:			left;
 	margin-bottom:	1em;
@@ -408,14 +408,6 @@ ul.sf-menu li li li.sfHover ul {
 .sf-menu li {
 	background: #8EB1DF;
 }
-/*
-.sf-menu li li {
-	background:		#AABDE6;
-}
-.sf-menu li li li {
-	background:		#9AAEDB;
-}
-*/
 .sf-menu li:hover, .sf-menu li.sfHover,
 .sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
 	background:	#7795BD;
