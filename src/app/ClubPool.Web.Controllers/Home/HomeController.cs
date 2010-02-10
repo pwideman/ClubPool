@@ -10,6 +10,7 @@ using ClubPool.Core;
 using ClubPool.ApplicationServices.Interfaces;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.ViewModels;
+using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 
 namespace ClubPool.Web.Controllers
 {
@@ -20,23 +21,18 @@ namespace ClubPool.Web.Controllers
 
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
-      var sidebarCollection = GetSidebarCollectionForIndex();
-      ViewData[sidebarCollection.GetType().FullName] = sidebarCollection;
+      var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
+      ViewData[sidebarGadgetCollection.GetType().FullName] = sidebarGadgetCollection;
       return View(viewModel);
     }
 
-    protected SidebarCollection GetSidebarCollectionForIndex() {
-      var sidebarCollection = new SidebarCollection();
+    protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
+      var sidebarGadgetCollection = new SidebarGadgetCollection();
       if (!HttpContext.User.Identity.IsAuthenticated) {
-        var loginControlRequest = new PartialRequest();
-        loginControlRequest.SetAction<ClubPool.Web.Controllers.UserController>(c => c.LoginGadget());
-        var loginViewData = new SidebarPanelViewData() {
-          Name = "Login",
-          Action = loginControlRequest
-        };
-        sidebarCollection.Add(loginViewData);
+        var loginGadget = new LoginSidebarGadget();
+        sidebarGadgetCollection.Add(loginGadget.Name, loginGadget);
       }
-      return sidebarCollection;
+      return sidebarGadgetCollection;
     }
   }
 }

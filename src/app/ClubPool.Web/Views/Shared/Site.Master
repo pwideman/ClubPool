@@ -1,4 +1,5 @@
 <%@ Master Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewMasterPage" %>
+<%@ Import Namespace="ClubPool.Web.Controllers.Shared.SidebarGadgets" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,13 +37,13 @@
         <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server" />
       </div>
       <%
-      if (ViewData.Contains<SidebarCollection>()) {
-        var sidebarCollection = ViewData.Get<SidebarCollection>();
-        if (sidebarCollection.Count > 0) { %>
+      if (ViewData.Contains<SidebarGadgetCollection>()) {
+        var sidebarGadgetCollection = ViewData.Get<SidebarGadgetCollection>();
+        if (sidebarGadgetCollection.Count > 0) { %>
           <div id="sidebarContainer" class="column">
             <div id="sidebar">
               <%
-              foreach (var sidebar in sidebarCollection) {
+              foreach (var sidebar in sidebarGadgetCollection.Values) {
                 sidebar.Action.Invoke(ViewContext);
               }
               %>

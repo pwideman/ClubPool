@@ -15,6 +15,7 @@ using Rhino.Mocks;
 
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Home.ViewModels;
+using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {
@@ -48,16 +49,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_return_the_default_view = () =>
       result.IsAViewAnd().ViewName.ShouldBeEmpty();
 
-    It should_add_sidebar_collection_to_the_view_data = () => {
+    It should_add_sidebar_gadget_collection_to_the_view_data = () => {
       var viewResult = result as ViewResult;
-      viewResult.ViewData.Contains<SidebarCollection>().ShouldBeTrue();
+      viewResult.ViewData.Contains<SidebarGadgetCollection>().ShouldBeTrue();
     };
 
-    It should_add_login_gadget_to_sidebar_collection = () => {
+    It should_add_login_gadget_to_sidebar_gadget_collection = () => {
       var viewResult = result as ViewResult;
-      var sidebarCollection = viewResult.ViewData.Get<SidebarCollection>();
+      var sidebarCollection = viewResult.ViewData.Get<SidebarGadgetCollection>();
       sidebarCollection.Count.ShouldEqual(1);
-      var loginViewData = sidebarCollection[0];
+      var loginViewData = sidebarCollection["Login"];
       loginViewData.Name.ShouldEqual("Login");
     };
   }

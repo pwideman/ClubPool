@@ -91,10 +91,12 @@
     <Compile Include="Navigation\NavigationController.cs" />
     <Compile Include="Navigation\ViewModels\MenuViewModel.cs" />
     <Compile Include="PartialRequest.cs" />
+    <Compile Include="Shared\SidebarGadgets\LoginSidebarGadget.cs" />
+    <Compile Include="Shared\SidebarGadgets\SidebarGadgetBase.cs" />
+    <Compile Include="Shared\SidebarGadgets\SidebarGadgetCollection.cs" />
     <Compile Include="Shared\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
     <Compile Include="Shared\ViewModels\TestPanelViewModel.cs" />
-    <Compile Include="SidebarPanelViewData.cs" />
     <Compile Include="Sidebar\SidebarController.cs" />
     <Compile Include="Sidebar\ViewModels\IndexViewModel.cs" />
     <Compile Include="User\ViewModels\LoginStatusViewModel.cs" />

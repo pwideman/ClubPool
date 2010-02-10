@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.Shared.SidebarGadgets
 {
-  public class SidebarCollection : List<SidebarPanelViewData>
-  {
-  }
-
-  public class SidebarPanelViewData
+  public abstract class SidebarGadgetBase
   {
     public string Name { get; set; }
     public PartialRequest Action { get; set; }
