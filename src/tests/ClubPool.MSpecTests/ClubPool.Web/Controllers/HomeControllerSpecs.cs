@@ -22,9 +22,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   public abstract class specification_for_home_controller
   {
     protected static HomeController controller;
+    protected static IIdentity identity;
 
     Establish context = () => {
       controller = new HomeController();
+      ControllerHelper.CreateMockControllerContext(controller);
+      identity = controller.User.Identity;
     };
   }
 
@@ -34,14 +37,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ActionResult result;
 
     Establish context = () => {
-      var mockIdentity = MockRepository.GenerateMock<IIdentity>();
-      mockIdentity.Expect(i => i.IsAuthenticated).Return(false);
-      var mockPrincipal = MockRepository.GenerateMock<IPrincipal>();
-      mockPrincipal.Expect(p => p.Identity).Return(mockIdentity);
-      var mockHttpContext = MockRepository.GenerateMock<HttpContextBase>();
-      mockHttpContext.Expect(c => c.User).Return(mockPrincipal);
-      var controllerContext = new ControllerContext(mockHttpContext, new RouteData(), controller);
-      controller.ControllerContext = controllerContext;
+      identity.Expect(i => i.IsAuthenticated).Return(false);
     };
 
     Because of = () => result = controller.Index();
@@ -62,4 +58,23 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       loginViewData.Name.ShouldEqual("Login");
     };
   }
+
+  [Subject(typeof(HomeController))]
+  public class when_the_home_controller_is_asked_for_the_default_view_when_user_is_logged_in : specification_for_home_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => {
+      identity.Expect(i => i.IsAuthenticated).Return(true);
+    };
+
+    Because of = () => result = controller.Index();
+
+    It should_not_add_login_gadget_to_sidebar_gadget_collection = () => {
+      var viewResult = result as ViewResult;
+      var sidebarCollection = viewResult.ViewData.Get<SidebarGadgetCollection>();
+      sidebarCollection.Count.ShouldEqual(0);
+    };
+  }
+
 }

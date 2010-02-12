@@ -20,6 +20,12 @@ namespace ClubPool.MSpecTests
       return result as ViewResult;
     }
 
+    public static PartialViewResult IsAPartialViewAnd(this ActionResult result) {
+      result.ShouldBeOfType(typeof(PartialViewResult));
+
+      return result as PartialViewResult;
+    }
+
     public static RedirectResult IsARedirectAnd(this ActionResult result) {
       result.ShouldBeOfType(typeof(RedirectResult));
 

@@ -119,7 +119,9 @@
   <ItemGroup>
     <Compile Include="ActionResultExtensions.cs" />
     <Compile Include="ClubPool.Data\TestDoubles\EntityDuplicateCheckerStub.cs" />
+    <Compile Include="ClubPool.Web\Controllers\ControllerHelper.cs" />
     <Compile Include="ClubPool.Web\Controllers\HomeControllerSpecs.cs" />
+    <Compile Include="ClubPool.Web\Controllers\NavigationControllerSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocatorInitializer.cs" />
   </ItemGroup>
