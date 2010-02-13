@@ -6,10 +6,10 @@
   <% } %>
   <%= this.Hidden(m => m.ReturnUrl) %>
   <div class="formrow">
-    <%= this.TextBox(m => m.Username).Label("Username:") %>
+    <%= this.TextBox(m => m.Username).Class("required").Label("Username:") %>
   </div>
   <div class="formrow">
-    <%= this.TextBox(m => m.Password).Label("Password:") %>
+    <%= this.TextBox(m => m.Password).Class("required").Label("Password:") %>
   </div>
   <div class="spacer">
     &nbsp;</div>

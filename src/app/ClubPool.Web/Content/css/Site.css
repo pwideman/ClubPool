@@ -219,6 +219,7 @@ div.formrow input
   border: 1px solid #074B8A;
   height: 25px;
   padding: 2px;
+  margin: 1px;
 }
 
 button
@@ -258,6 +259,14 @@ form p.error
   color: #DF0101;
   text-align: center;
   width: 100%;
+}
+
+div.formrow input.error
+{
+  border: 2px solid red !important;
+  background-color: #FFFFD5;
+  color: red;
+  margin: 0 !important;
 }
 
 /* sidebar login form */
