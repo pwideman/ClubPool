@@ -55,9 +55,11 @@ namespace ClubPool.Web.Controllers
 
     public ActionResult LoginStatus() {
       var viewModel = new LoginStatusViewModel() {
-        UserIsLoggedIn = User.Identity.IsAuthenticated,
-        Username = User.Identity.Name
+        UserIsLoggedIn = authenticationService.IsLoggedIn(),
       };
+      if (viewModel.UserIsLoggedIn) {
+        viewModel.Username = authenticationService.GetCurrentIdentity().Username;
+      }
       return PartialView(viewModel);
     }
 
