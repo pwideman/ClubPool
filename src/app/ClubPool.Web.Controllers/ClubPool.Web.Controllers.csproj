@@ -97,8 +97,6 @@
     <Compile Include="Shared\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
     <Compile Include="Shared\ViewModels\TestPanelViewModel.cs" />
-    <Compile Include="Sidebar\SidebarController.cs" />
-    <Compile Include="Sidebar\ViewModels\IndexViewModel.cs" />
     <Compile Include="User\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Home\ViewModels\IndexViewModel.cs" />
     <Compile Include="User\ViewModels\LoginViewModel.cs" />

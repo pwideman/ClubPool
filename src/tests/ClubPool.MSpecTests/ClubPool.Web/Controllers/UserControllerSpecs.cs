@@ -94,7 +94,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       viewModel.ReturnUrl.ShouldEqual(returnUrl);
       viewModel.Message.ShouldBeNull();
       viewModel.Password.ShouldBeNull();
-      viewModel.RememberMe.ShouldBeFalse();
+      viewModel.StayLoggedIn.ShouldBeFalse();
       viewModel.Username.ShouldBeNull();
     };
   }
@@ -125,7 +125,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ActionResult result;
     static string username = "TestUser";
     static string password = "TestPassword";
-    static bool rememberMe = true;
+    static bool stayLoggedIn = true;
     static string returnUrl = "some url";
     static LoginViewModel viewModel;
 
@@ -134,7 +134,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       viewModel = new LoginViewModel { 
         Username = username, 
         Password = password, 
-        RememberMe = rememberMe,
+        StayLoggedIn = stayLoggedIn,
         ReturnUrl = returnUrl
       };
     };
@@ -145,7 +145,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       membershipService.AssertWasCalled(s => s.ValidateUser(username, password));
 
     It should_ask_the_authentication_service_to_log_in = () =>
-      authenticationService.AssertWasCalled(s => s.LogIn(username, rememberMe));
+      authenticationService.AssertWasCalled(s => s.LogIn(username, stayLoggedIn));
 
     It should_redirect_to_the_return_url = () => 
       result.IsARedirectAnd().Url.ShouldEqual(returnUrl);
@@ -157,7 +157,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ActionResult result;
     static string username = "TestUser";
     static string password = "TestPassword";
-    static bool rememberMe = true;
+    static bool stayLoggedIn = true;
     static LoginViewModel viewModel;
 
     Establish context = () => {
@@ -165,7 +165,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       viewModel = new LoginViewModel {
         Username = username,
         Password = password,
-        RememberMe = rememberMe,
+        StayLoggedIn = stayLoggedIn
       };
     };
 
@@ -175,7 +175,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       membershipService.AssertWasCalled(s => s.ValidateUser(username, password));
 
     It should_ask_the_authentication_service_to_log_in = () =>
-      authenticationService.AssertWasCalled(s => s.LogIn(username, rememberMe));
+      authenticationService.AssertWasCalled(s => s.LogIn(username, stayLoggedIn));
 
     It should_redirect_to_home_index = () => {
       result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");

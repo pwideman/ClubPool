@@ -12,6 +12,6 @@ namespace ClubPool.Web.Controllers.User.ViewModels
     public string Message { get; set; }
     public string ReturnUrl { get; set; }
     public string Password { get; set; }
-    public bool RememberMe { get; set; }
+    public bool StayLoggedIn { get; set; }
   }
 }

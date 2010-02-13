@@ -43,7 +43,7 @@ namespace ClubPool.Web.Controllers
     [AcceptPost]
     public ActionResult Login(LoginViewModel viewModel) {
       if (membershipService.ValidateUser(viewModel.Username, viewModel.Password)) {
-        authenticationService.LogIn(viewModel.Username, viewModel.RememberMe);
+        authenticationService.LogIn(viewModel.Username, viewModel.StayLoggedIn);
         if (!string.IsNullOrEmpty(viewModel.ReturnUrl)) {
           return this.Redirect(viewModel.ReturnUrl);
         }
@@ -72,8 +72,12 @@ namespace ClubPool.Web.Controllers
       return PartialView(new LoginViewModel());
     }
 
+    public ActionResult AccountHelp() {
+      return View();
+    }
+
     [AcceptGet]
-    public ViewResult ResetPassword() {
+    public ActionResult ResetPassword() {
       return View();
     }
 
@@ -85,6 +89,16 @@ namespace ClubPool.Web.Controllers
     public ActionResult Logout() {
       authenticationService.LogOut();
       return this.RedirectToAction<HomeController>(x => x.Index());
+    }
+
+    [AcceptGet]
+    public ActionResult SignUp() {
+      return View();
+    }
+
+    [AcceptPost]
+    public ActionResult SignUp(SignUpViewModel viewModel) {
+      return View();
     }
   }
 }
