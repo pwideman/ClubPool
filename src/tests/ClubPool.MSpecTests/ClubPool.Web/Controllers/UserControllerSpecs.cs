@@ -38,7 +38,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ActionResult result;
 
     Establish context = () => {
-      authenticationService.Expect(svc => svc.IsLoggedIn()).Return(false);
+      authenticationService.Stub(svc => svc.IsLoggedIn()).Return(false);
     };
 
     Because of = () => result = controller.Index();
@@ -48,5 +48,255 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_redirect_to_the_login_action = () =>
       result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Login");
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_for_the_default_view_and_user_is_logged_in : specification_for_user_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => {
+      authenticationService.Stub(svc => svc.IsLoggedIn()).Return(true);
+    };
+
+    Because of = () => result = controller.Index();
+
+    It should_ask_if_the_user_is_logged_in = () =>
+      authenticationService.AssertWasCalled(svc => svc.IsLoggedIn());
+
+    It should_redirect_to_the_login_action = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
+      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_for_the_login_view_and_the_user_is_not_logged_in : specification_for_user_controller
+  {
+    static ActionResult result;
+    static string returnUrl;
+
+    Establish context = () => {
+      authenticationService.Stub(s => s.IsLoggedIn()).Return(false);
+      returnUrl = "some return url";
+    };
+
+    Because of = () => result = controller.Login(returnUrl);
+
+    It should_ask_the_authentication_service_if_the_user_is_logged_in = () =>
+      authenticationService.AssertWasCalled(s => s.IsLoggedIn());
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_set_the_view_model_properties_correctly = () => {
+      var viewModel = result.IsAViewAnd().ViewData.Model as LoginViewModel;
+      viewModel.ReturnUrl.ShouldEqual(returnUrl);
+      viewModel.Message.ShouldBeNull();
+      viewModel.Password.ShouldBeNull();
+      viewModel.RememberMe.ShouldBeFalse();
+      viewModel.Username.ShouldBeNull();
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_for_the_login_view_and_the_user_is_logged_in : specification_for_user_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => {
+      authenticationService.Stub(s => s.IsLoggedIn()).Return(true);
+    };
+
+    Because of = () => result = controller.Login(string.Empty);
+
+    It should_ask_the_authentication_service_if_the_user_is_logged_in = () =>
+      authenticationService.AssertWasCalled(s => s.IsLoggedIn());
+
+    It should_redirect_to_home_index = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
+      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_to_login_with_a_return_url_and_authentication_is_successful : specification_for_user_controller
+  {
+    static ActionResult result;
+    static string username = "TestUser";
+    static string password = "TestPassword";
+    static bool rememberMe = true;
+    static string returnUrl = "some url";
+    static LoginViewModel viewModel;
+
+    Establish context = () => {
+      membershipService.Stub(s => s.ValidateUser(username, password)).Return(true);
+      viewModel = new LoginViewModel { 
+        Username = username, 
+        Password = password, 
+        RememberMe = rememberMe,
+        ReturnUrl = returnUrl
+      };
+    };
+
+    Because of = () => result = controller.Login(viewModel);
+
+    It should_ask_the_membership_service_to_validate_the_user = () =>
+      membershipService.AssertWasCalled(s => s.ValidateUser(username, password));
+
+    It should_ask_the_authentication_service_to_log_in = () =>
+      authenticationService.AssertWasCalled(s => s.LogIn(username, rememberMe));
+
+    It should_redirect_to_the_return_url = () => 
+      result.IsARedirectAnd().Url.ShouldEqual(returnUrl);
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_to_login_without_a_return_url_and_authentication_is_successful : specification_for_user_controller
+  {
+    static ActionResult result;
+    static string username = "TestUser";
+    static string password = "TestPassword";
+    static bool rememberMe = true;
+    static LoginViewModel viewModel;
+
+    Establish context = () => {
+      membershipService.Stub(s => s.ValidateUser(username, password)).Return(true);
+      viewModel = new LoginViewModel {
+        Username = username,
+        Password = password,
+        RememberMe = rememberMe,
+      };
+    };
+
+    Because of = () => result = controller.Login(viewModel);
+
+    It should_ask_the_membership_service_to_validate_the_user = () =>
+      membershipService.AssertWasCalled(s => s.ValidateUser(username, password));
+
+    It should_ask_the_authentication_service_to_log_in = () =>
+      authenticationService.AssertWasCalled(s => s.LogIn(username, rememberMe));
+
+    It should_redirect_to_home_index = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
+      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_to_login_and_authentication_is_unsuccessful : specification_for_user_controller
+  {
+    static ActionResult result;
+    static string username = "TestUser";
+    static string password = "TestPassword";
+    static LoginViewModel viewModel;
+
+    Establish context = () => {
+      membershipService.Stub(s => s.ValidateUser(username, password)).Return(false);
+      viewModel = new LoginViewModel {
+        Username = username,
+        Password = password,
+      };
+    };
+
+    Because of = () => result = controller.Login(viewModel);
+
+    It should_ask_the_membership_service_to_validate_the_user = () =>
+      membershipService.AssertWasCalled(s => s.ValidateUser(username, password));
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_set_the_view_model_properties_correctly = () => {
+      var vm = result.IsAViewAnd().ViewData.Model as LoginViewModel;
+      vm.Username.ShouldEqual(username);
+      vm.Password.ShouldBeEmpty();
+      vm.Message.ShouldEqual("Invalid username/password");
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_for_the_login_status_view_and_the_user_is_not_logged_in : specification_for_user_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => {
+      authenticationService.Stub(s => s.IsLoggedIn()).Return(false);
+    };
+
+    Because of = () => result = controller.LoginStatus();
+
+    It should_ask_the_authentication_service_if_the_user_is_logged_in = () =>
+      authenticationService.AssertWasCalled(s => s.IsLoggedIn());
+
+    It should_return_the_default_view = () =>
+      result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_set_the_view_model_properties_correctly = () => {
+      var viewModel = result.IsAPartialViewAnd().ViewData.Model as LoginStatusViewModel;
+      viewModel.Username.ShouldBeNull();
+      viewModel.UserIsLoggedIn.ShouldBeFalse();
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_for_the_login_status_view_and_the_user_is_logged_in : specification_for_user_controller
+  {
+    static ActionResult result;
+    static string username = "TestUser";
+
+    Establish context = () => {
+      authenticationService.Stub(s => s.IsLoggedIn()).Return(true);
+      var identity = new Identity { Username = username };
+      authenticationService.Stub(s => s.GetCurrentIdentity()).Return(identity);
+    };
+
+    Because of = () => result = controller.LoginStatus();
+
+    It should_ask_the_authentication_service_if_the_user_is_logged_in = () =>
+      authenticationService.AssertWasCalled(s => s.IsLoggedIn());
+
+    It should_return_the_default_view = () =>
+      result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_set_the_view_model_properties_correctly = () => {
+      var viewModel = result.IsAPartialViewAnd().ViewData.Model as LoginStatusViewModel;
+      viewModel.Username.ShouldEqual(username);
+      viewModel.UserIsLoggedIn.ShouldBeTrue();
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_to_logout : specification_for_user_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => { };
+
+    Because of = () => result = controller.Logout();
+
+    It should_ask_the_authentication_service_to_log_out = () =>
+      authenticationService.AssertWasCalled(s => s.LogOut());
+
+    It should_redirect_to_home_index = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
+      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_user_controller_is_asked_for_the_login_sidebar_gadget : specification_for_user_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => { };
+
+    Because of = () => result = controller.LoginGadget();
+
+    It should_return_the_default_view = () =>
+      result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_pass_a_login_view_model_object_to_the_view = () =>
+      (result.IsAPartialViewAnd().ViewData.Model is LoginViewModel).ShouldBeTrue();
   }
 }
