@@ -8,7 +8,6 @@ namespace ClubPool.Web.Controllers.User.ViewModels
 
   public class LoginViewModel
   {
-    public bool IsInSidebar { get; set; }
     public string Username { get; set; }
     public string Message { get; set; }
     public string ReturnUrl { get; set; }

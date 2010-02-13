@@ -32,7 +32,12 @@ namespace ClubPool.Web.Controllers
 
     [AcceptGet]
     public ActionResult Login(string returnUrl) {
-      return View(new LoginViewModel() { ReturnUrl = returnUrl });
+      if (authenticationService.IsLoggedIn()) {
+        return this.RedirectToAction<HomeController>(c => c.Index());
+      }
+      else {
+        return View(new LoginViewModel() { ReturnUrl = returnUrl });
+      }
     }
 
     [AcceptPost]
@@ -64,7 +69,7 @@ namespace ClubPool.Web.Controllers
     }
 
     public ActionResult LoginGadget() {
-      return PartialView(new LoginViewModel() { IsInSidebar = true });
+      return PartialView(new LoginViewModel());
     }
 
     [AcceptGet]
