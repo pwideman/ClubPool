@@ -14,12 +14,12 @@
   <div class="spacer">
     &nbsp;</div>
   <div class="formrowspan">
-    <%= this.CheckBox(m => m.RememberMe).LabelAfter("Remember me next time") %>
-  </div>
-  <div class="formrowspan">
-    <%= Html.ActionLinkForAreas<ClubPool.Web.Controllers.UserController>(c => c.ResetPassword(), "I forgot my password") %>
+    <%= this.CheckBox(m => m.StayLoggedIn).LabelAfter("Stay logged in") %>
   </div>
   <div class="submitrow">
     <button type="submit">Login</button>
+  </div>
+  <div class="formrowspan">
+    <%= Html.ActionLinkForAreas<ClubPool.Web.Controllers.UserController>(c => c.AccountHelp(), "Can't access your account?") %>
   </div>
 </fieldset>

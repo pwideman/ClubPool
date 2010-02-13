@@ -242,10 +242,15 @@ div.formrowspan
   padding: 2px;
 }
 
+div.formrowspan input
+{
+  vertical-align: sub;
+}
+
 div.submitrow
 {
   text-align: center;
-  padding-top: 8px;
+  padding: 6px 0 6px 0;
 }
 
 form p.error
