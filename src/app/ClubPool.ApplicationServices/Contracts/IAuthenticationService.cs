@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using ClubPool.Core;
+
 namespace ClubPool.ApplicationServices.Contracts
 {
   public interface IAuthenticationService
@@ -10,5 +12,6 @@ namespace ClubPool.ApplicationServices.Contracts
     bool IsLoggedIn();
     void LogIn(string userName, bool createPersistentCookie);
     void LogOut();
+    Identity GetCurrentIdentity();
   }
 }

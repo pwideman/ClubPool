@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Security;
 
 using ClubPool.ApplicationServices.Contracts;
+using ClubPool.Core;
 
 namespace ClubPool.Web.Security
 {
@@ -21,6 +22,15 @@ namespace ClubPool.Web.Security
 
     public void LogOut() {
       FormsAuthentication.SignOut();
+    }
+
+    public Identity GetCurrentIdentity() {
+      if (IsLoggedIn()) {
+        return new Identity { Username = HttpContext.Current.User.Identity.Name };
+      }
+      else {
+        return null;
+      }
     }
   }
 }

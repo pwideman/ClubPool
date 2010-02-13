@@ -23,7 +23,8 @@ namespace ClubPool.Web.Controllers
     public ActionResult Menu() {
       var viewModel = new MenuViewModel();
       if (authenticationService.IsLoggedIn()) {
-        viewModel.DisplayAdminMenu = roleService.IsUserInRole(User.Identity.Name, Roles.Administrators);
+        var identity = authenticationService.GetCurrentIdentity();
+        viewModel.DisplayAdminMenu = roleService.IsUserInRole(identity.Username, Roles.Administrators);
         viewModel.UserIsLoggedIn = true;
       }
       else {

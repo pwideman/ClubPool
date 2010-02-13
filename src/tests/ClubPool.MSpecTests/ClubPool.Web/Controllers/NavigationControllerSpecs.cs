@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
-using System.Security.Principal;
 
 using Rhino.Mocks;
 using Machine.Specifications;
@@ -60,16 +59,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   public class when_the_navigation_controller_is_asked_for_the_menu_when_normal_user_is_logged_in : specification_for_navigation_controller
   {
     static ActionResult result;
-    static IIdentity identity;
+    static Identity identity;
 
     private static string username = "TestUser";
     private static string rolename = Roles.Administrators;
 
     Establish context = () => {
-      identity = controller.HttpContext.User.Identity;
-      identity.Expect(i => i.Name).Return(username);
+      identity = new Identity { Username = username };
+      authService.Expect(s => s.GetCurrentIdentity()).Return(identity);
       authService.Expect(s => s.IsLoggedIn()).Return(true);
-      roleService.Expect(r => r.IsUserInRole(username, rolename)).Return(false);
+      roleService.Expect(r => r.IsUserInRole(identity.Username, rolename)).Return(false);
     };
 
     Because of = () => result = controller.Menu();
@@ -78,7 +77,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       authService.AssertWasCalled(s => s.IsLoggedIn());
 
     It should_ask_if_the_user_is_in_the_Administrators_role = () =>
-      roleService.AssertWasCalled(r => r.IsUserInRole(username, rolename));
+      roleService.AssertWasCalled(r => r.IsUserInRole(identity.Username, rolename));
 
     It should_return_the_default_view = () => result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
 
@@ -96,16 +95,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   public class when_the_navigation_controller_is_asked_for_the_menu_when_admin_user_is_logged_in : specification_for_navigation_controller
   {
     static ActionResult result;
-    static IIdentity identity;
+    static Identity identity;
 
     private static string username = "TestUser";
     private static string rolename = Roles.Administrators;
 
     Establish context = () => {
-      identity = controller.HttpContext.User.Identity;
-      identity.Expect(i => i.Name).Return(username);
+      identity = new Identity { Username = username };
       authService.Expect(s => s.IsLoggedIn()).Return(true);
-      roleService.Expect(r => r.IsUserInRole(username, rolename)).Return(true);
+      authService.Expect(s => s.GetCurrentIdentity()).Return(identity);
+      roleService.Expect(r => r.IsUserInRole(identity.Username, rolename)).Return(true);
     };
 
     Because of = () => result = controller.Menu();
@@ -114,7 +113,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       authService.AssertWasCalled(s => s.IsLoggedIn());
 
     It should_ask_if_the_user_is_in_the_Administrators_role = () =>
-      roleService.AssertWasCalled(r => r.IsUserInRole(username, rolename));
+      roleService.AssertWasCalled(r => r.IsUserInRole(identity.Username, rolename));
 
     It should_return_the_default_view = () => result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
 
