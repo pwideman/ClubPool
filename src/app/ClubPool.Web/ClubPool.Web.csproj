@@ -199,7 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\arrows-ffffff.png" />
-    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\HeaderLogoHarlow.png" />
     <Content Include="Content\Images\shadow.png" />
     <Content Include="Content\Images\sharp_arch.jpg" />
     <Content Include="Content\Images\sharp_arch_small.gif" />
