@@ -211,8 +211,10 @@
     <Content Include="Scripts\jquery.corner.js" />
     <Content Include="Scripts\jquery.event.hover-1.0.js" />
     <Content Include="Scripts\jquery.hoverIntent.minified.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\superfish.js" />
     <Content Include="Scripts\supersubs.js" />
+    <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="SparkPrecompilePostBuildCommandLine.txt" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
@@ -225,6 +227,7 @@
     <Content Include="Views\User\LoginGadget.aspx" />
     <Content Include="Views\User\LoginStatus.ascx" />
     <Content Include="Views\User\ResetPassword.aspx" />
+    <Content Include="Views\User\SignUp.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\css\Site.css" />
     <Content Include="Scripts\MicrosoftAjax.js" />

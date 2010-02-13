@@ -81,6 +81,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="xVal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8fbed92c68c4006, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\xVal.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\BaseViewDataAttribute.cs" />
@@ -110,6 +114,7 @@
     <Compile Include="RouteRegistrar.cs" />
     <Compile Include="User\UserController.cs" />
     <Compile Include="User\ViewModels\ResetPasswordViewModel.cs" />
+    <Compile Include="User\ViewModels\SignUpViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.Core\ClubPool.Core.csproj">
