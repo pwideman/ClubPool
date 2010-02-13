@@ -5,16 +5,23 @@ using System.Web.Security;
 using System.Web;
 
 using SharpArch.Core.PersistenceSupport;
+using SharpArch.Core;
 
 using ClubPool.Core;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
+using ClubPool.ApplicationServices.Contracts;
 
 namespace ClubPool.Web.Controllers
 {
   public class HomeController : BaseController
   {
-    public HomeController() {
+    protected IAuthenticationService authenticationService;
+
+    public HomeController(IAuthenticationService authSvc) {
+      Check.Require(null != authSvc, "authSvc cannot be null");
+
+      authenticationService = authSvc;
     }
 
     public ActionResult Index() {
@@ -26,7 +33,7 @@ namespace ClubPool.Web.Controllers
 
     protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
-      if (!HttpContext.User.Identity.IsAuthenticated) {
+      if (!authenticationService.IsLoggedIn()) {
         var loginGadget = new LoginSidebarGadget();
         sidebarGadgetCollection.Add(loginGadget.Name, loginGadget);
       }

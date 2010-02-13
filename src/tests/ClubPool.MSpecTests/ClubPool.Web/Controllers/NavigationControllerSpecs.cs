@@ -9,7 +9,6 @@ using Rhino.Mocks;
 using Machine.Specifications;
 
 using ClubPool.ApplicationServices.Contracts;
-
 using ClubPool.Core;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
@@ -20,10 +19,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   {
     protected static NavigationController controller;
     protected static IRoleService roleService;
+    protected static IAuthenticationService authService;
 
     Establish context = () => {
       roleService = MockRepository.GenerateStub<IRoleService>();
-      controller = new NavigationController(roleService);
+      authService = MockRepository.GenerateStub<IAuthenticationService>();
+      controller = new NavigationController(authService, roleService);
       ControllerHelper.CreateMockControllerContext(controller);
     };
 
@@ -33,17 +34,15 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   public class when_the_navigation_controller_is_asked_for_the_menu_when_user_is_not_logged_in : specification_for_navigation_controller
   {
     static ActionResult result;
-    static IIdentity identity;
 
     Establish context = () => {
-      identity = controller.HttpContext.User.Identity;
-      identity.Expect(i => i.IsAuthenticated).Return(false);
+      authService.Expect(s => s.IsLoggedIn()).Return(false);
     };
 
     Because of = () => result = controller.Menu();
 
     It should_ask_if_the_user_is_logged_in = () =>
-      identity.AssertWasCalled(i => i.IsAuthenticated);
+      authService.AssertWasCalled(s => s.IsLoggedIn());
 
     It should_return_the_default_view = () => result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
 
@@ -68,15 +67,15 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     Establish context = () => {
       identity = controller.HttpContext.User.Identity;
-      identity.Expect(i => i.IsAuthenticated).Return(true);
       identity.Expect(i => i.Name).Return(username);
+      authService.Expect(s => s.IsLoggedIn()).Return(true);
       roleService.Expect(r => r.IsUserInRole(username, rolename)).Return(false);
     };
 
     Because of = () => result = controller.Menu();
 
     It should_ask_if_the_user_is_logged_in = () =>
-      identity.AssertWasCalled(i => i.IsAuthenticated);
+      authService.AssertWasCalled(s => s.IsLoggedIn());
 
     It should_ask_if_the_user_is_in_the_Administrators_role = () =>
       roleService.AssertWasCalled(r => r.IsUserInRole(username, rolename));
@@ -104,15 +103,15 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     Establish context = () => {
       identity = controller.HttpContext.User.Identity;
-      identity.Expect(i => i.IsAuthenticated).Return(true);
       identity.Expect(i => i.Name).Return(username);
+      authService.Expect(s => s.IsLoggedIn()).Return(true);
       roleService.Expect(r => r.IsUserInRole(username, rolename)).Return(true);
     };
 
     Because of = () => result = controller.Menu();
 
     It should_ask_if_the_user_is_logged_in = () =>
-      identity.AssertWasCalled(i => i.IsAuthenticated);
+      authService.AssertWasCalled(s => s.IsLoggedIn());
 
     It should_ask_if_the_user_is_in_the_Administrators_role = () =>
       roleService.AssertWasCalled(r => r.IsUserInRole(username, rolename));

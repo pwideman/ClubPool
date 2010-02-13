@@ -16,18 +16,19 @@ using Rhino.Mocks;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
+using ClubPool.ApplicationServices.Contracts;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {
   public abstract class specification_for_home_controller
   {
     protected static HomeController controller;
-    protected static IIdentity identity;
+    protected static IAuthenticationService authenticationService;
 
     Establish context = () => {
-      controller = new HomeController();
+      authenticationService = MockRepository.GenerateStub<IAuthenticationService>();
+      controller = new HomeController(authenticationService);
       ControllerHelper.CreateMockControllerContext(controller);
-      identity = controller.User.Identity;
     };
   }
 
@@ -37,7 +38,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ActionResult result;
 
     Establish context = () => {
-      identity.Expect(i => i.IsAuthenticated).Return(false);
+      authenticationService.Expect(svc => svc.IsLoggedIn()).Return(false);
     };
 
     Because of = () => result = controller.Index();
@@ -65,7 +66,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ActionResult result;
 
     Establish context = () => {
-      identity.Expect(i => i.IsAuthenticated).Return(true);
+      authenticationService.Expect(svc => svc.IsLoggedIn()).Return(true);
     };
 
     Because of = () => result = controller.Index();
