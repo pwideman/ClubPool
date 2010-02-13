@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Security;
 
-using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.ApplicationServices.Contracts;
 
 namespace ClubPool.ApplicationServices
 {

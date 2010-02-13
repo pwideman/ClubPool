@@ -10,7 +10,7 @@ using SharpArch.Web.Castle;
 using SharpArch.Core.CommonValidator;
 using SharpArch.Core.NHibernateValidator.CommonValidatorAdapter;
 
-using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.ApplicationServices.Contracts;
 using ClubPool.Web.Security;
 using ClubPool.Framework.NHibernate;
 

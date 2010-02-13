@@ -7,9 +7,7 @@ using System.Web;
 using SharpArch.Core.PersistenceSupport;
 
 using ClubPool.Core;
-using ClubPool.ApplicationServices.Interfaces;
 using ClubPool.Web.Controllers.Home.ViewModels;
-using ClubPool.Web.Controllers.Shared.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 
 namespace ClubPool.Web.Controllers

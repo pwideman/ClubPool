@@ -8,7 +8,7 @@ using System.Security.Principal;
 using Rhino.Mocks;
 using Machine.Specifications;
 
-using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.ApplicationServices.Contracts;
 
 using ClubPool.Core;
 using ClubPool.Web.Controllers;

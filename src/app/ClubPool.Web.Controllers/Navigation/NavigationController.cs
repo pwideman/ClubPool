@@ -5,7 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 
 using ClubPool.Core;
-using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.ApplicationServices.Contracts;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
 
 namespace ClubPool.Web.Controllers

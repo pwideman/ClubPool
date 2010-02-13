@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.Security;
 
-using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.ApplicationServices.Contracts;
 
 namespace ClubPool.Web.Security
 {

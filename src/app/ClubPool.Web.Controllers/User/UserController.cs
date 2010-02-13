@@ -5,7 +5,7 @@ using MvcContrib;
 using MvcContrib.Attributes;
 
 
-using ClubPool.ApplicationServices.Interfaces;
+using ClubPool.ApplicationServices.Contracts;
 using ClubPool.Web.Controllers.User.ViewModels;
 
 namespace ClubPool.Web.Controllers
