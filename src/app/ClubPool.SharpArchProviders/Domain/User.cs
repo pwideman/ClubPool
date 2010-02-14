@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 
 using NHibernate.Validator.Constraints;
-
+using SharpArch.Core.NHibernateValidator;
 using SharpArch.Core.DomainModel;
 using SharpArch.Core;
 
 namespace ClubPool.SharpArchProviders.Domain
 {
+  [HasUniqueDomainSignature(Message="A user already exists with this username")]
   public class User : Entity
   {
     public User() {
