@@ -134,6 +134,7 @@ div.spacer
   width: 270px;
   margin-right: -330px;
   padding: 0;
+  text-align: center;
 }
 
 #sidebar
@@ -256,7 +257,7 @@ div.submitrow
 
 form p.error
 {
-  color: #DF0101;
+  color: red; /*#DF0101;*/
   text-align: center;
   width: 100%;
 }
@@ -290,6 +291,13 @@ form.sidebarLoginForm button
 }
 
 /* normal login form */
+
+div#loginFormContainer
+{
+  padding: 30px;
+  margin-top: 50px;
+  text-align: center;
+}
 
 form.loginForm
 {

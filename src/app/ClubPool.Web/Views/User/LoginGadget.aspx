@@ -10,10 +10,6 @@
     <script type="text/javascript">
       $(document).ready(function() {
         $("#sidebarLoginForm").validate({
-          messages: {
-            Username: null,
-            Password: null
-          },
           errorPlacement: function() { /* don't show error labels, just highlight*/ }
         });
       });
