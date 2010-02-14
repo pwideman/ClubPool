@@ -43,7 +43,7 @@
         var sidebarGadgetCollection = ViewData.Get<SidebarGadgetCollection>();
         if (sidebarGadgetCollection.Count > 0) { %>
           <div id="sidebarContainer" class="column">
-            <div id="sidebar">
+            <div id="sidebar" class="sidebarRoundCorners">
               <%
               foreach (var sidebar in sidebarGadgetCollection.Values) {
                 sidebar.Action.Invoke(ViewContext);

@@ -20,11 +20,8 @@ $(document).ready(function() {
   }
   // sidebar gadgets
   var sidebarCornerRadius = "10px";
-  $("#sidebar").corner(sidebarCornerRadius);
-  $(".sidebarGadgetContainer").corner(sidebarCornerRadius);
-  $(".sidebarGadgetContent").corner(sidebarCornerRadius);
-  // normal forms
-  var formCornerRadius = "12px";
-  $("form.normal").corner(formCornerRadius);
-  $("form.normal fieldset").corner(formCornerRadius);
+  $(".sidebarRoundCorners").corner(sidebarCornerRadius);
+  // normal radius
+  var normalCornerRadius = "12px";
+  $(".normalRoundCorners").corner(normalCornerRadius);
 });

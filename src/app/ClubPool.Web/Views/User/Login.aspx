@@ -2,9 +2,11 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div id="loginFormContainer">
-    <form method="post" id="loginForm" class="loginForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.Login(string.Empty))%>">
+    <form method="post" id="loginForm" class="loginForm normal normalRoundCorners" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.Login(string.Empty))%>">
       <div class="formTitle">Login</div>
-      <% Html.RenderPartial("LoginControl"); %>
+      <div class="formContent normalRoundCorners">
+        <% Html.RenderPartial("LoginControl"); %>
+      </div>
     </form>
   </div>
 </asp:Content>

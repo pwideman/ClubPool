@@ -192,7 +192,7 @@ div.formTitle
   font-size: 120%;
 }
 
-form.normal fieldset
+div.formContent
 {
   border: 0;
   margin: 0 auto;
@@ -201,7 +201,7 @@ form.normal fieldset
   background-color: #E0ECF8; /*#8EB1DF; /*#F2F2F2;*/
 }
 
-fieldset 
+fieldset
 {
   border: 0;
 }
@@ -210,6 +210,7 @@ div.formrow
 {
   clear: both;
   padding-top: 10px;
+  padding-right: 10px;
 }
 
 div.formrow input
@@ -262,12 +263,21 @@ form p.error
   width: 100%;
 }
 
-div.formrow input.error
+div.formrow input.error, input.input-validation-error
 {
   border: 2px solid red !important;
   background-color: #FFFFD5;
   color: red;
   margin: 0 !important;
+}
+
+div.formValidationSummary
+{
+  color: Red;
+  background-color: #FFFFD5;
+  border: 1px solid red;
+  padding: 6px;
+  margin-bottom: 8px;
 }
 
 /* sidebar login form */
@@ -313,14 +323,34 @@ form.loginForm div.formrow label
 form.loginForm div.formrow input
 {
   width: 160px;
-  /*height: 16px;*/
 }
 
 form.loginForm button
 {
   width: 100px;
-  height: 25px;
-  /*margin-left: 100px;*/
+  height: 30px;
+}
+
+form.signupForm
+{
+  width: 500px;
+}
+
+form.signupForm div.formrow label
+{
+  padding-top: 4px;
+  width: 200px;
+}
+
+form.signupForm div.formrow input
+{
+  width: 220px;
+}
+
+form.signupForm button
+{
+  width: 100px;
+  height: 30px;
 }
 
 /* MISC  
@@ -330,11 +360,13 @@ form.loginForm button
     clear: both;
 }
 
+/*
 .input-validation-error
 {
     border: 1px solid #ff0000;
     background-color: #ffeeee;
 }
+*/
 
 /* Superfish menu css
 -----------------------------------------------------------*/
