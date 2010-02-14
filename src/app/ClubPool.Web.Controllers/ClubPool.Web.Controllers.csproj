@@ -115,6 +115,7 @@
     <Compile Include="User\UserController.cs" />
     <Compile Include="User\ViewModels\ResetPasswordViewModel.cs" />
     <Compile Include="User\ViewModels\SignUpViewModel.cs" />
+    <Compile Include="ValidatableViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.Core\ClubPool.Core.csproj">
@@ -124,6 +125,10 @@
     <ProjectReference Include="..\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
       <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
       <Name>ClubPool.ApplicationServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
+      <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
+      <Name>ClubPool.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
