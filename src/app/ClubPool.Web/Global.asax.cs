@@ -44,7 +44,7 @@ namespace ClubPool.Web
         InitSparkViewEngine();
       }
 
-      ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
+      //ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
 
       // xVal & the NHValidatorRulesProvider
       xVal.ActiveRuleProviders.Providers.Add(new NHValidatorRulesProvider());
