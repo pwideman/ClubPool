@@ -221,13 +221,13 @@
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\DebugFormSubmission.ascx" />
     <Content Include="Views\Shared\LoginControl.ascx" />
-    <Content Include="Views\Sidebar\Index.ascx" />
     <Content Include="Views\User\AccountHelp.aspx" />
     <Content Include="Views\User\Login.aspx" />
     <Content Include="Views\User\LoginGadget.aspx" />
     <Content Include="Views\User\LoginStatus.ascx" />
     <Content Include="Views\User\ResetPassword.aspx" />
     <Content Include="Views\User\SignUp.aspx" />
+    <Content Include="Views\User\SignUpComplete.aspx" />
     <Content Include="Web.config" />
     <Content Include="Content\css\Site.css" />
     <Content Include="Scripts\MicrosoftAjax.js" />
@@ -276,7 +276,6 @@
     <None Include="Views\Shared\_Menu.spark" />
     <None Include="Views\Shared\_Sidebar.spark" />
     <None Include="Views\Shared\_TestPanel.spark" />
-    <None Include="Views\Sidebar\Index.spark" />
     <None Include="Views\User\Login.spark" />
   </ItemGroup>
   <ItemGroup>

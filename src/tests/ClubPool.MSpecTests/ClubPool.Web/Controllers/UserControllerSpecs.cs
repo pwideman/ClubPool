@@ -299,4 +299,20 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_pass_a_login_view_model_object_to_the_view = () =>
       (result.IsAPartialViewAnd().ViewData.Model is LoginViewModel).ShouldBeTrue();
   }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_for_the_signup_view : specification_for_user_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => { };
+
+    Because of = () => result = controller.SignUp();
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_pass_a_signup_view_model_object_to_the_view = () =>
+      (result.IsAViewAnd().ViewData.Model is SignUpViewModel).ShouldBeTrue();
+  }
 }

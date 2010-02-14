@@ -3,10 +3,12 @@ using System.Web.Mvc;
 
 using MvcContrib;
 using MvcContrib.Attributes;
-
+using SharpArch.Web.NHibernate;
+using xVal.ServerSide;
 
 using ClubPool.ApplicationServices.Contracts;
 using ClubPool.Web.Controllers.User.ViewModels;
+using ClubPool.Framework.Extensions;
 
 namespace ClubPool.Web.Controllers
 {
@@ -93,12 +95,21 @@ namespace ClubPool.Web.Controllers
 
     [AcceptGet]
     public ActionResult SignUp() {
-      return View();
+      return View(new SignUpViewModel());
     }
 
     [AcceptPost]
+    [ValidateAntiForgeryToken]
+    [Transaction]
     public ActionResult SignUp(SignUpViewModel viewModel) {
-      return View();
+      try {
+        viewModel.Validate();
+        return View("SignUpComplete");
+      }
+      catch (RulesException re) {
+        re.AddModelStateErrors(this.ModelState, null);
+      }
+      return View(viewModel);
     }
   }
 }
