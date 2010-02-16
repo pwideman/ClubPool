@@ -64,6 +64,7 @@
           </div>
         </fieldset>
       </form>
+      <%= Html.ClientSideValidation<ClubPool.Web.Controllers.User.ViewModels.SignUpViewModel>() %>
     </div>
   </div>
   
