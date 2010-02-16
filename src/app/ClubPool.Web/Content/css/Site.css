@@ -177,10 +177,10 @@ div.sidebarGadgetContent
 /* forms
 ----------------------------------------------------------*/
 
-form.normal
+div.formContainer
 {
   margin-bottom: 4px;
-  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
+  background: #648ABD;
   padding: 6px;
   display: inline-block;
 }
@@ -190,16 +190,34 @@ div.formTitle
   padding: 4px;
   color: #FFFFFF;
   font-size: 120%;
+  text-align: center;
+}
+
+div.formHeader
+{
+  padding: 10px 0 10px 0;
+  border-bottom: solid 1px black;
+  margin: 0 10px 10px 10px;
+  text-align: center;
 }
 
 div.formContent
 {
   border: 0;
   margin: 0 auto;
-  /*width: 225px;*/
   padding: 8px;
-  background-color: #E0ECF8; /*#8EB1DF; /*#F2F2F2;*/
+  background-color: #E0ECF8;
 }
+
+form.normal2
+{
+  margin-bottom: 4px;
+  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
+  padding: 6px;
+  display: inline-block;
+}
+
+
 
 fieldset
 {
@@ -208,20 +226,61 @@ fieldset
 
 div.formrow
 {
-  clear: both;
   padding-top: 10px;
   padding-right: 10px;
 }
 
-div.formrow input
+div.formrow > label
 {
-  float:right;
-  width:200px;
-  text-align: left;
+  display: inline-block;
+  width: 200px;
+  text-align: right;
+  padding-right: 8px;
+  vertical-align: top;
+  margin-top: 8px;
+}
+
+span.required
+{
+  font-size: 110%;
+  color: Red;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+div.formInput input
+{
+  width: 221px;
   border: 1px solid #074B8A;
   height: 25px;
   padding: 2px;
   margin: 1px;
+  display: block;
+}
+
+div.formrow input.short
+{
+  width: 104px;
+}
+
+div.formInput
+{
+  display: inline-block;
+  padding: 0;
+  vertical-align: top;
+}
+
+div.formInput label
+{
+  font-size: 80%;
+}
+
+div.formrowold label 
+{
+  margin-top: 5px;
+  text-align:right;
+  float:left;
+  padding-right: 5px;
 }
 
 button
@@ -231,13 +290,6 @@ button
   font-weight:bold;
 }
 
-div.formrow label 
-{
-  margin-top: 5px;
-  text-align:right;
-  float:left;
-  padding-right: 5px;
-}
 
 div.formrowspan
 {
@@ -269,6 +321,12 @@ div.formrow input.error, input.input-validation-error
   background-color: #FFFFD5;
   color: red;
   margin: 0 !important;
+}
+
+span.field-validation-error
+{
+  color: Red;
+  font-size: 80%;
 }
 
 div.formValidationSummary
@@ -331,6 +389,7 @@ form.loginForm button
   height: 30px;
 }
 
+/*
 form.signupForm
 {
   width: 500px;
@@ -352,6 +411,7 @@ form.signupForm button
   width: 100px;
   height: 30px;
 }
+*/
 
 /* MISC  
 ----------------------------------------------------------*/

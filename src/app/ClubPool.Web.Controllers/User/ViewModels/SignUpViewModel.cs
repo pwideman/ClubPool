@@ -9,23 +9,23 @@ namespace ClubPool.Web.Controllers.User.ViewModels
 {
   public class SignUpViewModel : ValidatableViewModel
   {
-    [NotNullNotEmpty(Message="Username is missing")]
+    [NotNullNotEmpty(Message= "Required")]
     public string Username { get; set; }
 
-    [NotNullNotEmpty(Message="Password is missing")]
+    [NotNullNotEmpty(Message= "Required")]
     public string Password { get; set; }
 
-    [NotNullNotEmpty(Message="Confirmation password is missing")]
+    [NotNullNotEmpty(Message= "Required")]
     public string ConfirmPassword { get; set; }
 
-    [NotNullNotEmpty(Message="First name is missing")]
+    [NotNullNotEmpty(Message="Required")]
     public string FirstName { get; set; }
 
-    [NotNullNotEmpty(Message="Last name is missing")]
+    [NotNullNotEmpty(Message="Required")]
     public string LastName { get; set; }
 
-    [NotNullNotEmpty(Message="Email address is missing")]
-    [Email(Message="Email address is invalid")]
+    [NotNullNotEmpty(Message="Required")]
+    [Email(Message="Enter a valid email address")]
     public string Email { get; set; }
 
     public string PreviousUsername { get; set; }

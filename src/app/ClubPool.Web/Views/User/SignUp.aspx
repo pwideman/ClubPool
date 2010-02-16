@@ -7,42 +7,65 @@
   need to verify your account information before you will be able to log in. You will receive
   an email once an administrator has verified your information.</p>
   
-  <form method="post" id="signupForm" class="signupForm normal normalRoundCorners" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.SignUp())%>">
+  <div class="formContainer normalRoundCorners">
     <div class="formTitle">Sign Up</div>
     <div class="formContent normalRoundCorners">
-      <fieldset class="normalRoundCorners">
-        <% if (!ViewData.ModelState.IsValid) { %>
-        <div class="formValidationSummary normalRoundCorners">
-          <%= Html.ValidationSummary("There are problems with the information you provided:") %>
-        </div>
-        <% } %>
-        <%= Html.AntiForgeryToken() %>
-        <%= this.Hidden(m => m.PreviousUsername) %>
-        <div class="formrow">
-          <%= this.TextBox(m => m.Username).Label("Username:") %>
-        </div>
-        <div class="formrow">
-          <%= this.TextBox(m => m.Password).Label("Password:") %>
-        </div>
-        <div class="formrow">
-          <%= this.TextBox(m => m.ConfirmPassword).Label("Confirm password:") %>
-        </div>
-        <div class="formrow">
-          <%= this.TextBox(m => m.Email).Label("Email:") %>
-        </div>
-        <div class="formrow">
-          <%= this.TextBox(m => m.FirstName).Label("First name:") %>
-        </div>
-        <div class="formrow">
-          <%= this.TextBox(m => m.LastName).Label("Last name:") %>
-        </div>
-        <div class="spacer">&nbsp;</div>
-        <div class="formrowspan">
-          <button type="submit">Sign Up</button>
-        </div>
-      </fieldset>
+      <div class="formHeader">
+        All fields are required
+      </div>
+      <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.SignUp())%>">
+        <fieldset>
+          <%= Html.AntiForgeryToken() %>
+          <%= Html.HiddenFor(m => m.PreviousUsername) %>
+          <div class="formrow">
+            <label for="Username" accesskey="u">Username:</label>
+            <div class="formInput">
+              <%= this.TextBox(m => m.Username) %>
+              <%= Html.ValidationMessageFor(m => m.Username) %>
+            </div>
+          </div>
+          <div class="formrow">
+            <label for="Password" accesskey="p">Password:</label>
+            <div class="formInput">
+              <%= this.TextBox(m => m.Password) %>
+              <%= Html.ValidationMessageFor(m => m.Password) %>
+            </div>
+          </div>
+          <div class="formrow">
+            <label for="ConfirmPassword" accesskey="c">Confirm password:</label>
+            <div class="formInput">
+              <%= this.TextBox(m => m.ConfirmPassword) %>
+              <%= Html.ValidationMessageFor(m => m.ConfirmPassword) %>
+            </div>
+          </div>
+          <div class="formrow">
+            <label for="Email" accesskey="e">Email address:</label>
+            <div class="formInput">
+              <%= this.TextBox(m => m.Email) %>
+              <%= Html.ValidationMessageFor(m => m.Email) %>
+            </div>
+          </div>
+          <div class="formrow">
+            <label for="FirstName">Name:</label>
+            <div class="formInput">
+              <%= this.TextBox(m => m.FirstName).Class("short") %>
+              <label for="FirstName">First</label>
+              <%= Html.ValidationMessageFor(m => m.FirstName) %>
+            </div>
+            <div class="formInput">
+              <%= this.TextBox(m => m.LastName).Class("short") %>
+              <label for="LastName">Last</label>
+              <%= Html.ValidationMessageFor(m => m.LastName) %>
+            </div>
+          </div>
+          <div class="spacer">&nbsp;</div>
+          <div class="formrowspan">
+            <button type="submit">Sign Up</button>
+          </div>
+        </fieldset>
+      </form>
     </div>
-  </form>
+  </div>
   
 </asp:Content>
 
