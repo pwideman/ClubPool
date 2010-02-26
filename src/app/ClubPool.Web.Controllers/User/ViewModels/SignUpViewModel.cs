@@ -4,9 +4,15 @@ using System.Linq;
 using System.Text;
 
 using NHibernate.Validator.Constraints;
+using NHibernate.Validator.Engine;
+using NHibernate.Validator.Cfg.Loquacious;
+using xVal.Rules;
+
+using ClubPool.Framework.Validation;
 
 namespace ClubPool.Web.Controllers.User.ViewModels
 {
+  [ConfirmPassword]
   public class SignUpViewModel : ValidatableViewModel
   {
     [NotNullNotEmpty(Message= "Required")]
@@ -20,7 +26,7 @@ namespace ClubPool.Web.Controllers.User.ViewModels
 
     [NotNullNotEmpty(Message="Required")]
     public string FirstName { get; set; }
-
+    
     [NotNullNotEmpty(Message="Required")]
     public string LastName { get; set; }
 
@@ -29,5 +35,25 @@ namespace ClubPool.Web.Controllers.User.ViewModels
     public string Email { get; set; }
 
     public string PreviousUsername { get; set; }
+  }
+
+  [AttributeUsage(AttributeTargets.Class)]
+  [ValidatorClass(typeof(ConfirmPasswordValidator))]
+  public class ConfirmPasswordAttribute : CompareToAttribute
+  {
+    public ConfirmPasswordAttribute() {
+      Message = "Must equal Password";
+      PrimaryPropertyName = "ConfirmPassword";
+      PropertyToCompare = "Password";
+      Operator = xVal.Rules.ComparisonRule.Operator.Equals;
+    }
+  }
+
+  public class ConfirmPasswordValidator : IValidator
+  {
+    public bool IsValid(object value, IConstraintValidatorContext constraintValidatorContext) {
+      var vm = value as SignUpViewModel;
+      return vm.ConfirmPassword.Equals(vm.Password);
+    }
   }
 }

@@ -71,7 +71,10 @@
   <ItemGroup>
     <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\ValidatableExtensions.cs" />
+    <Compile Include="Validation\CompareToAttribute.cs" />
+    <Compile Include="Validation\IValidateMultipleProperties.cs" />
+    <Compile Include="Validation\NHValidatorRulesProvider.cs" />
+    <Compile Include="Validation\ValidatableExtensions.cs" />
     <Compile Include="NHibernate\ILinqRepository.cs" />
     <Compile Include="NHibernate\LinqRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

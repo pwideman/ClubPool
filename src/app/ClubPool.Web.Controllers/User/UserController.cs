@@ -9,6 +9,7 @@ using xVal.ServerSide;
 using ClubPool.ApplicationServices.Contracts;
 using ClubPool.Web.Controllers.User.ViewModels;
 using ClubPool.Framework.Extensions;
+using ClubPool.Framework.Validation;
 
 namespace ClubPool.Web.Controllers
 {

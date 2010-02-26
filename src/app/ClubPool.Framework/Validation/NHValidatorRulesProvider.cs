@@ -9,10 +9,12 @@ using xVal.Rules;
 
 using NHibernate.Validator.Constraints;
 using NHibernate.Validator.Engine;
+using NHibernate.Validator.Mappings;
+using NHVCfgEnvironment = NHibernate.Validator.Cfg.Environment;
 
-namespace ClubPool.Web.Code
+namespace ClubPool.Framework.Validation
 {
-  // This class comes from http://weblogs.asp.net/srkirkland/archive/2009/11/02/an-xval-provider-for-nhibernate-validator.aspx
+  // Most of this class comes from http://weblogs.asp.net/srkirkland/archive/2009/11/02/an-xval-provider-for-nhibernate-validator.aspx
   public class NHValidatorRulesProvider : CachingRulesProvider
   {
     private readonly RuleEmitterList<IRuleArgs> _ruleEmitters;
@@ -30,18 +32,26 @@ namespace ClubPool.Web.Code
       _ruleEmitters.AddSingle<PatternAttribute>(x => new RegularExpressionRule(x.Regex, x.Flags));
       _ruleEmitters.AddSingle<EmailAttribute>(x => new DataTypeRule(DataTypeRule.DataType.EmailAddress));
       _ruleEmitters.AddSingle<DigitsAttribute>(MakeDigitsRule);
+      _ruleEmitters.AddSingle<CompareToAttribute>(x => new ComparisonRule(x.PropertyToCompare, x.Operator));
     }
 
     protected override RuleSet GetRulesFromTypeCore(Type type) {
-      var classMapping = new ValidatorEngine().GetClassValidator(type);
-
-      var rules = from member in type.GetMembers()
+      var validatorEngine = NHVCfgEnvironment.SharedEngineProvider.GetEngine();
+      var classValidator = validatorEngine.GetClassValidator(type);
+      var rules = (from member in type.GetMembers()
                   where member.MemberType == MemberTypes.Field || member.MemberType == MemberTypes.Property
-                  from constraint in classMapping.GetMemberConstraints(member.Name).OfType<IRuleArgs>()
+                  from constraint in classValidator.GetMemberConstraints(member.Name).OfType<IRuleArgs>()
                   // All NHibernate Validation validators attributes must implement this interface
                   from rule in ConvertToXValRules(constraint)
                   where rule != null
-                  select new { MemberName = member.Name, Rule = rule };
+                  select new ClientRule { MemberName = member.Name, Rule = rule }).ToList();
+
+      var classMapping = new ReflectionClassMapping(type);
+      var classRules = from constraint in classMapping.GetClassAttributes().OfType<IValidateMultipleProperties>()
+                       from rule in ConvertToXValRules(constraint)
+                       where rule != null
+                       select new ClientRule { MemberName = constraint.PrimaryPropertyName, Rule = rule };
+      rules.AddRange(classRules);
 
       return new RuleSet(rules.ToLookup(x => x.MemberName, x => x.Rule));
     }
@@ -70,6 +80,12 @@ namespace ClubPool.Web.Code
       if ((message != null) && !message.StartsWith("{validator."))
         return message;
       return null;
+    }
+
+    protected class ClientRule
+    {
+      public string MemberName { get; set; }
+      public Rule Rule { get; set; }
     }
   }
 }

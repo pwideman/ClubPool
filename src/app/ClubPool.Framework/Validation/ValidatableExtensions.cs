@@ -8,7 +8,7 @@ using SharpArch.Core.NHibernateValidator.CommonValidatorAdapter;
 
 using xVal.ServerSide;
 
-namespace ClubPool.Framework.Extensions
+namespace ClubPool.Framework.Validation
 {
   /// <summary>
   /// Extension methods for Entities
@@ -44,6 +44,9 @@ namespace ClubPool.Framework.Extensions
     /// The ErrorInfo
     /// </returns>
     private static ErrorInfo GetErrorInfo(this IValidationResult result) {
+      if (string.IsNullOrEmpty(result.PropertyName)) {
+        return GetClassLevelErrorInfo(result);
+      }
       return GetPropertyLevelErrorInfo(result);
     }
 
@@ -60,5 +63,31 @@ namespace ClubPool.Framework.Extensions
       return new ErrorInfo(((ValidationResult)result).InvalidValue.PropertyPath, result.Message);
     }
 
+    /// <summary>
+    /// Returns an ErrorInfo for a class level validation result
+    /// </summary>
+    /// <param name="result">
+    /// The validation result.
+    /// </param>
+    /// <returns>
+    /// The ErrorInfo
+    /// </returns>
+    private static ErrorInfo GetClassLevelErrorInfo(IValidationResult result) {
+      var errorInfo = new ErrorInfo(string.Empty, result.Message);
+
+      // Get the validation attributes on the entity type
+      var validatorProperties = result.ClassContext.GetCustomAttributes(false)
+          .Where(x => typeof(IValidateMultipleProperties).IsAssignableFrom(x.GetType()));
+
+      // If the validation message matches one of the attributes messages,
+      // then set the correct property path, based on the primary property name
+      foreach(var x in validatorProperties) {
+        if (result.Message == ((IValidateMultipleProperties)x).Message) {
+          errorInfo = new ErrorInfo(((ValidationResult)result).InvalidValue.PropertyPath + ((IValidateMultipleProperties)x).PrimaryPropertyName, result.Message);
+        }
+      }
+
+      return errorInfo;
+    }
   }
 }

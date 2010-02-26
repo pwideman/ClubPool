@@ -175,7 +175,6 @@
     <Compile Include="CastleWindsor\ComponentRegistrar.cs" />
     <Compile Include="Code\AppHelper.cs" />
     <Compile Include="Code\HtmlHelperExtensions.cs" />
-    <Compile Include="Code\NHValidatorRulesProvider.cs" />
     <Compile Include="Code\SparkInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
