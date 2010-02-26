@@ -227,7 +227,7 @@ fieldset
 div.formrow
 {
   padding-right: 10px;
-  min-height: 60px;
+  min-height: 54px;
 }
 
 div.formrow > label
