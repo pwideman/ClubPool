@@ -12,7 +12,10 @@ using ClubPool.Framework.Validation;
 
 namespace ClubPool.Web.Controllers.User.ViewModels
 {
-  [ConfirmPassword]
+  [Compare(Message="Must equal Password", 
+    PrimaryPropertyName="ConfirmPassword", 
+    PropertyToCompare="Password",
+    Operator=xVal.Rules.ComparisonRule.Operator.Equals)]
   public class SignUpViewModel : ValidatableViewModel
   {
     [NotNullNotEmpty(Message= "Required")]
@@ -35,25 +38,5 @@ namespace ClubPool.Web.Controllers.User.ViewModels
     public string Email { get; set; }
 
     public string PreviousUsername { get; set; }
-  }
-
-  [AttributeUsage(AttributeTargets.Class)]
-  [ValidatorClass(typeof(ConfirmPasswordValidator))]
-  public class ConfirmPasswordAttribute : CompareToAttribute
-  {
-    public ConfirmPasswordAttribute() {
-      Message = "Must equal Password";
-      PrimaryPropertyName = "ConfirmPassword";
-      PropertyToCompare = "Password";
-      Operator = xVal.Rules.ComparisonRule.Operator.Equals;
-    }
-  }
-
-  public class ConfirmPasswordValidator : IValidator
-  {
-    public bool IsValid(object value, IConstraintValidatorContext constraintValidatorContext) {
-      var vm = value as SignUpViewModel;
-      return vm.ConfirmPassword.Equals(vm.Password);
-    }
   }
 }

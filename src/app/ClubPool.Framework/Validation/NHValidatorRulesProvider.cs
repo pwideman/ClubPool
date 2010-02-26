@@ -32,7 +32,7 @@ namespace ClubPool.Framework.Validation
       _ruleEmitters.AddSingle<PatternAttribute>(x => new RegularExpressionRule(x.Regex, x.Flags));
       _ruleEmitters.AddSingle<EmailAttribute>(x => new DataTypeRule(DataTypeRule.DataType.EmailAddress));
       _ruleEmitters.AddSingle<DigitsAttribute>(MakeDigitsRule);
-      _ruleEmitters.AddSingle<CompareToAttribute>(x => new ComparisonRule(x.PropertyToCompare, x.Operator));
+      _ruleEmitters.AddSingle<CompareAttribute>(x => new ComparisonRule(x.PropertyToCompare, x.Operator));
     }
 
     protected override RuleSet GetRulesFromTypeCore(Type type) {
