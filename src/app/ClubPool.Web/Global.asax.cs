@@ -14,6 +14,8 @@ using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
 using MvcContrib.Castle;
 using NHibernate.Cfg;
+using NHibernate.Validator.Cfg.Loquacious;
+using NHibernate.Validator.Event;
 using SharpArch.Data.NHibernate;
 using SharpArch.Web.NHibernate;
 using SharpArch.Web.Castle;
@@ -21,6 +23,7 @@ using SharpArch.Web.Areas;
 using SharpArch.Web.CommonValidator;
 using SharpArch.Web.ModelBinder;
 
+using ClubPool.Framework.Validation;
 using ClubPool.Web.Controllers;
 using ClubPool.Data.NHibernateMaps;
 using ClubPool.Web.CastleWindsor;
@@ -46,6 +49,17 @@ namespace ClubPool.Web
 
       //ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
 
+      // NHV shared engine provider
+      // I added this to experiment with the fluent NHV config (loquacious),
+      // which I'm no longer using. I'll leave it in place for now.
+      var provider = new NHibernateSharedEngineProvider();
+      NHibernate.Validator.Cfg.Environment.SharedEngineProvider = provider;
+      var cfg = new FluentConfiguration();
+      cfg.Register(typeof(ClubPool.Core.Player).Assembly.ValidationDefinitions())
+         .Register(typeof(ClubPool.SharpArchProviders.SharpArchMembershipProvider).Assembly.ValidationDefinitions())
+         .Register(typeof(HomeController).Assembly.ValidationDefinitions())
+         .SetDefaultValidatorMode(NHibernate.Validator.Engine.ValidatorMode.OverrideAttributeWithExternal);
+      NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine().Configure(cfg);
       // xVal & the NHValidatorRulesProvider
       xVal.ActiveRuleProviders.Providers.Add(new NHValidatorRulesProvider());
 
@@ -98,6 +112,7 @@ namespace ClubPool.Web
           webSessionStorage,
           new string[] { Server.MapPath("~/bin/ClubPool.Data.dll"), Server.MapPath("~/bin/ClubPool.SharpArchProviders.dll") },
           new AutoPersistenceModelGenerator().Generate());
+      NHibernateSession.ValidatorEngine = NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine();
     }
 
     protected void Application_Error(object sender, EventArgs e) {
