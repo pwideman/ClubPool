@@ -6,10 +6,16 @@
   <% } %>
   <%= this.Hidden(m => m.ReturnUrl) %>
   <div class="formrow">
-    <%= this.TextBox(m => m.Username).Class("required").Label("Username:") %>
+    <label for="Username" accesskey="u">Username:</label>
+    <div class="formInput">
+      <%= this.TextBox(m => m.Username).Class("required") %>
+    </div>
   </div>
   <div class="formrow">
-    <%= this.TextBox(m => m.Password).Class("required").Label("Password:") %>
+    <label for="Password" accesskey="p">Password:</label>
+    <div class="formInput">
+      <%= this.TextBox(m => m.Password).Class("required") %>
+    </div>
   </div>
   <div class="spacer">&nbsp;</div>
   <div class="formrowspan">

@@ -201,6 +201,15 @@ div.formHeader
   text-align: center;
 }
 
+div.formError
+{
+  padding: 10px;
+  border: 1px solid red;
+  background-color: #FFFFD5;
+  color: red;
+  margin: 8px;
+}
+
 div.formContent
 {
   border: 0;
@@ -224,7 +233,7 @@ fieldset
   border: 0;
 }
 
-div.formrow
+form.normal div.formrow
 {
   padding-right: 10px;
   min-height: 54px;
@@ -338,20 +347,36 @@ div.formValidationSummary
   margin-bottom: 8px;
 }
 
-/* sidebar login form */
+/* sidebar forms */
 
-form.sidebarLoginForm div.formrow label
+form.sidebar div.spacer
 {
-  width: 55px;
+  display: none;
 }
 
-form.sidebarLoginForm div.formrow input
+form.sidebar div.formrow
+{
+  padding-right: 8px;
+  min-height: 34px;
+}
+
+form.sidebar div.formrow label
+{
+  display: inline-block;
+  width: 70px;
+  text-align: right;
+  padding-right: 4px;
+  vertical-align: top;
+  margin-top: 8px;
+}
+
+form.sidebar div.formInput input
 {
   width: 120px;
   height: 16px;
 }
 
-form.sidebarLoginForm button
+form.sidebar button
 {
   width: 100px;
   height: 25px;
