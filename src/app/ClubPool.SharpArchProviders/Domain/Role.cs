@@ -12,8 +12,15 @@ namespace ClubPool.SharpArchProviders.Domain
 {
   public class Role : Entity
   {
-    public Role() {
+    protected Role() {
       InitMembers();
+    }
+
+    public Role(string name)
+      : this() {
+      Check.Require(!string.IsNullOrEmpty(name), "name cannot be null or empty");
+
+      Name = name;
     }
 
     protected virtual void InitMembers() {

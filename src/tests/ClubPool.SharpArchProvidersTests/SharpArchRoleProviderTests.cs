@@ -36,8 +36,7 @@ namespace Tests.ClubPool.SharpArchProviders
     protected override void LoadTestData() {
       Debug.Print("Loading test data");
       for (int i = 0; i < 3; i++) {
-        var role = new Role();
-        role.Name = "role" + i.ToString();
+        var role = new Role("role" + i.ToString());
         provider.RoleRepository.SaveOrUpdate(role);
       }
       for (int i = 0; i < 5; i++) {

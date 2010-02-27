@@ -121,6 +121,7 @@
   <ItemGroup>
     <Compile Include="Domain\Queries\RoleQueriesTests.cs" />
     <Compile Include="Domain\Queries\UserQueriesTests.cs" />
+    <Compile Include="Domain\RoleTests.cs" />
     <Compile Include="Domain\UserTests.cs" />
     <Compile Include="EntityIdGenerator.cs" />
     <Compile Include="NHibernateMaps\AutoPersistenceModelGenerator.cs" />

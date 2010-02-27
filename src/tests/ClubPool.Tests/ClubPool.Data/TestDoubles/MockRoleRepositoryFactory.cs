@@ -31,7 +31,7 @@ namespace Tests.ClubPool.Data.TestDoubles
       if (name.IsNullOrEmptyOrBlank()) {
         name = "role";
       }
-      return new Role { Name = name };
+      return new Role(name);
     }
 
     public static IList<Role> CreateRoles(int count) {

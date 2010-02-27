@@ -87,7 +87,7 @@ namespace ClubPool.SharpArchProviders
           throw new ProviderException(string.Format("There is already a role with the name '{0}'", roleName));
         }
 
-        role = new Role { Name = roleName };
+        role = new Role(roleName);
         roleRepository.SaveOrUpdate(role);
       }
     }
