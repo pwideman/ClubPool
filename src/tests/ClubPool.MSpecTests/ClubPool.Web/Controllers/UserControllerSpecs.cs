@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Security.Principal;
+using System.Web.Security;
 
 using Rhino.Mocks;
 using Machine.Specifications;
 
-using ClubPool.ApplicationServices.Contracts;
-
+using ClubPool.ApplicationServices.Membership.Contracts;
+using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Core;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.User.ViewModels;
@@ -29,6 +30,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       membershipService = MockRepository.GenerateStub<IMembershipService>();
       controller = new UserController(authenticationService, membershipService, roleService);
       ControllerHelper.CreateMockControllerContext(controller);
+      ServiceLocatorHelper.AddValidator();
     };
   }
 
@@ -314,5 +316,91 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_pass_a_signup_view_model_object_to_the_view = () =>
       (result.IsAViewAnd().ViewData.Model is SignUpViewModel).ShouldBeTrue();
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_and_the_viewModel_is_invalid : specification_for_user_controller
+  {
+    static ActionResult result;
+    static SignUpViewModel viewModel;
+    static string username = "TestUser";
+
+    Establish context = () => {
+      viewModel = new SignUpViewModel();
+      viewModel.Username = username;
+    };
+
+    Because of = () => result = controller.SignUp(viewModel);
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_pass_the_view_model_back_to_the_view = () => {
+      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
+      vm.ShouldNotBeNull();
+      vm.Username.ShouldEqual(username);
+    };
+
+    It should_set_the_model_state_errors = () => {
+      var modelState = result.IsAViewAnd().ViewData.ModelState;
+      modelState.IsValid.ShouldBeFalse();
+      modelState.Count.ShouldBeGreaterThan(0);
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_and_CreateUser_fails : specification_for_user_controller
+  {
+    static ActionResult result;
+    static SignUpViewModel viewModel;
+    static string username = "TestUser";
+
+    Establish context = () => {
+      viewModel = new SignUpViewModel();
+      viewModel.Username = username;
+      viewModel.Password = "test";
+      viewModel.ConfirmPassword = "test";
+      viewModel.Email = "test@test.com";
+      viewModel.FirstName = "test";
+      viewModel.LastName = "test";
+      membershipService.Stub(
+        s => s.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false))
+        .Throw(new MembershipCreateUserException(MembershipCreateStatus.DuplicateEmail));
+    };
+
+    Because of = () => result = controller.SignUp(viewModel);
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_pass_the_view_model_back_to_the_view_with_error_message = () => {
+      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
+      vm.ShouldNotBeNull();
+      vm.Username.ShouldEqual(username);
+      vm.ErrorMessage.ShouldNotBeEmpty();
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_and_CreateUser_succeeds : specification_for_user_controller
+  {
+    static ActionResult result;
+    static SignUpViewModel viewModel;
+    static string username = "TestUser";
+
+    Establish context = () => {
+      viewModel = new SignUpViewModel();
+      viewModel.Username = username;
+      viewModel.Password = "test";
+      viewModel.ConfirmPassword = "test";
+      viewModel.Email = "test@test.com";
+      viewModel.FirstName = "test";
+      viewModel.LastName = "test";
+    };
+
+    Because of = () => result = controller.SignUp(viewModel);
+
+    It should_return_the_SignUpComplete_view = () =>
+      result.IsAViewAnd().ViewName.ShouldEqual("SignUpComplete");
   }
 }
