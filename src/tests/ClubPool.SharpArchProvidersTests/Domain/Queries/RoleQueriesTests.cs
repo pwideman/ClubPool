@@ -51,7 +51,7 @@ namespace Tests.ClubPool.SharpArchProviders.Domain.Queries
       foreach (var user in users) {
         role.Users.Add(user);
       }
-      var invaliduser = new User { Username = "junk" };
+      var invaliduser = new User("junk", "junk", "junk");
 
       roles.WithUser(invaliduser).Count().ShouldEqual(0);
     }

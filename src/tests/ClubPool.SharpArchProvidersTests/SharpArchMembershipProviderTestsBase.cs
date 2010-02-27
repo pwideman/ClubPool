@@ -38,11 +38,11 @@ namespace Tests.ClubPool.SharpArchProviders
 
     protected override void LoadTestData() {
       for (int i = 0; i < 5; i++) {
-        var user = new User();
-        user.Username = "user" + i.ToString();
-        user.Email = user.Username + "@email.com";
-        user.PasswordSalt = provider.GenerateSalt(provider.SALT_SIZE);
-        user.Password = provider.EncodePassword(user.Username, user.PasswordSalt);
+        var salt = provider.GenerateSalt(provider.SALT_SIZE);
+        var username = "user" + i.ToString();
+        var user = new User(username, provider.EncodePassword(username, salt), username + "@email.com");
+        user.PasswordSalt = salt;
+        user.IsApproved = true;
         provider.UserRepository.SaveOrUpdate(user);
       }
     }
@@ -114,9 +114,10 @@ namespace Tests.ClubPool.SharpArchProviders
     [Test]
     public void CreateUser_creates_new_user_properly() {
       MembershipCreateStatus status;
-      var user = new User { Username = "username", Password = "password", Email = "newemail@email.com" };
+      var user = new User("username", "password", "newemail@email.com");
+      user.IsApproved = true;
 
-      var membershipUser = provider.CreateUser(user.Username, user.Password, user.Email, null, null, true, 1, out status);
+      var membershipUser = provider.CreateUser(user.Username, user.Password, user.Email, null, null, user.IsApproved, 1, out status);
 
       status.ShouldEqual(MembershipCreateStatus.Success);
 
@@ -124,22 +125,25 @@ namespace Tests.ClubPool.SharpArchProviders
       membershipUser.ShouldNotBeNull();
       membershipUser.UserName.ShouldEqual(user.Username);
       membershipUser.Email.ShouldEqual(user.Email);
+      membershipUser.IsApproved.ShouldEqual(user.IsApproved);
     }
 
     [Test]
     public void CreateUser_adds_new_user_to_repository() {
       MembershipCreateStatus status;
-      var user = new User { Username = "username", Password = "password", Email = "newemail@email.com" };
+      var user = new User("username", "password", "newemail@email.com");
+      user.IsApproved = true;
 
-      var membershipUser = provider.CreateUser(user.Username, user.Password, user.Email, null, null, true, 1, out status);
+      var membershipUser = provider.CreateUser(user.Username, user.Password, user.Email, null, null, user.IsApproved, 1, out status);
 
       FlushAndClearSession();
       membershipUser.ShouldNotBeNull();
       status.ShouldEqual(MembershipCreateStatus.Success);
       var repoUser = provider.UserRepository.FindOne(UserQueries.UserByUsername(user.Username));
       repoUser.ShouldNotBeNull();
-      repoUser.Email.Equals(user.Email);
-      repoUser.Password.Equals(provider.EncodePassword(user.Password, repoUser.PasswordSalt));
+      repoUser.Email.ShouldEqual(user.Email);
+      repoUser.Password.ShouldEqual(provider.EncodePassword(user.Password, repoUser.PasswordSalt));
+      repoUser.IsApproved.ShouldEqual(user.IsApproved);
     }
 
     #endregion CreateUser Tests
@@ -269,9 +273,9 @@ namespace Tests.ClubPool.SharpArchProviders
     [Test]
     public void FindUsersByName_returns_correct_totalRecords_and_collection() {
       var search = "searchstring";
-      var user = new User { Username = search + "1", Password = "pass", Email = "email" };
+      var user = new User(search + "1", "pass", "email");
       provider.UserRepository.SaveOrUpdate(user);
-      user = new User { Username = search + "2", Password = "pass", Email = "email" };
+      user = new User(search + "2", "pass", "email");
       provider.UserRepository.SaveOrUpdate(user);
       FlushSessionAndEvict(null);
 
@@ -492,10 +496,32 @@ namespace Tests.ClubPool.SharpArchProviders
     }
 
     [Test]
+    [ExpectedException(typeof(ProviderException))]
+    public void UpdateUser_throws_on_duplicate_email() {
+      var user = provider.UserRepository.GetAll().First();
+      var otherUser = provider.UserRepository.GetAll().Skip(1).First();
+      var membershipUser = provider.GetUser(user.Username, false);
+      membershipUser.Email = otherUser.Email;
+
+      provider.UpdateUser(membershipUser);
+    }
+
+    [Test]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void UpdateUser_throws_on_null_or_empty_email() {
+      var user = provider.UserRepository.GetAll().First();
+      var membershipUser = provider.GetUser(user.Username, false);
+      membershipUser.Email = null;
+
+      provider.UpdateUser(membershipUser);
+    }
+
+    [Test]
     public void UpdateUser_can_update_user() {
       var user = provider.UserRepository.GetAll().First();
       var membershipUser = provider.GetUser(user.Username, false);
       membershipUser.Email = "newemail@email.com";
+
       FlushAndClearSession();
 
       provider.UpdateUser(membershipUser);
@@ -534,6 +560,18 @@ namespace Tests.ClubPool.SharpArchProviders
     public void ValidateUser_returns_false_for_invalid_password() {
       var user = provider.UserRepository.GetAll().First();
       provider.ValidateUser(user.Username, "bad").ShouldBeFalse();
+    }
+
+    [Test]
+    public void ValidateUser_returns_false_when_user_is_not_approved() {
+      var user = provider.UserRepository.GetAll().First();
+      user.IsApproved = false;
+      var password = "password";
+      user.Password = provider.EncodePassword(password, user.PasswordSalt);
+      provider.UserRepository.SaveOrUpdate(user);
+      FlushAndClearSession();
+
+      provider.ValidateUser(user.Username, password).ShouldBeFalse();
     }
 
     #endregion ValidateUser Tests

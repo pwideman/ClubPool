@@ -11,12 +11,24 @@ namespace ClubPool.SharpArchProviders.Domain
   [HasUniqueDomainSignature(Message="A user already exists with this username")]
   public class User : Entity
   {
-    public User() {
+    protected User() {
       InitMembers();
+    }
+
+    public User(string username, string password, string email)
+      : this() {
+      Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
+      Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
+      Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
+
+      Username = username;
+      Password = password;
+      Email = email;
     }
 
     protected virtual void InitMembers() {
       Roles = new List<Role>();
+      IsApproved = false;
     }
 
     [DomainSignature]
@@ -30,6 +42,8 @@ namespace ClubPool.SharpArchProviders.Domain
 
     [Email]
     public virtual string Email { get; set; }
+
+    public virtual bool IsApproved { get; set; }
 
     public virtual IList<Role> Roles { get; protected set; }
   }

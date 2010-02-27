@@ -41,9 +41,8 @@ namespace Tests.ClubPool.SharpArchProviders
         provider.RoleRepository.SaveOrUpdate(role);
       }
       for (int i = 0; i < 5; i++) {
-        var user = new User();
-        user.Username = "user" + i.ToString();
-        user.Email = user.Username + "@email.com";
+        var username = "user" + i.ToString();
+        var user = new User(username, username, username + "@email.com");
         provider.UserRepository.SaveOrUpdate(user);
       }
       FlushAndClearSession();
@@ -223,7 +222,7 @@ namespace Tests.ClubPool.SharpArchProviders
       var search = "_search_";
       var numUsers = 2;
       for (int i = 0; i < numUsers; i++) {
-        var user = new User { Username = "junk" + search + i.ToString() };
+        var user = new User("junk" + search + i.ToString(), "junk", "junk");
         provider.UserRepository.SaveOrUpdate(user);
       }
       FlushAndClearSession();

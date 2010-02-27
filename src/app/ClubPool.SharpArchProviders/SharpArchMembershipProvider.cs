@@ -134,7 +134,9 @@ namespace ClubPool.SharpArchProviders
         }
 
         // everything's ok, create the new user
-        user = new User { Username = username, Password = password, PasswordSalt = salt, Email = email };
+        user = new User(username, password, email);
+        user.PasswordSalt = salt;
+        user.IsApproved = isApproved;
         user = userRepository.SaveOrUpdate(user);
         status = MembershipCreateStatus.Success;
         return ConvertUserToMembershipUser(user);
@@ -283,14 +285,24 @@ namespace ClubPool.SharpArchProviders
         if (null == userEntity) {
           throw new ProviderException("User not found");
         }
+        if (RequiresUniqueEmail) {
+          if (string.IsNullOrEmpty(user.Email)) {
+            throw new ArgumentNullException("User email cannot be null or empty");
+          }
+          else if (!userEntity.Email.ToLower().Equals(user.Email.ToLower()) &&
+            null != userRepository.FindOne(UserQueries.UserByEmail(user.Email))) {
+            throw new ProviderException(string.Format("Cannot update user with duplicate email address: {0}", user.Email));
+          }
+        }
         userEntity.Email = user.Email;
+        userEntity.IsApproved = user.IsApproved;
         userRepository.SaveOrUpdate(userEntity);
       }
     }
 
     public override bool ValidateUser(string username, string password) {
       User user = userRepository.FindOne(UserQueries.UserByUsername(username));
-      if (null != user) {
+      if (null != user && user.IsApproved) {
         return VerifyPassword(user.Password, password, user.PasswordSalt);
       }
       else {
@@ -322,7 +334,7 @@ namespace ClubPool.SharpArchProviders
 
     protected MembershipUser ConvertUserToMembershipUser(User user) {
       var membershipUser = new MembershipUser(Name, user.Username, user.Id, user.Email, null,
-        null, true, false, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
+        null, user.IsApproved, false, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
       return membershipUser;
     }
 

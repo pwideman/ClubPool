@@ -18,7 +18,9 @@ namespace Tests.ClubPool.SharpArchProviders.TestDoubles
       if (name.IsNullOrEmptyOrBlank()) {
         name = "user";
       }
-      return new User { Username = name, Password = name, PasswordSalt = name, Email = name + "@email.com" };
+      var user = new User(name, name, name + "@email.com");
+      user.PasswordSalt = name;
+      return user;
     }
 
     public static List<User> CreateUsers(int count) {

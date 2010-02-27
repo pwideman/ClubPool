@@ -13,13 +13,11 @@ namespace Tests.ClubPool.SharpArchProviders.Domain
     public void Can_create_user() {
       var name = "name";
       var password = "password";
-      var salt = "salt";
       var email = "email@email.com";
-      var user = new User { Username = name, Password = password, PasswordSalt = salt, Email = email };
+      var user = new User(name, password, email);
 
       user.Username.ShouldEqual(name);
       user.Password.ShouldEqual(password);
-      user.PasswordSalt.ShouldEqual(salt);
       user.Email.ShouldEqual(email);
     }
   }
