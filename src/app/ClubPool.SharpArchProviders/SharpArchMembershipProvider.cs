@@ -138,6 +138,7 @@ namespace ClubPool.SharpArchProviders
         user.PasswordSalt = salt;
         user.IsApproved = isApproved;
         user = userRepository.SaveOrUpdate(user);
+        userRepository.DbContext.CommitTransaction();
         status = MembershipCreateStatus.Success;
         return ConvertUserToMembershipUser(user);
       }
@@ -156,6 +157,7 @@ namespace ClubPool.SharpArchProviders
         }
         else {
           userRepository.Delete(user);
+          userRepository.DbContext.CommitTransaction();
           // TODO: what to do about deleteAllRelatedData?
           return true;
         }
@@ -267,6 +269,7 @@ namespace ClubPool.SharpArchProviders
 
         user.Password = EncodePassword(newPassword, user.PasswordSalt);
         userRepository.SaveOrUpdate(user);
+        userRepository.DbContext.CommitTransaction();
         return newPassword;
       }
     }
@@ -297,6 +300,7 @@ namespace ClubPool.SharpArchProviders
         userEntity.Email = user.Email;
         userEntity.IsApproved = user.IsApproved;
         userRepository.SaveOrUpdate(userEntity);
+        userRepository.DbContext.CommitTransaction();
       }
     }
 

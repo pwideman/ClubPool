@@ -65,6 +65,7 @@ namespace ClubPool.SharpArchProviders
           }
           roleRepository.SaveOrUpdate(role);
         }
+        roleRepository.DbContext.CommitTransaction();
       }
     }
 
@@ -89,6 +90,7 @@ namespace ClubPool.SharpArchProviders
 
         role = new Role(roleName);
         roleRepository.SaveOrUpdate(role);
+        roleRepository.DbContext.CommitTransaction();
       }
     }
 
@@ -104,6 +106,7 @@ namespace ClubPool.SharpArchProviders
             throw new ProviderException("Role is not empty");
           }
           roleRepository.Delete(role);
+          roleRepository.DbContext.CommitTransaction();
           return true;
         }
         else {
@@ -218,6 +221,7 @@ namespace ClubPool.SharpArchProviders
             roleRepository.SaveOrUpdate(role);
           }
         }
+        roleRepository.DbContext.CommitTransaction();
       }
     }
 
