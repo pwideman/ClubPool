@@ -39,11 +39,24 @@ namespace ClubPool.Framework.Validation
       var compareAttribute = compareAttributes.Single();
       var propertyValue = GetPropertyValue(value, compareAttribute.PrimaryPropertyName);
       var comparisonValue = GetPropertyValue(value, compareAttribute.PropertyToCompare);
-      var valid = propertyValue.Equals(comparisonValue);
-      if (compareAttribute.Operator == ComparisonRule.Operator.DoesNotEqual) {
-        valid = !valid;
+      var equal = false;
+      if (null == propertyValue) {
+        if (null == comparisonValue) {
+          equal = true;
+        }
+        else {
+          equal = false;
+        }
       }
-      return valid;
+      else {
+        equal = propertyValue.Equals(comparisonValue);
+      }
+      if (compareAttribute.Operator == ComparisonRule.Operator.Equals) {
+        return equal;
+      }
+      else {
+        return !equal;
+      }
     }
 
     private object GetPropertyValue(object obj, string propertyName) {
