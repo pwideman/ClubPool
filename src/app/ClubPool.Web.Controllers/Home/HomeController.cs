@@ -10,7 +10,7 @@ using SharpArch.Core;
 using ClubPool.Core;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
-using ClubPool.ApplicationServices.Contracts;
+using ClubPool.ApplicationServices.Authentication.Contracts;
 
 namespace ClubPool.Web.Controllers
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Security;
 
-namespace ClubPool.ApplicationServices.Contracts
+namespace ClubPool.ApplicationServices.Membership.Contracts
 {
   public interface IMembershipService
   {

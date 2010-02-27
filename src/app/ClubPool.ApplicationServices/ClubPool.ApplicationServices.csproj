@@ -54,12 +54,12 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AspNetMembershipService.cs" />
-    <Compile Include="AspNetRoleService.cs" />
-    <Compile Include="FormsAuthenticationService.cs" />
-    <Compile Include="Contracts\IAuthenticationService.cs" />
-    <Compile Include="Contracts\IMembershipService.cs" />
-    <Compile Include="Contracts\IRoleService.cs" />
+    <Compile Include="Membership\AspNetMembershipService.cs" />
+    <Compile Include="Membership\AspNetRoleService.cs" />
+    <Compile Include="Authentication\FormsAuthenticationService.cs" />
+    <Compile Include="Authentication\Contracts\IAuthenticationService.cs" />
+    <Compile Include="Membership\Contracts\IMembershipService.cs" />
+    <Compile Include="Membership\Contracts\IRoleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

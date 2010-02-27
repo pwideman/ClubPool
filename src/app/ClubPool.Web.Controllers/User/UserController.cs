@@ -8,7 +8,8 @@ using SharpArch.Web.NHibernate;
 using xVal.ServerSide;
 using Elmah;
 
-using ClubPool.ApplicationServices.Contracts;
+using ClubPool.ApplicationServices.Membership.Contracts;
+using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Web.Controllers.User.ViewModels;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
@@ -115,12 +116,6 @@ namespace ClubPool.Web.Controllers
         re.AddModelStateErrors(this.ModelState, null);
       }
       catch (MembershipCreateUserException me) {
-        var context = System.Web.HttpContext.Current;
-        // log the exception
-        var signal = ErrorSignal.FromContext(context);
-        if (signal != null) {
-          signal.Raise(me, context);
-        }
         viewModel.ErrorMessage = me.Message;
       }
       return View(viewModel);

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Web.Security;
 
-using ClubPool.ApplicationServices.Contracts;
+using ClubPool.ApplicationServices.Membership.Contracts;
 
-namespace ClubPool.ApplicationServices
+namespace ClubPool.ApplicationServices.Membership
 {
   public class AspNetMembershipService : IMembershipService
   {

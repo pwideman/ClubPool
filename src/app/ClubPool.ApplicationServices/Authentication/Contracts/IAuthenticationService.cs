@@ -5,7 +5,7 @@ using System.Text;
 
 using ClubPool.Core;
 
-namespace ClubPool.ApplicationServices.Contracts
+namespace ClubPool.ApplicationServices.Authentication.Contracts
 {
   public interface IAuthenticationService
   {
