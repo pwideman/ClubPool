@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using System.Web.Security;
 
 using MvcContrib;
 using MvcContrib.Attributes;
@@ -10,6 +11,7 @@ using ClubPool.ApplicationServices.Contracts;
 using ClubPool.Web.Controllers.User.ViewModels;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
+using Core = ClubPool.Core;
 
 namespace ClubPool.Web.Controllers
 {
@@ -105,7 +107,14 @@ namespace ClubPool.Web.Controllers
     public ActionResult SignUp(SignUpViewModel viewModel) {
       try {
         viewModel.Validate();
-        return View("SignUpComplete");
+        MembershipCreateStatus status;
+        var membershipUser = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false, out status);
+        if (status == MembershipCreateStatus.Success) {
+          return View("SignUpComplete");
+        }
+        else {
+          // do something
+        }
       }
       catch (RulesException re) {
         re.AddModelStateErrors(this.ModelState, null);
