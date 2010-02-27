@@ -124,6 +124,7 @@
     <Compile Include="ClubPool.Web\Controllers\NavigationControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\UserControllerSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceLocatorHelper.cs" />
     <Compile Include="ServiceLocatorInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
