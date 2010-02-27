@@ -16,12 +16,13 @@ namespace ClubPool.ApplicationServices
       membershipProvider = provider;
     }
 
-    #region IMembershipService Members
-
     public bool ValidateUser(string username, string password) {
       return membershipProvider.ValidateUser(username, password);
     }
 
-    #endregion
+    public MembershipUser CreateUser(string username, string password, string email, bool isApproved, out MembershipCreateStatus status) {
+      return membershipProvider.CreateUser(username, password, email, null, null, isApproved, null, out status);
+    }
+
   }
 }
