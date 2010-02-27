@@ -17,7 +17,6 @@
       <%= this.TextBox(m => m.Password).Class("required") %>
     </div>
   </div>
-  <div class="spacer">&nbsp;</div>
   <div class="formrowspan">
     <%= this.CheckBox(m => m.StayLoggedIn).LabelAfter("Stay logged in") %>
   </div>

@@ -299,6 +299,11 @@ button
   font-weight:bold;
 }
 
+form.normal button
+{
+  padding: 6px 20px 6px 20px;
+}
+
 
 div.formrowspan
 {
@@ -349,11 +354,6 @@ div.formValidationSummary
 
 /* sidebar forms */
 
-form.sidebar div.spacer
-{
-  display: none;
-}
-
 form.sidebar div.formrow
 {
   padding-right: 8px;
@@ -385,6 +385,17 @@ form.sidebar button
 
 /* normal login form */
 
+form.loginForm
+{
+  width: 400px;
+}
+
+form.loginForm div.formrow > label
+{
+  width: 120px;
+}
+
+/*
 div#loginFormContainer
 {
   padding: 30px;
@@ -392,10 +403,6 @@ div#loginFormContainer
   text-align: center;
 }
 
-form.loginForm
-{
-  width: 300px;
-}
 
 form.loginForm div.formrow label
 {
@@ -412,7 +419,7 @@ form.loginForm button
 {
   width: 100px;
   height: 30px;
-}
+}*/
 
 /*
 form.signupForm

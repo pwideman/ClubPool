@@ -1,13 +1,14 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.User.ViewModels.LoginViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-  <div id="loginFormContainer">
-    <form method="post" id="loginForm" class="loginForm normal normalRoundCorners" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.Login(string.Empty))%>">
-      <div class="formTitle">Login</div>
-      <div class="formContent normalRoundCorners">
+  <div class="formContainer normalRoundCorners">
+    <div class="formTitle">Login</div>
+    <div class="formContent normalRoundCorners">
+      <div class="spacer">&nbsp;</div>
+      <form method="post" id="loginForm" class="loginForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.Login(string.Empty))%>">
         <% Html.RenderPartial("LoginControl"); %>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </asp:Content>
 
