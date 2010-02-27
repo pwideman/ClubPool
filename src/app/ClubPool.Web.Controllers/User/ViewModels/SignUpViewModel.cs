@@ -38,5 +38,7 @@ namespace ClubPool.Web.Controllers.User.ViewModels
     public string Email { get; set; }
 
     public string PreviousUsername { get; set; }
+
+    public string ErrorMessage { get; set; }
   }
 }

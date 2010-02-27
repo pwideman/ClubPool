@@ -6,6 +6,7 @@ using MvcContrib;
 using MvcContrib.Attributes;
 using SharpArch.Web.NHibernate;
 using xVal.ServerSide;
+using Elmah;
 
 using ClubPool.ApplicationServices.Contracts;
 using ClubPool.Web.Controllers.User.ViewModels;
@@ -107,17 +108,20 @@ namespace ClubPool.Web.Controllers
     public ActionResult SignUp(SignUpViewModel viewModel) {
       try {
         viewModel.Validate();
-        MembershipCreateStatus status;
-        var membershipUser = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false, out status);
-        if (status == MembershipCreateStatus.Success) {
-          return View("SignUpComplete");
-        }
-        else {
-          // do something
-        }
+        membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false);
+        return View("SignUpComplete");
       }
       catch (RulesException re) {
         re.AddModelStateErrors(this.ModelState, null);
+      }
+      catch (MembershipCreateUserException me) {
+        var context = System.Web.HttpContext.Current;
+        // log the exception
+        var signal = ErrorSignal.FromContext(context);
+        if (signal != null) {
+          signal.Raise(me, context);
+        }
+        viewModel.ErrorMessage = me.Message;
       }
       return View(viewModel);
     }

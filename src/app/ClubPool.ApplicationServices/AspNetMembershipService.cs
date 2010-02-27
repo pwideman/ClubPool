@@ -20,8 +20,12 @@ namespace ClubPool.ApplicationServices
       return membershipProvider.ValidateUser(username, password);
     }
 
-    public MembershipUser CreateUser(string username, string password, string email, bool isApproved, out MembershipCreateStatus status) {
-      return membershipProvider.CreateUser(username, password, email, null, null, isApproved, null, out status);
+    public void CreateUser(string username, string password, string email, bool isApproved) {
+      MembershipCreateStatus status;
+      var membershipUser = membershipProvider.CreateUser(username, password, email, null, null, isApproved, null, out status);
+      if (status != MembershipCreateStatus.Success) {
+        throw new MembershipCreateUserException(status);
+      }
     }
 
   }

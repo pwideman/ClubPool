@@ -13,6 +13,11 @@
       <div class="formHeader">
         All fields are required
       </div>
+      <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) { %>
+      <div class="formError normalRoundCorners">
+        <%= Model.ErrorMessage %>
+      </div>
+      <% } %>
       <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.SignUp())%>">
         <fieldset>
           <%= Html.AntiForgeryToken() %>

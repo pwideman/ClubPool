@@ -9,6 +9,6 @@ namespace ClubPool.ApplicationServices.Contracts
   public interface IMembershipService
   {
     bool ValidateUser(string username, string password);
-    MembershipUser CreateUser(string username, string password, string email, bool isApproved, out MembershipCreateStatus status);
+    void CreateUser(string username, string password, string email, bool isApproved);
   }
 }
