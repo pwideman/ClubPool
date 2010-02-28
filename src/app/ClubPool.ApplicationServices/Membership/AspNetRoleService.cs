@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Security;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
+using Core=ClubPool.Core;
 
 namespace ClubPool.ApplicationServices.Membership
 {
@@ -24,6 +25,14 @@ namespace ClubPool.ApplicationServices.Membership
 
     public bool IsUserInRole(string username, string role) {
       return roleProvider.IsUserInRole(username, role);
+    }
+
+    public string[] GetUsersInRole(string roleName) {
+      return roleProvider.GetUsersInRole(roleName);
+    }
+
+    public bool IsUserAdministrator(string username) {
+      return roleProvider.IsUserInRole(username, Core.Roles.Administrators);
     }
 
     #endregion

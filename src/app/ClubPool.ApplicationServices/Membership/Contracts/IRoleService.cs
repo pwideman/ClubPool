@@ -9,5 +9,7 @@ namespace ClubPool.ApplicationServices.Membership.Contracts
   {
     string[] GetRolesForUser(string username);
     bool IsUserInRole(string username, string role);
+    string[] GetUsersInRole(string roleName);
+    bool IsUserAdministrator(string username);
   }
 }

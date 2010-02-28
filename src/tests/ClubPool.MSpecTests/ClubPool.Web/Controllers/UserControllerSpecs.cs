@@ -11,9 +11,12 @@ using Machine.Specifications;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Core;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.User.ViewModels;
+using ClubPool.Framework.NHibernate;
+using ClubPool.SharpArchProviders.Domain;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {
@@ -23,12 +26,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static IRoleService roleService;
     protected static IAuthenticationService authenticationService;
     protected static IMembershipService membershipService;
+    protected static ILinqRepository<Player> playerRepository;
+    protected static IEmailService emailService;
 
     Establish context = () => {
       roleService = MockRepository.GenerateStub<IRoleService>();
       authenticationService = MockRepository.GenerateStub<IAuthenticationService>();
       membershipService = MockRepository.GenerateStub<IMembershipService>();
-      controller = new UserController(authenticationService, membershipService, roleService);
+      playerRepository = MockRepository.GenerateStub<ILinqRepository<Player>>();
+      emailService = MockRepository.GenerateStub<IEmailService>();
+      controller = new UserController(authenticationService, membershipService, roleService, playerRepository, emailService);
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
     };
@@ -180,7 +187,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       authenticationService.AssertWasCalled(s => s.LogIn(username, stayLoggedIn));
 
     It should_redirect_to_home_index = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
+      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Dashboard");
       result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
     };
   }
@@ -387,20 +394,35 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ActionResult result;
     static SignUpViewModel viewModel;
     static string username = "TestUser";
+    static string adminUsername = "admin";
+    static string adminEmail = "admin@email.com";
+    static string userEmail = "test@test.com";
 
     Establish context = () => {
       viewModel = new SignUpViewModel();
       viewModel.Username = username;
       viewModel.Password = "test";
       viewModel.ConfirmPassword = "test";
-      viewModel.Email = "test@test.com";
+      viewModel.Email = userEmail;
       viewModel.FirstName = "test";
       viewModel.LastName = "test";
+
+      roleService.Stub(s => s.GetUsersInRole(Core.Roles.Administrators))
+        .Return(new string[] { adminUsername });
+      playerRepository.Stub(r => r.GetAll()).Return(
+        new List<Player>() { 
+          new Player() { User = new User(adminUsername, adminUsername, adminEmail) }
+        }.AsQueryable());
     };
 
     Because of = () => result = controller.SignUp(viewModel);
 
     It should_return_the_SignUpComplete_view = () =>
       result.IsAViewAnd().ViewName.ShouldEqual("SignUpComplete");
+
+    It should_send_new_player_awaiting_approval_email_to_all_admins = () => {
+      emailService.AssertWasCalled(s => s.SendSystemEmail(new List<string>(), null, null),
+        o => o.IgnoreArguments());
+    };
   }
 }

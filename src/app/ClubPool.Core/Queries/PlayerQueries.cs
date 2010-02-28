@@ -22,5 +22,9 @@ namespace ClubPool.Core.Queries
     // the database's case sensitivity settings come into play? Those could
     // possibly be case insensitive by default, etc.
 
+    public static IQueryable<Player> WithUsernames(this IQueryable<Player> players, string[] usernames) {
+      return players.Where(p => usernames.Contains(p.User.Username));
+    }
+
   }
 }
