@@ -60,6 +60,8 @@
     <Compile Include="Authentication\Contracts\IAuthenticationService.cs" />
     <Compile Include="Membership\Contracts\IMembershipService.cs" />
     <Compile Include="Membership\Contracts\IRoleService.cs" />
+    <Compile Include="Messaging\Contracts\IEmailService.cs" />
+    <Compile Include="Messaging\EmailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
