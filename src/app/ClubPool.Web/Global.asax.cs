@@ -35,11 +35,8 @@ namespace ClubPool.Web
   public class MvcApplication : HttpApplication
   {
     private WebSessionStorage webSessionStorage;
-    private static bool showCustomErrorPages;
 
     protected void Application_Start() {
-
-      showCustomErrorPages = Convert.ToBoolean(ConfigurationManager.AppSettings["showCustomErrorPages"]);
       
       log4net.Config.XmlConfigurator.Configure();
 
@@ -111,48 +108,5 @@ namespace ClubPool.Web
       NHibernateSession.ValidatorEngine = NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine();
     }
 
-    protected void Application_Error(object sender, EventArgs e) {
-      // Useful for debugging
-      var exception = Server.GetLastError();
-
-      var context = HttpContext.Current;
-
-      //  Show custom error page if necessary - from Who Can Help Me?
-      if (showCustomErrorPages) {
-        if (exception is HttpRequestValidationException) {
-          this.DisplayErrorPage("InvalidInput");
-          return;
-        }
-
-        this.DisplayErrorPage("Error");
-      }
-    }
-
-    /// <summary>
-    /// Returns a response by executing the Error controller with the specified action. 
-    /// Shamelessly copied from the Who Can Help Me? showcase app
-    /// </summary>
-    /// <param name="action">
-    /// The action.
-    /// </param>
-    private void DisplayErrorPage(string action) {
-      var routeData = new RouteData();
-      routeData.Values.Add("controller", "Error");
-      routeData.Values.Add("action", action);
-
-      this.Server.ClearError();
-      this.Response.Clear();
-
-      var httpContext = new HttpContextWrapper(this.Context);
-      var requestContext = new RequestContext(httpContext, routeData);
-
-      IController errorController = ControllerBuilder.Current.GetControllerFactory().CreateController(new RequestContext(httpContext, routeData), "Error");
-
-      // Clear the query string, in particular to avoid HttpRequestValidationException being re-raised
-      // when the error view is rendered by the Error Controller.
-      httpContext.RewritePath(httpContext.Request.FilePath, httpContext.Request.PathInfo, string.Empty);
-
-      errorController.Execute(requestContext);
-    }
   }
 }

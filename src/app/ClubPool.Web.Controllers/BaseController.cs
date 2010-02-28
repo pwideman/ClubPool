@@ -8,6 +8,7 @@ using ClubPool.Web.Controllers.Attributes;
 
 namespace ClubPool.Web.Controllers
 {
+  [ElmahRescue("DefaultError")]
   public abstract class BaseController : Controller
   {
   }

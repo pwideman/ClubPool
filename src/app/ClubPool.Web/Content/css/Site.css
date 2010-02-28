@@ -65,6 +65,17 @@ div.spacer
   clear: both;
 }
 
+/* rescue pages */
+div.rescuediv
+{
+  text-align: center;
+  padding: 50px;
+  border: 2px solid red;
+  background-color: #FFFFD5;
+  color: red;
+  margin: 30px;
+}
+
 /* Container
 ---------------------------------------------------------*/
 #container 

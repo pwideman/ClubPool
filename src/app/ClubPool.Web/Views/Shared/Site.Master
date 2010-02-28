@@ -15,10 +15,10 @@
     <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
     <%= Html.ScriptInclude("supersubs.js") %>
     <%= Html.ScriptInclude("superfish.js") %>
-    <%= Html.ScriptInclude("clubpool.js") %>
     <%= Html.ScriptInclude("jquery.corner.js") %>
     <%= Html.ScriptInclude("jquery.validate.min.js") %>
     <%= Html.ScriptInclude("xVal.jquery.validate.js") %>
+    <%= Html.ScriptInclude("clubpool.js") %>
     
     <% // At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded %>
     <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">

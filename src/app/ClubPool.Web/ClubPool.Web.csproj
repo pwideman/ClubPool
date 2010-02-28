@@ -199,12 +199,14 @@
     <Content Include="Scripts\superfish.js" />
     <Content Include="Scripts\supersubs.js" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
+    <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
-    <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\DebugFormSubmission.ascx" />
     <Content Include="Views\Shared\LoginControl.ascx" />
+    <Content Include="Views\Shared\Rescues\DefaultError.aspx" />
     <Content Include="Views\User\AccountHelp.aspx" />
+    <Content Include="Views\User\Delete.aspx" />
     <Content Include="Views\User\Login.aspx" />
     <Content Include="Views\User\LoginGadget.aspx" />
     <Content Include="Views\User\LoginStatus.ascx" />

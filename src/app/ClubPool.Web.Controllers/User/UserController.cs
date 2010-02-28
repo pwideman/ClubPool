@@ -119,5 +119,10 @@ namespace ClubPool.Web.Controllers
       }
       return View(viewModel);
     }
+
+    [Authorize(Roles=ClubPool.Core.Roles.Administrators)]
+    public ActionResult Delete(int id) {
+      return View();
+    }
   }
 }

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elmah, Version=1.2.11629.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Elmah.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -87,9 +91,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\BaseViewDataAttribute.cs" />
-    <Compile Include="Attributes\MenuViewDataAttribute.cs" />
-    <Compile Include="Attributes\LoginStatusViewDataAttribute.cs" />
+    <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Navigation\NavigationController.cs" />
@@ -100,7 +102,6 @@
     <Compile Include="Shared\SidebarGadgets\SidebarGadgetCollection.cs" />
     <Compile Include="Shared\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
-    <Compile Include="Shared\ViewModels\TestPanelViewModel.cs" />
     <Compile Include="User\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Home\ViewModels\IndexViewModel.cs" />
     <Compile Include="User\ViewModels\LoginViewModel.cs" />
