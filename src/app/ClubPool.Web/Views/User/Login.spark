@@ -1,5 +1,0 @@
-﻿<viewdata model="ClubPool.Web.Controllers.User.ViewModels.LoginViewModel"/>
-
-<content name="title">Login</content>
-
-<Login/>

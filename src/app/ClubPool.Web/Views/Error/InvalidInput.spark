@@ -1,8 +1,0 @@
-﻿<viewdata model="ClubPool.Web.Controllers.BaseViewModel"/>
-
-<content name="title">
-Error
-</content>
-
-<h2>Error - Invalid Input</h2>
-<p>Invalid input error.</p>

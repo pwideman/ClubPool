@@ -6,8 +6,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Reflection;
 
-using Spark;
-using Spark.Web.Mvc;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CommonServiceLocator.WindsorAdapter;
@@ -36,16 +34,14 @@ namespace ClubPool.Web
 
   public class MvcApplication : HttpApplication
   {
+    private WebSessionStorage webSessionStorage;
+    private static bool showCustomErrorPages;
+
     protected void Application_Start() {
 
       showCustomErrorPages = Convert.ToBoolean(ConfigurationManager.AppSettings["showCustomErrorPages"]);
       
       log4net.Config.XmlConfigurator.Configure();
-
-      var spark = Convert.ToBoolean(ConfigurationManager.AppSettings["useSparkViewEngine"]);
-      if (spark) {
-        InitSparkViewEngine();
-      }
 
       //ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
 
@@ -158,21 +154,5 @@ namespace ClubPool.Web
 
       errorController.Execute(requestContext);
     }
-
-    // spark stuff
-    public void InitSparkViewEngine() {
-      ViewEngines.Engines.Clear();
-      SparkEngineStarter.RegisterViewEngine(SparkInitializer.GetSettings());
-      LoadPrecompiledViews(ViewEngines.Engines);
-    }
-
-    public void LoadPrecompiledViews(ViewEngineCollection engines) {
-      SparkViewFactory factory = engines.OfType<SparkViewFactory>().First();
-      factory.Engine.LoadBatchCompilation(Assembly.Load("ClubPool.Web.Views"));
-    }
-    // end spark stuff
-
-    private WebSessionStorage webSessionStorage;
-    private static bool showCustomErrorPages;
   }
 }

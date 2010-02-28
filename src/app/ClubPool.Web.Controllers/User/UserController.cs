@@ -6,7 +6,6 @@ using MvcContrib;
 using MvcContrib.Attributes;
 using SharpArch.Web.NHibernate;
 using xVal.ServerSide;
-using Elmah;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;

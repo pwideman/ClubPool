@@ -1,7 +1,0 @@
-<viewdata SidebarPanels="IList[[SidebarPanelViewData]]"/>
-<p>Sidebar</p>
-<for each="var panel in SidebarPanels">
-  <div class="sidebarPanel">
-    # Html.RenderPartial(panel.Name, panel.ViewModel);
-  </div>
-</for>
