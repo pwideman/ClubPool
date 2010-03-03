@@ -67,6 +67,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Domain\NHibernateMaps\UserMap.cs" />
     <Compile Include="Domain\Queries\RoleQueries.cs" />
     <Compile Include="Domain\Queries\UserQueries.cs" />
