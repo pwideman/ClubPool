@@ -3,8 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 
 [assembly: AllowPartiallyTrustedCallers]
-[assembly: AssemblyCompany("Your Company")]
-[assembly: AssemblyCopyright("Copyright © Your Company 2009")]
+[assembly: AssemblyCopyright("Copyright © Paul Wideman 2010")]
 [assembly: AssemblyConfiguration("debug")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
