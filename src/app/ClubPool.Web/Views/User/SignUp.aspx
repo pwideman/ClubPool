@@ -1,4 +1,5 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="ClubPool.Web.Views.AspxViewPageBase<ClubPool.Web.Controllers.User.ViewModels.SignUpViewModel>" %>
+<%@ Import Namespace="ClubPool.Web.Controls.Captcha" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <strong>Sign up for a new Club Pool League account</strong>
@@ -61,6 +62,15 @@
               <%= this.TextBox(m => m.LastName).Class("short") %>
               <label for="LastName">Last</label>
               <%= Html.ValidationMessageFor(m => m.LastName) %>
+            </div>
+          </div>
+          <div class="spacer">&nbsp;</div>
+          <div class="formrow">
+            <label><%= Html.CaptchaImage(50, 180) %></label>
+            <div class="formInput">
+              <label for="captcha">Enter the text from the image below:</label><br />
+              <%= Html.CaptchaTextBox("captcha") %>
+              <%= Html.ValidationMessage("captcha") %>
             </div>
           </div>
           <div class="spacer">&nbsp;</div>

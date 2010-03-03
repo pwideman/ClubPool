@@ -136,6 +136,10 @@
       <Project>{164B9715-21F9-4932-87BF-5D6B28CED547}</Project>
       <Name>ClubPool.SharpArchProviders</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ClubPool.Web.Controls\ClubPool.Web.Controls.csproj">
+      <Project>{9A9C7C70-2E70-4A74-86F6-2C11F995510D}</Project>
+      <Name>ClubPool.Web.Controls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

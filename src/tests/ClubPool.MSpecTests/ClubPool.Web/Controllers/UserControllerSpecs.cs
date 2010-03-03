@@ -337,7 +337,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       viewModel.Username = username;
     };
 
-    Because of = () => result = controller.SignUp(viewModel);
+    Because of = () => result = controller.SignUp(viewModel, true);
 
     It should_return_the_default_view = () =>
       result.IsAViewAnd().ViewName.ShouldBeEmpty();
@@ -375,7 +375,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
         .Throw(new MembershipCreateUserException(MembershipCreateStatus.DuplicateEmail));
     };
 
-    Because of = () => result = controller.SignUp(viewModel);
+    Because of = () => result = controller.SignUp(viewModel, true);
 
     It should_return_the_default_view = () =>
       result.IsAViewAnd().ViewName.ShouldBeEmpty();
@@ -415,7 +415,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
         }.AsQueryable());
     };
 
-    Because of = () => result = controller.SignUp(viewModel);
+    Because of = () => result = controller.SignUp(viewModel, true);
 
     It should_return_the_SignUpComplete_view = () =>
       result.IsAViewAnd().ViewName.ShouldEqual("SignUpComplete");

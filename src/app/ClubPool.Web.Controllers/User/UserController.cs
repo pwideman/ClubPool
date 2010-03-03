@@ -19,6 +19,7 @@ using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using Core = ClubPool.Core;
 using ClubPool.Core.Queries;
+using ClubPool.Web.Controls.Captcha;
 
 namespace ClubPool.Web.Controllers
 {
@@ -126,18 +127,24 @@ namespace ClubPool.Web.Controllers
     [AcceptPost]
     [ValidateAntiForgeryToken]
     [Transaction]
-    public ActionResult SignUp(SignUpViewModel viewModel) {
-      try {
-        viewModel.Validate();
-        membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false);
-        SendNewPlayerAwaitingApprovalEmail(viewModel.Username, viewModel.FirstName, viewModel.LastName, viewModel.Email);
-        return View("SignUpComplete");
+    [CaptchaValidation("captcha")]
+    public ActionResult SignUp(SignUpViewModel viewModel, bool captchaValid) {
+      if (!captchaValid) {
+        ModelState.AddModelError("captcha", "Incorrect. Try again.");
       }
-      catch (RulesException re) {
-        re.AddModelStateErrors(this.ModelState, null);
-      }
-      catch (MembershipCreateUserException me) {
-        viewModel.ErrorMessage = me.Message;
+      else {
+        try {
+          viewModel.Validate();
+          membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false);
+          SendNewPlayerAwaitingApprovalEmail(viewModel.Username, viewModel.FirstName, viewModel.LastName, viewModel.Email);
+          return View("SignUpComplete");
+        }
+        catch (RulesException re) {
+          re.AddModelStateErrors(this.ModelState, null);
+        }
+        catch (MembershipCreateUserException me) {
+          viewModel.ErrorMessage = me.Message;
+        }
       }
       return View(viewModel);
     }
