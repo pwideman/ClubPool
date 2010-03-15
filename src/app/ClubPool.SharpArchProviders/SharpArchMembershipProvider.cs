@@ -108,40 +108,37 @@ namespace ClubPool.SharpArchProviders
 
       User user = null;
 
-      using (var tx = userRepository.DbContext.BeginTransaction()) {
-        // see if a user by this username already exists
-        user = userRepository.FindOne(UserQueries.UserByUsername(username));
-        if (null != user) {
-          status = MembershipCreateStatus.DuplicateUserName;
-          return null;
-        }
-
-        if (RequiresUniqueEmail) {
-          // see if a user with this email already exists
-          user = userRepository.FindOne(UserQueries.UserByEmail(email));
-          if (null != user) {
-            status = MembershipCreateStatus.DuplicateEmail;
-            return null;
-          }
-        }
-
-        // encode the password and verify the result
-        var salt = GenerateSalt(SALT_SIZE);
-        password = EncodePassword(password, salt);
-        if (password.IsNullOrEmptyOrBlank()) {
-          status = MembershipCreateStatus.InvalidPassword;
-          return null;
-        }
-
-        // everything's ok, create the new user
-        user = new User(username, password, email);
-        user.PasswordSalt = salt;
-        user.IsApproved = isApproved;
-        user = userRepository.SaveOrUpdate(user);
-        userRepository.DbContext.CommitTransaction();
-        status = MembershipCreateStatus.Success;
-        return ConvertUserToMembershipUser(user);
+      // see if a user by this username already exists
+      user = userRepository.FindOne(UserQueries.UserByUsername(username));
+      if (null != user) {
+        status = MembershipCreateStatus.DuplicateUserName;
+        return null;
       }
+
+      if (RequiresUniqueEmail) {
+        // see if a user with this email already exists
+        user = userRepository.FindOne(UserQueries.UserByEmail(email));
+        if (null != user) {
+          status = MembershipCreateStatus.DuplicateEmail;
+          return null;
+        }
+      }
+
+      // encode the password and verify the result
+      var salt = GenerateSalt(SALT_SIZE);
+      password = EncodePassword(password, salt);
+      if (password.IsNullOrEmptyOrBlank()) {
+        status = MembershipCreateStatus.InvalidPassword;
+        return null;
+      }
+
+      // everything's ok, create the new user
+      user = new User(username, password, email);
+      user.PasswordSalt = salt;
+      user.IsApproved = isApproved;
+      user = userRepository.SaveOrUpdate(user);
+      status = MembershipCreateStatus.Success;
+      return ConvertUserToMembershipUser(user);
     }
 
     public override bool DeleteUser(string username, bool deleteAllRelatedData) {
@@ -150,17 +147,14 @@ namespace ClubPool.SharpArchProviders
         return false;
       }
 
-      using (var tx = userRepository.DbContext.BeginTransaction()) {
-        var user = userRepository.FindOne(UserQueries.UserByUsername(username));
-        if (null == user) {
-          return false;
-        }
-        else {
-          userRepository.Delete(user);
-          userRepository.DbContext.CommitTransaction();
-          // TODO: what to do about deleteAllRelatedData?
-          return true;
-        }
+      var user = userRepository.FindOne(UserQueries.UserByUsername(username));
+      if (null == user) {
+        return false;
+      }
+      else {
+        userRepository.Delete(user);
+        // TODO: what to do about deleteAllRelatedData?
+        return true;
       }
     }
 
@@ -252,26 +246,23 @@ namespace ClubPool.SharpArchProviders
         throw new MembershipPasswordException("Password reset not enabled");
       }
 
-      using (var tx = userRepository.DbContext.BeginTransaction()) {
-        var user = userRepository.FindOne(UserQueries.UserByUsername(username));
-        if (null == user) {
-          throw new ProviderException("Invalid username");
-        }
-
-        var newPassword = Membership.GeneratePassword(MinRequiredPasswordLength, MinRequiredNonAlphanumericCharacters);
-
-        // Raise the ValidatingPassword event in case an event handler has been defined.
-        ValidatePasswordEventArgs args = new ValidatePasswordEventArgs(username, newPassword, true);
-        OnValidatingPassword(args);
-        if (args.Cancel) {
-          throw args.FailureInformation ?? new MembershipPasswordException("Reset cancelled");
-        }
-
-        user.Password = EncodePassword(newPassword, user.PasswordSalt);
-        userRepository.SaveOrUpdate(user);
-        userRepository.DbContext.CommitTransaction();
-        return newPassword;
+      var user = userRepository.FindOne(UserQueries.UserByUsername(username));
+      if (null == user) {
+        throw new ProviderException("Invalid username");
       }
+
+      var newPassword = Membership.GeneratePassword(MinRequiredPasswordLength, MinRequiredNonAlphanumericCharacters);
+
+      // Raise the ValidatingPassword event in case an event handler has been defined.
+      ValidatePasswordEventArgs args = new ValidatePasswordEventArgs(username, newPassword, true);
+      OnValidatingPassword(args);
+      if (args.Cancel) {
+        throw args.FailureInformation ?? new MembershipPasswordException("Reset cancelled");
+      }
+
+      user.Password = EncodePassword(newPassword, user.PasswordSalt);
+      userRepository.SaveOrUpdate(user);
+      return newPassword;
     }
 
     public override bool UnlockUser(string userName) {
@@ -281,27 +272,24 @@ namespace ClubPool.SharpArchProviders
     public override void UpdateUser(MembershipUser user) {
       Check.Require(null != user, "user cannot be null");
 
-      using (var tx = userRepository.DbContext.BeginTransaction()) {
-        // TODO: Use Id instead? Need to find out what the norm is for which properties are
-        // allowed to be updated. Username? etc.
-        var userEntity = userRepository.FindOne(UserQueries.UserByUsername(user.UserName));
-        if (null == userEntity) {
-          throw new ProviderException("User not found");
-        }
-        if (RequiresUniqueEmail) {
-          if (string.IsNullOrEmpty(user.Email)) {
-            throw new ArgumentNullException("User email cannot be null or empty");
-          }
-          else if (!userEntity.Email.ToLower().Equals(user.Email.ToLower()) &&
-            null != userRepository.FindOne(UserQueries.UserByEmail(user.Email))) {
-            throw new ProviderException(string.Format("Cannot update user with duplicate email address: {0}", user.Email));
-          }
-        }
-        userEntity.Email = user.Email;
-        userEntity.IsApproved = user.IsApproved;
-        userRepository.SaveOrUpdate(userEntity);
-        userRepository.DbContext.CommitTransaction();
+      // TODO: Use Id instead? Need to find out what the norm is for which properties are
+      // allowed to be updated. Username? etc.
+      var userEntity = userRepository.FindOne(UserQueries.UserByUsername(user.UserName));
+      if (null == userEntity) {
+        throw new ProviderException("User not found");
       }
+      if (RequiresUniqueEmail) {
+        if (string.IsNullOrEmpty(user.Email)) {
+          throw new ArgumentNullException("User email cannot be null or empty");
+        }
+        else if (!userEntity.Email.ToLower().Equals(user.Email.ToLower()) &&
+          null != userRepository.FindOne(UserQueries.UserByEmail(user.Email))) {
+          throw new ProviderException(string.Format("Cannot update user with duplicate email address: {0}", user.Email));
+        }
+      }
+      userEntity.Email = user.Email;
+      userEntity.IsApproved = user.IsApproved;
+      userRepository.SaveOrUpdate(userEntity);
     }
 
     public override bool ValidateUser(string username, string password) {

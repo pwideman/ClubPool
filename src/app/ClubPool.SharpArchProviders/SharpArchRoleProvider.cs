@@ -34,38 +34,35 @@ namespace ClubPool.SharpArchProviders
       var roles = new List<Role>();
       var users = new List<User>();
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        // validate usernames
-        foreach (var username in usernames) {
-          Check.Require(!username.IsNullOrEmptyOrBlank(),
-            "usernames cannot contain null or empty username");
-          var user = userRepository.FindOne(UserQueries.UserByUsername(username));
-          if (null == user) {
-            throw new ProviderException(string.Format("Username '{0}' does not exist", username));
-          }
-          users.Add(user);
+      // validate usernames
+      foreach (var username in usernames) {
+        Check.Require(!username.IsNullOrEmptyOrBlank(),
+          "usernames cannot contain null or empty username");
+        var user = userRepository.FindOne(UserQueries.UserByUsername(username));
+        if (null == user) {
+          throw new ProviderException(string.Format("Username '{0}' does not exist", username));
         }
+        users.Add(user);
+      }
 
-        // validate rolenames
-        foreach (var rolename in roleNames) {
-          Check.Require(!rolename.IsNullOrEmptyOrBlank(),
-            "roleNames cannot contain null or empty rolename");
-          var role = roleRepository.FindOne(RoleQueries.RoleByName(rolename));
-          if (null == role) {
-            throw new ProviderException(string.Format("Rolename '{0}' does not exist", rolename));
-          }
-          roles.Add(role);
+      // validate rolenames
+      foreach (var rolename in roleNames) {
+        Check.Require(!rolename.IsNullOrEmptyOrBlank(),
+          "roleNames cannot contain null or empty rolename");
+        var role = roleRepository.FindOne(RoleQueries.RoleByName(rolename));
+        if (null == role) {
+          throw new ProviderException(string.Format("Rolename '{0}' does not exist", rolename));
         }
+        roles.Add(role);
+      }
 
-        foreach (var role in roles) {
-          foreach (var user in users) {
-            if (!role.Users.Contains(user)) {
-              role.Users.Add(user);
-            }
+      foreach (var role in roles) {
+        foreach (var user in users) {
+          if (!role.Users.Contains(user)) {
+            role.Users.Add(user);
           }
-          roleRepository.SaveOrUpdate(role);
         }
-        roleRepository.DbContext.CommitTransaction();
+        roleRepository.SaveOrUpdate(role);
       }
     }
 
@@ -81,17 +78,14 @@ namespace ClubPool.SharpArchProviders
     public override void CreateRole(string roleName) {
       Check.Require(!roleName.IsNullOrEmptyOrBlank(), "roleName cannot be null or empty");
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        // check for duplicate
-        var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
-        if (null != role) {
-          throw new ProviderException(string.Format("There is already a role with the name '{0}'", roleName));
-        }
-
-        role = new Role(roleName);
-        roleRepository.SaveOrUpdate(role);
-        roleRepository.DbContext.CommitTransaction();
+      // check for duplicate
+      var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
+      if (null != role) {
+        throw new ProviderException(string.Format("There is already a role with the name '{0}'", roleName));
       }
+
+      role = new Role(roleName);
+      roleRepository.SaveOrUpdate(role);
     }
 
     public override bool DeleteRole(string roleName, bool throwOnPopulatedRole) {
@@ -99,86 +93,73 @@ namespace ClubPool.SharpArchProviders
         return false;
       }
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
-        if (null != role) {
-          if (throwOnPopulatedRole && role.Users.Count() > 0) {
-            throw new ProviderException("Role is not empty");
-          }
-          roleRepository.Delete(role);
-          roleRepository.DbContext.CommitTransaction();
-          return true;
+      var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
+      if (null != role) {
+        if (throwOnPopulatedRole && role.Users.Count() > 0) {
+          throw new ProviderException("Role is not empty");
         }
-        else {
-          return false;
-        }
+        roleRepository.Delete(role);
+        return true;
+      }
+      else {
+        return false;
       }
     }
 
     public override string[] FindUsersInRole(string roleName, string usernameToMatch) {
       Check.Require(!roleName.IsNullOrEmptyOrBlank(), "roleName cannot be null or empty");
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
-        if (null == role) {
-          throw new ProviderException(string.Format("Role '{0}' does not exist", roleName));
-        }
-        var usernames = role.Users.AsQueryable()
-          .Where(UserQueries.UserByUsernameContains(usernameToMatch))
-          .Select((u, i) => u.Username).ToList();
-        return usernames.ToArray();
+      var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
+      if (null == role) {
+        throw new ProviderException(string.Format("Role '{0}' does not exist", roleName));
       }
+      var usernames = role.Users.AsQueryable()
+        .Where(UserQueries.UserByUsernameContains(usernameToMatch))
+        .Select((u, i) => u.Username).ToList();
+      return usernames.ToArray();
     }
 
     public override string[] GetAllRoles() {
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        var roles = roleRepository.GetAll().ToArray();
-        var rolenames = new List<string>();
-        foreach (var role in roles) {
-          rolenames.Add(role.Name);
-        }
-        return rolenames.ToArray();
+      var roles = roleRepository.GetAll().ToArray();
+      var rolenames = new List<string>();
+      foreach (var role in roles) {
+        rolenames.Add(role.Name);
       }
+      return rolenames.ToArray();
     }
 
     public override string[] GetRolesForUser(string username) {
       Check.Require(!username.IsNullOrEmptyOrBlank(), "username cannot be null or empty");
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        var user = userRepository.FindOne(UserQueries.UserByUsername(username));
-        if (null == user) {
-          throw new ProviderException(string.Format("User '{0}' does not exist", username));
-        }
-        var roles = roleRepository.GetAll().WithUser(user);
-        return roles.ToList().Select(RoleQueries.SelectName).ToArray();
+      var user = userRepository.FindOne(UserQueries.UserByUsername(username));
+      if (null == user) {
+        throw new ProviderException(string.Format("User '{0}' does not exist", username));
       }
+      var roles = roleRepository.GetAll().WithUser(user);
+      return roles.ToList().Select(RoleQueries.SelectName).ToArray();
     }
 
     public override string[] GetUsersInRole(string roleName) {
       Check.Require(!roleName.IsNullOrEmptyOrBlank(), "roleName cannot be null or empty");
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
-        if (null == role) {
-          throw new ProviderException(string.Format("Role '{0}' does not exist", roleName));
-        }
-        return role.Users.Select(UserQueries.SelectUsername).ToArray();
+      var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
+      if (null == role) {
+        throw new ProviderException(string.Format("Role '{0}' does not exist", roleName));
       }
+      return role.Users.Select(UserQueries.SelectUsername).ToArray();
     }
 
     public override bool IsUserInRole(string username, string roleName) {
       Check.Require(!username.IsNullOrEmptyOrBlank(), "username cannot be null or empty");
       Check.Require(!roleName.IsNullOrEmptyOrBlank(), "roleName cannot be null or empty");
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
-        if (null != role) {
-          return role.Users.AsQueryable()
-            .Where(UserQueries.UserByUsername(username)).Count() > 0;
-        }
-        else {
-          return false;
-        }
+      var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
+      if (null != role) {
+        return role.Users.AsQueryable()
+          .Where(UserQueries.UserByUsername(username)).Count() > 0;
+      }
+      else {
+        return false;
       }
     }
 
@@ -188,40 +169,37 @@ namespace ClubPool.SharpArchProviders
       Check.Require(null != roleNames && roleNames.Length != 0,
         "roleNames cannot be null or empty");
 
-      using (var tx = roleRepository.DbContext.BeginTransaction()) {
-        List<User> users = new List<User>();
-        foreach (var username in usernames) {
-          Check.Require(!username.IsNullOrEmptyOrBlank(),
-            "usernames cannot contain null or empty strings");
-          var user = userRepository.FindOne(UserQueries.UserByUsername(username));
-          if (null == user) {
-            throw new ProviderException(string.Format("User '{0}' does not exist", username));
-          }
-          users.Add(user);
+      List<User> users = new List<User>();
+      foreach (var username in usernames) {
+        Check.Require(!username.IsNullOrEmptyOrBlank(),
+          "usernames cannot contain null or empty strings");
+        var user = userRepository.FindOne(UserQueries.UserByUsername(username));
+        if (null == user) {
+          throw new ProviderException(string.Format("User '{0}' does not exist", username));
         }
-        
-        List<Role> roles = new List<Role>();
-        foreach (var rolename in roleNames) {
-          Check.Require(!rolename.IsNullOrEmptyOrBlank(),
-            "roleNames cannot contain null or empty strings");
-          var role = roleRepository.FindOne(RoleQueries.RoleByName(rolename));
-          if (null == role) {
-            throw new ProviderException(string.Format("Role '{0}' does not exist", rolename));
-          }
-          roles.Add(role);
+        users.Add(user);
+      }
+      
+      List<Role> roles = new List<Role>();
+      foreach (var rolename in roleNames) {
+        Check.Require(!rolename.IsNullOrEmptyOrBlank(),
+          "roleNames cannot contain null or empty strings");
+        var role = roleRepository.FindOne(RoleQueries.RoleByName(rolename));
+        if (null == role) {
+          throw new ProviderException(string.Format("Role '{0}' does not exist", rolename));
         }
+        roles.Add(role);
+      }
 
-        foreach (var role in roles) {
-          foreach (var user in users) {
-            if (!role.Users.Contains(user)) {
-              throw new ProviderException(string.Format("User '{0}' is not in role '{0}'",
-                user.Username, role.Name));
-            }
-            role.Users.Remove(user);
-            roleRepository.SaveOrUpdate(role);
+      foreach (var role in roles) {
+        foreach (var user in users) {
+          if (!role.Users.Contains(user)) {
+            throw new ProviderException(string.Format("User '{0}' is not in role '{0}'",
+              user.Username, role.Name));
           }
+          role.Users.Remove(user);
+          roleRepository.SaveOrUpdate(role);
         }
-        roleRepository.DbContext.CommitTransaction();
       }
     }
 
