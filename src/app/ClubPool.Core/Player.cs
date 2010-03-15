@@ -17,11 +17,11 @@ namespace ClubPool.Core
     [DomainSignature]
     public virtual User User { get; set; }
 
-    //[NotNullNotEmpty]
-    //public virtual string FirstName { get; set; }
+    [NotNullNotEmpty]
+    public virtual string FirstName { get; set; }
 
-    //[NotNullNotEmpty]
-    //public virtual string LastName { get; set; }
+    [NotNullNotEmpty]
+    public virtual string LastName { get; set; }
 
   }
 }
