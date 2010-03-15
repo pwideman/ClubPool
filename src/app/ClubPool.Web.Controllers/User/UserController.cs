@@ -20,6 +20,7 @@ using ClubPool.Framework.NHibernate;
 using Core = ClubPool.Core;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controls.Captcha;
+using SharpArchProviders = ClubPool.SharpArchProviders;
 
 namespace ClubPool.Web.Controllers
 {
@@ -30,17 +31,21 @@ namespace ClubPool.Web.Controllers
     protected IRoleService roleService;
     protected ILinqRepository<Core.Player> playerRepository;
     protected IEmailService emailService;
+    protected ILinqRepository<SharpArchProviders.Domain.User> userRepository;
 
     public UserController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
       IRoleService roleSvc,
+      IEmailService emailSvc,
       ILinqRepository<Core.Player> playerRepo,
-      IEmailService emailSvc) {
+      ILinqRepository<SharpArchProviders.Domain.User> userRepo)
+    {
 
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != membershipSvc, "membershipSvc cannot be null");
       Check.Require(null != roleSvc, "roleSvc cannot be null");
       Check.Require(null != playerRepo, "playerRepo cannot be null");
+      Check.Require(null != userRepo, "userRepo cannot be null");
       Check.Require(null != emailSvc, "emailSvc cannot be null");
 
       authenticationService = authSvc;
@@ -48,6 +53,7 @@ namespace ClubPool.Web.Controllers
       roleService = roleSvc;
       playerRepository = playerRepo;
       emailService = emailSvc;
+      userRepository = userRepo;
     }
 
     public ActionResult Index() {
@@ -136,6 +142,9 @@ namespace ClubPool.Web.Controllers
         try {
           viewModel.Validate();
           membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false);
+          var user = userRepository.FindOne(SharpArchProviders.Domain.Queries.UserQueries.UserByUsername(viewModel.Username));
+          var player = new Core.Player() { FirstName = viewModel.FirstName, LastName = viewModel.LastName, User = user };
+          playerRepository.SaveOrUpdate(player);
           SendNewPlayerAwaitingApprovalEmail(viewModel.Username, viewModel.FirstName, viewModel.LastName, viewModel.Email);
           return View("SignUpComplete");
         }
@@ -151,9 +160,9 @@ namespace ClubPool.Web.Controllers
 
     protected void SendNewPlayerAwaitingApprovalEmail(string username, string firstName, string lastName, string email) {
       var adminUsernames = roleService.GetUsersInRole(Core.Roles.Administrators);
-      var adminPlayers = playerRepository.GetAll().WithUsernames(adminUsernames);
-      var adminEmailAddresses = adminPlayers.Select(p => p.User.Email).ToList();
-      if (adminEmailAddresses.Count > 0) {
+      if (adminUsernames.Length > 0) {
+        var adminPlayers = playerRepository.GetAll().WithUsernames(adminUsernames);
+        var adminEmailAddresses = adminPlayers.Select(p => p.User.Email).ToList();
         var subject = "New player sign up at ClubPool";
         var body = new StringBuilder();
         body.Append("A new player has signed up at ClubPool and needs admin approval:" + Environment.NewLine);

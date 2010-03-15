@@ -27,6 +27,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static IAuthenticationService authenticationService;
     protected static IMembershipService membershipService;
     protected static ILinqRepository<Player> playerRepository;
+    protected static ILinqRepository<User> userRepository;
     protected static IEmailService emailService;
 
     Establish context = () => {
@@ -34,8 +35,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       authenticationService = MockRepository.GenerateStub<IAuthenticationService>();
       membershipService = MockRepository.GenerateStub<IMembershipService>();
       playerRepository = MockRepository.GenerateStub<ILinqRepository<Player>>();
+      userRepository = MockRepository.GenerateStub<ILinqRepository<User>>();
       emailService = MockRepository.GenerateStub<IEmailService>();
-      controller = new UserController(authenticationService, membershipService, roleService, playerRepository, emailService);
+      controller = new UserController(authenticationService, membershipService, roleService, emailService, playerRepository, userRepository);
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
     };
@@ -380,6 +382,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_return_the_default_view = () =>
       result.IsAViewAnd().ViewName.ShouldBeEmpty();
 
+    It should_ask_the_membership_service_to_create_the_user = () => {
+      membershipService.AssertWasCalled(s => s.CreateUser(viewModel.Username, viewModel.Password, viewModel.Email, false));
+    };
+
     It should_pass_the_view_model_back_to_the_view_with_error_message = () => {
       var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
       vm.ShouldNotBeNull();
@@ -393,6 +399,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   {
     static ActionResult result;
     static SignUpViewModel viewModel;
+    static User user;
     static string username = "TestUser";
     static string adminUsername = "admin";
     static string adminEmail = "admin@email.com";
@@ -407,18 +414,28 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       viewModel.FirstName = "test";
       viewModel.LastName = "test";
 
+      user = new User(viewModel.Username, viewModel.Password, viewModel.Email);
+
       roleService.Stub(s => s.GetUsersInRole(Core.Roles.Administrators))
         .Return(new string[] { adminUsername });
+
       playerRepository.Stub(r => r.GetAll()).Return(
         new List<Player>() { 
           new Player() { User = new User(adminUsername, adminUsername, adminEmail) }
         }.AsQueryable());
+
+      userRepository.Stub(r => r.FindOne(u => u.Username.Equals(viewModel.Username))).IgnoreArguments().Return(user);
     };
 
     Because of = () => result = controller.SignUp(viewModel, true);
 
     It should_return_the_SignUpComplete_view = () =>
       result.IsAViewAnd().ViewName.ShouldEqual("SignUpComplete");
+
+    It should_ask_the_player_repository_to_save_the_new_player = () => {
+      var player = new Player() { FirstName = viewModel.FirstName, LastName = viewModel.LastName, User = user };
+      playerRepository.AssertWasCalled(r => r.SaveOrUpdate(player));
+    };
 
     It should_send_new_player_awaiting_approval_email_to_all_admins = () => {
       emailService.AssertWasCalled(s => s.SendSystemEmail(new List<string>(), null, null),
