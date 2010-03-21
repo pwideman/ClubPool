@@ -48,8 +48,7 @@ namespace ClubPool.Web
       var provider = new NHibernateSharedEngineProvider();
       NHibernate.Validator.Cfg.Environment.SharedEngineProvider = provider;
       var cfg = new FluentConfiguration();
-      cfg.Register(typeof(ClubPool.Core.Player).Assembly.ValidationDefinitions())
-         .Register(typeof(ClubPool.SharpArchProviders.SharpArchMembershipProvider).Assembly.ValidationDefinitions())
+      cfg.Register(typeof(ClubPool.Core.User).Assembly.ValidationDefinitions())
          .Register(typeof(HomeController).Assembly.ValidationDefinitions())
          .SetDefaultValidatorMode(NHibernate.Validator.Engine.ValidatorMode.OverrideAttributeWithExternal);
       NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine().Configure(cfg);
@@ -103,7 +102,7 @@ namespace ClubPool.Web
     private void InitializeNHibernateSession() {
       NHibernateSession.Init(
           webSessionStorage,
-          new string[] { Server.MapPath("~/bin/ClubPool.Data.dll"), Server.MapPath("~/bin/ClubPool.SharpArchProviders.dll") },
+          new string[] { Server.MapPath("~/bin/ClubPool.Data.dll") },
           new AutoPersistenceModelGenerator().Generate());
       NHibernateSession.ValidatorEngine = NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine();
     }

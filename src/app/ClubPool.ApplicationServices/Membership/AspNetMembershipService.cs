@@ -8,7 +8,7 @@ using ClubPool.ApplicationServices.Membership.Contracts;
 
 namespace ClubPool.ApplicationServices.Membership
 {
-  public class AspNetMembershipService : IMembershipService
+  public class AspNetMembershipService// : IMembershipService
   {
     protected MembershipProvider membershipProvider;
 

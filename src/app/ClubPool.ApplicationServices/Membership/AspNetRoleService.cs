@@ -9,7 +9,7 @@ using Core=ClubPool.Core;
 
 namespace ClubPool.ApplicationServices.Membership
 {
-  public class AspNetRoleService : IRoleService
+  public class AspNetRoleService// : IRoleService
   {
     protected RoleProvider roleProvider;
 

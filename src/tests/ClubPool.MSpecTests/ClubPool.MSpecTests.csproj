@@ -118,6 +118,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResultExtensions.cs" />
+    <Compile Include="ClubPool.ApplicationServices\Membership\SharpArchMembershipServiceSpecs.cs" />
+    <Compile Include="ClubPool.ApplicationServices\Membership\SharpArchRoleServiceSpecs.cs" />
     <Compile Include="ClubPool.Data\TestDoubles\EntityDuplicateCheckerStub.cs" />
     <Compile Include="ClubPool.Web\Controllers\ControllerHelper.cs" />
     <Compile Include="ClubPool.Web\Controllers\DashboardControllerSpecs.cs" />

@@ -20,7 +20,7 @@ namespace ClubPool.Web.CastleWindsor
     public static void AddComponentsTo(IWindsorContainer container) {
       AddGenericRepositoriesTo(container);
       AddCustomRepositoriesTo(container);
-      AddWebSecurityServicesTo(container);
+      //AddWebSecurityServicesTo(container);
       AddApplicationServicesTo(container);
 
       container.AddComponent("validator",

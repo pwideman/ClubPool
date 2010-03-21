@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 using SharpArch.Core;
 
-using ClubPool.Framework.Extensions;
+//using ClubPool.Framework.Extensions;
 
 namespace ClubPool.Core.Queries
 {

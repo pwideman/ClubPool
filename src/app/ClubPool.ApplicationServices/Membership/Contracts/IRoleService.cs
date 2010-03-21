@@ -8,7 +8,7 @@ namespace ClubPool.ApplicationServices.Membership.Contracts
   public interface IRoleService
   {
     string[] GetRolesForUser(string username);
-    bool IsUserInRole(string username, string role);
+    bool IsUserInRole(string username, string roleName);
     string[] GetUsersInRole(string roleName);
     bool IsUserAdministrator(string username);
   }

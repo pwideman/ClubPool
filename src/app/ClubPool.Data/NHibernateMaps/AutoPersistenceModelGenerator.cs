@@ -10,7 +10,6 @@ using SharpArch.Data.NHibernate.FluentNHibernate;
 
 using ClubPool.Core;
 using ClubPool.Data.NHibernateMaps.Conventions;
-using ClubPool.SharpArchProviders.Domain;
 
 namespace ClubPool.Data.NHibernateMaps
 {
@@ -22,14 +21,12 @@ namespace ClubPool.Data.NHibernateMaps
 
     public AutoPersistenceModel Generate() {
       var mappings = new AutoPersistenceModel();
-      mappings.AddEntityAssembly(typeof(Player).Assembly).Where(GetAutoMappingFilter);
       mappings.AddEntityAssembly(typeof(User).Assembly).Where(GetAutoMappingFilter);
       mappings.Conventions.Setup(GetConventions());
       mappings.Setup(GetSetup());
       mappings.IgnoreBase<Entity>();
       mappings.IgnoreBase(typeof(EntityWithTypedId<>));
       mappings.UseOverridesFromAssemblyOf<AutoPersistenceModelGenerator>();
-      mappings.UseOverridesFromAssemblyOf<User>();
 
       return mappings;
 

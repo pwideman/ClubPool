@@ -8,7 +8,6 @@ using SharpArch.Testing;
 using ClubPool.Core;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.NHibernate;
-using ClubPool.SharpArchProviders.Domain;
 
 using Tests.ClubPool.Framework.NHibernate.TestDoubles;
 
@@ -33,7 +32,7 @@ namespace Tests.ClubPool.Data.TestDoubles
       if (name.IsNullOrEmptyOrBlank()) {
         name = "user";
       }
-      var user = new User(name, name, name + "@email.com");
+      var user = new User(name, name, name, name, name + "@email.com");
       user.PasswordSalt = name;
       return user;
     }

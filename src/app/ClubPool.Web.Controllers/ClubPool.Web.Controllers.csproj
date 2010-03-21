@@ -134,10 +134,6 @@
       <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
       <Name>ClubPool.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClubPool.SharpArchProviders\ClubPool.SharpArchProviders.csproj">
-      <Project>{164B9715-21F9-4932-87BF-5D6B28CED547}</Project>
-      <Name>ClubPool.SharpArchProviders</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ClubPool.Web.Controls\ClubPool.Web.Controls.csproj">
       <Project>{9A9C7C70-2E70-4A74-86F6-2C11F995510D}</Project>
       <Name>ClubPool.Web.Controls</Name>
