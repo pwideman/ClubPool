@@ -141,14 +141,14 @@ namespace ClubPool.Web.Controllers
         re.AddModelStateErrors(this.ModelState, null);
         return View(viewModel);
       }
-      var user = userRepository.FindOne(UserQueries.UserByUsername(viewModel.Username));
-      if (null != user) {
+
+      if (membershipService.UsernameIsInUse(viewModel.Username)) {
         // the username is in use
         viewModel.ErrorMessage = string.Format("The username '{0}' is already in use, choose another", viewModel.Username);
         return View(viewModel);
       }
-      user = userRepository.FindOne(UserQueries.UserByEmail(viewModel.Email));
-      if (null != user) {
+
+      if (membershipService.EmailIsInUse(viewModel.Email)) {
         // the email address is in use
         viewModel.ErrorMessage = string.Format("The email address '{0}' is already in use, provide another", viewModel.Email);
         return View(viewModel);

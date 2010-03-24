@@ -370,7 +370,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       viewModel.FirstName = "test";
       viewModel.LastName = "test";
 
-      userRepository.Expect(r => r.FindOne(null)).IgnoreArguments().Return(new User("test", "test", "test", "test", "test"));
+      membershipService.Expect(s => s.UsernameIsInUse(null)).IgnoreArguments().Return(true);
     };
 
     Because of = () => result = controller.SignUp(viewModel, true);
@@ -382,6 +382,38 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
       vm.ShouldNotBeNull();
       vm.Username.ShouldEqual(username);
+      vm.ErrorMessage.ShouldNotBeEmpty();
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_with_duplicate_email : specification_for_user_controller
+  {
+    static ActionResult result;
+    static SignUpViewModel viewModel;
+    static string email = "TestEmail@email.com";
+
+    Establish context = () => {
+      viewModel = new SignUpViewModel();
+      viewModel.Username = "test";
+      viewModel.Password = "test";
+      viewModel.ConfirmPassword = "test";
+      viewModel.Email = email;
+      viewModel.FirstName = "test";
+      viewModel.LastName = "test";
+
+      membershipService.Expect(s => s.EmailIsInUse(null)).IgnoreArguments().Return(true);
+    };
+
+    Because of = () => result = controller.SignUp(viewModel, true);
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_pass_the_view_model_back_to_the_view_with_error_message = () => {
+      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
+      vm.ShouldNotBeNull();
+      vm.Email.ShouldEqual(email);
       vm.ErrorMessage.ShouldNotBeEmpty();
     };
   }

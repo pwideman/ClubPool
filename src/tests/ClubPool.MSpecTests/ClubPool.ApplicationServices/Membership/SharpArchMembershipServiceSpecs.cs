@@ -189,4 +189,72 @@ namespace ClubPool.MSpecTests.ClubPool.ApplicationServices.Membership
       userRepository.AssertWasCalled(r => r.SaveOrUpdate(user));
     };
   }
+
+  [Subject(typeof(SharpArchMembershipService))]
+  public class when_the_membership_service_is_asked_if_username_is_in_use_and_it_is : specification_for_SharpArchMembershipService
+  {
+    static string username = "test";
+    static bool result;
+
+    Establish context = () => {
+      var user = new User(username, "test", "test", "test", "test");
+      var users = new List<User>() { user };
+      userRepository.Expect(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = service.UsernameIsInUse(username);
+
+    It should_return_true = () => result.ShouldBeTrue();
+  }
+
+  [Subject(typeof(SharpArchMembershipService))]
+  public class when_the_membership_service_is_asked_if_username_is_in_use_and_it_is_not : specification_for_SharpArchMembershipService
+  {
+    static string username = "test";
+    static bool result;
+
+    Establish context = () => {
+      var user = new User(username, "test", "test", "test", "test");
+      var users = new List<User>() { user };
+      userRepository.Expect(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = service.UsernameIsInUse("newuser");
+
+    It should_return_true = () => result.ShouldBeFalse();
+  }
+
+  [Subject(typeof(SharpArchMembershipService))]
+  public class when_the_membership_service_is_asked_if_email_is_in_use_and_it_is : specification_for_SharpArchMembershipService
+  {
+    static string email = "test";
+    static bool result;
+
+    Establish context = () => {
+      var user = new User("test", "test", "test", "test", email);
+      var users = new List<User>() { user };
+      userRepository.Expect(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = service.EmailIsInUse(email);
+
+    It should_return_true = () => result.ShouldBeTrue();
+  }
+
+  [Subject(typeof(SharpArchMembershipService))]
+  public class when_the_membership_service_is_asked_if_email_is_in_use_and_it_is_not : specification_for_SharpArchMembershipService
+  {
+    static string email = "test";
+    static bool result;
+
+    Establish context = () => {
+      var user = new User("test", "test", "test", "test", email);
+      var users = new List<User>() { user };
+      userRepository.Expect(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = service.EmailIsInUse("newemail");
+
+    It should_return_true = () => result.ShouldBeFalse();
+  }
 }

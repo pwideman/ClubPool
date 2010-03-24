@@ -26,6 +26,26 @@ namespace ClubPool.ApplicationServices.Membership
       userRepository = userRepo;
     }
 
+    public bool UsernameIsInUse(string username) {
+      Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
+
+      // TODO: Count() does not work properly with MySql because NH uses "cast(count(*) as INTEGER)",
+      // while MySql requires "cast(count(*) as [SIGNED|UNSIGNED]". Need to see if NH trunk has been
+      // updated to handle this, if not then we'll have to use something different
+      var count = userRepository.GetAll().WithUsername(username).Count();
+      return count > 0;
+    }
+
+    public bool EmailIsInUse(string email) {
+      Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
+
+      // TODO: Count() does not work properly with MySql because NH uses "cast(count(*) as INTEGER)",
+      // while MySql requires "cast(count(*) as [SIGNED|UNSIGNED]". Need to see if NH trunk has been
+      // updated to handle this, if not then we'll have to use something different
+      var count = userRepository.GetAll().WithEmail(email).Count();
+      return count > 0;
+    }
+
     public bool ValidateUser(string username, string password) {
       User user = userRepository.FindOne(UserQueries.UserByUsername(username));
       if (null != user && user.IsApproved) {

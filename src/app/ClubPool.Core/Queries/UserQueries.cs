@@ -34,6 +34,10 @@ namespace ClubPool.Core.Queries
       return users.Where(UserByEmailContains(email));
     }
 
+    public static IQueryable<User> WithEmail(this IQueryable<User> users, string email) {
+      return users.Where(UserByEmail(email));
+    }
+
     public static UserExpression UserByUsernameContains(string username) {
       return user => user.Username.Contains(username);
     }
@@ -44,6 +48,10 @@ namespace ClubPool.Core.Queries
 
     public static IQueryable<User> WithUsernames(this IQueryable<User> users, string[] usernames) {
       return users.Where(u => usernames.Contains(u.Username));
+    }
+
+    public static IQueryable<User> WithUsername(this IQueryable<User> users, string username) {
+      return users.Where(UserByUsername(username));
     }
 
     public static Func<User, int, string> SelectUsername {
