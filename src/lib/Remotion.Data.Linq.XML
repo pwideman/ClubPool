@@ -262,6 +262,112 @@
             When this node is used, it marks the beginning (i.e. the last node) of an <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.IExpressionNode"/> chain that represents a query.
             </summary>
         </member>
+        <member name="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression">
+            <summary>
+            Acts as a base class for custom extension expressions, providing advanced visitor support. Also allows extension expressions to be reduced to 
+            a tree of standard expressions with equivalent semantics.
+            </summary>
+        </member>
+        <member name="F:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.ExtensionExpressionNodeType">
+            <summary>
+            Defines a standard <see cref="T:System.Linq.Expressions.ExpressionType"/> value that is used by all <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> subclasses.
+            </summary>
+        </member>
+        <member name="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> class.
+            </summary>
+            <param name="type">The type of the value represented by the <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>.</param>
+        </member>
+        <member name="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce">
+            <summary>
+            Reduces this instance to a tree of standard expressions. If this instance cannot be reduced, the same <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>
+            is returned.
+            </summary>
+            <returns>If <see cref="P:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.CanReduce"/> is <see langword="true"/>, a reduced version of this <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>; otherwise,
+            this <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>.</returns>
+            <remarks>
+            <para>
+            This method can be called in order to produce a new <see cref="T:System.Linq.Expressions.Expression"/> that has the same semantics as this 
+            <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> but consists of expressions of standard node types. The reduction need not be complete, nodes can be 
+            returned that themselves must be reduced.
+            </para>
+            <para>
+            Subclasses overriding the <see cref="P:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.CanReduce"/> property to return <see langword="true"/> must also override this method and cannot
+            call the base implementation.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.ReduceAndCheck">
+            <summary>
+            Calls the <see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce"/> method and checks certain invariants before returning the result. This method can only be called when
+            <see cref="P:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.CanReduce"/> returns <see langword="true"/>.
+            </summary>
+            <returns>A reduced version of this <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>.</returns>
+            <exception cref="T:System.InvalidOperationException">This <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> is not reducible - or - the <see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce"/> method 
+            violated one of the invariants (see Remarks).</exception>
+            <remarks>
+              This method checks the following invariants:
+              <list type="bullet">
+                <item><see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce"/> must not return <see langword="null"/>.</item>
+                <item><see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce"/> must not return the original <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>.</item>
+                <item>
+                  The new expression returned by <see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce"/> must be assignment-compatible with the type of the original 
+                  <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>.
+                </item>
+              </list>
+              </remarks>
+        </member>
+        <member name="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Accept(Remotion.Data.Linq.Parsing.ExpressionTreeVisitor)">
+            <summary>
+            Accepts the specified visitor, by default dispatching to <see cref="M:Remotion.Data.Linq.Parsing.ExpressionTreeVisitor.VisitUnknownExpression(System.Linq.Expressions.Expression)"/>. 
+            Inheritors of the <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> class can override this method in order to dispatch to a specific Visit method.
+            </summary>
+            <param name="visitor">The visitor whose Visit method should be invoked.</param>
+            <returns>The <see cref="T:System.Linq.Expressions.Expression"/> returned by the visitor.</returns>
+            <remarks>
+            Overriders can test the <paramref name="visitor"/> for a specific interface. If the visitor supports the interface, the extension expression 
+            can dispatch to the respective strongly-typed Visit method declared in the interface. If it does not, the extension expression should call 
+            the base implementation of <see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Accept(Remotion.Data.Linq.Parsing.ExpressionTreeVisitor)"/>, which will dispatch to <see cref="M:Remotion.Data.Linq.Parsing.ExpressionTreeVisitor.VisitUnknownExpression(System.Linq.Expressions.Expression)"/>.
+            </remarks>
+        </member>
+        <member name="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.VisitChildren(Remotion.Data.Linq.Parsing.ExpressionTreeVisitor)">
+            <summary>
+            Must be overridden by <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> subclasses by calling <see cref="M:Remotion.Data.Linq.Parsing.ExpressionTreeVisitor.VisitExpression(System.Linq.Expressions.Expression)"/> on all 
+            children of this extension node. 
+            </summary>
+            <param name="visitor">The visitor to visit the child nodes with.</param>
+            <returns>This <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>, or an expression that should replace it in the surrounding tree.</returns>
+            <remarks>
+            If the visitor replaces any of the child nodes, a new <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> instance should
+            be returned holding the new child nodes. If the node has no children or the visitor does not replace any child node, the method should
+            return this <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/>. 
+            </remarks>
+        </member>
+        <member name="P:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.CanReduce">
+            <summary>
+            Gets a value indicating whether this instance can be reduced to a tree of standard expressions.
+            </summary>
+            <value>
+            	<see langword="true"/> if this instance can be reduced; otherwise, <see langword="false"/>.
+            </value>
+            <remarks>
+            <para>
+            If this method returns <see langword="true"/>, the <see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce"/> method can be called in order to produce a new 
+            <see cref="T:System.Linq.Expressions.Expression"/> that has the same semantics as this <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression"/> but consists of 
+            expressions of standard node types.
+            </para>
+            <para>
+            Subclasses overriding the <see cref="P:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.CanReduce"/> property to return <see langword="true"/> must also override the <see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce"/> 
+            method and cannot call its base implementation.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Remotion.Data.Linq.Utilities.HashCodeUtility">
+            <summary>
+            Provides functionality to calculate hash codes from values and sequences.
+            </summary>
+        </member>
         <member name="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.LastExpressionNode">
             <summary>
             Represents a <see cref="T:System.Linq.Expressions.MethodCallExpression"/> for <see cref="M:System.Linq.Queryable.Last``1(System.Linq.IQueryable{``0})"/>,
@@ -926,6 +1032,11 @@
             </summary>
             <value>The aggregating function.</value>
         </member>
+        <member name="T:Remotion.Data.Linq.Utilities.SeparatedStringBuilder">
+            <summary>
+            Builds a string from a sequence, separating each item with a given separator string.
+            </summary>
+        </member>
         <member name="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.SelectManyExpressionNode">
             <summary>
             Represents a <see cref="T:System.Linq.Expressions.MethodCallExpression"/> for 
@@ -1391,36 +1502,73 @@
         </member>
         <member name="T:Remotion.Data.Linq.Backend.IDatabaseInfo">
             <summary>
-            The interface has to be implemented so that the linq provider can use the underlying system to get information of the data source.
+            Provides an interface for classes representing the databases to re-linq's SQL backend. Usually, implementations of this interface will be
+            linked to an O/R mapping infrastructure that knows how types and properties are mapped to tables and columns.
             </summary>
         </member>
-        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetTableName(Remotion.Data.Linq.Clauses.FromClauseBase)">
+        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetTableForFromClause(Remotion.Data.Linq.Clauses.FromClauseBase,System.String)">
             <summary>
-            Has to be implemented to get the table name of the given clause.
+            Creates a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/> object for the query source represented by the given <see cref="T:Remotion.Data.Linq.Clauses.FromClauseBase"/>.
             </summary>
-            <param name="fromClause">The clause identifies the query source.</param>
-            <returns>The table name as string.</returns>
+            <param name="fromClause">The clause for which to get a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/> object.</param>
+            <param name="alias">The alias to assign to the table.</param>
+            <returns>
+            A <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/> object for the <paramref name="fromClause"/>.
+            </returns>
+            <exception cref="T:Remotion.Data.Linq.UnmappedItemException">The given <paramref name="fromClause"/> cannot be mapped to a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/>.</exception>
         </member>
-        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetRelatedTableName(System.Reflection.MemberInfo)">
+        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.IsRelationMember(System.Reflection.MemberInfo)">
             <summary>
-            Has to be implemented to get the table name of the n-side of a relation.
+            Determines whether the specified member identifies a mapped relation.
             </summary>
-            <param name="relationMember"><see cref="T:System.Reflection.MemberInfo"/></param>
-            <returns>The table name of the related side of a join as string.</returns>
+            <param name="member">The member to check.</param>
+            <returns>
+            	<see langword="true"/> if the specified member identifies a mapped relation; otherwise, <see langword="false"/>.
+            </returns>
         </member>
-        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetColumnName(System.Reflection.MemberInfo)">
+        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetTableForRelation(System.Reflection.MemberInfo,System.String)">
             <summary>
-            Has to be implemented to get the column name of a given member.
+            Creates a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/> object for the related table represented by the member identified by the given <see cref="T:System.Reflection.MemberInfo"/>.
             </summary>
-            <param name="member"><see cref="T:System.Reflection.MemberInfo"/></param>
-            <returns>The column name as string.</returns>
+            <param name="relationMember">The <see cref="T:System.Reflection.MemberInfo"/> identifying the relation.</param>
+            <param name="alias">The alias to assign to the table.</param>
+            <returns>
+            A <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/> object for the given <paramref name="relationMember"/>.
+            </returns>
+            <exception cref="T:Remotion.Data.Linq.UnmappedItemException">The given <paramref name="relationMember"/> cannot be mapped to a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/>.</exception>
         </member>
-        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetJoinColumnNames(System.Reflection.MemberInfo)">
+        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.HasAssociatedColumn(System.Reflection.MemberInfo)">
             <summary>
-            Has to be implemented to get affected columns of a join.
+            Determines whether the specified <see cref="T:System.Reflection.MemberInfo"/> has an associated column.
             </summary>
-            <param name="relationMember"><see cref="T:System.Reflection.MemberInfo"/></param>
-            <returns>A tuple which containes the left and right side of a join. It must return the name of the primary and foreign key.</returns>
+            <param name="member">The member to check.</param>
+            <returns>
+            	<see langword="true"/> if the specified member is associated with a column; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetColumnForMember(Remotion.Data.Linq.Backend.DataObjectModel.IColumnSource,System.Reflection.MemberInfo)">
+            <summary>
+            Creates a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Column"/> instance for the given <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.IColumnSource"/> and <see cref="T:System.Reflection.MemberInfo"/>.
+            </summary>
+            <param name="columnSource">The <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.IColumnSource"/> representing the object owning the column, e.g. a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/> or a 
+            <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.SubQuery"/>.</param>
+            <param name="member">The <see cref="T:System.Reflection.MemberInfo"/> identifying the column being queried.</param>
+            <returns>A <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Column"/> for the given <paramref name="member"/>.</returns>
+            <exception cref="T:Remotion.Data.Linq.UnmappedItemException">The given <paramref name="member"/> cannot be mapped to a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.Table"/>.</exception>
+        </member>
+        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.GetJoinForMember(System.Reflection.MemberInfo,Remotion.Data.Linq.Backend.DataObjectModel.IColumnSource,Remotion.Data.Linq.Backend.DataObjectModel.IColumnSource)">
+            <summary>
+            Retrieves a <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.SingleJoin"/> instance representing the given relation <see cref="T:System.Reflection.MemberInfo"/>.
+            </summary>
+            <param name="relationMember">The <see cref="T:System.Reflection.MemberInfo"/> representing the join.</param>
+            <param name="leftSource">The left <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.IColumnSource"/>. This represents the owner of the left column in the join (the instance whose 
+            member is retrieved).</param>
+            <param name="rightSource">The right <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.IColumnSource"/>. This represents the owner of the right column in the join (the value stored
+            by the member).</param>
+            <returns>
+            A <see cref="T:Remotion.Data.Linq.Backend.DataObjectModel.SingleJoin"/> instance holding the columns involved in the join operation.
+            </returns>
+            <exception cref="T:Remotion.Data.Linq.UnmappedItemException">The given <paramref name="relationMember"/> cannot be mapped to a join.</exception>
         </member>
         <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.ProcessWhereParameter(System.Object)">
             <summary>
@@ -1435,13 +1583,6 @@
             </summary>
             <param name="entityType">The type of the queried entity.</param>
             <returns><see cref="T:System.Reflection.MemberInfo"/> of the primary key.</returns>
-        </member>
-        <member name="M:Remotion.Data.Linq.Backend.IDatabaseInfo.IsTableType(System.Type)">
-            <summary>
-            Has to be implemented to check whether a given type is a table.
-            </summary>
-            <param name="type">The type of a queried entity.</param>
-            <returns>Boolean value depending on the evaluation.</returns>
         </member>
         <member name="T:Remotion.Data.Linq.QueryModelVisitorBase">
             <summary>
@@ -2028,6 +2169,11 @@
             </summary>
             <value>The current sequence.</value>
         </member>
+        <member name="T:Remotion.Data.Linq.UnmappedItemException">
+            <summary>
+            Thrown by implementations of <see cref="T:Remotion.Data.Linq.Backend.IDatabaseInfo"/> when the given item cannot be mapped to a database construct.
+            </summary>
+        </member>
         <member name="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.WhereExpressionNode">
             <summary>
             Represents a <see cref="T:System.Linq.Expressions.MethodCallExpression"/> for 
@@ -2270,6 +2416,12 @@
             result type will be <see cref="T:System.Int32"/>.
             </remarks>
         </member>
+        <member name="M:Remotion.Data.Linq.QueryModel.GetUniqueIdentfierGenerator">
+            <summary>
+            Gets the <see cref="T:Remotion.Data.Linq.UniqueIdentifierGenerator"/> which is used by the <see cref="T:Remotion.Data.Linq.QueryModel"/>.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Remotion.Data.Linq.QueryModel.Accept(Remotion.Data.Linq.IQueryModelVisitor)">
             <summary>
             Accepts an implementation of <see cref="T:Remotion.Data.Linq.IQueryModelVisitor"/> or <see cref="T:Remotion.Data.Linq.QueryModelVisitorBase"/>, as defined by the Visitor pattern.
@@ -2462,6 +2614,12 @@
             </summary>
             <value>The result selector.</value>
         </member>
+        <member name="T:Remotion.Data.Linq.Utilities.MemberInfoChain">
+            <summary>
+            Represents a chain of members leading over several joined members to an accessed member.
+            This models the following expression: start.P1.P2.P3 - P1 and P2 are joined members, P3 is the accessed member.
+            </summary>
+        </member>
         <member name="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.MinExpressionNode">
             <summary>
             Represents a <see cref="T:System.Linq.Expressions.MethodCallExpression"/> for <see cref="M:System.Linq.Queryable.Min``1(System.Linq.IQueryable{``0})"/> or <see cref="M:System.Linq.Queryable.Min``2(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})"/>.
@@ -2646,6 +2804,14 @@
             When this node is used, it usually follows (or replaces) a <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.SelectExpressionNode"/> of an <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.IExpressionNode"/> chain that 
             represents a query.
             </summary>
+        </member>
+        <member name="T:Remotion.Data.Linq.Collections.MultiDictionary`2">
+            <summary>
+            Provides an implementation of <see cref="T:System.Collections.Generic.IDictionary`2"/> that allows storing multiple values per key. The multiple values
+            are represented as an <see cref="T:System.Collections.Generic.IList`1"/> of value. Access to a key without values returns an empty <see cref="T:System.Collections.Generic.IList`1"/>.
+            </summary>
+            <typeparam name="TKey">The type of the keys of the values to be stored.</typeparam>
+            <typeparam name="TValue">The type of the values to be stored.</typeparam>
         </member>
         <member name="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.MaxExpressionNode">
             <summary>

@@ -2495,6 +2495,15 @@
         <member name="T:NHibernate.Cfg.MappingSchema.HbmArray">
             <remarks/>
         </member>
+        <member name="P:NHibernate.Cfg.MappingSchema.ICollectionPropertiesMapping.ElementRelationship">
+            <summary>
+            The relation of the element of the collection.
+            </summary>
+            <remarks>
+            Can be one of: HbmCompositeElement, HbmElement, HbmManyToAny, HbmManyToMany, HbmOneToMany...
+            according to the type of the collection.
+            </remarks>
+        </member>
         <member name="F:NHibernate.Cfg.MappingSchema.HbmArray.meta">
             <remarks/>
         </member>
@@ -5475,9 +5484,6 @@
             </summary>
             <remarks>Uses an <see cref="T:System.Xml.Serialization.XmlSerializer"/> to deserialize HBM.</remarks>
         </member>
-        <member name="F:NHibernate.Cfg.XmlHbmBinding.Binder.MappingSchemaXMLNS">
-            <summary>The XML Namespace for the nhibernate-mapping</summary>
-        </member>
         <member name="M:NHibernate.Cfg.XmlHbmBinding.Binder.FullQualifiedClassName(System.String,NHibernate.Cfg.Mappings)">
             <summary>
             Converts a partial class name into a fully qualified one
@@ -5521,23 +5527,23 @@
             <param name="errorMessage"></param>
             <returns></returns>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollection(System.Xml.XmlNode,NHibernate.Mapping.Collection,System.String,System.String,System.Type,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollection(NHibernate.Cfg.MappingSchema.ICollectionPropertiesMapping,NHibernate.Mapping.Collection,System.String,System.String,System.Type,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <remarks>
             Called for all collections. <paramref name="containingType" /> parameter
             was added in NH to allow for reflection related to generic types.
             </remarks>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindArray(System.Xml.XmlNode,NHibernate.Mapping.Array,System.String,System.String,System.Type,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindArray(NHibernate.Cfg.MappingSchema.HbmArray,NHibernate.Mapping.Array,System.String,System.String,System.Type,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <remarks>
             Called for arrays and primitive arrays
             </remarks>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindMapSecondPass(System.Xml.XmlNode,NHibernate.Mapping.Map,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass},System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindMapSecondPass(NHibernate.Cfg.MappingSchema.HbmMap,NHibernate.Mapping.Map,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass},System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <summary>
             Called for Maps
             </summary>
         </member>
-        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollectionSecondPass(System.Xml.XmlNode,NHibernate.Mapping.Collection,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass},System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.CollectionBinder.BindCollectionSecondPass(NHibernate.Cfg.MappingSchema.ICollectionPropertiesMapping,NHibernate.Mapping.Collection,System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.PersistentClass},System.Collections.Generic.IDictionary{System.String,NHibernate.Mapping.MetaAttribute})">
             <remarks>
             Called for all collections
             </remarks>
@@ -5548,7 +5554,7 @@
             and the names of the classes they extend.
             </summary>
         </member>
-        <member name="M:NHibernate.Cfg.ClassExtractor.GetClassEntries(System.Xml.XmlDocument)">
+        <member name="M:NHibernate.Cfg.ClassExtractor.GetClassEntries(NHibernate.Cfg.MappingSchema.HbmMapping)">
             <summary>
             Returns a collection of <see cref="T:NHibernate.Cfg.ClassExtractor.ClassEntry"/> containing
             information about all classes in this stream.
@@ -5990,6 +5996,12 @@
             <param name="listeners">The listener for <paramref name="type"/> or null to clear.</param>
             <remarks>Listeners of <paramref name="listeners"/> must implements one of the interface of event listenesr.</remarks>
             <seealso cref="N:NHibernate.Event"/>
+        </member>
+        <member name="M:NHibernate.Cfg.Configuration.AppendListeners(NHibernate.Event.ListenerType,System.Object[])">
+            <summary>
+            Append the listeners to the end of the currently configured
+            listeners
+            </summary>
         </member>
         <member name="M:NHibernate.Cfg.Configuration.GenerateSchemaUpdateScript(NHibernate.Dialect.Dialect,NHibernate.Tool.hbm2ddl.DatabaseMetadata)">
             <summary>
@@ -8187,99 +8199,94 @@
             </summary>
             <param name="detachedCriteria">detached subquery</param>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.WithAlias(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.WithAlias(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             Create an alias for the previous projection
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.Select(NHibernate.Criterion.IProjection)">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.Select(NHibernate.Criterion.IProjection)">
             <summary>
             Select an arbitrary projection
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectAvg(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectAvg(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A property average value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectAvg(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectAvg(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A property average value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectCount(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectCount(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A property value count
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectCount(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectCount(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A property value count
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectCountDistinct(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectCountDistinct(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A distinct property value count
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectCountDistinct(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectCountDistinct(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A distinct property value count
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectGroup(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectGroup(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A grouping property value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectGroup(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectGroup(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A grouping property value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectMax(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectMax(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A property maximum value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectMax(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectMax(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A property maximum value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectMin(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectMin(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A property minimum value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectMin(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectMin(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A property minimum value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.Select(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.Select(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A projected property value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.Select(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.Select(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A projected property value
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectSum(System.Linq.Expressions.Expression{System.Func{`2,System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectSum(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
             <summary>
             A property value sum
             </summary>
         </member>
-        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.SelectSum(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+        <member name="M:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`1.SelectSum(System.Linq.Expressions.Expression{System.Func{System.Object}})">
             <summary>
             A property value sum
-            </summary>
-        </member>
-        <member name="P:NHibernate.Criterion.Lambda.QueryOverProjectionBuilder`3.EndSelect">
-            <summary>
-            Create the ProjectionList and return to the query
             </summary>
         </member>
         <member name="M:NHibernate.Criterion.Lambda.QueryOverRestrictionBuilderBase`3.#ctor(`0,System.String)">
@@ -10648,7 +10655,18 @@
             </summary>
             <returns>The list filled with the results.</returns>
         </member>
-        <member name="M:NHibernate.IQueryOver`1.UniqueResult">
+        <member name="M:NHibernate.IQueryOver`1.ToRowCountQuery">
+            <summary>
+            Clones the QueryOver, removes orders and paging, and projects the row-count
+            for the query
+            </summary>
+        </member>
+        <member name="M:NHibernate.IQueryOver`1.RowCount">
+            <summary>
+            Short for ToRowCountQuery().SingleOrDefault()
+            </summary>
+        </member>
+        <member name="M:NHibernate.IQueryOver`1.SingleOrDefault">
             <summary>
             Convenience method to return a single instance that matches
             the query, or null if the query returns no results.
@@ -10658,9 +10676,9 @@
             If there is more than one matching result
             </exception>
         </member>
-        <member name="M:NHibernate.IQueryOver`1.UniqueResult``1">
+        <member name="M:NHibernate.IQueryOver`1.SingleOrDefault``1">
             <summary>
-            Override type of <see cref="M:NHibernate.IQueryOver`1.UniqueResult"/>.
+            Override type of <see cref="M:NHibernate.IQueryOver`1.SingleOrDefault"/>.
             </summary>
         </member>
         <member name="M:NHibernate.IQueryOver`1.Future">
@@ -10691,6 +10709,11 @@
             single roundtrip
             </summary>
         </member>
+        <member name="M:NHibernate.IQueryOver`1.Clone">
+            <summary>
+            Creates an exact clone of the IQueryOver
+            </summary>
+        </member>
         <member name="P:NHibernate.IQueryOver`1.UnderlyingCriteria">
             <summary>
             Access the underlying ICriteria
@@ -10705,6 +10728,17 @@
             <summary>
             Get an executable instance of <c>IQueryOver&lt;TRoot&gt;</c>,
             to actually run the query.</summary>
+        </member>
+        <member name="M:NHibernate.Criterion.QueryOver`1.ToRowCountQuery">
+            <summary>
+            Clones the QueryOver, clears the orders and paging, and projects the RowCount
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Criterion.QueryOver`1.Clone">
+            <summary>
+            Creates an exact clone of the QueryOver
+            </summary>
         </member>
         <member name="M:NHibernate.Criterion.QueryOver`1.As``1">
             <summary>
@@ -10839,6 +10873,11 @@
             Add arbitrary IProjections to query
             </summary>
         </member>
+        <member name="M:NHibernate.IQueryOver`2.Select(System.Func{NHibernate.Criterion.Lambda.QueryOverProjectionBuilder{`1},NHibernate.Criterion.Lambda.QueryOverProjectionBuilder{`1}})">
+            <summary>
+            Create a list of projections using a projection builder
+            </summary>
+        </member>
         <member name="M:NHibernate.IQueryOver`2.OrderBy(System.Linq.Expressions.Expression{System.Func{`1,System.Object}})">
             <summary>
             Add order expressed as a lambda expression
@@ -10866,6 +10905,11 @@
             </summary>
             <param name="path">Lambda expression</param>
             <returns>criteria instance</returns>
+        </member>
+        <member name="M:NHibernate.IQueryOver`2.ClearOrders">
+            <summary>
+            Clear all orders from the query.
+            </summary>
         </member>
         <member name="M:NHibernate.IQueryOver`2.Skip(System.Int32)">
             <summary>
@@ -11099,11 +11143,6 @@
             <param name="alias">Lambda expression returning alias reference</param>
             <param name="joinType">Type of join</param>
             <returns>criteria instance</returns>
-        </member>
-        <member name="P:NHibernate.IQueryOver`2.SelectList">
-            <summary>
-            Create a list of projections inline
-            </summary>
         </member>
         <member name="P:NHibernate.IQueryOver`2.WithSubquery">
             <summary>
@@ -12887,6 +12926,14 @@
             Comes into play whenever the user specifies the "identity" generator.
             </remarks>
         </member>
+        <member name="P:NHibernate.Dialect.Dialect.SupportsSqlBatches">
+            <summary>
+            Supports splitting batches using GO T-SQL command
+            </summary>
+            <remarks>
+            Batches http://msdn.microsoft.com/en-us/library/ms175502.aspx
+            </remarks>
+        </member>
         <member name="T:NHibernate.Exceptions.IViolatedConstraintNameExtracter">
             <summary> 
             Defines a contract for implementations that can extract the name of a violated
@@ -13611,6 +13658,22 @@
             </summary>
             <param name="constraintName">The name of the index to drop.</param>
             <returns>The SQL string to drop the index constraint.</returns>
+        </member>
+        <member name="M:NHibernate.Dialect.MySQLDialect.RegisterCastType(System.Data.DbType,System.String)">
+            <summary>
+            Suclasses register a typename for the given type code, to be used in CAST()
+            statements.
+            </summary>
+            <param name="code">The typecode</param>
+            <param name="name">The database type name</param>
+        </member>
+        <member name="M:NHibernate.Dialect.MySQLDialect.GetCastTypeName(NHibernate.SqlTypes.SqlType)">
+            <summary> 
+            Get the name of the database type appropriate for casting operations
+            (via the CAST() SQL function) for the given <see cref="T:NHibernate.SqlTypes.SqlType"/> typecode.
+            </summary>
+            <param name="sqlType">The <see cref="T:NHibernate.SqlTypes.SqlType"/> typecode </param>
+            <returns> The database type name </returns>
         </member>
         <member name="P:NHibernate.Dialect.MySQLDialect.AddColumnString">
             <summary></summary>
@@ -15540,6 +15603,13 @@
             collections?
             </summary>
             <returns> True if we currently hold state pertaining to loading collections; false otherwise. </returns>
+        </member>
+        <member name="P:NHibernate.Engine.Loading.LoadContexts.HasRegisteredLoadingCollectionEntries">
+            <summary>
+             Do we currently have any registered internal entries corresponding to loading
+             collections?
+             True if we currently hold state pertaining to a registered loading collections; false otherwise.
+             </summary>
         </member>
         <member name="T:NHibernate.Engine.Loading.LoadingCollectionEntry">
             <summary> 
@@ -21127,9 +21197,6 @@
             Calculate and cache select-clause suffixes. Must be
             called by subclasses after instantiation.
             </summary>
-        </member>
-        <member name="M:NHibernate.Loader.Loader.GetParameterTypes(NHibernate.Engine.QueryParameters,System.Boolean,System.Boolean)">
-            <returns><see cref="T:System.Collections.IList"/> of <see cref="T:NHibernate.Type.IType"/></returns>
         </member>
         <member name="P:NHibernate.Loader.Loader.EntityEagerPropertyFetches">
             <summary> 
@@ -27713,6 +27780,9 @@
         <member name="M:NHibernate.Intercept.IFieldInterceptor.ClearDirty">
             <summary> Clear the internal dirty flag.</summary>
         </member>
+        <member name="M:NHibernate.Intercept.IFieldInterceptor.Intercept(System.Object,System.String,System.Object)">
+            <summary> Intercept field set/get </summary>
+        </member>
         <member name="P:NHibernate.Intercept.IFieldInterceptor.IsDirty">
             <summary> Is the entity considered dirty? </summary>
             <value> True if the entity is dirty; otherwise false. </value>
@@ -28405,6 +28475,11 @@
             A walker for loaders that fetch entities
             </summary>
             <seealso cref="T:NHibernate.Loader.Entity.EntityLoader"/>
+        </member>
+        <member name="M:NHibernate.Loader.Entity.EntityJoinWalker.GenerateAliasForColumn(System.String,System.String)">
+            <summary>
+            Override to use the persister to change the table-alias for columns in join-tables
+            </summary>
         </member>
         <member name="M:NHibernate.Loader.Entity.EntityJoinWalker.IsJoinedFetchEnabled(NHibernate.Type.IAssociationType,NHibernate.FetchMode,NHibernate.Engine.CascadeStyle)">
             <summary>
@@ -32180,6 +32255,11 @@
             Return the alised identifier column names
             </summary>
         </member>
+        <member name="M:NHibernate.Persister.Entity.IOuterJoinLoadable.GenerateTableAliasForColumn(System.String,System.String)">
+            <summary>
+            Get the table alias used for the supplied column
+            </summary>
+        </member>
         <member name="T:NHibernate.Persister.Entity.IQueryable">
             <summary>
             Extends the generic <c>ILoadable</c> contract to add operations required by HQL
@@ -33863,15 +33943,12 @@
             A placeholder for an ADO.NET parameter in an <see cref="T:NHibernate.SqlCommand.SqlString"/>.
             </summary>
         </member>
-        <member name="F:NHibernate.SqlCommand.Parameter.OriginalPositionInQuery">
+        <member name="F:NHibernate.SqlCommand.Parameter.ParameterPosition">
             <summary>
             We need to know what the position of the parameter was in a query
             before we rearranged the query.
-            This is used only by dialects that rearrange the query, unfortunately, 
-            the MS SQL 2005 dialect have to re shuffle the query (and ruin positional parameter
-            support) because the SQL 2005 and 2008 SQL dialects have a completely broken
-            support for paging, which is just a tad less important than SELECT.
-            See  	 NH-1528
+            This is the ADO parameter position that this SqlString parameter is
+            bound to.  The SqlString can be safely rearranged once this is set.
             </summary>
         </member>
         <member name="M:NHibernate.SqlCommand.Parameter.GenerateParameters(System.Int32)">
@@ -35236,6 +35313,12 @@
         </member>
         <member name="M:NHibernate.Tool.hbm2ddl.SchemaValidator.Validate">
             Perform the validations.
+        </member>
+        <member name="M:NHibernate.Tool.hbm2ddl.ScriptReader.ReadNextSection">
+            <summary>
+            This acts as a template method. Specific Reader instances 
+            override the component methods.
+            </summary>
         </member>
         <member name="T:NHibernate.Tool.hbm2ddl.SuppliedConnectionHelper">
             <summary>
