@@ -56,7 +56,9 @@ namespace ClubPool.ApplicationServices.Messaging
       mm.Body = body;
 
       var client = SmtpClient;
-      client.Send(mm);
+      if (!string.IsNullOrEmpty(smtpHost)) {
+        client.Send(mm);
+      }
     }
 
     protected void AddAddressesToCollection(IList<string> recipients, MailAddressCollection collection) {
