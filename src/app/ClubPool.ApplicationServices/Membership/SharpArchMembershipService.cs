@@ -28,20 +28,12 @@ namespace ClubPool.ApplicationServices.Membership
 
     public bool UsernameIsInUse(string username) {
       Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
-
-      // TODO: Count() does not work properly with MySql because NH uses "cast(count(*) as INTEGER)",
-      // while MySql requires "cast(count(*) as [SIGNED|UNSIGNED]". Need to see if NH trunk has been
-      // updated to handle this, if not then we'll have to use something different
       var count = userRepository.GetAll().WithUsername(username).Count();
       return count > 0;
     }
 
     public bool EmailIsInUse(string email) {
       Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
-
-      // TODO: Count() does not work properly with MySql because NH uses "cast(count(*) as INTEGER)",
-      // while MySql requires "cast(count(*) as [SIGNED|UNSIGNED]". Need to see if NH trunk has been
-      // updated to handle this, if not then we'll have to use something different
       var count = userRepository.GetAll().WithEmail(email).Count();
       return count > 0;
     }
@@ -78,14 +70,12 @@ namespace ClubPool.ApplicationServices.Membership
       User user = null;
 
       // see if a user by this username already exists
-      user = userRepository.FindOne(UserQueries.UserByUsername(username));
-      if (null != user) {
+      if (UsernameIsInUse(username)) {
         throw new ArgumentException(string.Format("A user with username '{0}' already exists", username));
       }
 
       // see if a user with this email already exists
-      user = userRepository.FindOne(UserQueries.UserByEmail(email));
-      if (null != user) {
+      if (EmailIsInUse(email)) {
         throw new ArgumentException(string.Format("The email address '{0}' is already in use", email));
       }
 
