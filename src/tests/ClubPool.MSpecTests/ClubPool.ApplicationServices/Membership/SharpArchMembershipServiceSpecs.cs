@@ -179,13 +179,24 @@ namespace ClubPool.MSpecTests.ClubPool.ApplicationServices.Membership
     static string firstName = "test";
     static string lastName = "test";
     static string email = "test";
+    static User user;
 
     Establish context = () => {
-      service.CreateUser(username, password, firstName, lastName, email, false);
+      userRepository.Expect(r => r.GetAll()).Return(new List<User>().AsQueryable());
+      userRepository.Stub(r => r.SaveOrUpdate(Arg<User>.Is.Anything)).Return(null).WhenCalled(m => m.ReturnValue = m.Arguments[0]);
+    };
+
+    Because of = () => user = service.CreateUser(username, password, firstName, lastName, email, false);
+
+    It should_return_the_new_user = () => {
+      user.ShouldNotBeNull();
+      user.Username.ShouldEqual(username);
+      user.FirstName.ShouldEqual(firstName);
+      user.LastName.ShouldEqual(lastName);
+      user.Email.ShouldEqual(email);
     };
 
     It should_save_the_new_user_to_the_repository = () => {
-      var user = new User(username, password, firstName, lastName, email);
       userRepository.AssertWasCalled(r => r.SaveOrUpdate(user));
     };
   }

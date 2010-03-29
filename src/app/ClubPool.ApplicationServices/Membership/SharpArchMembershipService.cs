@@ -60,7 +60,7 @@ namespace ClubPool.ApplicationServices.Membership
         return Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
     }
 
-    public void CreateUser(string username, string password, string firstName, string lastName, string email, bool isApproved) {
+    public User CreateUser(string username, string password, string firstName, string lastName, string email, bool isApproved) {
       Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
@@ -93,7 +93,7 @@ namespace ClubPool.ApplicationServices.Membership
       user.FirstName = firstName;
       user.LastName = lastName;
       user = userRepository.SaveOrUpdate(user);
-      //return user;
+      return user;
     }
 
     protected string GenerateSalt(int size) {
