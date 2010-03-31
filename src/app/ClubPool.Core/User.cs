@@ -45,6 +45,13 @@ namespace ClubPool.Core
     [NotNullNotEmpty]
     public virtual string LastName { get; set; }
 
+    public virtual string FullName { 
+      get { 
+        return string.Format("{0} {1}", FirstName, LastName);
+      }
+    }
+
+
     [NotNullNotEmpty]
     public virtual string Password { get; set; }
 

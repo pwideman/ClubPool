@@ -11,6 +11,7 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.HasManyToMany<Role>(x => x.Roles)
         .Inverse()
         .AsBag();
+      mapping.IgnoreProperty(x => x.FullName);
     }
   }
 }
