@@ -143,6 +143,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClubPool.ApplicationServices\Membership\SharpArchMembershipServiceTests.cs" />
     <Compile Include="ClubPool.Core\Queries\PlayerQueriesTests.cs" />
     <Compile Include="ClubPool.Framework\NHibernate\TestDoubles\MockRepository.cs" />
     <Compile Include="ClubPool.Data\TestDoubles\MockRoleRepositoryFactory.cs" />
@@ -175,10 +176,6 @@
       <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
       <Name>ClubPool.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\app\ClubPool.SharpArchProviders\ClubPool.SharpArchProviders.csproj">
-      <Project>{164B9715-21F9-4932-87BF-5D6B28CED547}</Project>
-      <Name>ClubPool.SharpArchProviders</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\app\ClubPool.Web.Controllers\ClubPool.Web.Controllers.csproj">
       <Project>{2EBEB3C2-E3E7-4782-9288-6FBA771C031F}</Project>
       <Name>ClubPool.Web.Controllers</Name>
@@ -200,9 +197,6 @@
     <Content Include="Hibernate.cfg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClubPool.ApplicationServices\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

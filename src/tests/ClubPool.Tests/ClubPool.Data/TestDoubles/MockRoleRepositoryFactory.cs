@@ -5,7 +5,7 @@ using System.Text;
 
 using SharpArch.Testing;
 
-using ClubPool.SharpArchProviders.Domain;
+using ClubPool.Core;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.NHibernate;
 
