@@ -153,13 +153,12 @@ namespace ClubPool.Web.Controllers
         viewModel.ErrorMessage = string.Format("The email address '{0}' is already in use, provide another", viewModel.Email);
         return View(viewModel);
       }
-      membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, false);
-      //user = userRepository.FindOne(UserQueries.UserByUsername(viewModel.Username));
-      SendNewUserAwaitingApprovalEmail(viewModel.Username, viewModel.FirstName, viewModel.LastName, viewModel.Email);
+      var user = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, false);
+      SendNewUserAwaitingApprovalEmail(user);
       return View("SignUpComplete");
     }
 
-    protected void SendNewUserAwaitingApprovalEmail(string username, string firstName, string lastName, string email) {
+    protected void SendNewUserAwaitingApprovalEmail(Core.User newUser) {
       var adminUsernames = roleService.GetUsersInRole(Core.Roles.Administrators);
       if (adminUsernames.Length > 0) {
         var adminUsers = userRepository.GetAll().WithUsernames(adminUsernames);
@@ -168,7 +167,7 @@ namespace ClubPool.Web.Controllers
         var body = new StringBuilder();
         body.Append("A new user has signed up at ClubPool and needs admin approval:" + Environment.NewLine);
         body.Append(string.Format("Username: {0}" + Environment.NewLine + "Name: {1} {2}" + Environment.NewLine + "Email: {3}",
-          username, firstName, lastName, email));
+          newUser.Username, newUser.FirstName, newUser.LastName, newUser.Email));
         emailService.SendSystemEmail(adminEmailAddresses, subject, body.ToString());
       }
     }
