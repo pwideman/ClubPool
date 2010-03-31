@@ -440,6 +440,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
       user = new User(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email);
 
+      membershipService.Stub(s => s.CreateUser(username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, false)).Return(user);
+
       roleService.Stub(s => s.GetUsersInRole(Core.Roles.Administrators))
         .Return(new string[] { adminUsername });
 
