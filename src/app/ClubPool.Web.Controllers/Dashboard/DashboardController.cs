@@ -34,12 +34,12 @@ namespace ClubPool.Web.Controllers
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
       viewModel.UserIsAdmin = roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username);
-      var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex(viewModel.UserIsAdmin);
+      var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[sidebarGadgetCollection.GetType().FullName] = sidebarGadgetCollection;
       return View(viewModel);
     }
 
-    protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex(bool isAdmin) {
+    protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
       var alertsGadget = new Dashboard.SidebarGadgets.AlertsSidebarGadget();
       sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
