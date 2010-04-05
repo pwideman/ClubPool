@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web;
 
 using SharpArch.Core;
 
@@ -33,14 +34,29 @@ namespace ClubPool.Web.Controllers
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
       viewModel.UserIsAdmin = roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username);
-      if (viewModel.UserIsAdmin) {
-        // get the new users awaiting approval, if any
-        if (userRepository.GetAll().Where(u => !u.IsApproved).Count() > 0) {
-          viewModel.NewUsersAwaitingApproval = userRepository.GetAll().Where(u => !u.IsApproved).AsEnumerable();
+      var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex(viewModel.UserIsAdmin);
+      ViewData[sidebarGadgetCollection.GetType().FullName] = sidebarGadgetCollection;
+      return View(viewModel);
+    }
+
+    protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex(bool isAdmin) {
+      var sidebarGadgetCollection = new SidebarGadgetCollection();
+      var alertsGadget = new Dashboard.SidebarGadgets.AlertsSidebarGadget();
+      sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
+      return sidebarGadgetCollection;
+    }
+
+    public ActionResult AlertsGadget() {
+      var alerts = new List<Alert>();
+      var viewModel = new AlertsGadgetViewModel(alerts);
+      if (roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username)) {
+        var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
+        if (numberOfUnapprovedUsers > 0) {
+          alerts.Add(new Alert(string.Format("There are {0} users awaiting approval", numberOfUnapprovedUsers),
+            VirtualPathUtility.ToAbsolute("~/user/unapproved")));
         }
       }
-
-      return View(viewModel);
+      return PartialView(viewModel);
     }
   }
 }

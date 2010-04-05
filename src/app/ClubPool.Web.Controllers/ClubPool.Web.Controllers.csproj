@@ -97,13 +97,15 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />
+    <Compile Include="Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
     <Compile Include="Dashboard\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\AlertsGadgetViewModel.cs" />
     <Compile Include="Navigation\NavigationController.cs" />
     <Compile Include="Navigation\ViewModels\MenuViewModel.cs" />
     <Compile Include="PartialRequest.cs" />
     <Compile Include="Shared\SidebarGadgets\LoginSidebarGadget.cs" />
-    <Compile Include="Shared\SidebarGadgets\SidebarGadgetBase.cs" />
-    <Compile Include="Shared\SidebarGadgets\SidebarGadgetCollection.cs" />
+    <Compile Include="SidebarGadgetBase.cs" />
+    <Compile Include="SidebarGadgetCollection.cs" />
     <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
     <Compile Include="User\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Home\ViewModels\IndexViewModel.cs" />
