@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\CommonServiceLocator.WindsorAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="dotless.Core, Version=1.0.0.5, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\dotless.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah, Version=1.1.11517.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Elmah.dll</HintPath>
@@ -220,7 +224,7 @@
     <Content Include="Views\User\SignUp.aspx" />
     <Content Include="Views\User\SignUpComplete.aspx" />
     <Content Include="Web.config" />
-    <Content Include="Content\css\Site.css" />
+    <None Include="Content\css\Site.less" />
     <Content Include="Scripts\MicrosoftAjax.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftMvcAjax.js" />

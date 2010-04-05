@@ -1,4 +1,12 @@
-﻿/* base
+﻿@standard_blue: #074B8A;
+@error_background_color: #FFFFD5;
+@error_foreground: red;
+@light_blue: #E0ECF8;
+@dark_blue: #648ABD;
+@menu_background: #8EB1DF;
+@menu_highlight_background: #7795BD;
+
+/* base
 ---------------------------------------------------------*/
 html, body, img
 {
@@ -14,7 +22,7 @@ body
 
 a
 {
-  color: #074B8A;
+  color: @standard_blue;
 }
 
 a:hover
@@ -25,7 +33,7 @@ a:hover
 h1, h2, h3
 {
   font-weight: bold;
-  color: #074B8A;
+  color: @standard_blue;
   margin: 10px 0px 10px 0px;
 }
 
@@ -71,8 +79,8 @@ div.rescuediv
   text-align: center;
   padding: 50px;
   border: 2px solid red;
-  background-color: #FFFFD5;
-  color: red;
+  background-color: @error_background_color;
+  color: @error_foreground;
   margin: 30px;
 }
 
@@ -107,18 +115,13 @@ div.rescuediv
   float: right;
   display: inline;
   position: relative;
-  background: #E0ECF8;/*#648ABD;*/
+  background: @light_blue;
   padding: 4px 20px 10px 20px;
-  color: black; /*#FFFFFF;*/
+  color: black;
   width: 220px;
   text-align: center;
-  border: 1px solid #648ABD; /*#074B8A;*/
+  border: 1px solid @dark_blue;
   border-top: 0;
-}
-
-#loginStatusPanela a
-{
-  color: #E0ECF8/* #8EB1DF;*/
 }
 
 /* menu
@@ -157,7 +160,7 @@ div.rescuediv
 div.sidebarGadgetContainer
 {
   margin-bottom: 4px;
-  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
+  background: @dark_blue;
   padding: 6px;
 }
 
@@ -170,10 +173,9 @@ div.sidebarGadgetTitle
 div.sidebarGadgetContent
 {
   margin: 0 auto;
-  /*width: 225px;*/
   padding: 4px;
   font-size: 80%;
-  background-color: #E0ECF8; /*#8EB1DF; /*#F2F2F2;*/
+  background-color: @light_blue;
 }
 
 /* footer
@@ -191,7 +193,7 @@ div.sidebarGadgetContent
 div.formContainer
 {
   margin-bottom: 4px;
-  background: #648ABD;
+  background: @dark_blue;
   padding: 6px;
   display: inline-block;
 }
@@ -216,8 +218,8 @@ div.formError
 {
   padding: 10px;
   border: 1px solid red;
-  background-color: #FFFFD5;
-  color: red;
+  background-color: @error_background_color;
+  color: @error_foreground;
   margin: 8px;
 }
 
@@ -226,13 +228,13 @@ div.formContent
   border: 0;
   margin: 0 auto;
   padding: 8px;
-  background-color: #E0ECF8;
+  background-color: @light_blue;
 }
 
 form.normal2
 {
   margin-bottom: 4px;
-  background: #648ABD; /*#8EB1DF; /*#F2F2F2;*/
+  background: @dark_blue;
   padding: 6px;
   display: inline-block;
 }
@@ -271,7 +273,7 @@ span.required
 div.formInput input
 {
   width: 221px;
-  border: 1px solid #074B8A;
+  border: 1px solid @standard_blue;
   height: 25px;
   padding: 2px;
   margin: 1px;
@@ -335,7 +337,7 @@ div.submitrow
 
 form p.error
 {
-  color: red; /*#DF0101;*/
+  color: @error_foreground;
   text-align: center;
   width: 100%;
 }
@@ -343,21 +345,21 @@ form p.error
 div.formrow input.error, input.input-validation-error
 {
   border: 2px solid red !important;
-  background-color: #FFFFD5;
-  color: red;
+  background-color: @error_background_color;
+  color: @error_foreground;
   margin: 0 !important;
 }
 
 span.field-validation-error
 {
-  color: Red;
+  color: @error_foreground;
   font-size: 80%;
 }
 
 div.formValidationSummary
 {
-  color: Red;
-  background-color: #FFFFD5;
+  color: @error_foreground;
+  background-color: @error_background_color;
   border: 1px solid red;
   padding: 6px;
   margin-bottom: 8px;
@@ -406,70 +408,12 @@ form.loginForm div.formrow > label
   width: 120px;
 }
 
-/*
-div#loginFormContainer
-{
-  padding: 30px;
-  margin-top: 50px;
-  text-align: center;
-}
-
-
-form.loginForm div.formrow label
-{
-  padding-top: 4px;
-  width: 80px;
-}
-
-form.loginForm div.formrow input
-{
-  width: 160px;
-}
-
-form.loginForm button
-{
-  width: 100px;
-  height: 30px;
-}*/
-
-/*
-form.signupForm
-{
-  width: 500px;
-}
-
-form.signupForm div.formrow label
-{
-  padding-top: 4px;
-  width: 200px;
-}
-
-form.signupForm div.formrow input
-{
-  width: 220px;
-}
-
-form.signupForm button
-{
-  width: 100px;
-  height: 30px;
-}
-*/
-
 /* MISC  
 ----------------------------------------------------------*/
 .clear
 {
     clear: both;
 }
-
-/*
-.input-validation-error
-{
-    border: 1px solid #ff0000;
-    background-color: #ffeeee;
-}
-*/
 
 /* Superfish menu css
 -----------------------------------------------------------*/
@@ -534,9 +478,9 @@ ul.sf-menu li li li.sfHover ul {
 }
 
 .sf-menu a {
-	border-right: 1px solid #648ABD;
-	border-left: 1px solid #648abd;
-	border-top: 1px solid #648ABD;
+	border-right: 1px solid @dark_blue;
+	border-left: 1px solid @dark_blue;
+	border-top: 1px solid @dark_blue;
 	padding: .75em .75em;
 	text-decoration:none;
 	min-width: 6em;
@@ -544,30 +488,30 @@ ul.sf-menu li li li.sfHover ul {
 
 .sf-menu li.first a
 {
-  border-left: 1px solid #648abd;
+  border-left: 1px solid @dark_blue;
 }
 
 .sf-menu li.last a
 {
-  border-bottom: 1px solid #648abd;
+  border-bottom: 1px solid @dark_blue;
 }
 
 .sf-menu > li > a 
 {
   text-align: center;
   border-left: 0;
-  border-bottom: 1px solid #648abd;
+  border-bottom: 1px solid @dark_blue;
 }
 
 .sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
 	color:			black;
 }
 .sf-menu li {
-	background: #8EB1DF;
+	background: @menu_background;
 }
 .sf-menu li:hover, .sf-menu li.sfHover,
 .sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
-	background:	#7795BD;
+	background:	@menu_highlight_background;
 	outline: 0;
 	color: White;
 }
