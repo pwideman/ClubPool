@@ -16,7 +16,9 @@
     <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
     <%= Html.ScriptInclude("supersubs.js") %>
     <%= Html.ScriptInclude("superfish.js") %>
+    <% if (Request.Browser.Browser.ToLower().Contains("ie")) { %>
     <%= Html.ScriptInclude("jquery.corner.js") %>
+    <% } %>
     <%= Html.ScriptInclude("jquery.validate.min.js") %>
     <%= Html.ScriptInclude("xVal.jquery.validate.js") %>
     <%= Html.ScriptInclude("clubpool.js") %>
