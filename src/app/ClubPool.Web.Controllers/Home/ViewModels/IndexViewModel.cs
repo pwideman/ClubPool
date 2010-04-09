@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ClubPool.Web.Controllers.Home.ViewModels
 {
-  public class IndexViewModel : BaseViewModel
+  public class IndexViewModel : ViewModelBase
   {
   }
 }

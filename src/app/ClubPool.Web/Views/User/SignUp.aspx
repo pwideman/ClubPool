@@ -14,11 +14,9 @@
       <div class="formHeader">
         All fields are required
       </div>
-      <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) { %>
-      <div class="formError normalRoundCorners">
-        <%= Model.ErrorMessage %>
-      </div>
-      <% } %>
+      <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) {
+           Html.RenderPartial("FormError");
+         } %>
       <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.SignUp())%>">
         <fieldset>
           <%= Html.AntiForgeryToken() %>
@@ -33,14 +31,14 @@
           <div class="formrow">
             <label for="Password" accesskey="p">Password:</label>
             <div class="formInput">
-              <%= this.TextBox(m => m.Password) %>
+              <%= this.Password(m => m.Password) %>
               <%= Html.ValidationMessageFor(m => m.Password) %>
             </div>
           </div>
           <div class="formrow">
             <label for="ConfirmPassword" accesskey="c">Confirm password:</label>
             <div class="formInput">
-              <%= this.TextBox(m => m.ConfirmPassword) %>
+              <%= this.Password(m => m.ConfirmPassword) %>
               <%= Html.ValidationMessageFor(m => m.ConfirmPassword) %>
             </div>
           </div>

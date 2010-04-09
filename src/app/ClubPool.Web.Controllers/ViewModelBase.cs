@@ -5,7 +5,12 @@ using System.Text;
 
 namespace ClubPool.Web.Controllers
 {
-  public class BaseViewModel
+  public class ViewModelBase
   {
+  }
+
+  public class FormViewModelBase : ViewModelBase
+  {
+    public string ErrorMessage { get; set; }
   }
 }

@@ -1,9 +1,8 @@
 <%@ Control Language="C#" Inherits="ClubPool.Web.Views.AspxViewUserControlBase<ClubPool.Web.Controllers.User.ViewModels.LoginViewModel>" %>
 <fieldset>
-  <% if (!string.IsNullOrEmpty(ViewModel.Message)) { %>
-  <p class="error">
-    <%= ViewModel.Message%></p>
-  <% } %>
+  <% if (!string.IsNullOrEmpty(ViewModel.ErrorMessage)) { 
+       Html.RenderPartial("FormError");
+     } %>
   <%= this.Hidden(m => m.ReturnUrl) %>
   <div class="formrow">
     <label for="Username" accesskey="u">Username:</label>
@@ -14,7 +13,7 @@
   <div class="formrow">
     <label for="Password" accesskey="p">Password:</label>
     <div class="formInput">
-      <%= this.TextBox(m => m.Password).Class("required") %>
+      <%= this.Password(m => m.Password).Class("required") %>
     </div>
   </div>
   <div class="formrowspan">

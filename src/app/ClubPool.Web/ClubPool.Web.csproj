@@ -189,6 +189,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\jquery-ui-1.7.2.redmond.css" />
     <Content Include="Content\Images\arrows-ffffff.png" />
     <Content Include="Content\Images\HeaderLogoHarlow.png" />
     <Content Include="Content\Images\shadow.png" />
@@ -213,6 +214,7 @@
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Shared\DebugFormSubmission.ascx" />
+    <Content Include="Views\Shared\FormError.ascx" />
     <Content Include="Views\Shared\LoginControl.ascx" />
     <Content Include="Views\Shared\Rescues\DefaultError.aspx" />
     <Content Include="Views\User\AccountHelp.aspx" />

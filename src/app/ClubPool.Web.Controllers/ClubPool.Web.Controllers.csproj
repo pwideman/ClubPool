@@ -95,7 +95,7 @@
     <Compile Include="Attributes\ConfigRescueAttribute.cs" />
     <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
-    <Compile Include="BaseViewModel.cs" />
+    <Compile Include="ViewModelBase.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />
     <Compile Include="Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
     <Compile Include="Dashboard\ViewModels\IndexViewModel.cs" />

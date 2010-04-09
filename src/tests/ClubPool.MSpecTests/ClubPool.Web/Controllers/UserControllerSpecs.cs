@@ -100,7 +100,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_set_the_view_model_properties_correctly = () => {
       var viewModel = result.IsAViewAnd().ViewData.Model as LoginViewModel;
       viewModel.ReturnUrl.ShouldEqual(returnUrl);
-      viewModel.Message.ShouldBeNull();
+      viewModel.ErrorMessage.ShouldBeNull();
       viewModel.Password.ShouldBeNull();
       viewModel.StayLoggedIn.ShouldBeFalse();
       viewModel.Username.ShouldBeNull();
@@ -219,7 +219,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       var vm = result.IsAViewAnd().ViewData.Model as LoginViewModel;
       vm.Username.ShouldEqual(username);
       vm.Password.ShouldBeEmpty();
-      vm.Message.ShouldEqual("Invalid username/password");
+      vm.ErrorMessage.ShouldEqual("Invalid username/password");
     };
   }
 

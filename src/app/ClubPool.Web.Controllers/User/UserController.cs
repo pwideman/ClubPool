@@ -82,7 +82,7 @@ namespace ClubPool.Web.Controllers
       }
       else {
         viewModel.Password = "";
-        viewModel.Message = "Invalid username/password";
+        viewModel.ErrorMessage = "Invalid username/password";
         return View(viewModel);
       }
     }
@@ -144,13 +144,13 @@ namespace ClubPool.Web.Controllers
 
       if (membershipService.UsernameIsInUse(viewModel.Username)) {
         // the username is in use
-        viewModel.ErrorMessage = string.Format("The username '{0}' is already in use, choose another", viewModel.Username);
+        viewModel.ErrorMessage = string.Format("The username '{0}' is already in use", viewModel.Username);
         return View(viewModel);
       }
 
       if (membershipService.EmailIsInUse(viewModel.Email)) {
         // the email address is in use
-        viewModel.ErrorMessage = string.Format("The email address '{0}' is already in use, provide another", viewModel.Email);
+        viewModel.ErrorMessage = string.Format("The email address '{0}' is already in use", viewModel.Email);
         return View(viewModel);
       }
       var user = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, false);
