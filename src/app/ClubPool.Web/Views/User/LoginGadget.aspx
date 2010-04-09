@@ -1,7 +1,7 @@
 <%@ Page Language="C#" Inherits="ClubPool.Web.Views.AspxViewPageBase<ClubPool.Web.Controllers.User.ViewModels.LoginViewModel>" %>
-<div class="sidebarGadgetContainer sidebarRoundCorners">
+<div class="sidebarGadgetContainer sidebar-corner">
   <div class="sidebarGadgetTitle">Login</div>
-  <div class="sidebarGadgetContent sidebarRoundCorners">
+  <div class="sidebarGadgetContent sidebar-corner">
     <form method="post" id="sidebarLoginForm" class="sidebarLoginForm sidebar" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.Login(string.Empty))%>">
       <% Html.RenderPartial("LoginControl"); %>
     </form>

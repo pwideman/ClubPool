@@ -9,19 +9,14 @@ $(document).ready(function() {
     animation: { opacity: "show" },
     speed: "fast"
   });
-  // round the corners on standard elements
-  if (!$.browser.msie) {
-    // only do these if the browser is not IE, because IE sucks and will screw it up
-    // right edge of menu
-    $("ul.sf-menu > li:last").corner("right");
-    $("ul.sf-menu > li:last > a").corner("right");
-    // login status panel
-    $("#loginStatusPanel").corner("bottom 30px");
+  if ($.browser.msie) {
+    // round the corners on standard elements
+    // only do this in IE, others will use css
+    // sidebar gadgets
+    var sidebarCornerRadius = "10px";
+    $(".sidebar-corner").corner(sidebarCornerRadius);
+    // normal radius
+    var normalCornerRadius = "12px";
+    $(".corner").corner(normalCornerRadius);
   }
-  // sidebar gadgets
-  var sidebarCornerRadius = "10px";
-  $(".sidebarRoundCorners").corner(sidebarCornerRadius);
-  // normal radius
-  var normalCornerRadius = "12px";
-  $(".normalRoundCorners").corner(normalCornerRadius);
 });

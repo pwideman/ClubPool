@@ -5,19 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
     <title>Error</title>
-    <%= Html.Stylesheet("site.css") %>
-    <%= Html.ScriptInclude("jquery-1.4.1.min.js") %>
-    <%= Html.ScriptInclude("jquery.corner.js") %>
-    <script type="text/javascript">
-      // normal radius
-      $(document).ready(function() {
-        var normalCornerRadius = "12px";
-        $(".normalRoundCorners").corner(normalCornerRadius);
-      });
-    </script>
+    <%= Html.Stylesheet("site.less") %>
 </head>
 <body>
-    <div class="rescuediv normalRoundCorners">
+    <div class="rescuediv corner">
       Oops! An error has occurred. Information about the problem has been logged and we'll take a look at it.
     </div>
 </body>
