@@ -10643,6 +10643,16 @@
             </code>
             </remarks>
         </member>
+        <member name="P:NHibernate.IQueryOver.UnderlyingCriteria">
+            <summary>
+            Access the underlying ICriteria
+            </summary>
+        </member>
+        <member name="P:NHibernate.IQueryOver.RootCriteria">
+            <summary>
+            Access the root underlying ICriteria
+            </summary>
+        </member>
         <member name="M:NHibernate.IQueryOver`1.List">
             <summary>
             Get the results of the root type and fill the <see cref="T:System.Collections.Generic.IList`1"/>
@@ -10661,9 +10671,20 @@
             for the query
             </summary>
         </member>
+        <member name="M:NHibernate.IQueryOver`1.ToRowCountInt64Query">
+            <summary>
+            Clones the QueryOver, removes orders and paging, and projects the row-count (Int64)
+            for the query
+            </summary>
+        </member>
         <member name="M:NHibernate.IQueryOver`1.RowCount">
             <summary>
-            Short for ToRowCountQuery().SingleOrDefault()
+            Short for ToRowCountQuery().SingleOrDefault&lt;int&gt;()
+            </summary>
+        </member>
+        <member name="M:NHibernate.IQueryOver`1.RowCountInt64">
+            <summary>
+            Short for ToRowCountInt64Query().SingleOrDefault&lt;long&gt;()
             </summary>
         </member>
         <member name="M:NHibernate.IQueryOver`1.SingleOrDefault">
@@ -10714,11 +10735,6 @@
             Creates an exact clone of the IQueryOver
             </summary>
         </member>
-        <member name="P:NHibernate.IQueryOver`1.UnderlyingCriteria">
-            <summary>
-            Access the underlying ICriteria
-            </summary>
-        </member>
         <member name="M:NHibernate.Criterion.QueryOver`1.GetExecutableQueryOver(NHibernate.ISession)">
             <summary>
             Get an executable instance of <c>IQueryOver&lt;TRoot&gt;</c>,
@@ -10732,6 +10748,12 @@
         <member name="M:NHibernate.Criterion.QueryOver`1.ToRowCountQuery">
             <summary>
             Clones the QueryOver, clears the orders and paging, and projects the RowCount
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.Criterion.QueryOver`1.ToRowCountInt64Query">
+            <summary>
+            Clones the QueryOver, clears the orders and paging, and projects the RowCount (Int64)
             </summary>
             <returns></returns>
         </member>
@@ -26476,6 +26498,44 @@
             </summary>
             <param name="key">The key</param>
             <param name="detachedCriteria">The detached criteria</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add(System.Type,NHibernate.IQueryOver)">
+            <summary>
+            Adds the specified IQueryOver to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="resultGenericListType">Return results in a <see cref="T:System.Collections.Generic.List`1"/></param>
+            <param name="queryOver">The IQueryOver.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(NHibernate.IQueryOver{``0})">
+            <summary>
+            Adds the specified IQueryOver to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="queryOver">The IQueryOver.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(NHibernate.IQueryOver)">
+            <summary>
+            Adds the specified IQueryOver to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="queryOver">The IQueryOver.</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(System.String,NHibernate.IQueryOver{``0})">
+            <summary>
+            Adds the specified IQueryOver to the query, and associates it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="key">The key</param>
+            <param name="queryOver">The IQueryOver</param>
+            <returns></returns>
+        </member>
+        <member name="M:NHibernate.IMultiCriteria.Add``1(System.String,NHibernate.IQueryOver)">
+            <summary>
+            Adds the specified IQueryOver to the query, and associates it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <param name="key">The key</param>
+            <param name="queryOver">The IQueryOver</param>
             <returns></returns>
         </member>
         <member name="M:NHibernate.IMultiCriteria.SetCacheable(System.Boolean)">
