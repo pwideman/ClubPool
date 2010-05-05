@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 
+using ClubPool.Core;
 using ClubPool.Data.NHibernateMaps;
 using SharpArch.Data.NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -37,6 +38,12 @@ namespace ClubPool.SchemaGen
         sw.Flush();
         output("SchemaExport output:");
         output(sb.Replace("\n", Environment.NewLine).ToString());
+        output("Creating roles");
+        var r = new Role("Administrators");
+        session.Save(r);
+        r = new Role("Users");
+        session.Save(r);
+        session.Flush();
         output("Finished");
       }
       catch (Exception ex) {
