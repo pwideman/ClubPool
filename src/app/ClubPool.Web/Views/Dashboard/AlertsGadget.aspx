@@ -1,6 +1,6 @@
 <%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Dashboard.ViewModels.AlertsGadgetViewModel>" %>
 <% if (Model.Alerts.Count() > 0) { %>
-<div class="ui-state-error ui-corner-all">
+<div class="ui-state-error ui-corner-all sidebar-gadget">
   <p><span class="ui-icon ui-icon-alert form-error-icon"></span>Alerts</p>
   <div class="alerts-gadget">
     <ul>

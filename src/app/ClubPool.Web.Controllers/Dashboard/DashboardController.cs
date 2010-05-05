@@ -10,6 +10,7 @@ using ClubPool.Core;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
+using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
 using ClubPool.Framework.NHibernate;
 
 namespace ClubPool.Web.Controllers
@@ -41,9 +42,22 @@ namespace ClubPool.Web.Controllers
 
     protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
-      var alertsGadget = new Dashboard.SidebarGadgets.AlertsSidebarGadget();
-      sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
+      if (userHasAlerts()) {
+        var alertsGadget = new AlertsSidebarGadget();
+        sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
+      }
       return sidebarGadgetCollection;
+    }
+
+    protected bool userHasAlerts() {
+      var hasAlerts = false;
+      // unapproved users alert
+      var username = authenticationService.GetCurrentIdentity().Username;
+      if (roleService.IsUserAdministrator(username)) {
+        var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
+        hasAlerts |= numberOfUnapprovedUsers > 0;
+      }
+      return hasAlerts;
     }
 
     public ActionResult AlertsGadget() {
