@@ -20,6 +20,7 @@ using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controls.Captcha;
+using ClubPool.Web.Controllers.Attributes;
 
 namespace ClubPool.Web.Controllers
 {
@@ -172,9 +173,16 @@ namespace ClubPool.Web.Controllers
       }
     }
 
-    [Authorize(Roles=Core.Roles.Administrators)]
+    [Attributes.Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Delete(int id) {
       return View();
+    }
+
+    [Attributes.Authorize(Roles = Core.Roles.Administrators)]
+    public ActionResult Unapproved() {
+      var viewModel = new UnapprovedViewModel();
+      viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList();
+      return View(viewModel);
     }
   }
 }

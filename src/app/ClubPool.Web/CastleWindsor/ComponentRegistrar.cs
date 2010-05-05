@@ -1,4 +1,5 @@
 ﻿using System.Web.Security;
+using System.Web.Mvc;
 
 using Castle.Windsor;
 using Castle.MicroKernel.Registration;
@@ -18,6 +19,10 @@ namespace ClubPool.Web.CastleWindsor
   public class ComponentRegistrar
   {
     public static void AddComponentsTo(IWindsorContainer container) {
+      container.Register(
+        Component.For<IWindsorContainer>()
+        .Instance(container));
+
       AddGenericRepositoriesTo(container);
       AddCustomRepositoriesTo(container);
       //AddWebSecurityServicesTo(container);
@@ -25,6 +30,8 @@ namespace ClubPool.Web.CastleWindsor
 
       container.AddComponent("validator",
           typeof(IValidator), typeof(Validator));
+      container.AddComponent("ActionInvoker",
+        typeof(IActionInvoker), typeof(WindsorActionInvoker));
     }
 
     private static void AddWebSecurityServicesTo(IWindsorContainer container) {

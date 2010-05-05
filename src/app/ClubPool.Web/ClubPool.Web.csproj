@@ -173,6 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CastleWindsor\ComponentRegistrar.cs" />
+    <Compile Include="CastleWindsor\WindsorActionInvoker.cs" />
+    <Compile Include="CastleWindsor\WindsorControllerFactory.cs" />
     <Compile Include="Code\AppHelper.cs" />
     <Compile Include="Code\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -225,6 +227,7 @@
     <Content Include="Views\User\ResetPassword.aspx" />
     <Content Include="Views\User\SignUp.aspx" />
     <Content Include="Views\User\SignUpComplete.aspx" />
+    <Content Include="Views\User\Unapproved.aspx" />
     <Content Include="Web.config" />
     <None Include="Content\css\Site.less" />
     <Content Include="Scripts\MicrosoftAjax.js" />

@@ -70,7 +70,7 @@ namespace ClubPool.Web
       // set up the ServiceLocator earlier so that we can use it in
       // ComponentRegistrar
       ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
-      ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
+      ControllerBuilder.Current.SetControllerFactory(new CastleWindsor.WindsorControllerFactory(container));
 
       container.RegisterControllers(typeof(BaseController).Assembly);
       ComponentRegistrar.AddComponentsTo(container);
