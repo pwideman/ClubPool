@@ -54,6 +54,10 @@ namespace ClubPool.Core.Queries
       return users.Where(UserByUsername(username));
     }
 
+    public static IQueryable<User> WhereUnapproved(this IQueryable<User> users) {
+      return users.Where(u => !u.IsApproved);
+    }
+
     public static Func<User, int, string> SelectUsername {
       get { return (u, i) => u.Username; }
     }
