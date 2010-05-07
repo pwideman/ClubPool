@@ -9,6 +9,13 @@ namespace ClubPool.Web.Controllers.User.ViewModels
 {
   public class UnapprovedViewModel : FormViewModelBase
   {
-    public IList<Core.User> UnapprovedUsers;
+    public IEnumerable<UnapprovedUser> UnapprovedUsers;
+  }
+
+  public class UnapprovedUser
+  {
+    public int Id { get; set; }
+    public string FullName { get; set; }
+    public string Email { get; set; }
   }
 }

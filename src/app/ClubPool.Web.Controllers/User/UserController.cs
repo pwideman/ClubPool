@@ -9,6 +9,7 @@ using MvcContrib.Attributes;
 using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
+using AutoMapper;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
@@ -178,11 +179,28 @@ namespace ClubPool.Web.Controllers
       return View();
     }
 
-    [Attributes.Authorize(Roles = Core.Roles.Administrators)]
+    [Attributes.Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
-      viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList();
+      Mapper.CreateMap<Core.User, UnapprovedUser>();
+      viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList()
+        .Select(u => Mapper.Map<Core.User, UnapprovedUser>(u));
       return View(viewModel);
+    }
+
+    [AcceptPost]
+    [Transaction]
+    [ValidateAntiForgeryToken]
+    [Attributes.Authorize(Roles=Core.Roles.Administrators)]
+    public ActionResult Approve(int[] userIds) {
+      var users = userRepository.GetAll().WhereIdIn(userIds);
+      if (users.Count() > 0) {
+        foreach (var user in users) {
+          user.IsApproved = true;
+        }
+        TempData["message"] = "The selected users have been approved.";
+      }
+      return MvcContrib.ControllerExtensions.RedirectToAction(this, c => c.Unapproved());
     }
   }
 }
