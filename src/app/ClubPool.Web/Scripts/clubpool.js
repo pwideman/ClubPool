@@ -19,4 +19,5 @@ $(document).ready(function() {
     var normalCornerRadius = "12px";
     $(".corner").corner(normalCornerRadius);
   }
+  $(".notification").effect("fade", {easing:"easeInExpo"}, 5000);
 });
