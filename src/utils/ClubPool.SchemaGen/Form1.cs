@@ -43,20 +43,21 @@ namespace ClubPool.SchemaGen
         output(sb.Replace("\n", Environment.NewLine).ToString());
         output("Creating users");
         var userRepo = new LinqRepository<User>();
-        var adminId = 0;
+        User adminUser = null;
         using (userRepo.DbContext.BeginTransaction()) {
           var membershipService = new SharpArchMembershipService(userRepo);
-          var u = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true);
-          adminId = u.Id;
-          u = membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true);
+          adminUser = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true);
+          membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true);
           userRepo.DbContext.CommitTransaction();
         }
         output("Creating roles");
-        var r = new Role("Administrators");
-        var adminUser = session.Get<User>(adminId);
-        r.Users.Add(adminUser);
-        session.Save(r);
-        session.Flush();
+        var roleRepo = new LinqRepository<Role>();
+        using (roleRepo.DbContext.BeginTransaction()) {
+          var r = new Role("Administrators");
+          r.Users.Add(adminUser);
+          roleRepo.SaveOrUpdate(r);
+          roleRepo.DbContext.CommitTransaction();
+        }
         output("Finished");
       }
       catch (Exception ex) {
