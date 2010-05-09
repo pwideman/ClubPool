@@ -111,7 +111,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_set_the_view_model_properties_correctly = () => {
       var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
       viewModel.UserIsAdmin.ShouldBeTrue();
-      viewModel.NewUsersAwaitingApproval.Count().ShouldEqual(2);
+      // TODO: Check for alerts
     };
   }
 }
