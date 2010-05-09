@@ -60,6 +60,7 @@ namespace ClubPool.Web.Controllers
       return hasAlerts;
     }
 
+    [Authorize]
     public ActionResult AlertsGadget() {
       var alerts = new List<Alert>();
       var viewModel = new AlertsGadgetViewModel(alerts);
