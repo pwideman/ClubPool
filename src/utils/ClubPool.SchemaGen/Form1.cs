@@ -9,10 +9,13 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 
-using ClubPool.Core;
-using ClubPool.Data.NHibernateMaps;
 using SharpArch.Data.NHibernate;
 using NHibernate.Tool.hbm2ddl;
+
+using ClubPool.Core;
+using ClubPool.Data.NHibernateMaps;
+using ClubPool.ApplicationServices.Membership;
+using ClubPool.Framework.NHibernate;
 
 namespace ClubPool.SchemaGen
 {
@@ -38,10 +41,20 @@ namespace ClubPool.SchemaGen
         sw.Flush();
         output("SchemaExport output:");
         output(sb.Replace("\n", Environment.NewLine).ToString());
+        output("Creating users");
+        var userRepo = new LinqRepository<User>();
+        var adminId = 0;
+        using (userRepo.DbContext.BeginTransaction()) {
+          var membershipService = new SharpArchMembershipService(userRepo);
+          var u = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true);
+          adminId = u.Id;
+          u = membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true);
+          userRepo.DbContext.CommitTransaction();
+        }
         output("Creating roles");
         var r = new Role("Administrators");
-        session.Save(r);
-        r = new Role("Users");
+        var adminUser = session.Get<User>(adminId);
+        r.Users.Add(adminUser);
         session.Save(r);
         session.Flush();
         output("Finished");
