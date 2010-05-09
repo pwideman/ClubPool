@@ -10,6 +10,7 @@ using Rhino.Mocks;
 using Machine.Specifications;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
+using ClubPool.ApplicationServices.Authentication;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Core;
@@ -490,6 +491,29 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       modelState.IsValid.ShouldBeFalse();
       modelState.Count.ShouldBeGreaterThan(0);
       modelState.Keys.Contains("captcha").ShouldBeTrue();
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_for_the_unapproved_users_view_and_there_are_none : specification_for_user_controller
+  {
+    static ActionResult result;
+    static IList<User> users;
+
+    Establish context = () => {
+      users = new List<User>();
+      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = controller.Unapproved();
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_not_display_any_unapproved_users = () => {
+      var vm = result.IsAViewAnd().ViewData.Model as UnapprovedViewModel;
+      vm.ShouldNotBeNull();
+      vm.UnapprovedUsers.Count().ShouldEqual(0);
     };
   }
 }

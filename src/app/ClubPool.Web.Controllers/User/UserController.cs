@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Text;
+using System.Collections.Generic;
 
 using MvcContrib;
 using MvcContrib.Attributes;
@@ -174,24 +175,24 @@ namespace ClubPool.Web.Controllers
       }
     }
 
-    [Attributes.Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Delete(int id) {
       return View();
     }
 
-    [Attributes.Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
       Mapper.CreateMap<Core.User, UnapprovedUser>();
-      viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList()
-        .Select(u => Mapper.Map<Core.User, UnapprovedUser>(u));
+      viewModel.UnapprovedUsers = 
+        Mapper.Map<IList<Core.User>, IEnumerable<UnapprovedUser>>(userRepository.GetAll().WhereUnapproved().ToList());
       return View(viewModel);
     }
 
     [AcceptPost]
     [Transaction]
     [ValidateAntiForgeryToken]
-    [Attributes.Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Approve(int[] userIds) {
       var users = userRepository.GetAll().WhereIdIn(userIds);
       if (users.Count() > 0) {

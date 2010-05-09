@@ -30,8 +30,8 @@ namespace ClubPool.Web.CastleWindsor
 
       container.AddComponent("validator",
           typeof(IValidator), typeof(Validator));
-      container.AddComponent("ActionInvoker",
-        typeof(IActionInvoker), typeof(WindsorActionInvoker));
+      //container.AddComponent("ActionInvoker",
+      //  typeof(IActionInvoker), typeof(WindsorActionInvoker));
     }
 
     private static void AddWebSecurityServicesTo(IWindsorContainer container) {

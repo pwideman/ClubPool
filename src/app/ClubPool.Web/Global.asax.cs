@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Reflection;
+using System.Web.Security;
 
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
@@ -20,12 +21,14 @@ using SharpArch.Web.Castle;
 using SharpArch.Web.Areas;
 using SharpArch.Web.CommonValidator;
 using SharpArch.Web.ModelBinder;
+using log4net;
 
 using ClubPool.Framework.Validation;
 using ClubPool.Web.Controllers;
 using ClubPool.Data.NHibernateMaps;
 using ClubPool.Web.CastleWindsor;
 using ClubPool.Web.Code;
+using ClubPool.ApplicationServices.Authentication;
 
 namespace ClubPool.Web
 {
@@ -35,6 +38,7 @@ namespace ClubPool.Web
   public class MvcApplication : HttpApplication
   {
     private WebSessionStorage webSessionStorage;
+    protected static readonly ILog logger = LogManager.GetLogger(typeof(MvcApplication));
 
     protected void Application_Start() {
       
@@ -70,7 +74,7 @@ namespace ClubPool.Web
       // set up the ServiceLocator earlier so that we can use it in
       // ComponentRegistrar
       ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
-      ControllerBuilder.Current.SetControllerFactory(new CastleWindsor.WindsorControllerFactory(container));
+      ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
 
       container.RegisterControllers(typeof(BaseController).Assembly);
       ComponentRegistrar.AddComponentsTo(container);
@@ -92,6 +96,45 @@ namespace ClubPool.Web
     protected void Application_BeginRequest(object sender, EventArgs e) {
         NHibernateInitializer.Instance().InitializeNHibernateOnce(
           () => InitializeNHibernateSession());
+    }
+
+    protected void Application_AuthenticateRequest(object sender, EventArgs e) {
+      // We need to set the HttpContext.User property to our own IPrincipal implementation
+      // so that it uses our role service to satisfy IPrincipal.IsInRole(). The 
+      // Authorize attribute uses this method to determine whether the authenticated user
+      // is in the requested role
+
+      // Extract the forms authentication cookie
+      string cookieName = FormsAuthentication.FormsCookieName;
+      HttpCookie authCookie = Context.Request.Cookies[cookieName];
+
+      if (null == authCookie) {
+        // There is no authentication cookie.
+        return;
+      }
+
+      FormsAuthenticationTicket authTicket = null;
+      try {
+        authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+      }
+      catch (Exception ex) {
+        logger.Error("Forms authentication ticket could not be decrypted", ex);
+        return;
+      }
+
+      if (null == authTicket) {
+        // Cookie failed to decrypt.
+        return;
+      }
+
+      // Create an Identity object
+      FormsIdentity id = new FormsIdentity(authTicket);
+
+      // This principal will flow throughout the request.
+      ClubPoolPrincipal principal = new ClubPoolPrincipal(id, 
+        ServiceLocator.Current.GetInstance<ClubPool.ApplicationServices.Membership.Contracts.IRoleService>());
+      // Attach the new principal object to the current HttpContext object
+      Context.User = principal;
     }
 
     /// <summary>
