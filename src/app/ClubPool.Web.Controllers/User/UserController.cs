@@ -10,7 +10,6 @@ using MvcContrib.Attributes;
 using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
-using AutoMapper;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
@@ -180,12 +179,12 @@ namespace ClubPool.Web.Controllers
       return View();
     }
 
+    [AcceptGet]
     [Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
-      Mapper.CreateMap<Core.User, UnapprovedUser>();
-      viewModel.UnapprovedUsers = 
-        Mapper.Map<IList<Core.User>, IEnumerable<UnapprovedUser>>(userRepository.GetAll().WhereUnapproved().ToList());
+      viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList()
+        .Select(u => new UnapprovedUser() { FullName = u.FullName, Email = u.Email, Id = u.Id });
       return View(viewModel);
     }
 
@@ -203,5 +202,8 @@ namespace ClubPool.Web.Controllers
       }
       return MvcContrib.ControllerExtensions.RedirectToAction(this, c => c.Unapproved());
     }
+
+
+
   }
 }
