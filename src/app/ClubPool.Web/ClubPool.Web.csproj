@@ -191,6 +191,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\base.css" />
     <Content Include="Content\css\jquery-ui-1.8.1.redmond.css" />
     <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\css\images\ui-bg_flat_55_fbec88_40x100.png" />

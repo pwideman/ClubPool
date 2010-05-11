@@ -1,4 +1,5 @@
-﻿@standard_blue: #074B8A;
+﻿/* global vars */
+@standard_blue: #074B8A;
 @error_background_color: #FFFFD5;
 @error_foreground: red;
 @light_blue: #E0ECF8;
@@ -6,159 +7,11 @@
 @menu_background: #8EB1DF;
 @menu_highlight_background: #7795BD;
 
-/* base
----------------------------------------------------------*/
-html, body, img
-{
-  padding: 0;
-  margin: 0;
-  font: 14px Verdana, Arial, Helvetica;
-}
+/* imports */
+@import "menu.css";
+@import "base.css";
 
-table
-{
-  border-collapse: collapse;
-}
-
-thead {
-  th {
-    color: @standard_blue;
-    border-bottom: 2px solid @standard_blue;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
-}
-
-tbody {
-  td {
-    padding: 12px 40px;
-    text-align: center;
-    border-bottom: 1px solid @light_blue;
-  }
-  tr:hover {
-    td {
-      background-color: @light_blue;
-    }
-  }
-}
-
-.submit-row {
-  text-align: right;
-  padding: 10px 10px 6px 0px;
-}
-
-body 
-{
-  min-width: 800px;
-}
-
-a
-{
-  color: @standard_blue;
-}
-
-a:hover
-{
-  color: #0000FF;
-}
-
-h1, h2, h3
-{
-  font-weight: bold;
-  color: @standard_blue;
-  margin: 20px 0px 20px 0px;
-}
-
-h1
-{
-  font-size:300%;
-}
-
-h2
-{
-  font-size: 250%;
-}
-
-H3
-{
-  font-size: 200%;
-}
-
-H4, h5
-{
-  color: #114884;
-  margin: 15px 0px 15px 0px;
-  font-weight: normal;
-}
-
-h4
-{
-  font-size: 160%;
-}
-h5
-{
-  font-size: 120%;
-}
-
-div.spacer
-{
-  clear: both;
-}
-
-.sidebar-corner
-{
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
-}
-
-.corner
-{
-  -moz-border-radius: 12px;
-  -webkit-border-radius: 12px;
-}
-
-
-/* rescue pages */
-div.rescuediv
-{
-  text-align: center;
-  padding: 50px;
-  border: 2px solid red;
-  background-color: @error_background_color;
-  color: @error_foreground;
-  margin: 30px;
-}
-
-p.heading {
-  padding: 10px 0px 20px 0px;
-}
-
-/* Container
----------------------------------------------------------*/
-#container 
-{
-  padding-right: 330px;
-  overflow: hidden;
-  clear: both;
-}
-
-#container .column 
-{
-  position: relative;
-  float: left;
-  padding-bottom: 20010px;
-  margin-bottom: -20000px;
-}
-
-/* HEADER
----------------------------------------------------------*/
-#header
-{
-  padding: 0;
-  margin: 0;
-}
-
-#loginStatusPanel
+.loginStatusPanel
 {
   right: 25px;
   float: right;
@@ -175,30 +28,20 @@ p.heading {
   -webkit-border-bottom-left-radius: 30px;
   -moz-border-radius-bottomright: 30px;
   -webkit-border-bottom-right-radius: 30px;
-}
-
-/* menu
-----------------------------------------------------------*/
-#menucontainer
-{
-  margin-top: -3px;
-  margin-left: 0;
-  font-size: 12px;
-  height: 32px;
-  background-color: @light_blue;
-}
-
-/* main content
-----------------------------------------------------------*/
-#maincontent
-{
-  width: 100%;
-  padding: 10px 20px;
+  border-radius-bottomleft: 30px;
+  border-radius-bottomright: 30px;
 }
 
 /* sidebar
 ----------------------------------------------------------*/
-#sidebarContainer
+.sidebar-corner
+{
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+}
+
+.sidebar-container
 {
   width: 270px;
   margin-right: -330px;
@@ -206,7 +49,7 @@ p.heading {
   text-align: center;
 }
 
-#sidebar
+div.sidebar
 {
   background: #E2E2E2;
   padding: 6px 6px 2px 6px;
@@ -236,6 +79,10 @@ div.sidebarGadgetContent
   padding: 4px;
   font-size: 80%;
   background-color: @light_blue;
+  
+  button {
+    padding: 0px;
+  }
 }
 
 /* footer
@@ -296,10 +143,11 @@ fieldset
   border: 0;
 }
 
-form.normal div.formrow
-{
-  padding-right: 10px;
-  min-height: 54px;
+form.normal {
+  div.formrow {
+    padding-right: 10px;
+    min-height: 54px;
+  }
 }
 
 div.formrow > label
@@ -330,9 +178,10 @@ div.formInput input
   display: block;
 }
 
-div.formrow input.short
-{
-  width: 104px;
+div.formrow {
+  input.short {
+    width: 104px;
+  }
 }
 
 div.formInput
@@ -340,19 +189,9 @@ div.formInput
   display: inline-block;
   padding: 0;
   vertical-align: top;
-}
-
-div.formInput label
-{
-  font-size: 80%;
-}
-
-div.formrowold label 
-{
-  margin-top: 5px;
-  text-align:right;
-  float:left;
-  padding-right: 5px;
+  label {
+    font-size: 80%;
+  }
 }
 
 button
@@ -363,9 +202,10 @@ button
   padding: 6px;
 }
 
-form.normal button
-{
-  padding: 6px 20px 6px 20px;
+form.normal {
+  button {
+    padding: 6px 20px 6px 20px;
+  }
 }
 
 
@@ -425,33 +265,30 @@ div.formValidationSummary
 
 /* sidebar forms */
 
-form.sidebar div.formrow
-{
-  padding-right: 8px;
-  min-height: 34px;
-}
-
-form.sidebar div.formrow label
-{
-  display: inline-block;
-  width: 70px;
-  text-align: right;
-  padding-right: 4px;
-  vertical-align: top;
-  margin-top: 8px;
-}
-
-form.sidebar div.formInput input
-{
-  width: 120px;
-  height: 16px;
-}
-
-form.sidebar button
-{
-  width: 100px;
-  height: 25px;
-  /*margin-left: 55px;*/
+form.sidebar {
+  div.formrow {
+    padding-right: 8px;
+    min-height: 34px;
+    label {
+      display: inline-block;
+      width: 70px;
+      text-align: right;
+      padding-right: 4px;
+      vertical-align: top;
+      margin-top: 8px;
+    }
+  }
+  div.formInput {
+    input {
+      width: 120px;
+      height: 16px;
+    }
+  }
+  button {
+    width: 100px;
+    height: 25px;
+    /*margin-left: 55px;*/
+  }
 }
 
 /* normal login form */
@@ -459,11 +296,11 @@ form.sidebar button
 form.loginForm
 {
   width: 400px;
-}
-
-form.loginForm div.formrow > label
-{
-  width: 120px;
+  div.formrow {
+    label {
+      width: 120px;
+    }
+  }
 }
 
 /* MISC  
@@ -479,15 +316,13 @@ form.loginForm div.formrow > label
 {
   text-align:left;
   font-size: 80%;
+  ul {
+    padding-left: 24px;
+  }
 }
 
-.alerts-gadget ul
-{
-  padding-left: 24px;
-}
+/* Notifications */
 
-/* Notifications
------------------------------------------------------------*/
 .notification {
   padding: 0 30px 0 10px;
   display: inline-block;
@@ -499,5 +334,3 @@ form.loginForm div.formrow > label
   margin-right: .3em;
   vertical-align: middle;
 }
-
-@import "menu.css";

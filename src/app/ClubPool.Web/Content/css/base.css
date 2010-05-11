@@ -1,0 +1,165 @@
+﻿/* base
+---------------------------------------------------------*/
+html, body, img
+{
+  padding: 0;
+  margin: 0;
+  font: 14px Verdana, Arial, Helvetica;
+}
+
+table
+{
+  border-collapse: collapse;
+}
+
+thead {
+  th {
+    color: @standard_blue;
+    border-bottom: 2px solid @standard_blue;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+tbody {
+  td {
+    padding: 12px 40px;
+    text-align: center;
+    border-bottom: 1px solid @light_blue;
+  }
+  tr:hover {
+    td {
+      background-color: @light_blue;
+    }
+  }
+}
+
+.submit-row {
+  text-align: right;
+  padding: 10px 10px 6px 0px;
+}
+
+body 
+{
+  min-width: 800px;
+}
+
+a
+{
+  color: @standard_blue;
+}
+
+a:hover
+{
+  color: #0000FF;
+}
+
+h1, h2, h3
+{
+  font-weight: bold;
+  color: @standard_blue;
+  margin: 20px 0px 20px 0px;
+}
+
+h1
+{
+  font-size:300%;
+}
+
+h2
+{
+  font-size: 250%;
+}
+
+H3
+{
+  font-size: 200%;
+}
+
+H4, h5
+{
+  color: #114884;
+  margin: 15px 0px 15px 0px;
+  font-weight: normal;
+}
+
+h4
+{
+  font-size: 160%;
+}
+h5
+{
+  font-size: 120%;
+}
+
+div.spacer
+{
+  clear: both;
+}
+
+.corner
+{
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  border-radius: 12px;
+}
+
+p.heading {
+  padding: 10px 0px 20px 0px;
+}
+
+/* rescue pages */
+div.rescuediv
+{
+  text-align: center;
+  padding: 50px;
+  border: 2px solid red;
+  background-color: @error_background_color;
+  color: @error_foreground;
+  margin: 30px;
+}
+
+/* layout */
+/* Container
+---------------------------------------------------------*/
+#container 
+{
+  padding-right: 330px;
+  overflow: hidden;
+  clear: both;
+}
+
+#container .column 
+{
+  position: relative;
+  float: left;
+  padding-bottom: 20010px;
+  margin-bottom: -20000px;
+}
+
+/* HEADER
+---------------------------------------------------------*/
+#header
+{
+  padding: 0;
+  margin: 0;
+}
+
+/* menu
+----------------------------------------------------------*/
+#menucontainer
+{
+  margin-top: -3px;
+  margin-left: 0;
+  font-size: 12px;
+  height: 32px;
+  background-color: @light_blue;
+}
+
+/* main content
+----------------------------------------------------------*/
+#maincontent
+{
+  width: 100%;
+  padding: 10px 20px;
+}

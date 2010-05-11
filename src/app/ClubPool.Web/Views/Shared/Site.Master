@@ -30,7 +30,7 @@
   <body>
     <div id="header">
       <%= Html.ContentImage("HeaderLogoHarlow.png", "Logo") %>
-      <div id="loginStatusPanel">
+      <div class="loginStatusPanel">
         <% Html.RenderActionForAreas<ClubPool.Web.Controllers.UserController>(c => c.LoginStatus()); %>
       </div>
       <div id="menucontainer">
@@ -45,8 +45,8 @@
       if (ViewData.Contains<SidebarGadgetCollection>()) {
         var sidebarGadgetCollection = ViewData.Get<SidebarGadgetCollection>();
         if (sidebarGadgetCollection.Count > 0) { %>
-          <div id="sidebarContainer" class="column">
-            <div id="sidebar" class="sidebar-corner">
+          <div class="column sidebar-container">
+            <div class="sidebar sidebar-corner">
               <%
               foreach (var sidebar in sidebarGadgetCollection.Values) {
                 sidebar.Action.Invoke(ViewContext);
