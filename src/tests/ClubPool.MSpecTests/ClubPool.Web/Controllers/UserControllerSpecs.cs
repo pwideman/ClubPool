@@ -8,6 +8,7 @@ using System.Web.Security;
 
 using Rhino.Mocks;
 using Machine.Specifications;
+using SharpArch.Testing;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication;
@@ -495,7 +496,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_for_the_unapproved_users_view_and_there_are_none : specification_for_user_controller
+  public class when_the_user_controller_is_asked_for_the_unapproved_users_and_there_are_none : specification_for_user_controller
   {
     static ActionResult result;
     static IList<User> users;
@@ -515,5 +516,64 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       vm.ShouldNotBeNull();
       vm.UnapprovedUsers.Count().ShouldEqual(0);
     };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_for_the_unapproved_users_view : specification_for_user_controller
+  {
+    static ActionResult result;
+    static IList<User> users;
+
+    Establish context = () => {
+      users = new List<User>() {
+        new User("user1", "user1", "user", "one", "user@user.com"),
+        new User("user2", "user2", "user", "two", "user2@user.com"),
+        new User("user3", "user3", "user", "three", "user3@user.com") { IsApproved = true }
+      };
+      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = controller.Unapproved();
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_pass_the_view_model_to_the_view = () => {
+      var vm = result.IsAViewAnd().ViewData.Model as UnapprovedViewModel;
+      vm.ShouldNotBeNull();
+      vm.UnapprovedUsers.Count().ShouldEqual(2);
+    };
+  }
+
+  [Subject(typeof(UserController))]
+  public class when_the_user_controller_is_asked_to_approve_users : specification_for_user_controller
+  {
+    static ActionResult result;
+    static IList<User> users;
+
+    Establish context = () => {
+      users = new List<User>() {
+        new User("user1", "user1", "user", "one", "user@user.com").SetIdTo(1) as User,
+        new User("user2", "user2", "user", "two", "user2@user.com").SetIdTo(2) as User,
+        new User("user3", "user3", "user", "three", "user3@user.com").SetIdTo(3) as User
+      };
+      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = controller.Approve(new int[] {1,2});
+
+    It should_set_the_IsApproved_property_on_the_approved_user = () => {
+      users[0].IsApproved.ShouldBeTrue();
+      users[1].IsApproved.ShouldBeTrue();
+      users[2].IsApproved.ShouldBeFalse();
+    };
+
+    It should_redirect_to_the_unapproved_view = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("User");
+      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Unapproved");
+    };
+
+    It should_set_the_tempdata_message = () =>
+      controller.TempData.ContainsKey("message").ShouldBeTrue();
   }
 }
