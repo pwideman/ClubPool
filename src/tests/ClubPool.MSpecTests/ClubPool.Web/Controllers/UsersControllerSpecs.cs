@@ -16,14 +16,14 @@ using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Core;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.User.ViewModels;
+using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {
-  public abstract class specification_for_user_controller
+  public abstract class specification_for_users_controller
   {
-    protected static UserController controller;
+    protected static UsersController controller;
     protected static IRoleService roleService;
     protected static IAuthenticationService authenticationService;
     protected static IMembershipService membershipService;
@@ -36,14 +36,14 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       membershipService = MockRepository.GenerateStub<IMembershipService>();
       userRepository = MockRepository.GenerateStub<ILinqRepository<User>>();
       emailService = MockRepository.GenerateStub<IEmailService>();
-      controller = new UserController(authenticationService, membershipService, roleService, emailService, userRepository);
+      controller = new UsersController(authenticationService, membershipService, roleService, emailService, userRepository);
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_for_the_default_view_and_user_is_not_logged_in : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_for_the_default_view_and_user_is_not_logged_in : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -60,8 +60,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Login");
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_for_the_default_view_and_user_is_logged_in : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_for_the_default_view_and_user_is_logged_in : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -80,8 +80,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_for_the_login_view_and_the_user_is_not_logged_in : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_for_the_login_view_and_the_user_is_not_logged_in : specification_for_users_controller
   {
     static ActionResult result;
     static string returnUrl;
@@ -109,8 +109,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_for_the_login_view_and_the_user_is_logged_in : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_for_the_login_view_and_the_user_is_logged_in : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -129,8 +129,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_to_login_with_a_return_url_and_authentication_is_successful : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_to_login_with_a_return_url_and_authentication_is_successful : specification_for_users_controller
   {
     static ActionResult result;
     static string username = "TestUser";
@@ -161,8 +161,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       result.IsARedirectAnd().Url.ShouldEqual(returnUrl);
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_to_login_without_a_return_url_and_authentication_is_successful : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_to_login_without_a_return_url_and_authentication_is_successful : specification_for_users_controller
   {
     static ActionResult result;
     static string username = "TestUser";
@@ -193,8 +193,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_to_login_and_authentication_is_unsuccessful : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_to_login_and_authentication_is_unsuccessful : specification_for_users_controller
   {
     static ActionResult result;
     static string username = "TestUser";
@@ -225,8 +225,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_for_the_login_status_view_and_the_user_is_not_logged_in : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_for_the_login_status_view_and_the_user_is_not_logged_in : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -249,8 +249,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_for_the_login_status_view_and_the_user_is_logged_in : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_for_the_login_status_view_and_the_user_is_logged_in : specification_for_users_controller
   {
     static ActionResult result;
     static string username = "TestUser";
@@ -276,8 +276,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_to_logout : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_to_logout : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -294,8 +294,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_user_controller_is_asked_for_the_login_sidebar_gadget : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_user_controller_is_asked_for_the_login_sidebar_gadget : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -310,8 +310,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       (result.IsAPartialViewAnd().ViewData.Model is LoginViewModel).ShouldBeTrue();
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_for_the_signup_view : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_for_the_signup_view : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -326,8 +326,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       (result.IsAViewAnd().ViewData.Model is SignUpViewModel).ShouldBeTrue();
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_and_the_viewModel_is_invalid : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_and_the_viewModel_is_invalid : specification_for_users_controller
   {
     static ActionResult result;
     static SignUpViewModel viewModel;
@@ -356,8 +356,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_with_duplicate_username : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_with_duplicate_username : specification_for_users_controller
   {
     static ActionResult result;
     static SignUpViewModel viewModel;
@@ -388,8 +388,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_with_duplicate_email : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_with_duplicate_email : specification_for_users_controller
   {
     static ActionResult result;
     static SignUpViewModel viewModel;
@@ -420,8 +420,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_with_valid_info : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_with_valid_info : specification_for_users_controller
   {
     static ActionResult result;
     static SignUpViewModel viewModel;
@@ -464,8 +464,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_and_the_captcha_is_invalid : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_to_sign_up_a_new_user_and_the_captcha_is_invalid : specification_for_users_controller
   {
     static ActionResult result;
     static SignUpViewModel viewModel;
@@ -495,8 +495,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_for_the_unapproved_users_and_there_are_none : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_for_the_unapproved_users_and_there_are_none : specification_for_users_controller
   {
     static ActionResult result;
     static IList<User> users;
@@ -518,8 +518,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_for_the_unapproved_users_view : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_for_the_unapproved_users_view : specification_for_users_controller
   {
     static ActionResult result;
     static IList<User> users;
@@ -545,8 +545,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
-  [Subject(typeof(UserController))]
-  public class when_the_user_controller_is_asked_to_approve_users : specification_for_user_controller
+  [Subject(typeof(UsersController))]
+  public class when_the_user_controller_is_asked_to_approve_users : specification_for_users_controller
   {
     static ActionResult result;
     static IList<User> users;
@@ -569,8 +569,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
 
     It should_redirect_to_the_unapproved_view = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("User");
-      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Unapproved");
+      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
+      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("unapproved");
     };
 
     It should_set_the_tempdata_message = () =>

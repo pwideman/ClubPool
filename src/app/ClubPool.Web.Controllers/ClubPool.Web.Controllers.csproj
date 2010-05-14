@@ -96,7 +96,7 @@
     <Compile Include="Attributes\ConfigRescueAttribute.cs" />
     <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
-    <Compile Include="User\ViewModels\UnapprovedViewModel.cs" />
+    <Compile Include="Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />
     <Compile Include="Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
@@ -109,9 +109,9 @@
     <Compile Include="SidebarGadgetBase.cs" />
     <Compile Include="SidebarGadgetCollection.cs" />
     <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
-    <Compile Include="User\ViewModels\LoginStatusViewModel.cs" />
+    <Compile Include="Users\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Home\ViewModels\IndexViewModel.cs" />
-    <Compile Include="User\ViewModels\LoginViewModel.cs" />
+    <Compile Include="Users\ViewModels\LoginViewModel.cs" />
     <Compile Include="ControllerEnums.cs" />
     <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Home\HomeController.cs" />
@@ -120,9 +120,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRegistrar.cs" />
-    <Compile Include="User\UserController.cs" />
-    <Compile Include="User\ViewModels\ResetPasswordViewModel.cs" />
-    <Compile Include="User\ViewModels\SignUpViewModel.cs" />
+    <Compile Include="Users\UsersController.cs" />
+    <Compile Include="Users\ViewModels\ResetPasswordViewModel.cs" />
+    <Compile Include="Users\ViewModels\SignUpViewModel.cs" />
     <Compile Include="ValidatableViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

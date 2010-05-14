@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="ClubPool.Web.Views.AspxViewPageBase<ClubPool.Web.Controllers.User.ViewModels.SignUpViewModel>" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="ClubPool.Web.Views.AspxViewPageBase<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>" %>
 <%@ Import Namespace="ClubPool.Web.Controls.Captcha" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
@@ -17,7 +17,7 @@
       <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) {
            Html.RenderPartial("FormError");
          } %>
-      <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.SignUp())%>">
+      <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UsersController>(c => c.SignUp())%>">
         <fieldset>
           <%= Html.AntiForgeryToken() %>
           <%= Html.HiddenFor(m => m.PreviousUsername) %>
@@ -77,7 +77,7 @@
           </div>
         </fieldset>
       </form>
-      <%= Html.ClientSideValidation<ClubPool.Web.Controllers.User.ViewModels.SignUpViewModel>() %>
+      <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>() %>
     </div>
   </div>
   

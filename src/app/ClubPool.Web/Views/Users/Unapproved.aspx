@@ -1,10 +1,10 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="ClubPool.Web.Views.AspxViewPageBase<ClubPool.Web.Controllers.User.ViewModels.UnapprovedViewModel>" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="ClubPool.Web.Views.AspxViewPageBase<ClubPool.Web.Controllers.Users.ViewModels.UnapprovedViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <h4>Users Awaiting Approval</h4>
   <% if (Model.UnapprovedUsers.Count() > 0) { %>
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
-  <form method="post" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UserController>(c => c.Approve(null))%>">
+  <form method="post" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UsersController>(c => c.Approve(null))%>">
     <%= Html.AntiForgeryToken() %>
     <table>
       <thead>

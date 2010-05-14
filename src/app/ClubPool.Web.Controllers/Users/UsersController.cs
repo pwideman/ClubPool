@@ -14,7 +14,7 @@ using xVal.ServerSide;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
-using ClubPool.Web.Controllers.User.ViewModels;
+using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
@@ -25,19 +25,19 @@ using ClubPool.Web.Controllers.Attributes;
 
 namespace ClubPool.Web.Controllers
 {
-  public class UserController : BaseController
+  public class UsersController : BaseController
   {
     protected IAuthenticationService authenticationService;
     protected IMembershipService membershipService;
     protected IRoleService roleService;
     protected IEmailService emailService;
-    protected ILinqRepository<Core.User> userRepository;
+    protected ILinqRepository<User> userRepository;
 
-    public UserController(IAuthenticationService authSvc, 
+    public UsersController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
       IRoleService roleSvc,
       IEmailService emailSvc,
-      ILinqRepository<Core.User> userRepo)
+      ILinqRepository<User> userRepo)
     {
 
       Check.Require(null != authSvc, "authSvc cannot be null");
@@ -160,7 +160,7 @@ namespace ClubPool.Web.Controllers
       return View("SignUpComplete");
     }
 
-    protected void SendNewUserAwaitingApprovalEmail(Core.User newUser) {
+    protected void SendNewUserAwaitingApprovalEmail(User newUser) {
       var adminUsernames = roleService.GetUsersInRole(Core.Roles.Administrators);
       if (adminUsernames.Length > 0) {
         var adminUsers = userRepository.GetAll().WithUsernames(adminUsernames);

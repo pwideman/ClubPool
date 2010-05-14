@@ -10,7 +10,7 @@ using xVal.Rules;
 
 using ClubPool.Framework.Validation;
 
-namespace ClubPool.Web.Controllers.User.ViewModels
+namespace ClubPool.Web.Controllers.Users.ViewModels
 {
   [Compare(Message="Must equal Password", 
     PrimaryPropertyName="ConfirmPassword", 

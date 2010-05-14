@@ -5,7 +5,7 @@ using System.Text;
 
 using ClubPool.Core;
 
-namespace ClubPool.Web.Controllers.User.ViewModels
+namespace ClubPool.Web.Controllers.Users.ViewModels
 {
   public class UnapprovedViewModel : FormViewModelBase
   {

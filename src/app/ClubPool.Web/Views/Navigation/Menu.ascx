@@ -4,7 +4,7 @@
 	<li>
 		<a href="/home">Home</a>
   </li>
-  <li><%= Html.ActionLink<ClubPool.Web.Controllers.UserController>(x => x.Login(string.Empty), "Login") %></li>
+  <li><%= Html.ActionLink<ClubPool.Web.Controllers.UsersController>(x => x.Login(string.Empty), "Login") %></li>
   <li><a href="#">League</a>
     <ul>
       <li><a href="/league/regulations">Regulations</a></li>

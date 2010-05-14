@@ -10,7 +10,7 @@ namespace ClubPool.Web.Controllers.Shared.SidebarGadgets
     public LoginSidebarGadget() {
       Name = "Login";
       var request = new PartialRequest();
-      request.SetAction<ClubPool.Web.Controllers.UserController>(c => c.LoginGadget());
+      request.SetAction<ClubPool.Web.Controllers.UsersController>(c => c.LoginGadget());
       Action = request;
     }
 
