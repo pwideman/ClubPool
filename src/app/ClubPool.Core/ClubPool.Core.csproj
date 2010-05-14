@@ -67,8 +67,6 @@
     </Compile>
     <Compile Include="Identity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\PlayerQueries.cs" />
-    <Compile Include="Player.cs" />
     <Compile Include="Queries\RoleQueries.cs" />
     <Compile Include="Queries\UserQueries.cs" />
     <Compile Include="Role.cs" />
