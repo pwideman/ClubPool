@@ -19,9 +19,9 @@ namespace ClubPool.Web.Controllers
   {
     protected IRoleService roleService;
     protected IAuthenticationService authenticationService;
-    protected ILinqRepository<Core.User> userRepository;
+    protected ILinqRepository<User> userRepository;
 
-    public DashboardController(IRoleService roleSvc, IAuthenticationService authSvc, ILinqRepository<Core.User> userRepository) {
+    public DashboardController(IRoleService roleSvc, IAuthenticationService authSvc, ILinqRepository<User> userRepository) {
       Check.Require(null != roleSvc, "roleSvc cannot be null");
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
@@ -67,8 +67,8 @@ namespace ClubPool.Web.Controllers
       if (roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username)) {
         var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
         if (numberOfUnapprovedUsers > 0) {
-          alerts.Add(new Alert(string.Format("There are {0} users awaiting approval", numberOfUnapprovedUsers),
-            VirtualPathUtility.ToAbsolute("~/user/unapproved")));
+          var url = BuildUrlFromExpression<UsersController>(u => u.Unapproved(), null);
+          alerts.Add(new Alert(string.Format("There are {0} users awaiting approval", numberOfUnapprovedUsers), url));
         }
       }
       return PartialView(viewModel);
