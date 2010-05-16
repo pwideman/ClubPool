@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Routing;
 using System.Web.Mvc;
 using Microsoft.Web.Mvc;
-using Microsoft.Web.Mvc.Internal;
 
 namespace ClubPool.Web.Code
 {
@@ -26,17 +25,17 @@ namespace ClubPool.Web.Code
     /// <typeparam name="TController">The controller whose action you want to render</typeparam>
     /// <param name="helper">The page's HtmlHelper</param>
     /// <param name="action">The action method that you want to render</param>
-    public static void RenderActionForAreas<TController>(this HtmlHelper helper, Expression<Action<TController>> action) where TController : Controller {
-      var rvd = ExpressionHelper.GetRouteValuesFromExpression(action);
-      foreach (var entry in helper.ViewContext.RouteData.Values) {
-        if (!rvd.ContainsKey(entry.Key)) {
-          rvd.Add(entry.Key, entry.Value);
-        }
-      }
-      helper.RenderRoute(rvd);
-    }
+    //public static void RenderActionForAreas<TController>(this HtmlHelper helper, Expression<Action<TController>> action) where TController : Controller {
+    //  var rvd = Microsoft.Web.Mvc.Internal.ExpressionHelper.GetRouteValuesFromExpression(action);
+    //  foreach (var entry in helper.ViewContext.RouteData.Values) {
+    //    if (!rvd.ContainsKey(entry.Key)) {
+    //      rvd.Add(entry.Key, entry.Value);
+    //    }
+    //  }
+    //  helper.RenderRoute(rvd);
+    //}
 
-    public static string ContentImage(this HtmlHelper helper, string image, string alt) {
+    public static MvcHtmlString ContentImage(this HtmlHelper helper, string image, string alt) {
       return helper.Image("~/content/images/" + image, alt);
     }
 

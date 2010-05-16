@@ -6,7 +6,6 @@ using System.Text;
 using System.Collections.Generic;
 
 using MvcContrib;
-using MvcContrib.Attributes;
 using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
@@ -61,7 +60,7 @@ namespace ClubPool.Web.Controllers
       return this.RedirectToAction(x => x.Login(new LoginViewModel()));
     }
 
-    [AcceptGet]
+    [HttpGet]
     public ActionResult Login(string returnUrl) {
       if (authenticationService.IsLoggedIn()) {
         return this.RedirectToAction<HomeController>(c => c.Index());
@@ -71,7 +70,7 @@ namespace ClubPool.Web.Controllers
       }
     }
 
-    [AcceptPost]
+    [HttpPost]
     public ActionResult Login(LoginViewModel viewModel) {
       if (membershipService.ValidateUser(viewModel.Username, viewModel.Password)) {
         authenticationService.LogIn(viewModel.Username, viewModel.StayLoggedIn);
@@ -107,12 +106,12 @@ namespace ClubPool.Web.Controllers
       return View();
     }
 
-    [AcceptGet]
+    [HttpGet]
     public ActionResult ResetPassword() {
       return View();
     }
 
-    [AcceptPost]
+    [HttpPost]
     public ActionResult ResetPassword(ResetPasswordViewModel viewModel) {
       return View();
     }
@@ -122,12 +121,12 @@ namespace ClubPool.Web.Controllers
       return this.RedirectToAction<HomeController>(x => x.Index());
     }
 
-    [AcceptGet]
+    [HttpGet]
     public ActionResult SignUp() {
       return View(new SignUpViewModel());
     }
 
-    [AcceptPost]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     [Transaction]
     [CaptchaValidation("captcha")]
@@ -179,7 +178,7 @@ namespace ClubPool.Web.Controllers
       return View();
     }
 
-    [AcceptGet]
+    [HttpGet]
     [Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
@@ -188,7 +187,7 @@ namespace ClubPool.Web.Controllers
       return View(viewModel);
     }
 
-    [AcceptPost]
+    [HttpPost]
     [Transaction]
     [ValidateAntiForgeryToken]
     [Authorize(Roles=Core.Roles.Administrators)]

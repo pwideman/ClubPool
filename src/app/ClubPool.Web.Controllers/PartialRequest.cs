@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.Web.Mvc.Internal;
 
 namespace ClubPool.Web.Controllers
 {
@@ -14,7 +13,7 @@ namespace ClubPool.Web.Controllers
     public RouteValueDictionary RouteValues { get; private set; }
 
     public void SetAction<TController>(Expression<Action<TController>> action) where TController : Controller {
-      RouteValues = ExpressionHelper.GetRouteValuesFromExpression(action);
+      RouteValues = Microsoft.Web.Mvc.Internal.ExpressionHelper.GetRouteValuesFromExpression(action);
     }
 
     public void Invoke(ControllerContext context) {
