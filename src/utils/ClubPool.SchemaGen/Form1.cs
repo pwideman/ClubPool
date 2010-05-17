@@ -27,7 +27,7 @@ namespace ClubPool.SchemaGen
 
     private void button1_Click(object sender, EventArgs e) {
       try {
-        var mappingAssemblies = new string[] { "ClubPool.Data" };
+        var mappingAssemblies = new string[] { "ClubPool.Data.dll" };
         output("Creating NH configuration...");
         var configuration = NHibernateSession.Init(new SimpleSessionStorage(), mappingAssemblies,
                                new AutoPersistenceModelGenerator().Generate(),

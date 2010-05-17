@@ -10914,6 +10914,13 @@
             <param name="path">Lambda expression</param>
             <returns>criteria instance</returns>
         </member>
+        <member name="M:NHibernate.IQueryOver`2.OrderByAlias(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+            <summary>
+            Add order for an aliased projection expressed as a lambda expression
+            </summary>
+            <param name="path">Lambda expression</param>
+            <returns>criteria instance</returns>
+        </member>
         <member name="M:NHibernate.IQueryOver`2.ThenBy(System.Linq.Expressions.Expression{System.Func{`1,System.Object}})">
             <summary>
             Add order expressed as a lambda expression
@@ -10928,9 +10935,21 @@
             <param name="path">Lambda expression</param>
             <returns>criteria instance</returns>
         </member>
+        <member name="M:NHibernate.IQueryOver`2.ThenByAlias(System.Linq.Expressions.Expression{System.Func{System.Object}})">
+            <summary>
+            Add order for an aliased projection expressed as a lambda expression
+            </summary>
+            <param name="path">Lambda expression</param>
+            <returns>criteria instance</returns>
+        </member>
         <member name="M:NHibernate.IQueryOver`2.ClearOrders">
             <summary>
             Clear all orders from the query.
+            </summary>
+        </member>
+        <member name="M:NHibernate.IQueryOver`2.TransformUsing(NHibernate.Transform.IResultTransformer)">
+            <summary>
+            Transform the results using the supplied IResultTransformer
             </summary>
         </member>
         <member name="M:NHibernate.IQueryOver`2.Skip(System.Int32)">
@@ -26176,6 +26195,11 @@
             If the member is referenced from a null valued object, then the container is treated as an alias.</param>
             <returns>The name of the member property</returns>
         </member>
+        <member name="M:NHibernate.Impl.ExpressionProcessor.FindPropertyExpression(System.Linq.Expressions.Expression)">
+            <summary>
+            Retrieves the name of the property from a member expression (without leading member access)
+            </summary>
+        </member>
         <member name="M:NHibernate.Impl.ExpressionProcessor.FindDetachedCriteria(System.Linq.Expressions.Expression)">
             <summary>
             Retrieves a detached criteria from an appropriate lambda expression
@@ -26215,12 +26239,13 @@
             <param name="orderDelegate">The appropriate order delegate (order direction)</param>
             <returns>NHibernate Order</returns>
         </member>
-        <member name="M:NHibernate.Impl.ExpressionProcessor.ProcessOrder(System.Linq.Expressions.LambdaExpression,System.Func{System.String,NHibernate.Criterion.Order})">
+        <member name="M:NHibernate.Impl.ExpressionProcessor.ProcessOrder(System.Linq.Expressions.LambdaExpression,System.Func{System.String,NHibernate.Criterion.Order},System.Boolean)">
             <summary>
             Convert a lambda expression to NHibernate Order
             </summary>
             <param name="expression">The lambda expression to convert</param>
             <param name="orderDelegate">The appropriate order delegate (order direction)</param>
+            <param name="isAlias">Indicates if the path is an aliased projection</param>
             <returns>NHibernate Order</returns>
         </member>
         <member name="M:NHibernate.Impl.ExpressionProcessor.ProcessSubquery``1(NHibernate.Impl.LambdaSubqueryType,System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
@@ -34541,6 +34566,11 @@
             how that provider wants our parameters formatted.
             </remarks>
             <returns>A provider-neutral version of the CommandText</returns>
+        </member>
+        <member name="M:NHibernate.SqlCommand.SqlString.Copy">
+            <summary>
+            Make a copy of the SqlString, with new parameter references (Placeholders)
+            </summary>
         </member>
         <member name="M:NHibernate.SqlCommand.SqlString.SubstringStartingWithLast(System.String)">
             <summary>
