@@ -1,31 +1,32 @@
-<%@ Control Language="C#" Inherits="ClubPool.Web.Views.AspxViewUserControlBase<ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel>" %>
 <fieldset>
-  <% if (!string.IsNullOrEmpty(ViewModel.ErrorMessage)) { 
+  <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) { 
        Html.RenderPartial("FormError");
      } %>
-  <%= this.Hidden(m => m.ReturnUrl) %>
+  <%= Html.HiddenFor(m => m.ReturnUrl) %>
   <div class="formrow">
     <label for="Username" accesskey="u">Username:</label>
     <div class="formInput">
-      <%= this.TextBox(m => m.Username).Class("required") %>
+      <%= Html.TextBoxFor(m => m.Username, new { @class="required"}) %>
     </div>
   </div>
   <div class="formrow">
     <label for="Password" accesskey="p">Password:</label>
     <div class="formInput">
-      <%= this.Password(m => m.Password).Class("required") %>
+      <%= Html.PasswordFor(m => m.Password, new { @class = "required" })%>
     </div>
   </div>
   <div class="formrowspan">
-    <%= this.CheckBox(m => m.StayLoggedIn).LabelAfter("Stay logged in") %>
+    <%= Html.CheckBoxFor(m => m.StayLoggedIn) %>
+    <%= Html.Label("Stay logged in") %>
   </div>
   <div class="submitrow">
     <button type="submit">Login</button>
   </div>
   <div class="formrowspan">
-    <%= Html.ActionLinkForAreas<ClubPool.Web.Controllers.UsersController>(c => c.AccountHelp(), "Can't access your account?") %>
+    <%= Html.ActionLink<ClubPool.Web.Controllers.UsersController>(c => c.AccountHelp(), "Can't access your account?") %>
   </div>
   <div class="formrowspan">
-    <%= Html.ActionLinkForAreas<ClubPool.Web.Controllers.UsersController>(c => c.SignUp(), "Not a member? Sign up here") %>
+    <%= Html.ActionLink<ClubPool.Web.Controllers.UsersController>(c => c.SignUp(), "Not a member? Sign up here") %>
   </div>
 </fieldset>

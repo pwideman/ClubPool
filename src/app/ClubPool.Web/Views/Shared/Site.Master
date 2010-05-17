@@ -31,10 +31,10 @@
     <div id="header">
       <%= Html.ContentImage("HeaderLogoHarlow.png", "Logo") %>
       <div class="loginStatusPanel">
-        <% Html.RenderActionForAreas<ClubPool.Web.Controllers.UsersController>(c => c.LoginStatus()); %>
+        <% Html.RenderAction<ClubPool.Web.Controllers.UsersController>(c => c.LoginStatus()); %>
       </div>
       <div id="menucontainer">
-        <% Html.RenderActionForAreas<ClubPool.Web.Controllers.NavigationController>(c => c.Menu()); %>
+        <% Html.RenderAction<ClubPool.Web.Controllers.NavigationController>(c => c.Menu()); %>
       </div>
     </div>
     <div id="container">

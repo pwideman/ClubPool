@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="ClubPool.Web.Views.AspxViewPageBase<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>" %>
+<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>" %>
 <%@ Import Namespace="ClubPool.Web.Controls.Captcha" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
@@ -17,47 +17,47 @@
       <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) {
            Html.RenderPartial("FormError");
          } %>
-      <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UsersController>(c => c.SignUp())%>">
+      <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.UsersController>(c => c.SignUp())%>">
         <fieldset>
           <%= Html.AntiForgeryToken() %>
           <%= Html.HiddenFor(m => m.PreviousUsername) %>
           <div class="formrow">
             <label for="Username" accesskey="u">Username:</label>
             <div class="formInput">
-              <%= this.TextBox(m => m.Username) %>
+              <%= Html.TextBoxFor(m => m.Username) %>
               <%= Html.ValidationMessageFor(m => m.Username) %>
             </div>
           </div>
           <div class="formrow">
             <label for="Password" accesskey="p">Password:</label>
             <div class="formInput">
-              <%= this.Password(m => m.Password) %>
+              <%= Html.PasswordFor(m => m.Password) %>
               <%= Html.ValidationMessageFor(m => m.Password) %>
             </div>
           </div>
           <div class="formrow">
             <label for="ConfirmPassword" accesskey="c">Confirm password:</label>
             <div class="formInput">
-              <%= this.Password(m => m.ConfirmPassword) %>
+              <%= Html.PasswordFor(m => m.ConfirmPassword)%>
               <%= Html.ValidationMessageFor(m => m.ConfirmPassword) %>
             </div>
           </div>
           <div class="formrow">
             <label for="Email" accesskey="e">Email address:</label>
             <div class="formInput">
-              <%= this.TextBox(m => m.Email) %>
+              <%= Html.TextBoxFor(m => m.Email)%>
               <%= Html.ValidationMessageFor(m => m.Email) %>
             </div>
           </div>
           <div class="formrow">
             <label for="FirstName">Name:</label>
             <div class="formInput">
-              <%= this.TextBox(m => m.FirstName).Class("short") %>
+              <%= Html.TextBoxFor(m => m.FirstName, new { @class = "short" })%>
               <label for="FirstName">First</label>
               <%= Html.ValidationMessageFor(m => m.FirstName) %>
             </div>
             <div class="formInput">
-              <%= this.TextBox(m => m.LastName).Class("short") %>
+              <%= Html.TextBoxFor(m => m.LastName, new { @class = "short" })%>
               <label for="LastName">Last</label>
               <%= Html.ValidationMessageFor(m => m.LastName) %>
             </div>

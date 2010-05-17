@@ -5,7 +5,7 @@
     <div class="formTitle">Login</div>
     <div class="formContent corner">
       <div class="spacer">&nbsp;</div>
-      <form method="post" id="loginForm" class="loginForm normal" action="<%= Html.BuildUrlFromExpressionForAreas<ClubPool.Web.Controllers.UsersController>(c => c.Login(string.Empty))%>">
+      <form method="post" id="loginForm" class="loginForm normal" action="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.UsersController>(c => c.Login(string.Empty))%>">
         <% Html.RenderPartial("LoginControl"); %>
       </form>
     </div>

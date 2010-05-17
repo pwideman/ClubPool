@@ -61,6 +61,7 @@ namespace ClubPool.Web
 
       InitializeServiceLocator();
 
+      AreaRegistration.RegisterAllAreas();
       RouteRegistrar.RegisterRoutesTo(RouteTable.Routes);
     }
 
