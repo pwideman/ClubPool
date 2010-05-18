@@ -1,5 +1,6 @@
 <%@ Master Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewMasterPage" %>
 <%@ Import Namespace="ClubPool.Web.Controllers.Shared.SidebarGadgets" %>
+<%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -31,10 +32,10 @@
     <div id="header">
       <%= Html.ContentImage("HeaderLogoHarlow.png", "Logo") %>
       <div class="loginStatusPanel">
-        <% Html.RenderAction<ClubPool.Web.Controllers.UsersController>(c => c.LoginStatus()); %>
+        <% Html.RenderAction<ClubPool.Web.Controllers.Users.UsersController>(c => c.LoginStatus()); %>
       </div>
       <div id="menucontainer">
-        <% Html.RenderAction<ClubPool.Web.Controllers.NavigationController>(c => c.Menu()); %>
+        <% Html.RenderAction<ClubPool.Web.Controllers.Navigation.NavigationController>(c => c.Menu()); %>
       </div>
     </div>
     <div id="container">
@@ -42,8 +43,9 @@
         <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server" />
       </div>
       <%
-      if (ViewData.Contains<SidebarGadgetCollection>()) {
-        var sidebarGadgetCollection = ViewData.Get<SidebarGadgetCollection>();
+      if (ViewData.ContainsKey(GlobalViewDataProperty.SidebarGadgetCollection)) {
+        SidebarGadgetCollection sidebarGadgetCollection =
+          ViewData[GlobalViewDataProperty.SidebarGadgetCollection] as SidebarGadgetCollection;
         if (sidebarGadgetCollection.Count > 0) { %>
           <div class="column sidebar-container">
             <div class="sidebar sidebar-corner">

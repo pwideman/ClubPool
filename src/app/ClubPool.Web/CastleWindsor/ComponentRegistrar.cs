@@ -25,24 +25,10 @@ namespace ClubPool.Web.CastleWindsor
 
       AddGenericRepositoriesTo(container);
       AddCustomRepositoriesTo(container);
-      //AddWebSecurityServicesTo(container);
       AddApplicationServicesTo(container);
 
       container.AddComponent("validator",
           typeof(IValidator), typeof(Validator));
-      //container.AddComponent("ActionInvoker",
-      //  typeof(IActionInvoker), typeof(WindsorActionInvoker));
-    }
-
-    private static void AddWebSecurityServicesTo(IWindsorContainer container) {
-      // add the MembershipProvider for the application,
-      // which will be setup in web.config.
-      container.Register(
-        Component.For<MembershipProvider>()
-        .Instance(Membership.Provider));
-      container.Register(
-        Component.For<RoleProvider>()
-        .Instance(Roles.Provider));
     }
 
     private static void AddApplicationServicesTo(IWindsorContainer container) {

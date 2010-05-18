@@ -9,11 +9,11 @@ using System.Security.Principal;
 using System.Web.Routing;
 
 using Microsoft.Web.Mvc;
-using MvcContrib;
 using Machine.Specifications;
 using Rhino.Mocks;
 
 using ClubPool.Web.Controllers;
+using ClubPool.Web.Controllers.Home;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 using ClubPool.ApplicationServices.Authentication.Contracts;
@@ -48,12 +48,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_add_sidebar_gadget_collection_to_the_view_data = () => {
       var viewResult = result as ViewResult;
-      viewResult.ViewData.Contains<SidebarGadgetCollection>().ShouldBeTrue();
+      viewResult.ViewData.ContainsKey(GlobalViewDataProperty.SidebarGadgetCollection).ShouldBeTrue();
     };
 
     It should_add_login_gadget_to_sidebar_gadget_collection = () => {
       var viewResult = result as ViewResult;
-      var sidebarCollection = viewResult.ViewData.Get<SidebarGadgetCollection>();
+      var sidebarCollection = viewResult.ViewData[GlobalViewDataProperty.SidebarGadgetCollection] as SidebarGadgetCollection;
       sidebarCollection.Count.ShouldEqual(1);
       var loginViewData = sidebarCollection["Login"];
       loginViewData.Name.ShouldEqual("Login");
@@ -73,7 +73,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_not_add_login_gadget_to_sidebar_gadget_collection = () => {
       var viewResult = result as ViewResult;
-      var sidebarCollection = viewResult.ViewData.Get<SidebarGadgetCollection>();
+      var sidebarCollection = viewResult.ViewData[GlobalViewDataProperty.SidebarGadgetCollection] as SidebarGadgetCollection;
       sidebarCollection.Count.ShouldEqual(0);
     };
   }

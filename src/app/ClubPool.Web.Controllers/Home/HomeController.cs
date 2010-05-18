@@ -12,7 +12,7 @@ using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.Home
 {
   public class HomeController : BaseController
   {
@@ -27,7 +27,7 @@ namespace ClubPool.Web.Controllers
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
-      ViewData[sidebarGadgetCollection.GetType().FullName] = sidebarGadgetCollection;
+      ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
     }
 

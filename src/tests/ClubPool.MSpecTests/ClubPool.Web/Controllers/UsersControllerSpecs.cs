@@ -15,7 +15,7 @@ using ClubPool.ApplicationServices.Authentication;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Core;
-using ClubPool.Web.Controllers;
+using ClubPool.Web.Controllers.Users;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
 

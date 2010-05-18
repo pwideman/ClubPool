@@ -2,9 +2,10 @@
 <div class="sidebarGadgetContainer sidebar-corner">
   <div class="sidebarGadgetTitle">Login</div>
   <div class="sidebarGadgetContent sidebar-corner">
-    <form method="post" id="sidebarLoginForm" class="sidebarLoginForm sidebar" action="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.UsersController>(c => c.Login(string.Empty))%>">
+    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Login(string.Empty),
+          FormMethod.Post, new { @class = "sidebarLoginForm sidebar" })) { %>
       <% Html.RenderPartial("LoginControl"); %>
-    </form>
+    <% } %>
     <script type="text/javascript">
       $(document).ready(function() {
         $("#sidebarLoginForm").validate({

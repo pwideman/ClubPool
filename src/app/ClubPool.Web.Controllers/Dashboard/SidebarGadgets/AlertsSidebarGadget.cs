@@ -10,7 +10,7 @@ namespace ClubPool.Web.Controllers.Dashboard.SidebarGadgets
     public AlertsSidebarGadget() {
       Name = "Alerts";
       var request = new PartialRequest();
-      request.SetAction<ClubPool.Web.Controllers.DashboardController>(c => c.AlertsGadget());
+      request.SetAction<ClubPool.Web.Controllers.Dashboard.DashboardController>(c => c.AlertsGadget());
       Action = request;
     }
   }

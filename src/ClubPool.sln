@@ -35,6 +35,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Testing", "tests\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Web.Controls", "app\ClubPool.Web.Controls\ClubPool.Web.Controls.csproj", "{9A9C7C70-2E70-4A74-86F6-2C11F995510D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{34FBAA11-4039-4AD7-A08F-CB9787367A64}"
+	ProjectSection(SolutionItems) = preProject
+		TodoList.txt = TodoList.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True

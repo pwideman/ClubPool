@@ -5,9 +5,10 @@
     <div class="formTitle">Login</div>
     <div class="formContent corner">
       <div class="spacer">&nbsp;</div>
-      <form method="post" id="loginForm" class="loginForm normal" action="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.UsersController>(c => c.Login(string.Empty))%>">
+      <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Login(string.Empty), 
+           FormMethod.Post, new { @class = "loginForm normal" })) { %>
         <% Html.RenderPartial("LoginControl"); %>
-      </form>
+      <% } %>
     </div>
   </div>
 </asp:Content>

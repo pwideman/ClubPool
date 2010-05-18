@@ -4,7 +4,7 @@
 <strong>I cannot access my account</strong>
 <p>We're sorry for the inconvenience. Choose one of the options below:</p>
 <ul>
-  <li><%= Html.ActionLink<UsersController>(c => c.ResetPassword(), "I forgot my password") %></li>
+  <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.ResetPassword(), "I forgot my password")%></li>
 </ul>
 </asp:Content>
 

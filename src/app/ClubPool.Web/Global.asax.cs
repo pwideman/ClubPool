@@ -53,7 +53,7 @@ namespace ClubPool.Web
       NHibernate.Validator.Cfg.Environment.SharedEngineProvider = provider;
       var cfg = new FluentConfiguration();
       cfg.Register(typeof(ClubPool.Core.User).Assembly.ValidationDefinitions())
-         .Register(typeof(HomeController).Assembly.ValidationDefinitions())
+         .Register(typeof(ClubPool.Web.Controllers.Home.HomeController).Assembly.ValidationDefinitions())
          .SetDefaultValidatorMode(NHibernate.Validator.Engine.ValidatorMode.OverrideAttributeWithExternal);
       NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine().Configure(cfg);
       // xVal & the NHValidatorRulesProvider

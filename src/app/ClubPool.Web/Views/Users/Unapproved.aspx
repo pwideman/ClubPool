@@ -4,7 +4,7 @@
   <h4>Users Awaiting Approval</h4>
   <% if (Model.UnapprovedUsers.Count() > 0) { %>
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
-  <form method="post" action="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.UsersController>(c => c.Approve(null))%>">
+  <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Approve(null))) { %>
     <%= Html.AntiForgeryToken() %>
     <table>
       <thead>
@@ -29,7 +29,7 @@
         <% } %>
       </tbody>
     </table>
-  </form>
+  <% } %>
   <%} else { %>
   <p>There are no users awaiting approval.</p>
   <% } %>

@@ -17,58 +17,58 @@
       <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) {
            Html.RenderPartial("FormError");
          } %>
-      <form method="post" id="signupForm" class="signupForm normal" action="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.UsersController>(c => c.SignUp())%>">
+      <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), FormMethod.Post, new { @class = "signupForm normal" })) { %>
         <fieldset>
-          <%= Html.AntiForgeryToken() %>
-          <%= Html.HiddenFor(m => m.PreviousUsername) %>
+          <%= Html.AntiForgeryToken()%>
+          <%= Html.HiddenFor(m => m.PreviousUsername)%>
           <div class="formrow">
-            <label for="Username" accesskey="u">Username:</label>
+            <%= Html.LabelFor(m => m.Username)%>
             <div class="formInput">
-              <%= Html.TextBoxFor(m => m.Username) %>
-              <%= Html.ValidationMessageFor(m => m.Username) %>
+              <%= Html.TextBoxFor(m => m.Username)%>
+              <%= Html.ValidationMessageFor(m => m.Username)%>
             </div>
           </div>
           <div class="formrow">
-            <label for="Password" accesskey="p">Password:</label>
+            <%= Html.LabelFor(m => m.Password)%>
             <div class="formInput">
-              <%= Html.PasswordFor(m => m.Password) %>
-              <%= Html.ValidationMessageFor(m => m.Password) %>
+              <%= Html.PasswordFor(m => m.Password)%>
+              <%= Html.ValidationMessageFor(m => m.Password)%>
             </div>
           </div>
           <div class="formrow">
-            <label for="ConfirmPassword" accesskey="c">Confirm password:</label>
+            <%= Html.LabelFor(m => m.ConfirmPassword)%>
             <div class="formInput">
               <%= Html.PasswordFor(m => m.ConfirmPassword)%>
-              <%= Html.ValidationMessageFor(m => m.ConfirmPassword) %>
+              <%= Html.ValidationMessageFor(m => m.ConfirmPassword)%>
             </div>
           </div>
           <div class="formrow">
-            <label for="Email" accesskey="e">Email address:</label>
+            <%= Html.LabelFor(m => m.Email)%>
             <div class="formInput">
               <%= Html.TextBoxFor(m => m.Email)%>
-              <%= Html.ValidationMessageFor(m => m.Email) %>
+              <%= Html.ValidationMessageFor(m => m.Email)%>
             </div>
           </div>
           <div class="formrow">
             <label for="FirstName">Name:</label>
             <div class="formInput">
               <%= Html.TextBoxFor(m => m.FirstName, new { @class = "short" })%>
-              <label for="FirstName">First</label>
-              <%= Html.ValidationMessageFor(m => m.FirstName) %>
+              <%= Html.LabelFor(m => m.FirstName)%>
+              <%= Html.ValidationMessageFor(m => m.FirstName)%>
             </div>
             <div class="formInput">
               <%= Html.TextBoxFor(m => m.LastName, new { @class = "short" })%>
-              <label for="LastName">Last</label>
-              <%= Html.ValidationMessageFor(m => m.LastName) %>
+              <%= Html.LabelFor(m => m.LastName)%>
+              <%= Html.ValidationMessageFor(m => m.LastName)%>
             </div>
           </div>
           <div class="spacer">&nbsp;</div>
           <div class="formrow">
-            <label><%= Html.CaptchaImage(50, 180) %></label>
+            <label><%= Html.CaptchaImage(50, 180)%></label>
             <div class="formInput">
               <label for="captcha">Enter the text from the image below:</label><br />
-              <%= Html.CaptchaTextBox("captcha") %>
-              <%= Html.ValidationMessage("captcha") %>
+              <%= Html.CaptchaTextBox("captcha")%>
+              <%= Html.ValidationMessage("captcha")%>
             </div>
           </div>
           <div class="spacer">&nbsp;</div>
@@ -76,7 +76,7 @@
             <button type="submit">Sign Up</button>
           </div>
         </fieldset>
-      </form>
+      <% } %>
       <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>() %>
     </div>
   </div>

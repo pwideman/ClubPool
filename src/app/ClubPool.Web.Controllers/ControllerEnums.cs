@@ -1,10 +1,8 @@
 ﻿namespace ClubPool.Web.Controllers
 {
-  public class ControllerEnums
-  {
-    public enum GlobalViewDataProperty
+    public class GlobalViewDataProperty
     {
-      PageMessage
+        public const string PageMessage = "PageMessage";
+        public const string SidebarGadgetCollection = "SidebarGadgetCollection";
     }
-  }
 }

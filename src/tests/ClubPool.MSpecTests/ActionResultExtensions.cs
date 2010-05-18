@@ -46,10 +46,5 @@ namespace ClubPool.MSpecTests
       return result.RouteValues["Action"].ToString();
     }
 
-    //public static NotFoundResult ShouldBeANotFoundResult(this ActionResult result) {
-    //  result.ShouldBeOfType(typeof(NotFoundResult));
-
-    //  return result as NotFoundResult;
-    //}
   }
 }

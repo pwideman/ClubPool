@@ -22,7 +22,7 @@ using ClubPool.Core.Queries;
 using ClubPool.Web.Controls.Captcha;
 using ClubPool.Web.Controllers.Attributes;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.Users
 {
   public class UsersController : BaseController
   {
@@ -54,7 +54,7 @@ namespace ClubPool.Web.Controllers
 
     public ActionResult Index() {
       if (authenticationService.IsLoggedIn()) {
-        return this.RedirectToAction<HomeController>(x => x.Index());
+        return this.RedirectToAction<Home.HomeController>(x => x.Index());
       }
 
       return this.RedirectToAction(x => x.Login(new LoginViewModel()));
@@ -63,7 +63,7 @@ namespace ClubPool.Web.Controllers
     [HttpGet]
     public ActionResult Login(string returnUrl) {
       if (authenticationService.IsLoggedIn()) {
-        return this.RedirectToAction<HomeController>(c => c.Index());
+        return this.RedirectToAction<Home.HomeController>(c => c.Index());
       }
       else {
         return View(new LoginViewModel() { ReturnUrl = returnUrl });
@@ -78,7 +78,7 @@ namespace ClubPool.Web.Controllers
           return this.Redirect(viewModel.ReturnUrl);
         }
         else {
-          return this.RedirectToAction<DashboardController>(x => x.Index());
+          return this.RedirectToAction<Dashboard.DashboardController>(x => x.Index());
         }
       }
       else {
@@ -118,7 +118,7 @@ namespace ClubPool.Web.Controllers
 
     public ActionResult Logout() {
       authenticationService.LogOut();
-      return this.RedirectToAction<HomeController>(x => x.Index());
+      return this.RedirectToAction<Home.HomeController>(x => x.Index());
     }
 
     [HttpGet]

@@ -10,7 +10,7 @@ using Machine.Specifications;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Core;
-using ClubPool.Web.Controllers;
+using ClubPool.Web.Controllers.Navigation;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers

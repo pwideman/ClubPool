@@ -9,7 +9,7 @@ using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.Navigation
 {
   public class NavigationController : BaseController
   {

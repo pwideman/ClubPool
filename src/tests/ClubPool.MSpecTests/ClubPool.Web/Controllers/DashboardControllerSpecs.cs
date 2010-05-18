@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Rhino.Mocks;
 using Machine.Specifications;
 
-using ClubPool.Web.Controllers;
+using ClubPool.Web.Controllers.Dashboard;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Membership.Contracts;

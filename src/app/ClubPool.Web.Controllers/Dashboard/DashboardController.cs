@@ -13,7 +13,7 @@ using ClubPool.Web.Controllers.Dashboard.ViewModels;
 using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
 using ClubPool.Framework.NHibernate;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Web.Controllers.Dashboard
 {
   public class DashboardController : BaseController
   {
@@ -36,7 +36,7 @@ namespace ClubPool.Web.Controllers
       var viewModel = new IndexViewModel();
       viewModel.UserIsAdmin = roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username);
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
-      ViewData[sidebarGadgetCollection.GetType().FullName] = sidebarGadgetCollection;
+      ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
     }
 
@@ -67,7 +67,7 @@ namespace ClubPool.Web.Controllers
       if (roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username)) {
         var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
         if (numberOfUnapprovedUsers > 0) {
-          var url = BuildUrlFromExpression<UsersController>(u => u.Unapproved(), null);
+          var url = BuildUrlFromExpression<Users.UsersController>(u => u.Unapproved(), null);
           alerts.Add(new Alert(string.Format("There are {0} users awaiting approval", numberOfUnapprovedUsers), url));
         }
       }
