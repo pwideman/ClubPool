@@ -88,10 +88,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Attributes\AuthorizeAttribute.cs" />
     <Compile Include="Attributes\ConfigRescueAttribute.cs" />
     <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
+    <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />
@@ -104,12 +104,10 @@
     <Compile Include="Shared\SidebarGadgets\LoginSidebarGadget.cs" />
     <Compile Include="SidebarGadgetBase.cs" />
     <Compile Include="SidebarGadgetCollection.cs" />
-    <Compile Include="Shared\ViewModels\MenuViewModel.cs" />
     <Compile Include="Users\ViewModels\LoginStatusViewModel.cs" />
     <Compile Include="Home\ViewModels\IndexViewModel.cs" />
     <Compile Include="Users\ViewModels\LoginViewModel.cs" />
     <Compile Include="ControllerEnums.cs" />
-    <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Home\HomeController.cs" />
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
@@ -138,6 +136,9 @@
       <Project>{9A9C7C70-2E70-4A74-86F6-2C11F995510D}</Project>
       <Name>ClubPool.Web.Controls</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shared\ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

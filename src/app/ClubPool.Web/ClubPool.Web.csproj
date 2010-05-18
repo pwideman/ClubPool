@@ -162,9 +162,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CastleWindsor\ComponentRegistrar.cs" />
-    <None Include="CastleWindsor\WindsorActionInvoker.cs" />
-    <None Include="CastleWindsor\WindsorControllerFactory.cs" />
-    <None Include="Code\AppHelper.cs" />
     <Compile Include="Code\HtmlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
