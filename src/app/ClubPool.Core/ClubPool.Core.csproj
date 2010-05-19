@@ -70,8 +70,10 @@
     <Compile Include="Queries\RoleQueries.cs" />
     <Compile Include="Queries\UserQueries.cs" />
     <Compile Include="Role.cs" />
+    <Compile Include="RoleDto.cs" />
     <Compile Include="Roles.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserDto.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
