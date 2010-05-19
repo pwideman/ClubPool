@@ -25,7 +25,7 @@
     if (Model.DisplayAdminMenu) { %>
   <li><a href="#">Admin</a>
     <ul>
-      <li><a href="/players">Players</a></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Index(null), "Users") %></li>
       <li><a href="/seasons">Seasons</a></li>
       <li><a href="/divisions">Divisions</a></li>
       <li><a href="/teams">Teams</a></li>

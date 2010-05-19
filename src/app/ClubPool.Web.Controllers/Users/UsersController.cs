@@ -52,18 +52,23 @@ namespace ClubPool.Web.Controllers.Users
       userRepository = userRepo;
     }
 
-    public ActionResult Index() {
-      if (authenticationService.IsLoggedIn()) {
-        return this.RedirectToAction<Home.HomeController>(x => x.Index());
-      }
-
-      return this.RedirectToAction(x => x.Login(new LoginViewModel()));
+    [Authorize(Roles=Core.Roles.Administrators)]
+    [Transaction]
+    public ActionResult Index(int? page) {
+      var index = Math.Max(page ?? 1, 1) - 1;
+      var users = userRepository.GetAll().Page(index, 10).ToList().Select(u => new UserDto(u)).ToArray();
+      return View(users);
     }
 
     [HttpGet]
     public ActionResult Login(string returnUrl) {
       if (authenticationService.IsLoggedIn()) {
-        return this.RedirectToAction<Home.HomeController>(c => c.Index());
+        if (null != returnUrl && !string.IsNullOrEmpty(returnUrl)) {
+          return Redirect(returnUrl);
+        }
+        else {
+          return this.RedirectToAction<Dashboard.DashboardController>(c => c.Index());
+        }
       }
       else {
         return View(new LoginViewModel() { ReturnUrl = returnUrl });
@@ -202,7 +207,17 @@ namespace ClubPool.Web.Controllers.Users
       return MvcContrib.ControllerExtensions.RedirectToAction(this, c => c.Unapproved());
     }
 
+    [Transaction]
+    [Authorize(Roles=Core.Roles.Administrators)]
+    public ActionResult View(int id) {
+      var user = new UserDto(userRepository.Get(id));
+      return View(user);
+    }
 
-
+    [HttpGet]
+    public ActionResult Edit(int id) {
+      var user = new UserDto(userRepository.Get(id));
+      return View(user);
+    }
   }
 }

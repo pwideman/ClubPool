@@ -43,40 +43,25 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(UsersController))]
-  public class when_user_controller_is_asked_for_the_default_view_and_user_is_not_logged_in : specification_for_users_controller
+  public class when_asked_for_the_default_view : specification_for_users_controller
   {
     static ActionResult result;
 
     Establish context = () => {
-      authenticationService.Stub(svc => svc.IsLoggedIn()).Return(false);
+      userRepository.Stub(r => r.GetAll()).Return(new List<User>() {
+        new User("user1", "user1", "User", "One", "user1@user.com"),
+        new User("user2", "user2", "User", "Two", "user2@user.com") }.AsQueryable());
     };
 
-    Because of = () => result = controller.Index();
+    Because of = () => result = controller.Index(null);
 
-    It should_ask_if_the_user_is_logged_in = () =>
-      authenticationService.AssertWasCalled(svc => svc.IsLoggedIn());
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
 
-    It should_redirect_to_the_login_action = () =>
-      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Login");
-  }
-
-  [Subject(typeof(UsersController))]
-  public class when_user_controller_is_asked_for_the_default_view_and_user_is_logged_in : specification_for_users_controller
-  {
-    static ActionResult result;
-
-    Establish context = () => {
-      authenticationService.Stub(svc => svc.IsLoggedIn()).Return(true);
-    };
-
-    Because of = () => result = controller.Index();
-
-    It should_ask_if_the_user_is_logged_in = () =>
-      authenticationService.AssertWasCalled(svc => svc.IsLoggedIn());
-
-    It should_redirect_to_the_login_action = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
-      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
+    It should_set_the_view_model_properties_correctly = () => {
+      var viewModel = result.IsAViewAnd().ViewData.Model as UserDto[];
+      viewModel.ShouldNotBeNull();
+      viewModel.Length.ShouldEqual(2);
     };
   }
 
@@ -110,7 +95,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(UsersController))]
-  public class when_user_controller_is_asked_for_the_login_view_and_the_user_is_logged_in : specification_for_users_controller
+  public class when_asked_for_the_login_view_and_the_user_is_logged_in : specification_for_users_controller
   {
     static ActionResult result;
 
@@ -124,7 +109,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       authenticationService.AssertWasCalled(s => s.IsLoggedIn());
 
     It should_redirect_to_home_index = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
+      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Dashboard");
       result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
     };
   }
