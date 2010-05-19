@@ -59,8 +59,6 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Authentication\ClubPoolPrincipal.cs" />
-    <Compile Include="Membership\AspNetMembershipService.cs" />
-    <Compile Include="Membership\AspNetRoleService.cs" />
     <Compile Include="Authentication\FormsAuthenticationService.cs" />
     <Compile Include="Authentication\Contracts\IAuthenticationService.cs" />
     <Compile Include="Membership\Contracts\IMembershipService.cs" />
