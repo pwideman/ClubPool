@@ -13,7 +13,7 @@ using ClubPool.Framework.Validation;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  [Compare(Message="Must equal Password", 
+  [Compare(Message="Passwords do not match", 
     PrimaryPropertyName="ConfirmPassword", 
     PropertyToCompare="Password",
     Operator=xVal.Rules.ComparisonRule.Operator.Equals)]
