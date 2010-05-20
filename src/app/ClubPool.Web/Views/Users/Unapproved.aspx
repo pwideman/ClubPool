@@ -6,7 +6,7 @@
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
   <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Approve(null))) { %>
     <%= Html.AntiForgeryToken() %>
-    <table>
+    <table style="width: 600px">
       <thead>
         <tr>
           <th>Name</th>
@@ -16,7 +16,8 @@
       </thead>
       <tfoot>
         <tr>
-          <td colspan="99" class="submit-row"><button type="submit">Approve</button></td>
+          <td colspan="2" />
+          <td align="center"><button type="submit">Approve</button></td>
         </tr>
       </tfoot>
       <tbody>

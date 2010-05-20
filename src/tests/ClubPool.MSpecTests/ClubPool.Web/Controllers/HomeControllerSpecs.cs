@@ -33,7 +33,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(HomeController))]
-  public class when_the_home_controller_is_asked_for_the_default_view_when_user_is_not_logged_in : specification_for_home_controller
+  public class when_asked_for_the_default_view_when_user_is_not_logged_in : specification_for_home_controller
   {
     static ActionResult result;
 
@@ -61,7 +61,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(HomeController))]
-  public class when_the_home_controller_is_asked_for_the_default_view_when_user_is_logged_in : specification_for_home_controller
+  public class when_asked_for_the_default_view_when_user_is_logged_in : specification_for_home_controller
   {
     static ActionResult result;
 

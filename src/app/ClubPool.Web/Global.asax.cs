@@ -15,6 +15,7 @@ using MvcContrib.Castle;
 using NHibernate.Cfg;
 using NHibernate.Validator.Cfg.Loquacious;
 using NHibernate.Validator.Event;
+using SharpArch.Core;
 using SharpArch.Data.NHibernate;
 using SharpArch.Web.NHibernate;
 using SharpArch.Web.Castle;
@@ -23,6 +24,9 @@ using SharpArch.Web.CommonValidator;
 using SharpArch.Web.ModelBinder;
 using log4net;
 
+using ClubPool.Core;
+using ClubPool.Core.Queries;
+using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Validation;
 using ClubPool.Web.Controllers;
 using ClubPool.Data.NHibernateMaps;
@@ -131,9 +135,11 @@ namespace ClubPool.Web
       // Create an Identity object
       FormsIdentity id = new FormsIdentity(authTicket);
 
+      var userRepository = SafeServiceLocator<ILinqRepository<User>>.GetService();
+      var roles = userRepository.FindOne(UserQueries.UserByUsername(id.Name))
+                                .Roles.Select(RoleQueries.SelectName).ToArray();
       // This principal will flow throughout the request.
-      ClubPoolPrincipal principal = new ClubPoolPrincipal(id, 
-        ServiceLocator.Current.GetInstance<ClubPool.ApplicationServices.Membership.Contracts.IRoleService>());
+      ClubPoolPrincipal principal = new ClubPoolPrincipal(id, roles);
       // Attach the new principal object to the current HttpContext object
       Context.User = principal;
     }

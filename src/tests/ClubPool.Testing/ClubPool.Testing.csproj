@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\..\tools\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -49,11 +52,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationServices\Authentication\AuthHelper.cs" />
     <Compile Include="ApplicationServices\Membership\PasswordHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Framework\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\app\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
+      <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
+      <Name>ClubPool.ApplicationServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

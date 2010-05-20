@@ -14,16 +14,16 @@ table
 
 thead {
   th {
-    color: @standard_blue;
-    border-bottom: 2px solid @standard_blue;
-    padding-bottom: 10px;
+    color: @dark_blue;
+    border-bottom: 2px solid @dark_blue;
+    padding: 0 12px 10px 12px;
     margin-bottom: 10px;
   }
 }
 
 tbody {
   td {
-    padding: 12px 20px;
+    padding: 8px 16px;
     text-align: center;
     border-bottom: 1px solid @light_blue;
   }
@@ -31,6 +31,14 @@ tbody {
     td {
       background-color: @light_blue;
     }
+  }
+}
+
+tfoot 
+{
+  td 
+  {
+    padding: 12px;
   }
 }
 
@@ -57,7 +65,7 @@ a:hover
 h1, h2, h3
 {
   font-weight: bold;
-  color: @standard_blue;
+  color: @dark_blue;
   margin: 20px 0px 20px 0px;
 }
 
@@ -74,6 +82,13 @@ h2
 H3
 {
   font-size: 200%;
+}
+
+H3.heading
+{
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 40px;
 }
 
 H4, h5
@@ -97,15 +112,23 @@ div.spacer
   clear: both;
 }
 
-.corner
+.corner(@radius: 12px)
 {
-  -moz-border-radius: 12px;
-  -webkit-border-radius: 12px;
-  border-radius: 12px;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
 }
 
 p.heading {
   padding: 10px 0px 20px 0px;
+}
+
+span.heading 
+{
+  font-weight: bold;
+  color: @standard_blue;
+  margin-bottom: 30px;
+  font-size: 200%;
 }
 
 /* rescue pages */
@@ -162,4 +185,25 @@ div.rescuediv
 {
   width: 100%;
   padding: 10px 20px;
+}
+
+div.blue-button 
+{
+  display: inline-block;
+  border: 2px solid @dark_blue;
+  background-color: @standard_blue;
+  padding: 10px;
+  .corner(6px);
+  color: @light_blue;
+
+  img {
+    vertical-align: middle;
+  }
+}
+
+div.blue-button:hover
+{
+  background-color: @light_blue;
+  border-color: @standard_blue;
+  color: @dark_blue;
 }

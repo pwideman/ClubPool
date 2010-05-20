@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Security.Principal;
 
-using ClubPool.ApplicationServices.Membership.Contracts;
 using SharpArch.Core;
 
 namespace ClubPool.ApplicationServices.Authentication
@@ -15,28 +11,29 @@ namespace ClubPool.ApplicationServices.Authentication
   /// </summary>
   public class ClubPoolPrincipal : IPrincipal
   {
-    IRoleService roleService;
-    IIdentity identity;
+    protected string[] roles;
 
     /// <summary>
     /// ClubPoolPrincipal
     /// </summary>
     /// <param name="id">This principal's identity</param>
     /// <param name="roleSvc">The role service</param>
-    public ClubPoolPrincipal(IIdentity id, IRoleService roleSvc) {
+    public ClubPoolPrincipal(IIdentity id, string[] roles) {
       Check.Require(null != id, "id cannot be null");
-      Check.Require(null != roleSvc, "roleSvc cannot be null");
 
-      identity = id;
-      roleService = roleSvc;
+      Identity = id;
+      this.roles = roles;
     }
 
-    public IIdentity Identity {
-      get { return identity; }
-    }
+    public IIdentity Identity { get; protected set; }
 
     public bool IsInRole(string role) {
-      return roleService.IsUserInRole(identity.Name, role);
+      if (null != roles && roles.Length > 0) {
+        return roles.Contains(role);
+      }
+      else {
+        return false;
+      }
     }
   }
 }

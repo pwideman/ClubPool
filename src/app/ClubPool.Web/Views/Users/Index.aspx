@@ -1,44 +1,37 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<ClubPool.Core.UserDto>>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<IPagination<ClubPool.Core.UserDto>>" %>
+<%@ Import Namespace="MvcContrib.UI.Pager"%>
+<%@ Import Namespace="MvcContrib.UI.Grid"%>
+<%@ Import Namespace="MvcContrib.Pagination"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-    <%= Html.ContentImage("users.png", "Users") %>
-    <h3 style="margin-bottom: 60px;">Users</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Username</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Approved</th>
-          <th>Roles</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-    <% foreach (var item in Model) { %>
-        <tr>
-          <td><%= Html.Encode(item.Id) %></td>
-          <td><%= Html.Encode(item.Username) %></td>
-          <td><%= Html.Encode(item.FullName) %></td>
-          <td><%= Html.Encode(item.Email) %></td>
-          <td><%= item.IsApproved ? "Yes" : "No" %></td>
-          <td>
-            <%= string.Join(", ", item.Roles) %>
-          </td>
-          <td>
-            <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Edit(item.Id)) %>">
-            <%= Html.ContentImage("edit.png", "Edit") %>
-            </a>
-            <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Delete(item.Id)) %>">
-              <%= Html.ContentImage("delete.png", "Delete") %>
-            </a>
-          </td>
-        </tr>
-    <% } %>
-      </tbody>
-    </table>
-    <p><%= Html.ActionLink("Create New", "Create") %></p>
+  <%= Html.ContentImage("users.png", "Users") %>
+  <h3 class="heading">Users</h3>
+  <div>
+    <div style="display:inline-block; clear: both;">
+	    <%= Html.Grid(Model).Columns(column => {
+            column.For(x => x.Id);
+     		    column.For(x => x.Username);
+     		    column.For(x => x.FullName).Named("Name");
+            column.For(x => x.Email);
+            column.For(x => x.IsApproved ? "Yes" : "No").Named("Approved");
+            column.For(x => string.Join(", ", x.Roles)).Named("Roles");
+            column.For(x => @"<a href=""" +
+              Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Edit(x.Id)) +
+              @""">" + Html.ContentImage("edit.png", "Edit") + @"</a>&nbsp;<a href=""" +
+              Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Delete(x.Id)) +
+              @""">" + Html.ContentImage("delete.png", "Delete") + "</a>").Encode(false);
+     	    }) %>
+      <div class="pager"><%= Html.Pager(Model) %></div>
+    </div>
+  </div>
+  <p>
+    <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Create()) %>">
+      <div class="blue-button">
+        <%= Html.ContentImage("add.png", "Add") %>
+        Add a new user
+      </div>
+    </a>
+  </p>
 
 </asp:Content>
 

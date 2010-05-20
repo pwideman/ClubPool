@@ -13,19 +13,17 @@ namespace ClubPool.Web.Controllers.Navigation
 {
   public class NavigationController : BaseController
   {
-    protected IRoleService roleService;
     protected IAuthenticationService authenticationService;
 
-    public NavigationController(IAuthenticationService authSvc, IRoleService roleSvc) {
-      roleService = roleSvc;
+    public NavigationController(IAuthenticationService authSvc) {
       authenticationService = authSvc;
     }
 
     public ActionResult Menu() {
       var viewModel = new MenuViewModel();
       if (authenticationService.IsLoggedIn()) {
-        var identity = authenticationService.GetCurrentIdentity();
-        viewModel.DisplayAdminMenu = roleService.IsUserInRole(identity.Username, Roles.Administrators);
+        var principal = authenticationService.GetCurrentPrincipal();
+        viewModel.DisplayAdminMenu = principal.IsInRole(Roles.Administrators);
         viewModel.UserIsLoggedIn = true;
       }
       else {

@@ -62,8 +62,8 @@
     <Compile Include="Authentication\FormsAuthenticationService.cs" />
     <Compile Include="Authentication\Contracts\IAuthenticationService.cs" />
     <Compile Include="Membership\Contracts\IMembershipService.cs" />
-    <Compile Include="Membership\Contracts\IRoleService.cs" />
-    <Compile Include="Membership\SharpArchRoleService.cs" />
+    <None Include="Membership\Contracts\IRoleService.cs" />
+    <None Include="Membership\SharpArchRoleService.cs" />
     <Compile Include="Membership\SharpArchMembershipService.cs" />
     <Compile Include="Messaging\Contracts\IEmailService.cs" />
     <Compile Include="Messaging\EmailService.cs" />

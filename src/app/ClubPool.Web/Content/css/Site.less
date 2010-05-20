@@ -1,9 +1,9 @@
 ﻿/* global vars */
-@standard_blue: #074B8A;
+@standard_blue: #648ABD;
 @error_background_color: #FFFFD5;
 @error_foreground: red;
 @light_blue: #E0ECF8;
-@dark_blue: #648ABD;
+@dark_blue: #074B8A;
 @menu_background: #8EB1DF;
 @menu_highlight_background: #7795BD;
 
@@ -63,7 +63,7 @@ div.sidebar
 div.sidebarGadgetContainer
 {
   .sidebar-gadget;
-  background: @dark_blue;
+  background: @standard_blue;
   padding: 6px;
 }
 
@@ -100,9 +100,10 @@ div.sidebarGadgetContent
 div.formContainer
 {
   margin-bottom: 4px;
-  background: @dark_blue;
+  background: @standard_blue;
   padding: 6px;
   display: inline-block;
+  .corner;
 }
 
 div.formTitle
@@ -136,6 +137,7 @@ div.formContent
   margin: 0 auto;
   padding: 8px;
   background-color: @light_blue;
+  .corner;
 }
 
 fieldset
@@ -333,4 +335,9 @@ form.loginForm
 {
   margin-right: .3em;
   vertical-align: middle;
+}
+
+div.pager {
+  padding: 10px;
+  text-align: right;
 }

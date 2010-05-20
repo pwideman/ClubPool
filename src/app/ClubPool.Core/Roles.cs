@@ -8,6 +8,6 @@ namespace ClubPool.Core
   public static class Roles
   {
     public const string Administrators = "Administrators";
-    public const string Users = "Users";
+    public const string Officers = "Officers";
   }
 }

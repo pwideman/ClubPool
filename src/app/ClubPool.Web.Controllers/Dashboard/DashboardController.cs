@@ -17,16 +17,13 @@ namespace ClubPool.Web.Controllers.Dashboard
 {
   public class DashboardController : BaseController
   {
-    protected IRoleService roleService;
     protected IAuthenticationService authenticationService;
     protected ILinqRepository<User> userRepository;
 
-    public DashboardController(IRoleService roleSvc, IAuthenticationService authSvc, ILinqRepository<User> userRepository) {
-      Check.Require(null != roleSvc, "roleSvc cannot be null");
+    public DashboardController(IAuthenticationService authSvc, ILinqRepository<User> userRepository) {
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
 
-      roleService = roleSvc;
       authenticationService = authSvc;
       this.userRepository = userRepository;
     }
@@ -34,7 +31,7 @@ namespace ClubPool.Web.Controllers.Dashboard
     [Authorize]
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
-      viewModel.UserIsAdmin = roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username);
+      viewModel.UserIsAdmin = authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators);
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
@@ -52,8 +49,7 @@ namespace ClubPool.Web.Controllers.Dashboard
     protected bool userHasAlerts() {
       var hasAlerts = false;
       // unapproved users alert
-      var username = authenticationService.GetCurrentIdentity().Username;
-      if (roleService.IsUserAdministrator(username)) {
+      if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
         var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
         hasAlerts |= numberOfUnapprovedUsers > 0;
       }
@@ -64,7 +60,7 @@ namespace ClubPool.Web.Controllers.Dashboard
     public ActionResult AlertsGadget() {
       var alerts = new List<Alert>();
       var viewModel = new AlertsGadgetViewModel(alerts);
-      if (roleService.IsUserAdministrator(authenticationService.GetCurrentIdentity().Username)) {
+      if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
         var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
         if (numberOfUnapprovedUsers > 0) {
           var url = BuildUrlFromExpression<Users.UsersController>(u => u.Unapproved(), null);

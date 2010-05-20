@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using System.Security.Principal;
 
 using Rhino.Mocks;
 using Machine.Specifications;
@@ -12,37 +13,33 @@ using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Core;
 using ClubPool.Web.Controllers.Navigation;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
+using ClubPool.Testing.ApplicationServices.Authentication;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {
   public abstract class specification_for_navigation_controller
   {
     protected static NavigationController controller;
-    protected static IRoleService roleService;
-    protected static IAuthenticationService authService;
+    protected static MockAuthenticationService authService;
 
     Establish context = () => {
-      roleService = MockRepository.GenerateStub<IRoleService>();
-      authService = MockRepository.GenerateStub<IAuthenticationService>();
-      controller = new NavigationController(authService, roleService);
+      authService = AuthHelper.CreateMockAuthenticationService();
+      controller = new NavigationController(authService);
       ControllerHelper.CreateMockControllerContext(controller);
     };
 
   }
 
   [Subject(typeof(NavigationController))]
-  public class when_the_navigation_controller_is_asked_for_the_menu_when_user_is_not_logged_in : specification_for_navigation_controller
+  public class when_asked_for_the_menu_when_user_is_not_logged_in : specification_for_navigation_controller
   {
     static ActionResult result;
 
     Establish context = () => {
-      authService.Expect(s => s.IsLoggedIn()).Return(false);
+      authService.MockPrincipal.MockIdentity.IsAuthenticated = false;
     };
 
     Because of = () => result = controller.Menu();
-
-    It should_ask_if_the_user_is_logged_in = () =>
-      authService.AssertWasCalled(s => s.IsLoggedIn());
 
     It should_return_the_default_view = () => result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
 
@@ -57,28 +54,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(NavigationController))]
-  public class when_the_navigation_controller_is_asked_for_the_menu_when_normal_user_is_logged_in : specification_for_navigation_controller
+  public class when_asked_for_the_menu_when_normal_user_is_logged_in : specification_for_navigation_controller
   {
     static ActionResult result;
-    static Identity identity;
-
-    private static string username = "TestUser";
-    private static string rolename = Roles.Administrators;
 
     Establish context = () => {
-      identity = new Identity { Username = username };
-      authService.Expect(s => s.GetCurrentIdentity()).Return(identity);
-      authService.Expect(s => s.IsLoggedIn()).Return(true);
-      roleService.Expect(r => r.IsUserInRole(identity.Username, rolename)).Return(false);
+      var principal = authService.MockPrincipal;
+      principal.MockIdentity.IsAuthenticated = true;
     };
 
     Because of = () => result = controller.Menu();
-
-    It should_ask_if_the_user_is_logged_in = () =>
-      authService.AssertWasCalled(s => s.IsLoggedIn());
-
-    It should_ask_if_the_user_is_in_the_Administrators_role = () =>
-      roleService.AssertWasCalled(r => r.IsUserInRole(identity.Username, rolename));
 
     It should_return_the_default_view = () => result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
 
@@ -93,28 +78,17 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(NavigationController))]
-  public class when_the_navigation_controller_is_asked_for_the_menu_when_admin_user_is_logged_in : specification_for_navigation_controller
+  public class when_asked_for_the_menu_when_admin_user_is_logged_in : specification_for_navigation_controller
   {
     static ActionResult result;
-    static Identity identity;
-
-    private static string username = "TestUser";
-    private static string rolename = Roles.Administrators;
 
     Establish context = () => {
-      identity = new Identity { Username = username };
-      authService.Expect(s => s.IsLoggedIn()).Return(true);
-      authService.Expect(s => s.GetCurrentIdentity()).Return(identity);
-      roleService.Expect(r => r.IsUserInRole(identity.Username, rolename)).Return(true);
+      var principal = authService.MockPrincipal;
+      principal.MockIdentity.IsAuthenticated = true;
+      principal.Roles = new string[] { Roles.Administrators };
     };
 
     Because of = () => result = controller.Menu();
-
-    It should_ask_if_the_user_is_logged_in = () =>
-      authService.AssertWasCalled(s => s.IsLoggedIn());
-
-    It should_ask_if_the_user_is_in_the_Administrators_role = () =>
-      roleService.AssertWasCalled(r => r.IsUserInRole(identity.Username, rolename));
 
     It should_return_the_default_view = () => result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
 

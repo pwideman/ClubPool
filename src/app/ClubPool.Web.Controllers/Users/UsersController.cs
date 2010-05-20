@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 
 using MvcContrib;
+using MvcContrib.Pagination;
 using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
@@ -28,35 +29,37 @@ namespace ClubPool.Web.Controllers.Users
   {
     protected IAuthenticationService authenticationService;
     protected IMembershipService membershipService;
-    protected IRoleService roleService;
+    protected ILinqRepository<Role> roleRepository;
     protected IEmailService emailService;
     protected ILinqRepository<User> userRepository;
 
     public UsersController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
-      IRoleService roleSvc,
       IEmailService emailSvc,
-      ILinqRepository<User> userRepo)
+      ILinqRepository<User> userRepo,
+      ILinqRepository<Role> roleRepo)
     {
 
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != membershipSvc, "membershipSvc cannot be null");
-      Check.Require(null != roleSvc, "roleSvc cannot be null");
       Check.Require(null != userRepo, "userRepo cannot be null");
+      Check.Require(null != roleRepo, "roleRepo cannot be null");
       Check.Require(null != emailSvc, "emailSvc cannot be null");
+
 
       authenticationService = authSvc;
       membershipService = membershipSvc;
-      roleService = roleSvc;
       emailService = emailSvc;
       userRepository = userRepo;
+      roleRepository = roleRepo;
     }
 
     [Authorize(Roles=Core.Roles.Administrators)]
     [Transaction]
     public ActionResult Index(int? page) {
+      int pageSize = 10;
       var index = Math.Max(page ?? 1, 1) - 1;
-      var users = userRepository.GetAll().Page(index, 10).ToList().Select(u => new UserDto(u)).ToArray();
+      var users = userRepository.GetAll().Select(u => new UserDto(u)).AsPagination(page.GetValueOrDefault(1), pageSize);
       return View(users);
     }
 
@@ -94,11 +97,12 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     public ActionResult LoginStatus() {
+      var principal = authenticationService.GetCurrentPrincipal();
       var viewModel = new LoginStatusViewModel() {
-        UserIsLoggedIn = authenticationService.IsLoggedIn(),
+        UserIsLoggedIn = principal.Identity.IsAuthenticated
       };
       if (viewModel.UserIsLoggedIn) {
-        viewModel.Username = authenticationService.GetCurrentIdentity().Username;
+        viewModel.Username = principal.Identity.Name;
       }
       return PartialView(viewModel);
     }
@@ -165,16 +169,16 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected void SendNewUserAwaitingApprovalEmail(User newUser) {
-      var adminUsernames = roleService.GetUsersInRole(Core.Roles.Administrators);
-      if (adminUsernames.Length > 0) {
-        var adminUsers = userRepository.GetAll().WithUsernames(adminUsernames);
-        var adminEmailAddresses = adminUsers.Select(u => u.Email).ToList();
+      //var adminUsernames = roleService.GetUsersInRole(Core.Roles.Administrators);
+      var officers = roleRepository.FindOne(RoleQueries.RoleByName(Core.Roles.Officers)).Users;
+      if (officers.Count() > 0) {
+        var officerEmailAddresses = officers.Select(u => u.Email).ToList();
         var subject = "New user sign up at ClubPool";
         var body = new StringBuilder();
         body.Append("A new user has signed up at ClubPool and needs admin approval:" + Environment.NewLine);
         body.Append(string.Format("Username: {0}" + Environment.NewLine + "Name: {1} {2}" + Environment.NewLine + "Email: {3}",
           newUser.Username, newUser.FirstName, newUser.LastName, newUser.Email));
-        emailService.SendSystemEmail(adminEmailAddresses, subject, body.ToString());
+        emailService.SendSystemEmail(officerEmailAddresses, subject, body.ToString());
       }
     }
 
@@ -215,9 +219,16 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpGet]
+    [Authorize(Roles=Core.Roles.Administrators)]
     public ActionResult Edit(int id) {
       var user = new UserDto(userRepository.Get(id));
       return View(user);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = Core.Roles.Administrators)]
+    public ActionResult Create() {
+      return View();
     }
   }
 }

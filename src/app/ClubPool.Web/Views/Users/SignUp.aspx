@@ -8,9 +8,9 @@
   need to verify your account information before you will be able to log in. You will receive
   an email once an administrator has verified your information.</p>
   
-  <div class="formContainer corner">
+  <div class="formContainer">
     <div class="formTitle">Sign Up</div>
-    <div class="formContent corner">
+    <div class="formContent">
       <div class="formHeader">
         All fields are required
       </div>

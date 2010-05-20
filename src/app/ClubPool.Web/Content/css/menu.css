@@ -1,5 +1,6 @@
 ﻿/* Superfish menu css
 -----------------------------------------------------------*/
+@menu_border_color: @standard_blue;
 
 /*** ESSENTIAL STYLES ***/
 .sf-menu, .sf-menu * {
@@ -61,9 +62,9 @@ ul.sf-menu li li li.sfHover ul {
 }
 
 .sf-menu a {
-	border-right: 1px solid @dark_blue;
-	border-left: 1px solid @dark_blue;
-	border-top: 1px solid @dark_blue;
+	border-right: 1px solid @menu_border_color;
+	border-left: 1px solid @menu_border_color;
+	border-top: 1px solid @menu_border_color;
 	padding: .75em .75em;
 	text-decoration:none;
 	min-width: 6em;
@@ -71,19 +72,19 @@ ul.sf-menu li li li.sfHover ul {
 
 .sf-menu li.first a
 {
-  border-left: 1px solid @dark_blue;
+  border-left: 1px solid @menu_border_color;
 }
 
 .sf-menu li.last a
 {
-  border-bottom: 1px solid @dark_blue;
+  border-bottom: 1px solid @menu_border_color;
 }
 
 .sf-menu > li > a 
 {
   text-align: center;
   border-left: 0;
-  border-bottom: 1px solid @dark_blue;
+  border-bottom: 1px solid @menu_border_color;
 }
 
 .sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
