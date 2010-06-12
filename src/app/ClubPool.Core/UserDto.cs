@@ -10,6 +10,35 @@ namespace ClubPool.Core
 {
   public class UserDto
   {
+    public UserDto() {
+      InitMembers();
+    }
+
+    public UserDto(User user):this() {
+      if (null != user) {
+        Id = user.Id;
+        Username = user.Username;
+        FirstName = user.FirstName;
+        LastName = user.LastName;
+        FullName = user.FullName;
+        Email = user.Email;
+        IsApproved = user.IsApproved;
+        Roles = user.Roles.Select(r => r.Name).ToArray();
+      }
+    }
+
+    public void UpdateUser(User user) {
+      user.Email = Email;
+      user.Username = Username;
+      user.FirstName = FirstName;
+      user.LastName = LastName;
+      user.IsApproved = IsApproved;
+    }
+
+    private void InitMembers() {
+      Roles = new string[0];
+    }
+
     public int Id { get; set; }
 
     [DisplayName("Username:")]
@@ -36,17 +65,5 @@ namespace ClubPool.Core
 
     public string[] Roles { get; set; }
 
-    public UserDto(User user) {
-      if (null != user) {
-        Id = user.Id;
-        Username = user.Username;
-        FirstName = user.FirstName;
-        LastName = user.LastName;
-        FullName = user.FullName;
-        Email = user.Email;
-        IsApproved = user.IsApproved;
-        Roles = user.Roles.Select(r => r.Name).ToArray();
-      }
-    }
   }
 }

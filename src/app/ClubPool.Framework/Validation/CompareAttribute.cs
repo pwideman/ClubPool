@@ -28,10 +28,9 @@ namespace ClubPool.Framework.Validation
   public class CompareValidator : IValidator
   {
     public bool IsValid(object value, IConstraintValidatorContext constraintValidatorContext) {
-      var classMapping = new ReflectionClassMapping(value.GetType());
-      var compareAttributes = classMapping.GetClassAttributes().OfType<CompareAttribute>()
+      var compareAttributes = GetAllCompareAttributes(value.GetType())
         .Where(a => a.Message.Equals(constraintValidatorContext.DefaultErrorMessage));
-      if (compareAttributes.Count() != 1) {
+      if (compareAttributes.Count() > 1) {
         throw new CompareAttributeException(
           string.Format("CompareTo class attributes must have unique messages: {0}", 
           constraintValidatorContext.DefaultErrorMessage));
@@ -57,6 +56,19 @@ namespace ClubPool.Framework.Validation
       else {
         return !equal;
       }
+    }
+
+    private IList<CompareAttribute> GetAllCompareAttributes(Type type) {
+      var allAttributes = new List<CompareAttribute>();
+      var classMapping = new ReflectionClassMapping(type);
+      var compareAttributes = classMapping.GetClassAttributes().OfType<CompareAttribute>();
+      foreach (var attribute in compareAttributes) {
+        allAttributes.Add(attribute);
+      }
+      if (null != type.BaseType) {
+        allAttributes.AddRange(GetAllCompareAttributes(type.BaseType));
+      }
+      return allAttributes;
     }
 
     private object GetPropertyValue(object obj, string propertyName) {

@@ -55,6 +55,11 @@ body
 a
 {
   color: @standard_blue;
+
+  img 
+  {
+    border: 0;
+  }
 }
 
 a:hover
@@ -88,7 +93,7 @@ H3.heading
 {
   display: inline-block;
   margin-top: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 H4, h5

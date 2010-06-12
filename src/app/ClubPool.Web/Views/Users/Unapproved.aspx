@@ -17,7 +17,7 @@
       <tfoot>
         <tr>
           <td colspan="2" />
-          <td align="center"><button type="submit">Approve</button></td>
+          <td align="center"><input class="submit-button" type="submit" value="Approve" /></td>
         </tr>
       </tfoot>
       <tbody>
@@ -33,13 +33,11 @@
   <% } %>
   <%} else { %>
   <p>There are no users awaiting approval.</p>
-  <% } %>
-  <% if (TempData.ContainsKey("message")) { %>
-		<div class="ui-state-highlight ui-corner-all notification"> 
-			<p><span class="ui-icon ui-icon-info notification-icon"></span>
-			<%= Html.Encode(TempData["message"]) %></p>
-		</div>
-  <% } %>
+  <% } 
+    if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) {
+      Html.RenderPartial("NotificationMessage");
+    }
+  %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Users Awaiting Approval

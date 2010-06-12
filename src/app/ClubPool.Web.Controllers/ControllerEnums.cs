@@ -2,7 +2,8 @@
 {
     public class GlobalViewDataProperty
     {
-        public const string PageMessage = "PageMessage";
-        public const string SidebarGadgetCollection = "SidebarGadgetCollection";
+      public const string PageNotificationMessage = "PageNotificationMessage";
+      public const string SidebarGadgetCollection = "SidebarGadgetCollection";
+      public const string PageErrorMessage = "PageErrorMessage"; 
     }
 }

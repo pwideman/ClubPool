@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Security;
 using System.Text;
 using System.Collections.Generic;
 
@@ -54,13 +53,18 @@ namespace ClubPool.Web.Controllers.Users
       roleRepository = roleRepo;
     }
 
-    [Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Roles.Administrators)]
     [Transaction]
     public ActionResult Index(int? page) {
       int pageSize = 10;
       var index = Math.Max(page ?? 1, 1) - 1;
-      var users = userRepository.GetAll().Select(u => new UserDto(u)).AsPagination(page.GetValueOrDefault(1), pageSize);
-      return View(users);
+      page = page.GetValueOrDefault(1);
+      var users = userRepository.GetAll().Select(u => new UserDto(u)).AsPagination(page.Value, pageSize);
+      var viewModel = new IndexViewModel() {
+        Users = users,
+        Page = page.Value
+      };
+      return View(viewModel);
     }
 
     [HttpGet]
@@ -144,26 +148,14 @@ namespace ClubPool.Web.Controllers.Users
         ModelState.AddModelError("captcha", "Incorrect. Try again.");
         return View(viewModel);
       }
-      try {
-        viewModel.Validate();
-      }
-      catch (RulesException re) {
-        re.AddModelStateErrors(this.ModelState, null);
+      var user = CreateUser(viewModel, false);
+
+      if (null == user) {
+        // if we couldn't create the user that means there was some type of validation error,
+        // so redisplay the form with the model
         return View(viewModel);
       }
 
-      if (membershipService.UsernameIsInUse(viewModel.Username)) {
-        // the username is in use
-        viewModel.ErrorMessage = string.Format("The username '{0}' is already in use", viewModel.Username);
-        return View(viewModel);
-      }
-
-      if (membershipService.EmailIsInUse(viewModel.Email)) {
-        // the email address is in use
-        viewModel.ErrorMessage = string.Format("The email address '{0}' is already in use", viewModel.Email);
-        return View(viewModel);
-      }
-      var user = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, false);
       SendNewUserAwaitingApprovalEmail(user);
       return View("SignUpComplete");
     }
@@ -182,13 +174,25 @@ namespace ClubPool.Web.Controllers.Users
       }
     }
 
-    [Authorize(Roles=Core.Roles.Administrators)]
-    public ActionResult Delete(int id) {
-      return View();
+    [Authorize(Roles=Roles.Administrators)]
+    [HttpPost]
+    [Transaction]
+    [ValidateAntiForgeryToken]
+    public ActionResult Delete(int id, int page) {
+      User userToDelete = userRepository.Get(id);
+      if (null != userToDelete) {
+        //TODO: check to see if user has any data and if so, deny delete
+        userRepository.Delete(userToDelete);
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
+      }
+      else {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid user id";
+      }
+      return this.RedirectToAction(c => c.Index(page));
     }
 
     [HttpGet]
-    [Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Roles.Administrators)]
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
       viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList()
@@ -199,36 +203,111 @@ namespace ClubPool.Web.Controllers.Users
     [HttpPost]
     [Transaction]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Roles.Administrators)]
     public ActionResult Approve(int[] userIds) {
       var users = userRepository.GetAll().WhereIdIn(userIds);
       if (users.Count() > 0) {
         foreach (var user in users) {
           user.IsApproved = true;
         }
-        TempData["message"] = "The selected users have been approved.";
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The selected users have been approved.";
       }
-      return MvcContrib.ControllerExtensions.RedirectToAction(this, c => c.Unapproved());
+      return this.RedirectToAction(c => c.Unapproved());
     }
 
     [Transaction]
-    [Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Roles.Administrators)]
     public ActionResult View(int id) {
       var user = new UserDto(userRepository.Get(id));
       return View(user);
     }
 
     [HttpGet]
-    [Authorize(Roles=Core.Roles.Administrators)]
+    [Authorize(Roles=Roles.Administrators)]
     public ActionResult Edit(int id) {
-      var user = new UserDto(userRepository.Get(id));
-      return View(user);
+      var user = userRepository.Get(id);
+      var viewModel = new EditViewModel() {
+        Id = user.Id,
+        Username = user.Username,
+        Email = user.Email,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        IsApproved = user.IsApproved
+      };
+      return View(viewModel);
+    }
+
+    [HttpPost]
+    [Transaction]
+    [Authorize(Roles=Roles.Administrators)]
+    [ValidateAntiForgeryToken]
+    public ActionResult Edit(EditViewModel viewModel) {
+      try {
+        viewModel.Validate();
+      }
+      catch (RulesException re) {
+        re.AddModelStateErrors(this.ModelState, null);
+        return View(viewModel);
+      }
+
+      var user = userRepository.Get(viewModel.Id);
+      user.Username = viewModel.Username;
+      user.FirstName = viewModel.FirstName;
+      user.LastName = viewModel.LastName;
+      user.Email = viewModel.Email;
+      user.IsApproved = viewModel.IsApproved;
+      userRepository.SaveOrUpdate(user);
+
+      TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
+      return this.RedirectToAction(c => c.Index(null));
     }
 
     [HttpGet]
-    [Authorize(Roles = Core.Roles.Administrators)]
+    [Authorize(Roles=Roles.Administrators)]
     public ActionResult Create() {
-      return View();
+      var viewModel = new CreateViewModel();
+      return View(viewModel);
+    }
+
+    [HttpPost]
+    [Authorize(Roles=Roles.Administrators)]
+    [Transaction]
+    [ValidateAntiForgeryToken]
+    public ActionResult Create(CreateViewModel viewModel) {
+      var user = CreateUser(viewModel, true);
+
+      if (null == user) {
+        // if we couldn't create the user that means there was some type of validation error,
+        // so redisplay the form with the model
+        return View(viewModel);
+      }
+
+      TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was created successfully";
+      return this.RedirectToAction(c => c.Index(null));
+    }
+
+    protected User CreateUser(CreateViewModel viewModel, bool approved) {
+      try {
+        viewModel.Validate();
+      }
+      catch (RulesException re) {
+        re.AddModelStateErrors(this.ModelState, null);
+        return null;
+      }
+
+      if (membershipService.UsernameIsInUse(viewModel.Username)) {
+        // the username is in use
+        viewModel.ErrorMessage = string.Format("The username '{0}' is already in use", viewModel.Username);
+        return null;
+      }
+
+      if (membershipService.EmailIsInUse(viewModel.Email)) {
+        // the email address is in use
+        viewModel.ErrorMessage = string.Format("The email address '{0}' is already in use", viewModel.Email);
+        return null;
+      }
+      var user = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, approved);
+      return user;
     }
   }
 }

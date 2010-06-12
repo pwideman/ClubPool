@@ -20,7 +20,7 @@
     <% if (Request.Browser.Browser.ToLower().Contains("ie")) { %>
     <%= Html.ScriptInclude("jquery.corner.js") %>
     <% } %>
-    <%= Html.ScriptInclude("jquery.validate.min.js") %>
+    <%= Html.ScriptInclude("jquery.validate.js") %>
     <%= Html.ScriptInclude("xVal.jquery.validate.js") %>
     <%= Html.ScriptInclude("clubpool.js") %>
     

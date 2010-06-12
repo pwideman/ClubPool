@@ -9,12 +9,14 @@ using System.Web.Security;
 using Rhino.Mocks;
 using Machine.Specifications;
 using SharpArch.Testing;
+using MvcContrib.Pagination;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Core;
+using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Users;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
@@ -49,6 +51,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   public class when_asked_for_the_default_view : specification_for_users_controller
   {
     static ActionResult result;
+    static int page = 1;
 
     Establish context = () => {
       userRepository.Stub(r => r.GetAll()).Return(new List<User>() {
@@ -56,15 +59,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
         new User("user2", "user2", "User", "Two", "user2@user.com") }.AsQueryable());
     };
 
-    Because of = () => result = controller.Index(null);
+    Because of = () => result = controller.Index(page);
 
     It should_return_the_default_view = () =>
       result.IsAViewAnd().ViewName.ShouldBeEmpty();
 
     It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as UserDto[];
+      var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
       viewModel.ShouldNotBeNull();
-      viewModel.Length.ShouldEqual(2);
+      viewModel.Users.Count().ShouldEqual(2);
+      viewModel.Page.ShouldEqual(page);
     };
   }
 
@@ -320,6 +324,41 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(UsersController))]
+  public class when_asked_to_sign_up_a_new_user_and_password_and_confirm_password_do_not_match : specification_for_users_controller
+  {
+    static ActionResult result;
+    static SignUpViewModel viewModel;
+
+    Establish context = () => {
+      viewModel = new SignUpViewModel();
+      viewModel.Username = "test";
+      viewModel.ConfirmPassword = "test";
+      viewModel.Password = "Password";
+      viewModel.Email = "test@test.com";
+      viewModel.FirstName = "test";
+      viewModel.LastName = "test";
+    };
+
+    Because of = () => result = controller.SignUp(viewModel, true);
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_pass_the_view_model_back_to_the_view = () => {
+      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
+      vm.ShouldNotBeNull();
+      vm.Username.ShouldEqual(viewModel.Username);
+    };
+
+    It should_set_the_model_state_errors = () => {
+      var modelState = result.IsAViewAnd().ViewData.ModelState;
+      modelState.IsValid.ShouldBeFalse();
+      modelState.Count.ShouldBeGreaterThan(0);
+      modelState.Keys.Contains("ConfirmPassword").ShouldBeTrue();
+    };
+  }
+
+  [Subject(typeof(UsersController))]
   public class when_asked_to_sign_up_a_new_user_with_duplicate_username : specification_for_users_controller
   {
     static ActionResult result;
@@ -536,6 +575,65 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
 
     It should_set_the_tempdata_message = () =>
-      controller.TempData.ContainsKey("message").ShouldBeTrue();
+      controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_delete_a_user : specification_for_users_controller
+  {
+    static ActionResult result;
+    static int userId = 1;
+    static User user;
+    static int page = 5;
+
+    Establish context = () => {
+      user = new User("test", "test", "test", "test", "test");
+      userRepository.Stub(r => r.Get(userId)).Return(user);
+      userRepository.Expect(r => r.Delete(user));
+    };
+
+    Because of = () => result = controller.Delete(userId, page);
+
+    It should_delete_the_user = () =>
+      userRepository.VerifyAllExpectations();
+
+    It should_redirect_to_the_users_index_view = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
+      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
+      var pageRouteValue = new KeyValuePair<string, object>("page", page);
+      result.IsARedirectToARouteAnd().RouteValues.ShouldContain(pageRouteValue);
+    };
+
+    It should_set_the_notification_message = () =>
+      controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
+
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_delete_an_invalid_user : specification_for_users_controller
+  {
+    static ActionResult result;
+    static int userId = 1;
+    static int page = 5;
+
+    Establish context = () => {
+      userRepository.Stub(r => r.Get(userId)).Return(null);
+    };
+
+    Because of = () => result = controller.Delete(userId, 5);
+
+    It should_not_delete_the_user = () =>
+      userRepository.AssertWasNotCalled(r => r.Delete(null), x => x.IgnoreArguments());
+
+    It should_redirect_to_the_users_index_view = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
+      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
+      var pageRouteValue = new KeyValuePair<string, object>("page", page);
+      result.IsARedirectToARouteAnd().RouteValues.ShouldContain(pageRouteValue);
+    };
+
+    It should_set_the_error_message = () =>
+      controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+
   }
 }

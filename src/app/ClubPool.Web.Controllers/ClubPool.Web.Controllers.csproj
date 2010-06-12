@@ -92,6 +92,9 @@
     <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="Error\ErrorController.cs" />
+    <Compile Include="Users\ViewModels\CreateViewModel.cs" />
+    <Compile Include="Users\ViewModels\EditViewModel.cs" />
+    <Compile Include="Users\ViewModels\IndexViewModel.cs" />
     <Compile Include="Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />

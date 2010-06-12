@@ -15,6 +15,12 @@ namespace ClubPool.Data.NHibernateMaps
         .Table("UsersRoles");
       mapping.IgnoreProperty(x => x.FullName);
       mapping.Map(x => x.IsApproved);
+      mapping.Map(x => x.Email);
+      mapping.Map(x => x.Username);
+      mapping.Map(x => x.FirstName);
+      mapping.Map(x => x.LastName);
+      mapping.Map(x => x.Password);
+      mapping.Map(x => x.PasswordSalt);
     }
   }
 }

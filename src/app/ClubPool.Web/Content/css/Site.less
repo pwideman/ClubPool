@@ -170,6 +170,7 @@ span.required
   vertical-align: top;
 }
 
+/*
 div.formInput input
 {
   width: 221px;
@@ -179,24 +180,42 @@ div.formInput input
   margin: 1px;
   display: block;
 }
+*/
 
+/*
 div.formrow {
   input.short {
     width: 104px;
   }
 }
+*/
 
 div.formInput
 {
   display: inline-block;
   padding: 0;
   vertical-align: top;
+
   label {
     font-size: 80%;
   }
+
+  input
+  {
+    width: 221px;
+    border: 1px solid @standard_blue;
+    height: 25px;
+    padding: 2px;
+    margin: 1px;
+    display: block;
+  }
+
+  input.short {
+    width: 104px;
+  }
 }
 
-button
+button, input.submit-button
 {
   clear:both;
   text-align:center;
@@ -325,13 +344,16 @@ form.loginForm
 
 /* Notifications */
 
-.notification {
+.message {
   padding: 0 30px 0 10px;
   display: inline-block;
   margin: 10px 0px;
 }
 
-.notification-icon
+.notification {
+}
+
+.message-icon
 {
   margin-right: .3em;
   vertical-align: middle;
@@ -340,4 +362,18 @@ form.loginForm
 div.pager {
   padding: 10px;
   text-align: right;
+}
+
+div.action-button
+{
+  display: inline-block;
+  padding: 4px;
+  img {
+    vertical-align: middle;
+  }
+}
+
+div.action-button-row
+{
+  margin-bottom: 20px;
 }

@@ -163,6 +163,7 @@
   <ItemGroup>
     <Compile Include="CastleWindsor\ComponentRegistrar.cs" />
     <Compile Include="Code\HtmlHelperExtensions.cs" />
+    <Compile Include="Code\UrlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -170,10 +171,6 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Views\AspxViewMasterPageBase.cs" />
-    <None Include="Views\AspxViewPageBase.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\base.css" />
@@ -220,11 +217,16 @@
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Shared\DebugFormSubmission.ascx" />
+    <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\FormError.ascx" />
-    <Content Include="Views\Shared\LoginControl.ascx" />
+    <Content Include="Views\Shared\NotificationMessage.ascx" />
+    <Content Include="Views\Users\Create.aspx" />
+    <Content Include="Views\Users\CreateUserControl.ascx" />
+    <Content Include="Views\Users\Edit.aspx" />
+    <Content Include="Views\Users\LoginControl.ascx" />
     <Content Include="Views\Shared\Rescues\DefaultError.aspx" />
     <Content Include="Views\Users\AccountHelp.aspx" />
-    <Content Include="Views\Users\Delete.aspx" />
+    <Content Include="Views\Users\Copy of Index.aspx" />
     <Content Include="Views\Users\Index.aspx" />
     <Content Include="Views\Users\Login.aspx" />
     <Content Include="Views\Users\LoginGadget.aspx" />

@@ -1,5 +1,5 @@
 ﻿// initialise plugins
-$(document).ready(function() {
+$(document).ready(function () {
   // set up the menu
   $('ul.sf-menu').supersubs({
     minWidth: 12,
@@ -9,7 +9,8 @@ $(document).ready(function() {
     animation: { opacity: "show" },
     speed: "fast"
   });
-  if ($.browser.msie) {
+  if ($.browser.msie && $.browser.version.substr(0,1) > 7) {
+    
     // round the corners on standard elements
     // only do this in IE, others will use css
     // sidebar gadgets
@@ -19,5 +20,5 @@ $(document).ready(function() {
     var normalCornerRadius = "12px";
     $(".corner").corner(normalCornerRadius);
   }
-  $(".notification").effect("fade", {easing:"easeInExpo"}, 5000);
+  $(".notification").effect("fade", { easing: "easeInExpo" }, 5000);
 });

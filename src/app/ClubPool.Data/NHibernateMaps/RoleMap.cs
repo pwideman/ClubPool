@@ -9,7 +9,7 @@ namespace ClubPool.Data.NHibernateMaps
   {
     public void Override(AutoMapping<Role> mapping) {
       mapping.Id(x => x.Id);
-      //mapping.Map(x => x.Name);
+      mapping.Map(x => x.Name);
       mapping.HasManyToMany<User>(x => x.Users)
         .AsBag()
         .Table("UsersRoles");

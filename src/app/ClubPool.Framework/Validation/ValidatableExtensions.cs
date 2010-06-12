@@ -76,7 +76,7 @@ namespace ClubPool.Framework.Validation
       var errorInfo = new ErrorInfo(string.Empty, result.Message);
 
       // Get the validation attributes on the entity type
-      var validatorProperties = result.ClassContext.GetCustomAttributes(false)
+      var validatorProperties = result.ClassContext.GetCustomAttributes(true)
           .Where(x => typeof(IValidateMultipleProperties).IsAssignableFrom(x.GetType()));
 
       // If the validation message matches one of the attributes messages,
