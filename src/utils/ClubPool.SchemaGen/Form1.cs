@@ -50,7 +50,7 @@ namespace ClubPool.SchemaGen
           adminUser = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true);
           officer = membershipService.CreateUser("officer", "officer", "officer", "user", "officer@email.com", true);
           membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true);
-          for (int i = 0; i < 5; i++) {
+          for (int i = 0; i < 25; i++) {
             var name = "user" + i.ToString();
             membershipService.CreateUser(name, name, "user", i.ToString(), name + "@email.com", false);
           }
