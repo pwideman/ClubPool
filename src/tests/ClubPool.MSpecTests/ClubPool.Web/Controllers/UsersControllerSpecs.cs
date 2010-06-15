@@ -90,8 +90,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_set_the_view_model_properties_correctly = () => {
       var viewModel = result.IsAViewAnd().ViewData.Model as LoginViewModel;
+      var viewResult = result as ViewResult;
+      viewResult.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeFalse();
       viewModel.ReturnUrl.ShouldEqual(returnUrl);
-      viewModel.ErrorMessage.ShouldBeNull();
       viewModel.Password.ShouldBeNull();
       viewModel.StayLoggedIn.ShouldBeFalse();
       viewModel.Username.ShouldBeNull();
@@ -190,9 +191,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_set_the_view_model_properties_correctly = () => {
       var vm = result.IsAViewAnd().ViewData.Model as LoginViewModel;
+      var viewResult = result as ViewResult;
       vm.Username.ShouldEqual(username);
       vm.Password.ShouldBeEmpty();
-      vm.ErrorMessage.ShouldEqual("Invalid username/password");
+      viewResult.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+      viewResult.TempData[GlobalViewDataProperty.PageErrorMessage].ShouldEqual("Invalid username/password");
     };
   }
 
@@ -386,7 +389,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
       vm.ShouldNotBeNull();
       vm.Username.ShouldEqual(username);
-      vm.ErrorMessage.ShouldNotBeEmpty();
+      var viewResult = result as ViewResult;
+      viewResult.ViewData.ModelState.ContainsKey("Username").ShouldBeTrue();
+      viewResult.ViewData.ModelState["Username"].Errors.Count.ShouldBeGreaterThan(0);
     };
   }
 
@@ -418,7 +423,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
       vm.ShouldNotBeNull();
       vm.Email.ShouldEqual(email);
-      vm.ErrorMessage.ShouldNotBeEmpty();
+      var viewResult = result as ViewResult;
+      viewResult.ViewData.ModelState.ContainsKey("Email").ShouldBeTrue();
+      viewResult.ViewData.ModelState["Email"].Errors.Count.ShouldBeGreaterThan(0);
     };
   }
 

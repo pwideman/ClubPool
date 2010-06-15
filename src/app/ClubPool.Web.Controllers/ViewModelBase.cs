@@ -9,8 +9,8 @@ namespace ClubPool.Web.Controllers
   {
   }
 
-  public class FormViewModelBase : ViewModelBase
-  {
-    public string ErrorMessage { get; set; }
-  }
+  //public class FormViewModelBase : ViewModelBase
+  //{
+  //  public string ErrorMessage { get; set; }
+  //}
 }

@@ -97,6 +97,7 @@ div.sidebarGadgetContent
 /* forms
 ----------------------------------------------------------*/
 
+/*
 div.formContainer
 {
   margin-bottom: 4px;
@@ -113,8 +114,9 @@ div.formTitle
   font-size: 120%;
   text-align: center;
 }
+*/
 
-div.formHeader
+div.form-header
 {
   padding: 10px 0 10px 0;
   border-bottom: solid 1px black;
@@ -131,12 +133,11 @@ div.formError
   margin: 8px;
 }
 
-div.formContent
+div.form-content
 {
-  border: 0;
-  margin: 0 auto;
   padding: 8px;
   background-color: @light_blue;
+  display: inline-block;
   .corner;
 }
 
@@ -146,13 +147,13 @@ fieldset
 }
 
 form.normal {
-  div.formrow {
+  div.form-row {
     padding-right: 10px;
     min-height: 54px;
   }
 }
 
-div.formrow > label
+div.form-row > label
 {
   display: inline-block;
   width: 200px;
@@ -190,7 +191,7 @@ div.formrow {
 }
 */
 
-div.formInput
+div.form-input
 {
   display: inline-block;
   padding: 0;
@@ -230,7 +231,7 @@ form.normal {
 }
 
 
-div.formrowspan
+div.form-row-span
 {
   text-align: center;
   padding: 2px;
@@ -242,7 +243,7 @@ div.formrowspan
 }
 
 
-div.submitrow
+div.submit-row
 {
   text-align: center;
   padding: 6px 0 6px 0;
@@ -261,7 +262,7 @@ form p.error
   margin-bottom: 1.5em;
 }
 
-div.formrow input.error, input.input-validation-error
+div.form-row input.error, input.input-validation-error
 {
   border: 2px solid red !important;
   background-color: @error_background_color;
@@ -287,7 +288,7 @@ div.formValidationSummary
 /* sidebar forms */
 
 form.sidebar {
-  div.formrow {
+  div.form-row {
     padding-right: 8px;
     min-height: 34px;
     label {
@@ -299,7 +300,7 @@ form.sidebar {
       margin-top: 8px;
     }
   }
-  div.formInput {
+  div.form-input {
     input {
       width: 120px;
       height: 16px;
@@ -314,14 +315,19 @@ form.sidebar {
 
 /* normal login form */
 
-form.loginForm
+div.login-form
 {
-  width: 400px;
-  div.formrow {
+  div.form-row {
     label {
-      width: 120px;
+      width: 100px;
     }
   }
+}
+
+div.form-message {
+  margin: 8px auto;
+  width: 80%;
+  display: block;
 }
 
 /* MISC  

@@ -14,6 +14,7 @@ using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
@@ -95,7 +96,7 @@ namespace ClubPool.Web.Controllers.Users
       }
       else {
         viewModel.Password = "";
-        viewModel.ErrorMessage = "Invalid username/password";
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid username/password";
         return View(viewModel);
       }
     }
@@ -162,8 +163,8 @@ namespace ClubPool.Web.Controllers.Users
 
     protected void SendNewUserAwaitingApprovalEmail(User newUser) {
       //var adminUsernames = roleService.GetUsersInRole(Core.Roles.Administrators);
-      var officers = roleRepository.FindOne(RoleQueries.RoleByName(Core.Roles.Officers)).Users;
-      if (officers.Count() > 0) {
+      var officers = roleRepository.FindOne(RoleQueries.RoleByName(Roles.Officers)).Users;
+      if (officers.Any()) {
         var officerEmailAddresses = officers.Select(u => u.Email).ToList();
         var subject = "New user sign up at ClubPool";
         var body = new StringBuilder();
@@ -206,7 +207,7 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize(Roles=Roles.Administrators)]
     public ActionResult Approve(int[] userIds) {
       var users = userRepository.GetAll().WhereIdIn(userIds);
-      if (users.Count() > 0) {
+      if (users.Any()) {
         foreach (var user in users) {
           user.IsApproved = true;
         }
@@ -251,10 +252,24 @@ namespace ClubPool.Web.Controllers.Users
       }
 
       var user = userRepository.Get(viewModel.Id);
-      user.Username = viewModel.Username;
+      if (!user.Username.Equals(viewModel.Username)) {
+        // verify that the new username is not in use
+        if (membershipService.UsernameIsInUse(viewModel.Username)) {
+          ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
+          return View(viewModel);
+        }
+        user.Username = viewModel.Username;
+      }
+      if (!user.Email.Equals(viewModel.Email)) {
+        // verify that the new email is not in use
+        if (membershipService.EmailIsInUse(viewModel.Email)) {
+          ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
+          return View(viewModel);
+        }
+        user.Email = viewModel.Email;
+      }
       user.FirstName = viewModel.FirstName;
       user.LastName = viewModel.LastName;
-      user.Email = viewModel.Email;
       user.IsApproved = viewModel.IsApproved;
       userRepository.SaveOrUpdate(user);
 
@@ -297,13 +312,13 @@ namespace ClubPool.Web.Controllers.Users
 
       if (membershipService.UsernameIsInUse(viewModel.Username)) {
         // the username is in use
-        viewModel.ErrorMessage = string.Format("The username '{0}' is already in use", viewModel.Username);
+        ModelState.AddModelErrorFor<CreateViewModel>(m => m.Username, "The username is already in use");
         return null;
       }
 
       if (membershipService.EmailIsInUse(viewModel.Email)) {
         // the email address is in use
-        viewModel.ErrorMessage = string.Format("The email address '{0}' is already in use", viewModel.Email);
+        ModelState.AddModelErrorFor<CreateViewModel>(m => m.Email, "The email address is already in use");
         return null;
       }
       var user = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, approved);

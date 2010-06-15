@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <h4>Users Awaiting Approval</h4>
-  <% if (Model.UnapprovedUsers.Count() > 0) { %>
+  <% if (Model.UnapprovedUsers.Any()) { %>
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
   <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Approve(null))) { %>
     <%= Html.AntiForgeryToken() %>

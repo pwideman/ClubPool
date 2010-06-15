@@ -8,37 +8,34 @@
   need to verify your account information before you will be able to log in. You will receive
   an email once an administrator has verified your information.</p>
   
-  <div class="formContainer">
-    <div class="formTitle">Sign Up</div>
-    <div class="formContent">
-      <div class="formHeader">
-        All fields are required
-      </div>
-      <% if (!string.IsNullOrEmpty(Model.ErrorMessage)) {
-           Html.RenderPartial("FormError");
-         } %>
-      <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), FormMethod.Post, new { @class = "signupForm normal" })) { %>
-        <fieldset>
-          <%= Html.AntiForgeryToken()%>
-          <%= Html.HiddenFor(m => m.PreviousUsername)%>
-          <% Html.RenderPartial("CreateUserControl"); %>
-          <div class="spacer">&nbsp;</div>
-          <div class="formrow">
-            <label><%= Html.CaptchaImage(50, 180)%></label>
-            <div class="formInput">
-              <label for="captcha">Enter the text from the image below:</label><br />
-              <%= Html.CaptchaTextBox("captcha")%>
-              <%= Html.ValidationMessage("captcha")%>
-            </div>
-          </div>
-          <div class="spacer">&nbsp;</div>
-          <div class="formrowspan">
-            <input class="submit-button" type="submit" value="Sign Up" />
-          </div>
-        </fieldset>
-      <% } %>
-      <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>() %>
+  <div class="form-content">
+    <div class="form-header">
+      All fields are required
     </div>
+    <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+          Html.RenderPartial("ErrorMessage");
+        } %>
+    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), FormMethod.Post, new { @class = "signupForm normal" })) { %>
+      <fieldset>
+        <%= Html.AntiForgeryToken()%>
+        <%= Html.HiddenFor(m => m.PreviousUsername)%>
+        <% Html.RenderPartial("CreateUserControl"); %>
+        <div class="spacer">&nbsp;</div>
+        <div class="form-row">
+          <label><%= Html.CaptchaImage(50, 180)%></label>
+          <div class="form-input">
+            <label for="captcha">Enter the text from the image below:</label><br />
+            <%= Html.CaptchaTextBox("captcha")%>
+            <%= Html.ValidationMessage("captcha")%>
+          </div>
+        </div>
+        <div class="spacer">&nbsp;</div>
+        <div class="form-row-span">
+          <input class="submit-button" type="submit" value="Sign Up" />
+        </div>
+      </fieldset>
+    <% } %>
+    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>() %>
   </div>
   
 </asp:Content>

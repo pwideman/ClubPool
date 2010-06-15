@@ -9,7 +9,7 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class IndexViewModel : FormViewModelBase
+  public class IndexViewModel : ViewModelBase
   {
     public IPagination<UserDto> Users { get; set; }
     public int Page { get; set; }

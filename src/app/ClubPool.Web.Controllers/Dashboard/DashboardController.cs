@@ -50,8 +50,7 @@ namespace ClubPool.Web.Controllers.Dashboard
       var hasAlerts = false;
       // unapproved users alert
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
-        var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
-        hasAlerts |= numberOfUnapprovedUsers > 0;
+        hasAlerts |= userRepository.GetAll().Where(u => !u.IsApproved).Any();
       }
       return hasAlerts;
     }
@@ -61,10 +60,10 @@ namespace ClubPool.Web.Controllers.Dashboard
       var alerts = new List<Alert>();
       var viewModel = new AlertsGadgetViewModel(alerts);
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
-        var numberOfUnapprovedUsers = userRepository.GetAll().Where(u => !u.IsApproved).Count();
-        if (numberOfUnapprovedUsers > 0) {
+        var unapprovedQuery = userRepository.GetAll().Where(u => !u.IsApproved);
+        if (unapprovedQuery.Any()) {
           var url = BuildUrlFromExpression<Users.UsersController>(u => u.Unapproved(), null);
-          alerts.Add(new Alert(string.Format("There are {0} users awaiting approval", numberOfUnapprovedUsers), url));
+          alerts.Add(new Alert(string.Format("There are {0} users awaiting approval", unapprovedQuery.Count()), url));
         }
       }
       return PartialView(viewModel);

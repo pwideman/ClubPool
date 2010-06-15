@@ -28,14 +28,12 @@ namespace ClubPool.ApplicationServices.Membership
 
     public bool UsernameIsInUse(string username) {
       Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
-      var count = userRepository.GetAll().WithUsername(username).Count();
-      return count > 0;
+      return userRepository.GetAll().WithUsername(username).Any();
     }
 
     public bool EmailIsInUse(string email) {
       Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
-      var count = userRepository.GetAll().WithEmail(email).Count();
-      return count > 0;
+      return userRepository.GetAll().WithEmail(email).Any();
     }
 
     public bool ValidateUser(string username, string password) {

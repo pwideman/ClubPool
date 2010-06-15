@@ -67,6 +67,11 @@ a:hover
   color: #0000FF;
 }
 
+a:visited
+{
+  color: @standard_blue;
+}
+
 h1, h2, h3
 {
   font-weight: bold;
@@ -94,6 +99,7 @@ H3.heading
   display: inline-block;
   margin-top: 10px;
   margin-bottom: 30px;
+  vertical-align: middle;
 }
 
 H4, h5

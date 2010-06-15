@@ -7,7 +7,7 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class UnapprovedViewModel : FormViewModelBase
+  public class UnapprovedViewModel : ViewModelBase
   {
     public IEnumerable<UnapprovedUser> UnapprovedUsers;
   }

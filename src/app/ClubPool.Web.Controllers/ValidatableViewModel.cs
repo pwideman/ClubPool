@@ -10,7 +10,7 @@ namespace ClubPool.Web.Controllers
 {
   // this class is heavily influenced by (and most of the code copied from) the ValidatableValueObject
   // in Who Can Help Me (http://whocanhelpme.codeplex.com/)
-  public class ValidatableViewModel : FormViewModelBase, IValidatable
+  public class ValidatableViewModel : ViewModelBase, IValidatable
   {
     protected IValidator Validator {
       get { return ServiceLocator.Current.GetInstance<IValidator>(); }
