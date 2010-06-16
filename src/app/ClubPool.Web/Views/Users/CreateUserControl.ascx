@@ -1,42 +1,42 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Users.ViewModels.CreateViewModel>" %>
 <div class="form-row">
-  <%= Html.LabelFor(m => m.Username)%>
+  <span class="form-label-left"><%= Html.LabelFor(m => m.Username)%></span>
   <div class="form-input">
     <%= Html.TextBoxFor(m => m.Username)%>
     <%= Html.ValidationMessageFor(m => m.Username)%>
   </div>
 </div>
 <div class="form-row">
-  <%= Html.LabelFor(m => m.Password)%>
+  <span class="form-label-left"><%= Html.LabelFor(m => m.Password)%></span>
   <div class="form-input">
     <%= Html.PasswordFor(m => m.Password)%>
     <%= Html.ValidationMessageFor(m => m.Password)%>
   </div>
 </div>
 <div class="form-row">
-  <%= Html.LabelFor(m => m.ConfirmPassword)%>
+  <span class="form-label-left"><%= Html.LabelFor(m => m.ConfirmPassword)%></span>
   <div class="form-input">
     <%= Html.PasswordFor(m => m.ConfirmPassword)%>
     <%= Html.ValidationMessageFor(m => m.ConfirmPassword)%>
   </div>
 </div>
 <div class="form-row">
-  <%= Html.LabelFor(m => m.Email)%>
+  <span class="form-label-left"><%= Html.LabelFor(m => m.Email)%></span>
   <div class="form-input">
     <%= Html.TextBoxFor(m => m.Email)%>
     <%= Html.ValidationMessageFor(m => m.Email)%>
   </div>
 </div>
 <div class="form-row">
-  <label for="FirstName">Name:</label>
+  <span class="form-label-left"><label for="FirstName">Name:</label></span>
   <div class="form-input">
     <%= Html.TextBoxFor(m => m.FirstName, new { @class = "short" })%>
-    <%= Html.LabelFor(m => m.FirstName)%>
+    <span class="form-sublabel"><%= Html.LabelFor(m => m.FirstName)%></span>
     <%= Html.ValidationMessageFor(m => m.FirstName)%>
   </div>
   <div class="form-input">
     <%= Html.TextBoxFor(m => m.LastName, new { @class = "short" })%>
-    <%= Html.LabelFor(m => m.LastName)%>
+    <span class="form-sublabel"><%= Html.LabelFor(m => m.LastName)%></span>
     <%= Html.ValidationMessageFor(m => m.LastName)%>
   </div>
 </div>

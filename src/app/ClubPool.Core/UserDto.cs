@@ -8,7 +8,7 @@ using NHibernate.Validator.Constraints;
 
 namespace ClubPool.Core
 {
-  public class UserDto
+  public class UserDto : EntityDto
   {
     public UserDto() {
       InitMembers();
@@ -20,10 +20,10 @@ namespace ClubPool.Core
         Username = user.Username;
         FirstName = user.FirstName;
         LastName = user.LastName;
-        FullName = user.FullName;
         Email = user.Email;
         IsApproved = user.IsApproved;
-        Roles = user.Roles.Select(r => r.Name).ToArray();
+        Roles = user.Roles.Select(r => r.Id).ToArray();
+        RoleNames = user.Roles.Select(r => r.Name).ToArray();
       }
     }
 
@@ -36,10 +36,8 @@ namespace ClubPool.Core
     }
 
     private void InitMembers() {
-      Roles = new string[0];
+      Roles = new int[0];
     }
-
-    public int Id { get; set; }
 
     [DisplayName("Username:")]
     [NotNullNotEmpty(Message = "Required")]
@@ -53,7 +51,11 @@ namespace ClubPool.Core
     [NotNullNotEmpty(Message = "Required")]
     public string LastName { get; set; }
 
-    public string FullName { get; protected set; }
+    public string FullName { 
+      get {
+        return string.Format("{0} {1}", FirstName, LastName);
+      }
+    }
 
     [DisplayName("Email address:")]
     [NotNullNotEmpty(Message = "Required")]
@@ -63,7 +65,9 @@ namespace ClubPool.Core
     [DisplayName("Approved")]
     public bool IsApproved { get; set; }
 
-    public string[] Roles { get; set; }
+    public int[] Roles { get; set; }
+
+    public string[] RoleNames { get; set; }
 
   }
 }

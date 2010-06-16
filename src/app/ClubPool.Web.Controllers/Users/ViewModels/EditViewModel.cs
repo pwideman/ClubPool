@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 using NHibernate.Validator.Constraints;
 
 using ClubPool.Framework.Validation;
+using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
@@ -30,5 +32,10 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
 
     [DisplayName("Approved")]
     public bool IsApproved { get; set; }
+
+    public int[] Roles { get; set; }
+
+    [DisplayName("Roles:")]
+    public RoleDto[] AvailableRoles { get; set; }
   }
 }

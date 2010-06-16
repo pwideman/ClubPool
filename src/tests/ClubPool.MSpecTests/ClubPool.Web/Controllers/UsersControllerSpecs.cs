@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Security.Principal;
-using System.Web.Security;
+//using System.Web.Security;
 
 using Rhino.Mocks;
 using Machine.Specifications;
@@ -451,14 +451,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
       membershipService.Stub(s => s.CreateUser(username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, false)).Return(user);
 
-      var role = new Role(Core.Roles.Officers);
-      role.Users.Add(new User("officer", "officer", "officer", "user", "officer@email.com"));
+      var role = MockRepository.GenerateStub<Role>(Roles.Officers);
+      user = new User("officer", "officer", "officer", "user", "officer@email.com");
+      role.Stub(r => r.Users).Return(new User[1] { user });
       roleRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(role);
-
-      //userRepository.Stub(r => r.GetAll()).Return(
-      //  new List<User>() { 
-      //    new User(adminUsername, adminUsername, adminUsername, adminUsername, adminEmail)
-      //  }.AsQueryable());
     };
 
     Because of = () => result = controller.SignUp(viewModel, true);

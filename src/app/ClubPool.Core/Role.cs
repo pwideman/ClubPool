@@ -24,13 +24,16 @@ namespace ClubPool.Core
     }
 
     protected virtual void InitMembers() {
-      Users = new List<User>();
+      users = new List<User>();
     }
 
     [DomainSignature]
     [NotNullNotEmpty]
     public virtual string Name { get; set; }
 
-    public virtual IList<User> Users { get; protected set; }
+    protected IList<User> users;
+
+    public virtual IEnumerable<User> Users { get { return users; } }
+
   }
 }

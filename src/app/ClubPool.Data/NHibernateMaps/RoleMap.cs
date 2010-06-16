@@ -11,6 +11,8 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.Id(x => x.Id);
       mapping.Map(x => x.Name);
       mapping.HasManyToMany<User>(x => x.Users)
+        .Access.ReadOnlyPropertyThroughCamelCaseField()
+        .Inverse()
         .AsBag()
         .Table("UsersRoles");
     }

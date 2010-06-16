@@ -6,7 +6,6 @@
     <h3 class="heading">Login</h3>
   </div>
   <div class="form-content login-form corner">
-    <div class="spacer">&nbsp;</div>
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Login(string.Empty), 
           FormMethod.Post, new { @class = "normal", id = "loginForm" })) { %>
       <% Html.RenderPartial("LoginControl"); %>

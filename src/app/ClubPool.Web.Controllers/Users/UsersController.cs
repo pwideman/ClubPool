@@ -229,11 +229,13 @@ namespace ClubPool.Web.Controllers.Users
       var user = userRepository.Get(id);
       var viewModel = new EditViewModel() {
         Id = user.Id,
-        Username = user.Username,
-        Email = user.Email,
         FirstName = user.FirstName,
         LastName = user.LastName,
-        IsApproved = user.IsApproved
+        Email = user.Email,
+        IsApproved = user.IsApproved,
+        Username = user.Username,
+        Roles = user.Roles.Select(r => r.Id).ToArray(),
+        AvailableRoles = roleRepository.GetAll().Select(r => new RoleDto(r)).ToArray()
       };
       return View(viewModel);
     }
@@ -271,6 +273,12 @@ namespace ClubPool.Web.Controllers.Users
       user.FirstName = viewModel.FirstName;
       user.LastName = viewModel.LastName;
       user.IsApproved = viewModel.IsApproved;
+      user.RemoveAllRoles();
+      if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
+        foreach (int roleId in viewModel.Roles) {
+          user.AddRole(roleRepository.Get(roleId));
+        }
+      }
       userRepository.SaveOrUpdate(user);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";

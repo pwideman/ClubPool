@@ -5,7 +5,7 @@
     <%= Html.ContentImage("adduser.png", "Add User") %>
     <h3 class="heading">Add User</h3>
   </div>
-  <div class="form-content">
+  <div class="form-content add-user-form">
     <div class="form-header">
       All fields are required
     </div>

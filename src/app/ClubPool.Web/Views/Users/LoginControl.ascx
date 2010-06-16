@@ -5,13 +5,13 @@
      } %>
   <%= Html.HiddenFor(m => m.ReturnUrl) %>
   <div class="form-row">
-    <%= Html.LabelFor(m => m.Username) %>
+    <span class="form-label-left"><%= Html.LabelFor(m => m.Username) %></span>
     <div class="form-input">
       <%= Html.TextBoxFor(m => m.Username, new { @class="required"}) %>
     </div>
   </div>
   <div class="form-row">
-    <%= Html.LabelFor(m => m.Password) %>
+    <span class="form-label-left"><%= Html.LabelFor(m => m.Password) %></span>
     <div class="form-input">
       <%= Html.PasswordFor(m => m.Password, new { @class = "required" })%>
     </div>

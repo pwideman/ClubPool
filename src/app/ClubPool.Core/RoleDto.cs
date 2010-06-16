@@ -8,13 +8,10 @@ using NHibernate.Validator.Constraints;
 
 namespace ClubPool.Core
 {
-  public class RoleDto
+  public class RoleDto : EntityDto
   {
-    public int Id { get; set; }
-
-    [DisplayName("Name:")]
-    [NotNullNotEmpty(Message = "Required")]
-    public string Name { get; set; }
+    public RoleDto() {
+    }
 
     public RoleDto(Role role) {
       if (null != role) {
@@ -22,5 +19,9 @@ namespace ClubPool.Core
         Name = role.Name;
       }
     }
+
+    [DisplayName("Name:")]
+    [NotNullNotEmpty(Message = "Required")]
+    public string Name { get; set; }
   }
 }

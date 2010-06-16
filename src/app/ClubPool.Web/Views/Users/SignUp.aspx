@@ -22,9 +22,9 @@
         <% Html.RenderPartial("CreateUserControl"); %>
         <div class="spacer">&nbsp;</div>
         <div class="form-row">
-          <label><%= Html.CaptchaImage(50, 180)%></label>
+          <span class="form-label-left"><%= Html.CaptchaImage(50, 180)%></span>
           <div class="form-input">
-            <label for="captcha">Enter the text from the image below:</label><br />
+            <span class="form-sublabel"><label for="captcha">Enter the text from the image below:</label></span><br />
             <%= Html.CaptchaTextBox("captcha")%>
             <%= Html.ValidationMessage("captcha")%>
           </div>

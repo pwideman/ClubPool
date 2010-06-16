@@ -41,32 +41,35 @@ namespace ClubPool.SchemaGen
         sw.Flush();
         output("SchemaExport output:");
         output(sb.Replace("\n", Environment.NewLine).ToString());
+        
+        output("Creating roles");
+        var roleRepo = new LinqRepository<Role>();
+        Role admin = null;
+        Role officer = null;
+        using (roleRepo.DbContext.BeginTransaction()) {
+          admin = new Role(Roles.Administrators);
+          roleRepo.SaveOrUpdate(admin);
+          officer = new Role(Roles.Officers);
+          roleRepo.SaveOrUpdate(officer);
+          roleRepo.DbContext.CommitTransaction();
+        }
+
         output("Creating users");
         var userRepo = new LinqRepository<User>();
-        User adminUser = null;
-        User officer = null;
         using (userRepo.DbContext.BeginTransaction()) {
           var membershipService = new SharpArchMembershipService(userRepo);
-          adminUser = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true);
-          officer = membershipService.CreateUser("officer", "officer", "officer", "user", "officer@email.com", true);
+          var user = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true);
+          user.AddRole(admin);
+          userRepo.SaveOrUpdate(user);
+          user = membershipService.CreateUser("officer", "officer", "officer", "user", "officer@email.com", true);
+          user.AddRole(officer);
+          userRepo.SaveOrUpdate(user);
           membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true);
           for (int i = 0; i < 25; i++) {
             var name = "user" + i.ToString();
             membershipService.CreateUser(name, name, "user", i.ToString(), name + "@email.com", false);
           }
           userRepo.DbContext.CommitTransaction();
-        }
-        output("Creating roles");
-        var roleRepo = new LinqRepository<Role>();
-        using (roleRepo.DbContext.BeginTransaction()) {
-          var r = new Role(Roles.Administrators);
-          r.Users.Add(adminUser);
-          roleRepo.SaveOrUpdate(r);
-          r = new Role(Roles.Officers);
-          r.Users.Add(officer);
-          r.Users.Add(adminUser);
-          roleRepo.SaveOrUpdate(r);
-          roleRepo.DbContext.CommitTransaction();
         }
         output("Finished");
       }

@@ -5,7 +5,7 @@
     <%= Html.ContentImage("edituser.png", "Edit User") %>
     <h3 class="heading">Edit User</h3>
   </div>
-  <div class="form-content">
+  <div class="form-content edit-user-form">
     <div class="form-header">
       All fields are required
     </div>
@@ -17,35 +17,52 @@
         <%= Html.AntiForgeryToken()%>
         <%= Html.HiddenFor(m => m.Id) %>
         <div class="form-row">
-          <%= Html.LabelFor(m => m.Username)%>
+          <span class="form-label-left"><%= Html.LabelFor(m => m.Username)%></span>
           <div class="form-input">
             <%= Html.TextBoxFor(m => m.Username)%>
             <%= Html.ValidationMessageFor(m => m.Username)%>
           </div>
         </div>
         <div class="form-row">
-          <%= Html.LabelFor(m => m.Email)%>
+          <span class="form-label-left"><%= Html.LabelFor(m => m.Email)%></span>
           <div class="form-input">
             <%= Html.TextBoxFor(m => m.Email)%>
             <%= Html.ValidationMessageFor(m => m.Email)%>
           </div>
         </div>
         <div class="form-row">
-          <label for="FirstName">Name:</label>
+          <span class="form-label-left"><label for="FirstName">Name:</label></span>
           <div class="form-input">
             <%= Html.TextBoxFor(m => m.FirstName, new { @class = "short" })%>
-            <%= Html.LabelFor(m => m.FirstName)%>
+            <span class="form-sublabel"><%= Html.LabelFor(m => m.FirstName)%></span>
             <%= Html.ValidationMessageFor(m => m.FirstName)%>
           </div>
           <div class="form-input">
             <%= Html.TextBoxFor(m => m.LastName, new { @class = "short" })%>
-            <%= Html.LabelFor(m => m.LastName)%>
+            <span class="form-sublabel"><%= Html.LabelFor(m => m.LastName)%></span>
             <%= Html.ValidationMessageFor(m => m.LastName)%>
           </div>
         </div>
+        <div class="form-row form-row-short">
+          <span class="form-label-left">&nbsp;</span>
+          <%= Html.CheckBoxFor(m => m.IsApproved)%>
+          <%= Html.LabelFor(m => m.IsApproved)%>
+        </div>
         <div class="form-row">
-          <%= Html.LabelFor(m => m.IsApproved) %>
-          <%= Html.CheckBoxFor(m => m.IsApproved, new { style = "vertical-align: bottom;" })%>
+          <span class="form-label-left"><%= Html.LabelFor(m => m.AvailableRoles) %></span>
+          <div style="display:inline-block; margin: 0;">
+            <ul style="list-style-type: none; padding: 0; margin: 0px 0">
+              <% foreach (var role in Model.AvailableRoles) { %>
+              <li>
+                <input type="checkbox" name="Roles" id="<%= "Role" + role.Id.ToString() %>" value="<%= role.Id %>" <%
+                  if (Model.Roles.Contains(role.Id)) {
+                    %>checked="checked"<%
+                  } %> />
+                <label for="<%= "Role" + role.Id.ToString() %>"><%= role.Name%></label>
+              </li>
+              <% } %>
+            </ul>
+          </div>
         </div>
         <div class="spacer">&nbsp;</div>
         <div class="form-row-span">

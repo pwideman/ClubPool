@@ -22,7 +22,7 @@
             column.For(x => x.FullName).Named("Name");
             column.For(x => x.Email);
             column.For(x => x.IsApproved ? "Yes" : "No").Named("Approved");
-            column.For(x => string.Join(", ", x.Roles)).Named("Roles");
+            column.For(x => string.Join(", ", x.RoleNames)).Named("Roles");
             column.For(x => @"<a href=""" +
               Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Edit(x.Id)) +
               @""">" + Html.ContentImage("edit.png", "Edit") + @"</a>").Encode(false);

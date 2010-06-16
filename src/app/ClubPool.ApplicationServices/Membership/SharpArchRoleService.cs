@@ -42,8 +42,7 @@ namespace ClubPool.ApplicationServices.Membership
 
       var role = roleRepository.FindOne(RoleQueries.RoleByName(roleName));
       if (null != role) {
-        return role.Users.AsQueryable()
-          .Where(UserQueries.UserByUsername(username)).Count() > 0;
+        return role.Users.AsQueryable().WithUsername(username).Any();
       }
       else {
         return false;

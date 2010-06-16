@@ -31,7 +31,7 @@ namespace ClubPool.Core
     }
 
     protected virtual void InitMembers() {
-      Roles = new List<Role>();
+      roles = new List<Role>();
       IsApproved = false;
     }
 
@@ -62,6 +62,37 @@ namespace ClubPool.Core
 
     public virtual bool IsApproved { get; set; }
 
-    public virtual IList<Role> Roles { get; protected set; }
+    protected IList<Role> roles;
+
+    public virtual IEnumerable<Role> Roles { get { return roles; } }
+
+    public virtual User RemoveAllRoles() {
+      roles.Clear();
+      return this;
+    }
+
+    public virtual User AddRole(Role role) {
+      Check.Require(null != role, "role cannot be null");
+
+      roles.Add(role);
+      return this;
+    }
+
+    public virtual bool IsInRole(Role role) {
+      return roles.Contains(role);
+    }
+
+    public virtual User RemoveRole(Role role) {
+      Check.Require(null != role, "role cannot be null");
+
+      if (IsInRole(role)) {
+        roles.Remove(role);
+      }
+      else {
+        throw new InvalidOperationException(string.Format("User does not belong to role '{0}'", role.Name));
+      }
+      return this;
+    }
+
   }
 }

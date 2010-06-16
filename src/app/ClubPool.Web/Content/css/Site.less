@@ -83,6 +83,30 @@ div.sidebarGadgetContent
   button {
     padding: 0px;
   }
+
+  div.form-row {
+    padding-right: 8px;
+    min-height: 34px;
+
+    span.form-label-left {
+      width: 70px;
+      padding-right: 4px;
+      margin-top: 8px;
+    }
+  }
+
+  div.form-input {
+    input {
+      width: 120px;
+      height: 16px;
+    }
+  }
+
+  button {
+    width: 100px;
+    height: 25px;
+    /*margin-left: 55px;*/
+  }
 }
 
 /* footer
@@ -96,25 +120,6 @@ div.sidebarGadgetContent
 
 /* forms
 ----------------------------------------------------------*/
-
-/*
-div.formContainer
-{
-  margin-bottom: 4px;
-  background: @standard_blue;
-  padding: 6px;
-  display: inline-block;
-  .corner;
-}
-
-div.formTitle
-{
-  padding: 4px;
-  color: #FFFFFF;
-  font-size: 120%;
-  text-align: center;
-}
-*/
 
 div.form-header
 {
@@ -151,12 +156,16 @@ form.normal {
     padding-right: 10px;
     min-height: 54px;
   }
+  div.form-row-short {
+    min-height: 0;
+    margin: 10px 0;
+  }
 }
 
-div.form-row > label
+span.form-label-left
 {
   display: inline-block;
-  width: 200px;
+  width: 180px;
   text-align: right;
   padding-right: 8px;
   vertical-align: top;
@@ -171,35 +180,15 @@ span.required
   vertical-align: top;
 }
 
-/*
-div.formInput input
-{
-  width: 221px;
-  border: 1px solid @standard_blue;
-  height: 25px;
-  padding: 2px;
-  margin: 1px;
-  display: block;
+span.form-sublabel {
+  font-size: 80%;
 }
-*/
-
-/*
-div.formrow {
-  input.short {
-    width: 104px;
-  }
-}
-*/
 
 div.form-input
 {
   display: inline-block;
   padding: 0;
   vertical-align: top;
-
-  label {
-    font-size: 80%;
-  }
 
   input
   {
@@ -209,6 +198,7 @@ div.form-input
     padding: 2px;
     margin: 1px;
     display: block;
+    .corner(4px);
   }
 
   input.short {
@@ -285,47 +275,24 @@ div.formValidationSummary
   margin-bottom: 8px;
 }
 
-/* sidebar forms */
-
-form.sidebar {
-  div.form-row {
-    padding-right: 8px;
-    min-height: 34px;
-    label {
-      display: inline-block;
-      width: 70px;
-      text-align: right;
-      padding-right: 4px;
-      vertical-align: top;
-      margin-top: 8px;
-    }
-  }
-  div.form-input {
-    input {
-      width: 120px;
-      height: 16px;
-    }
-  }
-  button {
-    width: 100px;
-    height: 25px;
-    /*margin-left: 55px;*/
-  }
-}
-
 /* normal login form */
 
 div.login-form
 {
-  div.form-row {
-    label {
-      width: 100px;
-    }
+  span.form-label-left {
+    width: 90px;
+  }
+}
+
+div.add-user-form, div.edit-user-form
+{
+  span.form-label-left {
+    width: 140px;
   }
 }
 
 div.form-message {
-  margin: 8px auto;
+  margin: 8px auto 16px;
   width: 80%;
   display: block;
 }
