@@ -230,6 +230,9 @@ xVal.AttachValidator = function(elementPrefix, rulesConfig, options, pluginName)
                     validationOptions.wrapper = "li";
                     validationOptions.errorLabelContainer = "#" + options.ValidationSummary.ElementID + " ul:first";
                 }
+                if (options.DisableMessages) {
+                    validationOptions.errorPlacement = function() {};
+                }
                 var validator = formElement.validate(validationOptions);
                 if (options.ValidationSummary)
                     this._modifyJQueryValidationElementHidingBehaviourToSupportValidationSummary(validator, options);

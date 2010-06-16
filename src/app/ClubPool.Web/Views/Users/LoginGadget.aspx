@@ -6,12 +6,6 @@
           FormMethod.Post, new { @class = "sidebarLoginForm sidebar", id = "sidebarLoginForm" })) { %>
       <% Html.RenderPartial("LoginControl"); %>
     <% } %>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $("#sidebarLoginForm").validate({
-          errorPlacement: function() { /* don't show error labels, just highlight*/ }
-        });
-      });
-    </script>
+    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel>().DisableMessages() %>
   </div>
 </div>

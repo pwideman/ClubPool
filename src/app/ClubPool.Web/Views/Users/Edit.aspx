@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div>
-    <%= Html.ContentImage("users.png", "Users") %>
+    <%= Html.ContentImage("edituser.png", "Edit User") %>
     <h3 class="heading">Edit User</h3>
   </div>
   <div class="form-content">
