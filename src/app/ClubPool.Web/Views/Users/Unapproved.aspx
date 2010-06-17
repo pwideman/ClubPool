@@ -9,12 +9,12 @@
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
   <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Approve(null))) { %>
     <%= Html.AntiForgeryToken() %>
-    <table style="width: 600px">
+    <table style="width: 600px;">
       <thead>
         <tr>
           <th>Name</th>
           <th>Email</th>
-          <th>Approve</th>
+          <th><input type="checkbox" id="approveall" /></th>
         </tr>
       </thead>
       <tfoot>
@@ -47,4 +47,12 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("#approveall").click(function () {
+        var approved = $(this).attr("checked");
+        $("input[name=userids]").attr("checked", approved);
+      });
+    });
+  </script>
 </asp:Content>
