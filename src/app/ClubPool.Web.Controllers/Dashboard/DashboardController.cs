@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web;
 
 using SharpArch.Core;
+using SharpArch.Web.NHibernate;
 
 using ClubPool.Core;
 using ClubPool.ApplicationServices.Membership.Contracts;
@@ -29,6 +30,7 @@ namespace ClubPool.Web.Controllers.Dashboard
     }
 
     [Authorize]
+    [Transaction]
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
       viewModel.UserIsAdmin = authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators);
@@ -39,10 +41,8 @@ namespace ClubPool.Web.Controllers.Dashboard
 
     protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
-      if (userHasAlerts()) {
-        var alertsGadget = new AlertsSidebarGadget();
-        sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
-      }
+      var alertsGadget = new AlertsSidebarGadget();
+      sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
       return sidebarGadgetCollection;
     }
 
@@ -57,16 +57,34 @@ namespace ClubPool.Web.Controllers.Dashboard
 
     [Authorize]
     public ActionResult AlertsGadget() {
-      var alerts = new List<Alert>();
-      var viewModel = new AlertsGadgetViewModel(alerts);
+      return PartialView(GetAlertsViewModel());
+    }
+
+    protected AlertsViewModel GetAlertsViewModel() {
+      var warnings = new List<Alert>();
+      var errors = new List<Alert>();
+      var notifications = new List<Alert>();
+      // add unapproved users warning
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
         var unapprovedQuery = userRepository.GetAll().Where(u => !u.IsApproved);
         if (unapprovedQuery.Any()) {
           var url = BuildUrlFromExpression<Users.UsersController>(u => u.Unapproved(), null);
-          alerts.Add(new Alert(string.Format("There are {0} users awaiting approval", unapprovedQuery.Count()), url));
+          warnings.Add(new Alert(string.Format("There are {0} users awaiting approval", unapprovedQuery.Count()), url, AlertType.Warning));
         }
       }
-      return PartialView(viewModel);
+      if (false) {
+        // add dummy errors
+        errors.Add(new Alert("Temp dummy error alert", "", AlertType.Error));
+        errors.Add(new Alert("Temp dummy error alert with really long message that will wrap", "", AlertType.Error));
+        errors.Add(new Alert("Temp dummy error alert", "", AlertType.Error));
+        // add dummy warning
+        warnings.Add(new Alert("Temp dummy warning alert with really long message that will wrap", "", AlertType.Warning));
+        // add dummy notification
+        notifications.Add(new Alert("Temp dummy notification alert", "", AlertType.Notification));
+        notifications.Add(new Alert("Temp dummy notification alert with really long message that will wrap", "", AlertType.Notification));
+        notifications.Add(new Alert("Temp dummy notification alert", "", AlertType.Notification));
+      }
+      return new AlertsViewModel(notifications, warnings, errors);
     }
   }
 }

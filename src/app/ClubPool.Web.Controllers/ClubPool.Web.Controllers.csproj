@@ -101,7 +101,7 @@
     <Compile Include="Dashboard\DashboardController.cs" />
     <Compile Include="Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
     <Compile Include="Dashboard\ViewModels\IndexViewModel.cs" />
-    <Compile Include="Dashboard\ViewModels\AlertsGadgetViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\AlertsViewModel.cs" />
     <Compile Include="Navigation\NavigationController.cs" />
     <Compile Include="Navigation\ViewModels\MenuViewModel.cs" />
     <Compile Include="PartialRequest.cs" />
