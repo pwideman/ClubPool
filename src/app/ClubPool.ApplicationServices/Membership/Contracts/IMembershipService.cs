@@ -11,7 +11,7 @@ namespace ClubPool.ApplicationServices.Membership.Contracts
   public interface IMembershipService
   {
     bool ValidateUser(string username, string password);
-    User CreateUser(string username, string password, string firstName, string lastName, string email, bool isApproved);
+    User CreateUser(string username, string password, string firstName, string lastName, string email, bool isApproved, bool isLocked);
     bool UsernameIsInUse(string username);
     bool EmailIsInUse(string email);
   }

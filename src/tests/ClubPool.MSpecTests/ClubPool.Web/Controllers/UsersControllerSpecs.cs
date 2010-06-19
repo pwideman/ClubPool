@@ -449,7 +449,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
       user = new User(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email);
 
-      membershipService.Stub(s => s.CreateUser(username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, false)).Return(user);
+      membershipService.Stub(s => s.CreateUser(username, viewModel.Password, viewModel.FirstName, 
+        viewModel.LastName, viewModel.Email, false, false)).Return(user);
 
       var role = MockRepository.GenerateStub<Role>(Roles.Officers);
       user = new User("officer", "officer", "officer", "user", "officer@email.com");

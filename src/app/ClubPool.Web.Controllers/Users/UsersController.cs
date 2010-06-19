@@ -149,7 +149,7 @@ namespace ClubPool.Web.Controllers.Users
         ModelState.AddModelError("captcha", "Incorrect. Try again.");
         return View(viewModel);
       }
-      var user = CreateUser(viewModel, false);
+      var user = CreateUser(viewModel, false, false);
 
       if (null == user) {
         // if we couldn't create the user that means there was some type of validation error,
@@ -273,6 +273,7 @@ namespace ClubPool.Web.Controllers.Users
       user.FirstName = viewModel.FirstName;
       user.LastName = viewModel.LastName;
       user.IsApproved = viewModel.IsApproved;
+      user.IsLocked = viewModel.IsLocked;
       user.RemoveAllRoles();
       if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
         foreach (int roleId in viewModel.Roles) {
@@ -297,7 +298,7 @@ namespace ClubPool.Web.Controllers.Users
     [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateViewModel viewModel) {
-      var user = CreateUser(viewModel, true);
+      var user = CreateUser(viewModel, true, false);
 
       if (null == user) {
         // if we couldn't create the user that means there was some type of validation error,
@@ -309,7 +310,7 @@ namespace ClubPool.Web.Controllers.Users
       return this.RedirectToAction(c => c.Index(null));
     }
 
-    protected User CreateUser(CreateViewModel viewModel, bool approved) {
+    protected User CreateUser(CreateViewModel viewModel, bool approved, bool locked) {
       try {
         viewModel.Validate();
       }
@@ -329,7 +330,8 @@ namespace ClubPool.Web.Controllers.Users
         ModelState.AddModelErrorFor<CreateViewModel>(m => m.Email, "The email address is already in use");
         return null;
       }
-      var user = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName, viewModel.LastName, viewModel.Email, approved);
+      var user = membershipService.CreateUser(viewModel.Username, viewModel.Password, viewModel.FirstName,
+        viewModel.LastName, viewModel.Email, approved, locked);
       return user;
     }
   }

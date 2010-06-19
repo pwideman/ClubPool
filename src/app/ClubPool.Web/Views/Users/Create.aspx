@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Users.ViewModels.CreateViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-  <div>
+  <div class="heading">
     <%= Html.ContentImage("adduser.png", "Add User") %>
-    <h3 class="heading">Add User</h3>
+    <span>Add User</span>
   </div>
   <div class="form-content add-user-form">
     <div class="form-header">

@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Users.ViewModels.EditViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-  <div>
-    <%= Html.ContentImage("edituser.png", "Edit User") %>
-    <h3 class="heading">Edit User</h3>
+  <div class="heading">
+    <%= Html.ContentImage("edituser-large.png", "Edit User") %>
+    <span>Edit User</span>
   </div>
   <div class="form-content edit-user-form">
     <div class="form-header">
@@ -45,8 +45,15 @@
         </div>
         <div class="form-row form-row-short">
           <span class="form-label-left">&nbsp;</span>
-          <%= Html.CheckBoxFor(m => m.IsApproved)%>
-          <%= Html.LabelFor(m => m.IsApproved)%>
+          <div style="display: inline-block;">
+            <div>
+            <%= Html.CheckBoxFor(m => m.IsApproved)%>
+            <%= Html.LabelFor(m => m.IsApproved)%>
+            </div><div>
+            <%= Html.CheckBoxFor(m => m.IsLocked)%>
+            <%= Html.LabelFor(m => m.IsLocked)%>
+            </div>
+          </div>
         </div>
         <div class="form-row">
           <span class="form-label-left"><%= Html.LabelFor(m => m.AvailableRoles) %></span>

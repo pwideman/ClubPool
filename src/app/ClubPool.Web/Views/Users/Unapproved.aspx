@@ -1,9 +1,9 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Users.ViewModels.UnapprovedViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-  <div>
-    <%= Html.ContentImage("lockedusers.png", "Locked Users") %>
-    <h3 class="heading">Users Awaiting Approval</h3>
+  <div class="heading">
+    <%= Html.ContentImage("userwarning-large.png", "Unapproved Users") %>
+    <span>Users Awaiting Approval</span>
   </div>
   <% if (Model.UnapprovedUsers.Any()) { %>
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>

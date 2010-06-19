@@ -58,16 +58,25 @@ namespace ClubPool.SchemaGen
         var userRepo = new LinqRepository<User>();
         using (userRepo.DbContext.BeginTransaction()) {
           var membershipService = new SharpArchMembershipService(userRepo);
-          var user = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true);
+          // create admin user
+          var user = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true, false);
           user.AddRole(admin);
           userRepo.SaveOrUpdate(user);
-          user = membershipService.CreateUser("officer", "officer", "officer", "user", "officer@email.com", true);
+          // create officer user
+          user = membershipService.CreateUser("officer", "officer", "officer", "user", "officer@email.com", true, false);
           user.AddRole(officer);
           userRepo.SaveOrUpdate(user);
-          membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true);
-          for (int i = 0; i < 25; i++) {
+          // create normal user
+          membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true, false);
+          // create some dummy unapproved users
+          for (int i = 0; i < 10; i++) {
             var name = "user" + i.ToString();
-            membershipService.CreateUser(name, name, "user", i.ToString(), name + "@email.com", false);
+            membershipService.CreateUser(name, name, "user", i.ToString(), name + "@email.com", false, false);
+          }
+          // create some dummy locked users
+          for (int i = 10; i < 20; i++) {
+            var name = "user" + i.ToString();
+            membershipService.CreateUser(name, name, "user", i.ToString(), name + "@email.com", true, true);
           }
           userRepo.DbContext.CommitTransaction();
         }

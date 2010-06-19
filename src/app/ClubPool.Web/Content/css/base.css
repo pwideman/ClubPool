@@ -89,14 +89,6 @@ H3
   font-size: 200%;
 }
 
-H3.heading
-{
-  display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  vertical-align: middle;
-}
-
 H4, h5
 {
   color: #114884;
@@ -127,14 +119,6 @@ div.spacer
 
 p.heading {
   padding: 10px 0px 20px 0px;
-}
-
-span.heading 
-{
-  font-weight: bold;
-  color: @standard_blue;
-  margin-bottom: 30px;
-  font-size: 200%;
 }
 
 /* rescue pages */

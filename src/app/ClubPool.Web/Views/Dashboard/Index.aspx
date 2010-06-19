@@ -1,9 +1,9 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Dashboard.ViewModels.IndexViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-  <div>
+  <div class="heading">
     <%= Html.ContentImage("home.png", "Home") %>
-    <h3 class="heading">Dashboard</h3>
+    <span>Dashboard</span>
   </div>
   <% if (Model.UserIsAdmin) {
   } %>

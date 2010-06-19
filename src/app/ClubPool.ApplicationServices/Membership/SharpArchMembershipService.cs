@@ -38,7 +38,7 @@ namespace ClubPool.ApplicationServices.Membership
 
     public bool ValidateUser(string username, string password) {
       User user = userRepository.FindOne(UserQueries.UserByUsername(username));
-      if (null != user && user.IsApproved) {
+      if (null != user && user.IsApproved && !user.IsLocked) {
         return VerifyPassword(user.Password, password, user.PasswordSalt);
       }
       else {
@@ -58,7 +58,14 @@ namespace ClubPool.ApplicationServices.Membership
         return Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
     }
 
-    public User CreateUser(string username, string password, string firstName, string lastName, string email, bool isApproved) {
+    public User CreateUser(string username, 
+      string password,
+      string firstName,
+      string lastName,
+      string email,
+      bool isApproved,
+      bool isLocked) {
+
       Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
@@ -88,6 +95,7 @@ namespace ClubPool.ApplicationServices.Membership
       user = new User(username, hashedPassword, firstName, lastName, email);
       user.PasswordSalt = salt;
       user.IsApproved = isApproved;
+      user.IsLocked = isLocked;
       user.FirstName = firstName;
       user.LastName = lastName;
       user = userRepository.SaveOrUpdate(user);

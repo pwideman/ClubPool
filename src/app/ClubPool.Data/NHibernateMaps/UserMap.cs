@@ -17,6 +17,7 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.IgnoreProperty(x => x.FullName);
       mapping.IgnoreProperty(x => x.AddRole(null));
       mapping.Map(x => x.IsApproved);
+      mapping.Map(x => x.IsLocked);
       mapping.Map(x => x.Email);
       mapping.Map(x => x.Username);
       mapping.Map(x => x.FirstName);

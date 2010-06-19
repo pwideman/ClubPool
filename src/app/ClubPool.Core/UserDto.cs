@@ -22,6 +22,7 @@ namespace ClubPool.Core
         LastName = user.LastName;
         Email = user.Email;
         IsApproved = user.IsApproved;
+        IsLocked = user.IsLocked;
         Roles = user.Roles.Select(r => r.Id).ToArray();
         RoleNames = user.Roles.Select(r => r.Name).ToArray();
       }
@@ -64,6 +65,9 @@ namespace ClubPool.Core
 
     [DisplayName("Approved")]
     public bool IsApproved { get; set; }
+
+    [DisplayName("Locked")]
+    public bool IsLocked { get; set; }
 
     public int[] Roles { get; set; }
 

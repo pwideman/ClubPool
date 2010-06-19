@@ -33,6 +33,9 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     [DisplayName("Approved")]
     public bool IsApproved { get; set; }
 
+    [DisplayName("Locked")]
+    public bool IsLocked { get; set; }
+
     public int[] Roles { get; set; }
 
     [DisplayName("Roles:")]

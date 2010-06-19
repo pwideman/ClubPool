@@ -33,6 +33,7 @@ namespace ClubPool.Core
     protected virtual void InitMembers() {
       roles = new List<Role>();
       IsApproved = false;
+      IsLocked = false;
     }
 
     [DomainSignature]
@@ -61,6 +62,8 @@ namespace ClubPool.Core
     public virtual string Email { get; set; }
 
     public virtual bool IsApproved { get; set; }
+
+    public virtual bool IsLocked { get; set; }
 
     protected IList<Role> roles;
 

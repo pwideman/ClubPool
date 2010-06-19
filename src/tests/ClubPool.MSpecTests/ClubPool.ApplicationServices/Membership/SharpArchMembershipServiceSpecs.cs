@@ -131,7 +131,8 @@ namespace ClubPool.MSpecTests.ClubPool.ApplicationServices.Membership
 
     Because of = () => {
       try {
-        service.CreateUser(testUser.Username, testUser.Password, testUser.FirstName, testUser.LastName, testUser.Email, false);
+        service.CreateUser(testUser.Username, testUser.Password, testUser.FirstName, 
+          testUser.LastName, testUser.Email, false, false);
       }
       catch (Exception e) {
         theException = e;
@@ -158,7 +159,8 @@ namespace ClubPool.MSpecTests.ClubPool.ApplicationServices.Membership
 
     Because of = () => {
       try {
-        service.CreateUser(testUser.Username, testUser.Password, testUser.FirstName, testUser.LastName, testUser.Email, false);
+        service.CreateUser(testUser.Username, testUser.Password, testUser.FirstName,
+          testUser.LastName, testUser.Email, false, false);
       }
       catch (Exception e) {
         theException = e;
@@ -186,7 +188,7 @@ namespace ClubPool.MSpecTests.ClubPool.ApplicationServices.Membership
       userRepository.Stub(r => r.SaveOrUpdate(Arg<User>.Is.Anything)).Return(null).WhenCalled(m => m.ReturnValue = m.Arguments[0]);
     };
 
-    Because of = () => user = service.CreateUser(username, password, firstName, lastName, email, false);
+    Because of = () => user = service.CreateUser(username, password, firstName, lastName, email, false, false);
 
     It should_return_the_new_user = () => {
       user.ShouldNotBeNull();
