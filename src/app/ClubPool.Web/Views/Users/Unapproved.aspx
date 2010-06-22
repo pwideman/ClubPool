@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
-    <%= Html.ContentImage("userwarning-large.png", "Unapproved Users") %>
+    <%= Html.ContentImage("unapproveduser-large.png", "Unapproved Users") %>
     <span>Users Awaiting Approval</span>
   </div>
   <% if (Model.UnapprovedUsers.Any()) { %>
