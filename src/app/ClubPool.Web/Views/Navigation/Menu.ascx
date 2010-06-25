@@ -26,7 +26,7 @@
   <li><a href="#">Admin</a>
     <ul>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Index(null), "Users") %></li>
-      <li><a href="/seasons">Seasons</a></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(null), "Seasons") %></li>
       <li><a href="/divisions">Divisions</a></li>
       <li><a href="/teams">Teams</a></li>
       <li><a href="/schedules">Schedules</a></li>

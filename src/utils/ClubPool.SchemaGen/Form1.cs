@@ -80,6 +80,17 @@ namespace ClubPool.SchemaGen
           }
           userRepo.DbContext.CommitTransaction();
         }
+
+        output("Creating seasons");
+        var seasonRepo = new LinqRepository<Season>();
+        using (seasonRepo.DbContext.BeginTransaction()) {
+          for (int i = 0; i < 150; i++) {
+            var s = new Season("Season " + i.ToString());
+            seasonRepo.SaveOrUpdate(s);
+          }
+          seasonRepo.DbContext.CommitTransaction();
+        }
+
         output("Finished");
       }
       catch (Exception ex) {

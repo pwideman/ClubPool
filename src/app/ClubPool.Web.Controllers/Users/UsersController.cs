@@ -21,7 +21,6 @@ using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controls.Captcha;
-using ClubPool.Web.Controllers.Attributes;
 
 namespace ClubPool.Web.Controllers.Users
 {
