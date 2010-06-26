@@ -25,13 +25,13 @@
         <tr>
           <td><%= Html.Encode(item.Id) %></td>
           <td><%= Html.Encode(item.Name) %></td>
-          <td>
+          <td class="action-column">
             <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Edit(item.Id)) %>">
             <%= Html.ContentImage("edit-medium.png", "Edit") %>
             </a>
           </td>
-          <td>
-            <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Delete(item.Id, Model.Page), FormMethod.Post, new { @class = "normal" })) { %>
+          <td class="action-column">
+            <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Delete(item.Id, Model.CurrentPage), FormMethod.Post, new { @class = "normal" })) { %>
               <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
               <%= Html.AntiForgeryToken() %>
             <% } %>
@@ -42,33 +42,40 @@
         <td colspan="99">
           <span class="pager-info">Showing <%= Model.First %> - <%= Model.Last %> of <%= Model.Total %></span>
           <span class="pager-links">
-          <% if (Model.Page > 1) { %>
+          <% if (Model.CurrentPage > 1) { %>
           <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(1), "<<")%>
-          <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(Model.Page - 1), "<")%>
+          <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(Model.CurrentPage - 1), "<")%>
           <% } else { %>
           << <
           <% }
-            if (Model.LastPage > 2) {
-              var first = Math.Max(Model.Page - 8, 1);
-              for (int i = first; i < Model.Page; i++) {
-                %>
-                <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(i), i.ToString()) %>
-                <%
+            if (Model.TotalPages > 2) {
+              var numPageLinksToShow = 7;
+              var first = Math.Max(Model.CurrentPage - numPageLinksToShow / 2, 1);
+              var last = Math.Min(Model.CurrentPage + numPageLinksToShow / 2, Model.TotalPages);
+              if (last - first < numPageLinksToShow - 1) {
+                if (1 == first) {
+                  last += numPageLinksToShow - (last - first) - 1;
+                }
+                else {
+                  first -= numPageLinksToShow - (last - first) - 1;
+                }
+                last = Math.Min(last, Model.TotalPages);
+                first = Math.Max(first, 1);
               }
-              %>
-              <%= Model.Page.ToString() %>
-              <%
-              var last = Math.Min(Model.Page + (8 - (Model.Page - first)), Model.LastPage);
-              for (int i = Model.Page + 1; i <= last; i++) {
-                %>
-                <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(i), i.ToString()) %>
-                <%
+              for (int i = first; i < last+1; i++) {
+                if (i != Model.CurrentPage) {
+                  Response.Write(@"<a href=""?page=" + i.ToString() + @""">" + i.ToString() + "</a>\n");
+                  //Response.Write(Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(i), i.ToString()) + "\n");
+                }
+                else {
+                  Response.Write(i.ToString() + "\n");
+                }
               }
             }
           %>
-          <%  if (Model.Page < Model.LastPage) { %>
-          <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(Model.Page + 1), ">")%>
-          <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(Model.LastPage), ">>")%>
+          <%  if (Model.CurrentPage < Model.TotalPages) { %>
+          <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(Model.CurrentPage + 1), ">")%>
+          <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(Model.TotalPages), ">>")%>
           <% } else { %>
           > >>
           <% } %>

@@ -42,11 +42,11 @@ namespace ClubPool.Web.Controllers.Seasons
       var lastPage = (int)Math.Ceiling((double)total / (double)pageSize);
       var viewModel = new IndexViewModel() {
         Seasons = seasons,
-        Page = index+1,
+        CurrentPage = index+1,
         Total = total,
         First = first,
         Last = first + seasons.Count - 1,
-        LastPage = lastPage
+        TotalPages = lastPage
       };
       return View(viewModel);
     }

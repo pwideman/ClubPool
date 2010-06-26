@@ -216,6 +216,9 @@
     <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
+    <Content Include="Views\Seasons\Create.aspx" />
+    <Content Include="Views\Seasons\Index.aspx" />
+    <Content Include="Views\Seasons\SeasonEditControl.ascx" />
     <Content Include="Views\Shared\DebugFormSubmission.ascx" />
     <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\FormError.ascx" />
@@ -235,7 +238,9 @@
     <Content Include="Views\Users\SignUp.aspx" />
     <Content Include="Views\Users\SignUpComplete.aspx" />
     <Content Include="Views\Users\Unapproved.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Content\css\Site.less" />
     <Content Include="Scripts\MicrosoftAjax.js" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
