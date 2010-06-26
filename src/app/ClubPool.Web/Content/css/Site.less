@@ -403,11 +403,6 @@ div.form-message {
   vertical-align: middle;
 }
 
-div.pager {
-  padding: 10px;
-  text-align: right;
-}
-
 tr.pager {
   td {
     padding: 20px;
@@ -422,18 +417,33 @@ tr.pager:hover {
   }
 }
 
+span.pager-info {
+  margin-right: 12px;
+  font-size: 80%;
+}
+
+span.pager-links {
+  word-spacing: 0;
+  font-size: 90%;
+  a {
+    text-decoration: none;
+    padding: 4px;
+  }
+  span.pager-number-links {
+    span.current-page {
+      font-weight: bold;
+      padding: 4px;
+    }
+  }
+  span.pager-arrow-links {
+    font-size: 110%;
+  }
+}
+
 td.action-column {
   width: 32px;
 }
 
-span.pager-info {
-  margin-right: 12px;
-}
-
-span.pager-links {
-  text-weight: bold;
-  word-spacing: 8px;
-}
 
 div.action-button
 {
