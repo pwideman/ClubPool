@@ -220,6 +220,7 @@ namespace ClubPool.Web.Controllers.Users
         LastName = user.LastName,
         Email = user.Email,
         IsApproved = user.IsApproved,
+        IsLocked = user.IsLocked,
         Username = user.Username,
         Roles = user.Roles.Select(r => r.Id).ToArray(),
         AvailableRoles = roleRepository.GetAll().Select(r => new RoleDto(r)).ToArray()
