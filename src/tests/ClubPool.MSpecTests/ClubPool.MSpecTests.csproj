@@ -120,6 +120,7 @@
     <Compile Include="ClubPool.Web\Controllers\DashboardControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\HomeControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\NavigationControllerSpecs.cs" />
+    <Compile Include="ClubPool.Web\Controllers\SeasonsControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\UsersControllerSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocatorHelper.cs" />

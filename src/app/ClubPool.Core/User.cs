@@ -97,5 +97,9 @@ namespace ClubPool.Core
       return this;
     }
 
+    public virtual bool CanDelete() {
+      return true;
+    }
+
   }
 }

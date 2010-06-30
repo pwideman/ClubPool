@@ -35,19 +35,8 @@ namespace ClubPool.Web.Controllers.Seasons
     [Transaction]
     public ActionResult Index(int? page) {
       int pageSize = 10;
-      var index = Math.Max(page ?? 1, 1) - 1;
-      var total = seasonRepository.GetAll().Count();
-      var seasons = seasonRepository.GetAll().Select(s => new SeasonDto(s)).Page(index, pageSize).ToList();
-      var first = index * pageSize + 1;
-      var lastPage = (int)Math.Ceiling((double)total / (double)pageSize);
-      var viewModel = new IndexViewModel() {
-        Seasons = seasons,
-        CurrentPage = index+1,
-        Total = total,
-        First = first,
-        Last = first + seasons.Count - 1,
-        TotalPages = lastPage
-      };
+      var viewModel = new IndexViewModel(seasonRepository.GetAll().Select(s => new SeasonDto(s)), 
+        page.GetValueOrDefault(1), pageSize);
       return View(viewModel);
     }
 
@@ -124,16 +113,50 @@ namespace ClubPool.Web.Controllers.Seasons
       if (null != seasonToDelete) {
         if (seasonToDelete.CanDelete()) {
           seasonRepository.Delete(seasonToDelete);
-          TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
+          TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was deleted successfully.";
         }
         else {
           TempData[GlobalViewDataProperty.PageErrorMessage] = "There is other data in the system that references this season, it cannot be deleted.";
         }
       }
       else {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid user id";
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid season id";
       }
       return this.RedirectToAction(c => c.Index(page));
+    }
+
+    [HttpGet]
+    [Authorize(Roles = Roles.Administrators)]
+    public ActionResult ChangeActive() {
+      var viewModel = new ChangeActiveViewModel();
+      var activeSeason = seasonRepository.GetAll().WhereActive().SingleOrDefault();
+      if (null != activeSeason) {
+        viewModel.CurrentActiveSeasonName = activeSeason.Name;
+      }
+      viewModel.InactiveSeasons = seasonRepository.GetAll().WhereInactive().Select(s => new SeasonDto(s)).ToList();
+      return View(viewModel);
+    }
+
+    [HttpPost]
+    [Transaction]
+    [Authorize(Roles = Roles.Administrators)]
+    [ValidateAntiForgeryToken]
+    public ActionResult ChangeActive(int id) {
+      var newActiveSeason = seasonRepository.Get(id);
+      if (null == newActiveSeason) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid season id";
+      }
+      else {
+        var activeSeasons = seasonRepository.GetAll().WhereActive();
+        foreach (var season in activeSeasons) {
+          season.IsActive = false;
+          seasonRepository.SaveOrUpdate(season);
+        }
+        newActiveSeason.IsActive = true;
+        seasonRepository.SaveOrUpdate(newActiveSeason);
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The active season has been changed";
+      }
+      return this.RedirectToAction(c => c.Index(null));
     }
 
   }

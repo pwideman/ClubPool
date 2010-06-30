@@ -9,9 +9,11 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class IndexViewModel : ViewModelBase
+  public class IndexViewModel : PagedListViewModelBase<UserDto>
   {
-    public IPagination<UserDto> Users { get; set; }
-    public int Page { get; set; }
+    public IndexViewModel(IQueryable<UserDto> seasons, int page, int pageSize)
+      : base(seasons, page, pageSize) {
+    }
   }
+
 }

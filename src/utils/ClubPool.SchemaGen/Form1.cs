@@ -84,10 +84,14 @@ namespace ClubPool.SchemaGen
         output("Creating seasons");
         var seasonRepo = new LinqRepository<Season>();
         using (seasonRepo.DbContext.BeginTransaction()) {
-          for (int i = 0; i < 150; i++) {
+          for (int i = 0; i < 5; i++) {
             var s = new Season("Season " + i.ToString());
+            s.IsActive = false;
             seasonRepo.SaveOrUpdate(s);
           }
+          var active = new Season("Active Season");
+          active.IsActive = true;
+          seasonRepo.SaveOrUpdate(active);
           seasonRepo.DbContext.CommitTransaction();
         }
 

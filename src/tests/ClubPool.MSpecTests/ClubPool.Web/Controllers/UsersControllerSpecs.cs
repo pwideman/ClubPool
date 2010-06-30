@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Security.Principal;
-//using System.Web.Security;
 
 using Rhino.Mocks;
 using Machine.Specifications;
 using SharpArch.Testing;
-using MvcContrib.Pagination;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication;
@@ -27,7 +25,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   public abstract class specification_for_users_controller
   {
     protected static UsersController controller;
-    //protected static IRoleService roleService;
     protected static ILinqRepository<Role> roleRepository;
     protected static MockAuthenticationService authenticationService;
     protected static IMembershipService membershipService;
@@ -35,7 +32,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static IEmailService emailService;
 
     Establish context = () => {
-      //roleService = MockRepository.GenerateStub<IRoleService>();
       roleRepository = MockRepository.GenerateStub<ILinqRepository<Role>>();
       authenticationService = AuthHelper.CreateMockAuthenticationService();
       membershipService = MockRepository.GenerateStub<IMembershipService>();
@@ -52,11 +48,15 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   {
     static ActionResult result;
     static int page = 1;
+    static int pages = 3;
+    static int pageSize = 10;
 
     Establish context = () => {
-      userRepository.Stub(r => r.GetAll()).Return(new List<User>() {
-        new User("user1", "user1", "User", "One", "user1@user.com"),
-        new User("user2", "user2", "User", "Two", "user2@user.com") }.AsQueryable());
+      var users = new List<User>();
+      for (var i = 0; i < pages * pageSize; i++) {
+        users.Add(new User("user" + i.ToString(), "pass", "user", i.ToString(), "user" + i.ToString() + "@user.com"));
+      }
+      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
     Because of = () => result = controller.Index(page);
@@ -67,8 +67,46 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_set_the_view_model_properties_correctly = () => {
       var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
       viewModel.ShouldNotBeNull();
-      viewModel.Users.Count().ShouldEqual(2);
-      viewModel.Page.ShouldEqual(page);
+      viewModel.Items.Count().ShouldEqual(pageSize);
+      viewModel.First.ShouldEqual((page-1) * pageSize + 1);
+      viewModel.Last.ShouldEqual(pageSize * page);
+      viewModel.Total.ShouldEqual(pageSize * pages);
+      viewModel.TotalPages.ShouldEqual(pages);
+      viewModel.CurrentPage.ShouldEqual(page);
+    };
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_for_the_default_view_page2 : specification_for_users_controller
+  {
+    static ActionResult result;
+    static int page = 2;
+    static List<User> users;
+    static int pages = 3;
+    static int pageSize = 10;
+
+    Establish context = () => {
+      users = new List<User>();
+      for (var i = 0; i < pages * pageSize; i++) {
+        users.Add(new User("user" + i.ToString(), "pass", "user", i.ToString(), "user" + i.ToString() + "@user.com"));
+      }
+      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => result = controller.Index(page);
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_set_the_view_model_properties_correctly = () => {
+      var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
+      viewModel.ShouldNotBeNull();
+      viewModel.Items.Count().ShouldEqual(pageSize);
+      viewModel.First.ShouldEqual((page-1)*pageSize + 1);
+      viewModel.Last.ShouldEqual(pageSize * page);
+      viewModel.Total.ShouldEqual(pages * pageSize);
+      viewModel.TotalPages.ShouldEqual(pages);
+      viewModel.CurrentPage.ShouldEqual(page);
     };
   }
 
@@ -638,6 +676,231 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_set_the_error_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+  }
 
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_edit_a_user : specification_for_users_controller
+  {
+    static ActionResult result;
+    static int userId = 1;
+    static User user;
+    static List<Role> roles;
+
+    Establish context = () => {
+      roles = new List<Role>();
+      for(var i=0; i< 5; i++) {
+        var role = new Role("role" + i.ToString());
+        role.SetIdTo(i);
+        roles.Add(role);
+      }
+      user = new User("user", "pass", "user", "one", "user@user.com");
+      user.AddRole(roles[0]);
+      user.AddRole(roles[1]);
+      user.SetIdTo(userId);
+      userRepository.Stub(r => r.Get(userId)).Return(user);
+      roleRepository.Stub(r => r.GetAll()).Return(roles.AsQueryable());
+    };
+
+    Because of = () => result = controller.Edit(userId);
+
+    It should_display_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+
+    It should_set_the_view_model_properties = () => {
+      var viewModel = result.IsAViewAnd().ViewData.Model as EditViewModel;
+      viewModel.ShouldNotBeNull();
+      viewModel.Id.ShouldEqual(user.Id);
+      viewModel.FirstName.ShouldEqual(user.FirstName);
+      viewModel.LastName.ShouldEqual(user.LastName);
+      viewModel.IsApproved.ShouldEqual(user.IsApproved);
+      viewModel.Email.ShouldEqual(user.Email);
+      viewModel.IsLocked.ShouldEqual(user.IsLocked);
+      viewModel.Username.ShouldEqual(user.Username);
+      viewModel.Roles.Count().ShouldEqual(user.Roles.Count());
+      viewModel.AvailableRoles.Count().ShouldEqual(roles.Count);
+    };
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_with_valid_data : specification_for_users_controller
+  {
+    static ActionResult result;
+    static EditViewModel viewModel;
+    static User user;
+    static int userId;
+    static List<Role> roles;
+    static User savedUser;
+
+    Establish context = () => {
+      userId = 1;
+
+      roles = new List<Role>();
+      for (var i = 0; i < 5; i++) {
+        var role = new Role("role" + i.ToString());
+        role.SetIdTo(i);
+        roles.Add(role);
+        roleRepository.Stub(r => r.Get(i)).Return(role);
+      }
+
+      viewModel = new EditViewModel() {
+        FirstName = "user",
+        LastName = "test",
+        Username = "testuser",
+        Email = "user@user.com",
+        IsLocked = false,
+        IsApproved = true,
+        Id = userId,
+        Roles = new int[] { 0, 1 }
+      };
+
+      user = new User("temp", "pass", "temp", "temp", "temp@temp.com");
+      user.SetIdTo(userId);
+
+      roleRepository.Stub(r => r.GetAll()).Return(roles.AsQueryable());
+      userRepository.Stub(r => r.Get(userId)).Return(user);
+      userRepository.Stub(r => r.SaveOrUpdate(Arg<User>.Is.Anything)).Return(null).WhenCalled(m => savedUser = (User)m.Arguments[0]);
+    };
+
+    Because of = () => result = controller.Edit(viewModel);
+
+    It should_redirect_to_the_default_view = () => {
+      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
+      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
+    };
+
+    It should_set_the_page_notification_message = () => 
+      controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
+
+    It should_update_the_user_properties = () => {
+      savedUser.Username.ShouldEqual(viewModel.Username);
+      savedUser.FirstName.ShouldEqual(viewModel.FirstName);
+      savedUser.LastName.ShouldEqual(viewModel.LastName);
+      savedUser.Email.ShouldEqual(viewModel.Email);
+      savedUser.IsApproved.ShouldEqual(viewModel.IsApproved);
+      savedUser.IsLocked.ShouldEqual(viewModel.IsLocked);
+      savedUser.Id.ShouldEqual(viewModel.Id);
+      savedUser.Roles.Count().ShouldEqual(viewModel.Roles.Count());
+    };
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_with_a_model_state_error : specification_for_users_controller
+  {
+    static ActionResult result;
+    static EditViewModel viewModel;
+    static int userId;
+
+    Establish context = () => {
+      userId = 1;
+      viewModel = new EditViewModel() {
+        FirstName = "user",
+        LastName = "test",
+        Username = null,
+        Email = "user@user.com",
+        IsLocked = false,
+        IsApproved = true,
+        Id = userId,
+        Roles = new int[] { 0, 1 }
+      };
+    };
+
+    Because of = () => result = controller.Edit(viewModel);
+
+    It should_return_the_viewmodel_to_the_default_view = () => {
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+      result.IsAViewAnd().ViewData.Model.ShouldEqual(viewModel);
+    };
+
+    It should_add_the_model_state_error = () => {
+      var modelState = result.IsAViewAnd().ViewData.ModelState;
+      modelState.IsValid.ShouldBeFalse();
+      modelState.Count.ShouldBeGreaterThan(0);
+    };
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_with_a_duplicate_username : specification_for_users_controller
+  {
+    static ActionResult result;
+    static EditViewModel viewModel;
+    static int userId;
+    static User user;
+
+    Establish context = () => {
+      userId = 1;
+      viewModel = new EditViewModel() {
+        FirstName = "user",
+        LastName = "test",
+        Username = "username",
+        Email = "user@user.com",
+        IsLocked = false,
+        IsApproved = true,
+        Id = userId,
+        Roles = new int[] { 0, 1 }
+      };
+      
+      user = new User("temp", "pass", "temp", "temp", "temp@temp.com");
+      user.SetIdTo(userId);
+      userRepository.Stub(r => r.Get(userId)).Return(user);
+
+      membershipService.Stub(s => s.UsernameIsInUse(null)).IgnoreArguments().Return(true);
+    };
+
+    Because of = () => result = controller.Edit(viewModel);
+
+    It should_return_the_viewmodel_to_the_default_view = () => {
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+      result.IsAViewAnd().ViewData.Model.ShouldEqual(viewModel);
+    };
+
+    It should_add_the_model_state_error = () => {
+      var modelState = result.IsAViewAnd().ViewData.ModelState;
+      modelState.IsValid.ShouldBeFalse();
+      modelState.Count.ShouldBeGreaterThan(0);
+      modelState.Keys.Contains("Username").ShouldBeTrue();
+    };
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_with_a_duplicate_email : specification_for_users_controller
+  {
+    static ActionResult result;
+    static EditViewModel viewModel;
+    static int userId;
+    static User user;
+
+    Establish context = () => {
+      userId = 1;
+      viewModel = new EditViewModel() {
+        FirstName = "user",
+        LastName = "test",
+        Username = "username",
+        Email = "user@user.com",
+        IsLocked = false,
+        IsApproved = true,
+        Id = userId,
+        Roles = new int[] { 0, 1 }
+      };
+
+      user = new User("temp", "pass", "temp", "temp", "temp@temp.com");
+      user.SetIdTo(userId);
+      userRepository.Stub(r => r.Get(userId)).Return(user);
+
+      membershipService.Stub(s => s.EmailIsInUse(null)).IgnoreArguments().Return(true);
+    };
+
+    Because of = () => result = controller.Edit(viewModel);
+
+    It should_return_the_viewmodel_to_the_default_view = () => {
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+      result.IsAViewAnd().ViewData.Model.ShouldEqual(viewModel);
+    };
+
+    It should_add_the_model_state_error = () => {
+      var modelState = result.IsAViewAnd().ViewData.ModelState;
+      modelState.IsValid.ShouldBeFalse();
+      modelState.Count.ShouldBeGreaterThan(0);
+      modelState.Keys.Contains("Email").ShouldBeTrue();
+    };
   }
 }

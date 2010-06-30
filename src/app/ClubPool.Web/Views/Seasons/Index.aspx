@@ -9,6 +9,10 @@
       <%= Html.ContentImage("add-medium.png", "Add a new season") %>
       <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Create(), "Add a new season") %>
     </div>
+    <div class="action-button">
+      <%= Html.ContentImage("check-medium.png", "Change active season") %>
+      <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.ChangeActive(), "Change the active season") %>
+    </div>
   </div>
   <div>
     <table style="width: 500px;">
@@ -16,25 +20,33 @@
         <tr>
           <th>Id</th>
           <th>Name</th>
+          <th>Active</th>
           <th></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-    <% foreach (var item in Model.Seasons) { %>
+    <% foreach (var item in Model.Items) { %>
         <tr>
           <td><%= Html.Encode(item.Id) %></td>
           <td><%= Html.Encode(item.Name) %></td>
+          <td>
+            <% if (item.IsActive) { %>
+            <%= Html.ContentImage("check-medium.png", "Current")%>
+            <% } %>
+          </td>
           <td class="action-column">
             <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Edit(item.Id)) %>">
             <%= Html.ContentImage("edit-medium.png", "Edit") %>
             </a>
           </td>
           <td class="action-column">
-            <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Delete(item.Id, Model.CurrentPage), FormMethod.Post, new { @class = "normal" })) { %>
+            <% if (item.CanDelete) {
+                 using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Delete(item.Id, Model.CurrentPage), FormMethod.Post)) { %>
               <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
-              <%= Html.AntiForgeryToken() %>
-            <% } %>
+              <%= Html.AntiForgeryToken()%>
+            <%   }
+               } %>
           </td>
         </tr>
     <% } %>

@@ -18,6 +18,7 @@ namespace ClubPool.Core
       : this() {
       Id = season.Id;
       Name = season.Name;
+      IsActive = season.IsActive;
       CanDelete = season.CanDelete();
     }
 
@@ -27,6 +28,9 @@ namespace ClubPool.Core
     [DisplayName("Name:")]
     [NotNullNotEmpty]
     public string Name { get; set; }
+
+    [DisplayName("Active")]
+    public virtual bool IsActive { get; set; }
 
     public bool CanDelete { get; set; }
   }

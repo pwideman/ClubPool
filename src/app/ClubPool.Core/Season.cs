@@ -30,8 +30,10 @@ namespace ClubPool.Core
     [NotNullNotEmpty]
     public virtual string Name { get; set; }
 
+    public virtual bool IsActive { get; set; }
+
     public virtual bool CanDelete() {
-      return true;
+      return !IsActive;
     }
   }
 }

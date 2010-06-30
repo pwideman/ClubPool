@@ -57,13 +57,8 @@ namespace ClubPool.Web.Controllers.Users
     [Transaction]
     public ActionResult Index(int? page) {
       int pageSize = 10;
-      var index = Math.Max(page ?? 1, 1) - 1;
-      page = page.GetValueOrDefault(1);
-      var users = userRepository.GetAll().Select(u => new UserDto(u)).AsPagination(page.Value, pageSize);
-      var viewModel = new IndexViewModel() {
-        Users = users,
-        Page = page.Value
-      };
+      var viewModel = new IndexViewModel(userRepository.GetAll().Select(u => new UserDto(u)),
+        page.GetValueOrDefault(1), pageSize);
       return View(viewModel);
     }
 
@@ -213,13 +208,6 @@ namespace ClubPool.Web.Controllers.Users
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The selected users have been approved.";
       }
       return this.RedirectToAction(c => c.Unapproved());
-    }
-
-    [Transaction]
-    [Authorize(Roles=Roles.Administrators)]
-    public ActionResult View(int id) {
-      var user = new UserDto(userRepository.Get(id));
-      return View(user);
     }
 
     [HttpGet]

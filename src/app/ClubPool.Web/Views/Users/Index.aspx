@@ -18,27 +18,58 @@
       <%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(u => u.Unapproved(), "Unapproved users") %>
     </div>
   </div>
-  <div>
-    <div style="display:inline-block; clear: both;">
-      <% var unapprovedStatus = Html.ContentImage("block-medium.png", "Unapproved").ToHtmlString();
-         var lockedStatus = Html.ContentImage("lock-medium.png", "Locked").ToHtmlString(); %>
-      <%= Html.Grid(Model.Users).Columns(column => {
-            column.For(x => x.Id);
-            column.For(x => x.Username);
-            column.For(x => x.FullName).Named("Name");
-            column.For(x => x.Email);
-            column.For(x => (x.IsApproved ? "" : unapprovedStatus) + (x.IsLocked ? lockedStatus : "")).Named("Status").Encode(false);
-            column.For(x => string.Join(", ", x.RoleNames)).Named("Roles");
-            column.For(x => @"<a href=""" +
-              Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Edit(x.Id)) +
-              @""">" + Html.ContentImage("edit-medium.png", "Edit") + @"</a>").Encode(false);
-            column.For(x => @"<form action=""" +
-              Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(u => u.Delete(x.Id, Model.Page)) +
-              @""" method=""post""><input type=""image"" value=""Delete"" alt=""Delete"" src=""" + Url.ContentImageUrl("delete-medium.png") + @"""/>" +
-              Html.AntiForgeryToken() + "</form>").Encode(false);
-          }) %>
-      <div class="pager"><%= Html.Pager(Model.Users) %></div>
-    </div>
+    <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Username</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Roles</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+    <% foreach (var item in Model.Items) { %>
+        <tr>
+          <td><%= Html.Encode(item.Id) %></td>
+          <td><%= Html.Encode(item.Username) %></td>
+          <td><%= Html.Encode(item.FullName) %></td>
+          <td><%= Html.Encode(item.Email) %></td>
+          <td>
+            <% if (!item.IsApproved) { %>
+            <%= Html.ContentImage("block-medium.png", "Unapproved")%>
+            <% }
+              if (item.IsLocked) { %>
+            <%= Html.ContentImage("lock-medium.png", "Locked")%>
+            <% } %>
+          </td>
+          <td><%= string.Join(", ", item.RoleNames) %></td>
+          <td class="action-column">
+            <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(item.Id)) %>">
+            <%= Html.ContentImage("edit-medium.png", "Edit") %>
+            </a>
+          </td>
+          <td class="action-column">
+            <% if (item.CanDelete) {
+                 using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Delete(item.Id, Model.CurrentPage), FormMethod.Post)) { %>
+              <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
+              <%= Html.AntiForgeryToken()%>
+            <%   }
+               } %>
+          </td>
+        </tr>
+    <% } %>
+      <tr class="pager">
+        <td colspan="99">
+          <% Html.RenderPartial("Pager"); %>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
   <%
     if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {

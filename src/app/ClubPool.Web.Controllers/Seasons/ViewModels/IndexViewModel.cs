@@ -7,8 +7,10 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Seasons.ViewModels
 {
-  public class IndexViewModel : PagedListViewModelBase
+  public class IndexViewModel : PagedListViewModelBase<SeasonDto>
   {
-    public IEnumerable<SeasonDto> Seasons { get; set; }
+    public IndexViewModel(IQueryable<SeasonDto> seasons, int page, int pageSize)
+      : base(seasons, page, pageSize) {
+    }
   }
 }
