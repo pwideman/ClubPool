@@ -8,7 +8,7 @@ using ClubPool.Framework.Extensions;
 
 namespace ClubPool.Web.Controllers
 {
-  public abstract class PagedListViewModelBase<T> : PagedListViewModelBase where T : EntityDto
+  public abstract class PagedListViewModelBase<T> : PagedListViewModelBase
   {
     protected int page;
     protected int pageSize;

@@ -176,9 +176,13 @@ namespace ClubPool.Web.Controllers.Users
     public ActionResult Delete(int id, int page) {
       User userToDelete = userRepository.Get(id);
       if (null != userToDelete) {
-        //TODO: check to see if user has any data and if so, deny delete
-        userRepository.Delete(userToDelete);
-        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
+        if (userToDelete.CanDelete()) {
+          userRepository.Delete(userToDelete);
+          TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
+        }
+        else {
+          TempData[GlobalViewDataProperty.PageErrorMessage] = "There is data in the system referencing this user, the user cannot be deleted.";
+        }
       }
       else {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid user id";

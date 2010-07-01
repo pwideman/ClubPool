@@ -20,7 +20,7 @@ using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Testing.ApplicationServices.Authentication;
 
-namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
+namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 {
   public abstract class specification_for_users_controller
   {
@@ -43,6 +43,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     };
   }
 
+  // We don't need to test the paging here, that is tested in PagedListViewModelBaseSpecs
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_default_view : specification_for_users_controller
   {
@@ -71,40 +72,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       viewModel.First.ShouldEqual((page-1) * pageSize + 1);
       viewModel.Last.ShouldEqual(pageSize * page);
       viewModel.Total.ShouldEqual(pageSize * pages);
-      viewModel.TotalPages.ShouldEqual(pages);
-      viewModel.CurrentPage.ShouldEqual(page);
-    };
-  }
-
-  [Subject(typeof(UsersController))]
-  public class when_asked_for_the_default_view_page2 : specification_for_users_controller
-  {
-    static ActionResult result;
-    static int page = 2;
-    static List<User> users;
-    static int pages = 3;
-    static int pageSize = 10;
-
-    Establish context = () => {
-      users = new List<User>();
-      for (var i = 0; i < pages * pageSize; i++) {
-        users.Add(new User("user" + i.ToString(), "pass", "user", i.ToString(), "user" + i.ToString() + "@user.com"));
-      }
-      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
-    };
-
-    Because of = () => result = controller.Index(page);
-
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
-      viewModel.ShouldNotBeNull();
-      viewModel.Items.Count().ShouldEqual(pageSize);
-      viewModel.First.ShouldEqual((page-1)*pageSize + 1);
-      viewModel.Last.ShouldEqual(pageSize * page);
-      viewModel.Total.ShouldEqual(pages * pageSize);
       viewModel.TotalPages.ShouldEqual(pages);
       viewModel.CurrentPage.ShouldEqual(page);
     };
@@ -648,7 +615,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_set_the_notification_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
-
   }
 
   [Subject(typeof(UsersController))]
@@ -901,6 +867,55 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       modelState.IsValid.ShouldBeFalse();
       modelState.Count.ShouldBeGreaterThan(0);
       modelState.Keys.Contains("Email").ShouldBeTrue();
+    };
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_for_the_create_view : specification_for_users_controller
+  {
+    static ActionResult result;
+
+    Establish context = () => result = controller.Create();
+
+    It should_return_the_default_view = () =>
+      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+  }
+
+  // we don't have to test much with Create because it's the same code as SignUp.
+  // technically our specs shouldn't know this and exercise them both, but...
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_create_a_user : specification_for_users_controller
+  {
+    static ActionResult result;
+    static User user;
+    static CreateViewModel viewModel;
+
+    Establish context = () => {
+      viewModel = new CreateViewModel();
+      viewModel.ConfirmPassword = "pass";
+      viewModel.Password = "pass";
+      viewModel.Username = "user";
+      viewModel.FirstName = "user";
+      viewModel.LastName = "user";
+      viewModel.Email = "user@user.com";
+
+      membershipService.Stub(s => s.CreateUser(null, null, null, null, null, false, false)).IgnoreArguments().WhenCalled(m => {
+        user = new User(m.Arguments[0] as string, m.Arguments[1] as string, m.Arguments[2] as string,
+          m.Arguments[3] as string, m.Arguments[4] as string);
+        user.IsApproved = (bool)m.Arguments[5];
+        user.IsLocked = (bool)m.Arguments[6];
+      });
+    };
+
+    Because of = () => result = controller.Create(viewModel);
+
+    It should_create_the_user_approved_and_unlocked = () => {
+      user.Username.ShouldEqual(viewModel.Username);
+      user.FirstName.ShouldEqual(viewModel.FirstName);
+      user.LastName.ShouldEqual(viewModel.LastName);
+      // etc.
+      user.IsLocked.ShouldBeFalse();
+      user.IsApproved.ShouldBeTrue();
     };
   }
 }
