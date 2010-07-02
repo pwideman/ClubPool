@@ -875,7 +875,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   {
     static ActionResult result;
 
-    Establish context = () => result = controller.Create();
+    Because of = () => result = controller.Create();
 
     It should_return_the_default_view = () =>
       result.IsAViewAnd().ViewName.ShouldBeEmpty();

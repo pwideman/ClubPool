@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
@@ -108,7 +110,7 @@ namespace ClubPool.Web.Controllers.Seasons
     [HttpPost]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, int page) {
+    public ActionResult Delete(int id, int? page) {
       var seasonToDelete = seasonRepository.Get(id);
       if (null != seasonToDelete) {
         if (seasonToDelete.CanDelete()) {
@@ -116,7 +118,8 @@ namespace ClubPool.Web.Controllers.Seasons
           TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was deleted successfully.";
         }
         else {
-          TempData[GlobalViewDataProperty.PageErrorMessage] = "There is other data in the system that references this season, it cannot be deleted.";
+          TempData[GlobalViewDataProperty.PageErrorMessage] = 
+            "There is other data in the system that references this season, it cannot be deleted.";
         }
       }
       else {
@@ -157,6 +160,19 @@ namespace ClubPool.Web.Controllers.Seasons
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The active season has been changed";
       }
       return this.RedirectToAction(c => c.Index(null));
+    }
+
+    [HttpGet]
+    [Authorize(Roles = Roles.Administrators)]
+    public ActionResult View(int id) {
+      var season = seasonRepository.Get(id);
+      if (null == season) {
+        Response.StatusCode = 404;
+        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+      }
+     
+      var dto = new SeasonDto(season);
+      return View(dto);
     }
 
   }

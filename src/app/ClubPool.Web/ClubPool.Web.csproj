@@ -218,8 +218,10 @@
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Seasons\ChangeActive.aspx" />
     <Content Include="Views\Seasons\Create.aspx" />
+    <Content Include="Views\Seasons\Edit.aspx" />
     <Content Include="Views\Seasons\Index.aspx" />
     <Content Include="Views\Seasons\SeasonEditControl.ascx" />
+    <Content Include="Views\Seasons\View.aspx" />
     <Content Include="Views\Shared\DebugFormSubmission.ascx" />
     <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\FormError.ascx" />

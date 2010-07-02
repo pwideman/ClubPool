@@ -29,7 +29,7 @@
     <% foreach (var item in Model.Items) { %>
         <tr>
           <td><%= Html.Encode(item.Id) %></td>
-          <td><%= Html.Encode(item.Name) %></td>
+          <td><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.View(item.Id), item.Name) %></td>
           <td>
             <% if (item.IsActive) { %>
             <%= Html.ContentImage("check-medium.png", "Current")%>

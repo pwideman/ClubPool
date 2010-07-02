@@ -69,23 +69,23 @@ namespace ClubPool.Core
 
     public virtual IEnumerable<Role> Roles { get { return roles; } }
 
-    public virtual User RemoveAllRoles() {
+    public virtual void RemoveAllRoles() {
       roles.Clear();
-      return this;
     }
 
-    public virtual User AddRole(Role role) {
+    public virtual void AddRole(Role role) {
       Check.Require(null != role, "role cannot be null");
 
-      roles.Add(role);
-      return this;
+      if (!IsInRole(role)) {
+        roles.Add(role);
+      }
     }
 
     public virtual bool IsInRole(Role role) {
       return roles.Contains(role);
     }
 
-    public virtual User RemoveRole(Role role) {
+    public virtual void RemoveRole(Role role) {
       Check.Require(null != role, "role cannot be null");
 
       if (IsInRole(role)) {
@@ -94,7 +94,6 @@ namespace ClubPool.Core
       else {
         throw new InvalidOperationException(string.Format("User does not belong to role '{0}'", role.Name));
       }
-      return this;
     }
 
     public virtual bool CanDelete() {

@@ -23,6 +23,7 @@ namespace ClubPool.Core
     }
 
     protected void InitMembers() {
+      Divisions = new DivisionDto[0];
     }
 
     [DisplayName("Name:")]
@@ -33,5 +34,7 @@ namespace ClubPool.Core
     public virtual bool IsActive { get; set; }
 
     public bool CanDelete { get; set; }
+
+    public DivisionDto[] Divisions { get; set; }
   }
 }
