@@ -216,6 +216,7 @@
     <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
+    <Content Include="Views\Seasons\AddDivision.aspx" />
     <Content Include="Views\Seasons\ChangeActive.aspx" />
     <Content Include="Views\Seasons\Create.aspx" />
     <Content Include="Views\Seasons\Edit.aspx" />

@@ -95,6 +95,7 @@
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="PagedListViewModelBase.cs" />
     <Compile Include="Seasons\SeasonsController.cs" />
+    <Compile Include="Seasons\ViewModels\AddDivisionViewModel.cs" />
     <Compile Include="Seasons\ViewModels\ChangeActiveViewModel.cs" />
     <Compile Include="Seasons\ViewModels\IndexViewModel.cs" />
     <Compile Include="Users\ViewModels\CreateViewModel.cs" />

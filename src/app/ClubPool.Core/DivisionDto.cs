@@ -16,9 +16,9 @@ namespace ClubPool.Core
 
     public DivisionDto(Division division)
       : this() {
+      Id = division.Id;
       Name = division.Name;
       StartingDate = division.StartingDate;
-      Periodicity = division.Periodicity;
       CanDelete = division.CanDelete();
     }
 
@@ -28,16 +28,11 @@ namespace ClubPool.Core
     public void UpdateDivision(Division division) {
       division.Name = Name;
       division.StartingDate = StartingDate;
-      division.Periodicity = Periodicity;
     }
 
     [DisplayName("Starting date")]
     [NotNull]
     public DateTime StartingDate { get; set; }
-
-    [DisplayName("Periodicity")]
-    [NotNull]
-    public TimeSpan Periodicity { get; set; }
 
     [DisplayName("Name")]
     [NotNullNotEmpty]

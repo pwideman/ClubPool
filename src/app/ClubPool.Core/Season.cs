@@ -43,6 +43,7 @@ namespace ClubPool.Core
 
       if (divisions.Contains(division)) {
         divisions.Remove(division);
+        division.Season = null;
       }
     }
 
@@ -51,11 +52,12 @@ namespace ClubPool.Core
 
       if (!divisions.Contains(division)) {
         divisions.Add(division);
+        division.Season = this;
       }
     }
 
     public virtual bool CanDelete() {
-      return !IsActive;
+      return !IsActive && divisions.Count == 0;
     }
   }
 }

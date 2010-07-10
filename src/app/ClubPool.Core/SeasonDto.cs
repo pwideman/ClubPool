@@ -19,6 +19,9 @@ namespace ClubPool.Core
       Id = season.Id;
       Name = season.Name;
       IsActive = season.IsActive;
+      if (season.Divisions.Any()) {
+        Divisions = season.Divisions.Select(d => new DivisionDto(d)).OrderBy(d => d.StartingDate).ToArray();
+      }
       CanDelete = season.CanDelete();
     }
 

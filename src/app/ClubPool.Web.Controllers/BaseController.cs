@@ -5,7 +5,11 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 
+using SharpArch.Core.CommonValidator;
+using xVal.ServerSide;
+
 using ClubPool.Web.Controllers.Attributes;
+using ClubPool.Framework.Validation;
 
 namespace ClubPool.Web.Controllers
 {
@@ -29,6 +33,17 @@ namespace ClubPool.Web.Controllers
 
       VirtualPathData vpd = ControllerContext.RouteData.Route.GetVirtualPath(ControllerContext.RequestContext, rvd);
       return (vpd == null) ? null : vpd.VirtualPath;
+    }
+
+    protected bool ValidateViewModel(IValidatable viewModel) {
+      try {
+        viewModel.Validate();
+        return true;
+      }
+      catch (RulesException re) {
+        re.AddModelStateErrors(this.ModelState, null);
+        return false;
+      }
     }
   }
 }

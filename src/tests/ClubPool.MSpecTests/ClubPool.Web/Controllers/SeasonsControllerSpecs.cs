@@ -21,11 +21,14 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   {
     protected static SeasonsController controller;
     protected static ILinqRepository<Season> seasonsRepository;
+    protected static ILinqRepository<Division> divisionsRepository;
     protected static ActionResult result;
 
     Establish context = () => {
       seasonsRepository = MockRepository.GenerateStub<ILinqRepository<Season>>();
-      controller = new SeasonsController(seasonsRepository);
+      divisionsRepository = MockRepository.GenerateStub<ILinqRepository<Division>>();
+      controller = new SeasonsController(seasonsRepository, divisionsRepository);
+
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
     };

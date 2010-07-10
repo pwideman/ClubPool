@@ -11,6 +11,78 @@
 @import "menu.css";
 @import "base.css";
 
+.topcorner(@radius: 12px)
+{
+  -moz-border-radius-topleft: @radius;
+  -webkit-border-top-left-radius: @radius;
+  border-radius-topleft: @radius;
+
+  -moz-border-radius-topright: @radius;
+  -webkit-border-top-right-radius: @radius;
+  border-radius-topright: @radius;
+}
+
+.bottomcorner(@radius: 12px)
+{
+  -moz-border-radius-bottomleft: @radius;
+  -webkit-border-bottom-left-radius: @radius;
+  border-radius-bottomleft: @radius;
+
+  -moz-border-radius-bottomright: @radius;
+  -webkit-border-bottom-right-radius: @radius;
+  border-radius-bottomright: @radius;
+}
+
+.leftcorner(@radius: 12px)
+{
+  -moz-border-radius-bottomleft: @radius;
+  -webkit-border-bottom-left-radius: @radius;
+  border-radius-bottomleft: @radius;
+
+  -moz-border-radius-topleft: @radius;
+  -webkit-border-top-left-radius: @radius;
+  border-radius-topleft: @radius;
+}
+
+.rightcorner(@radius: 12px)
+{
+  -moz-border-radius-topright: @radius;
+  -webkit-border-top-right-radius: @radius;
+  border-radius-topright: @radius;
+
+  -moz-border-radius-bottomright: @radius;
+  -webkit-border-bottom-right-radius: @radius;
+  border-radius-bottomright: @radius;
+}
+
+.blcorner(@radius: 12px)
+{
+  -moz-border-radius-bottomleft: @radius;
+  -webkit-border-bottom-left-radius: @radius;
+  border-radius-bottomleft: @radius;
+}
+
+.brcorner(@radius: 12px)
+{
+  -moz-border-radius-bottomright: @radius;
+  -webkit-border-bottom-right-radius: @radius;
+  border-radius-bottomright: @radius;
+}
+
+.tlcorner(@radius: 12px)
+{
+  -moz-border-radius-topleft: @radius;
+  -webkit-border-top-left-radius: @radius;
+  border-radius-topleft: @radius;
+}
+
+.trcorner(@radius: 12px)
+{
+  -moz-border-radius-topright: @radius;
+  -webkit-border-top-right-radius: @radius;
+  border-radius-topright: @radius;
+}
+
 .loginStatusPanel
 {
   right: 25px;
@@ -319,18 +391,6 @@ div.edit-season-properties-form
   }
 }
 
-div.edit-season-divisions-list
-{
-  width: 500px;
-  height: 400px;
-  margin: 8px;
-  border: 1px solid @dark_blue;
-  display: inline-block;
-  padding: 8px;
-  .corner;
-  vertical-align: top;
-}
-
 div.form-message {
   margin: 8px auto 16px;
   width: 80%;
@@ -485,3 +545,52 @@ div.action-button-row
 {
   margin-bottom: 20px;
 }
+
+/* Season View */
+
+div.season-view-divisions-list
+{
+  width: 600px;
+}
+
+div.content-box
+{
+  margin-bottom: 8px;
+  .corner;
+  border: 1px solid @dark_blue;
+
+  div.content-box-title {
+    padding: 6px;
+    background-color: @light_blue;
+    .topcorner;
+    
+    span.content-box-title-heading {
+      vertical-align: top;
+    }
+
+    div.content-box-title-toolbar {
+      float: right;
+      text-align: right;
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: inline;
+        li {
+          margin: 0;
+          padding: 0;
+          display: inline;
+          form {
+            display: inline;
+          }
+        }
+      }
+    }
+  }
+
+  div.content-box-content {
+    padding: 12px;
+  }
+}
+
+/* End Season View */

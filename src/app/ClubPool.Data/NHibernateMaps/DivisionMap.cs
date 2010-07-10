@@ -10,9 +10,9 @@ namespace ClubPool.Data.NHibernateMaps
   {
     public void Override(AutoMapping<Division> mapping) {
       mapping.Id(x => x.Id);
-      mapping.Map(x => x.Periodicity);
       mapping.Map(x => x.StartingDate);
       mapping.Map(x => x.Name);
+      mapping.References(x => x.Season);
     }
   }
 }

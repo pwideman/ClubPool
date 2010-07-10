@@ -26,11 +26,14 @@ namespace ClubPool.Web.Controllers.Seasons
   public class SeasonsController : BaseController
   {
     protected ILinqRepository<Season> seasonRepository;
+    protected ILinqRepository<Division> divisionRepository;
 
-    public SeasonsController(ILinqRepository<Season> seasonRepo) {
+    public SeasonsController(ILinqRepository<Season> seasonRepo, ILinqRepository<Division> divisionRepo) {
       Check.Require(null != seasonRepo, "seasonRepo cannot be null");
+      Check.Require(null != divisionRepo, "divisionRepo cannot be null");
 
       seasonRepository = seasonRepo;
+      divisionRepository = divisionRepo;
     }
 
     [Authorize(Roles = Roles.Administrators)]
@@ -71,6 +74,7 @@ namespace ClubPool.Web.Controllers.Seasons
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
+    [Transaction]
     public ActionResult Edit(int id) {
       var season = seasonRepository.Get(id);
       var dto = new SeasonDto(season);
@@ -130,6 +134,7 @@ namespace ClubPool.Web.Controllers.Seasons
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
+    [Transaction]
     public ActionResult ChangeActive() {
       var viewModel = new ChangeActiveViewModel();
       var activeSeason = seasonRepository.GetAll().WhereActive().SingleOrDefault();
@@ -164,15 +169,74 @@ namespace ClubPool.Web.Controllers.Seasons
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
+    [Transaction]
     public ActionResult View(int id) {
       var season = seasonRepository.Get(id);
       if (null == season) {
-        Response.StatusCode = 404;
         throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
       }
      
       var dto = new SeasonDto(season);
       return View(dto);
+    }
+
+    [HttpGet]
+    [Authorize(Roles=Roles.Administrators)]
+    [Transaction]
+    public ActionResult AddDivision(int seasonId) {
+      var season = seasonRepository.Get(seasonId);
+      if (null == season) {
+        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+      }
+      var dto = new AddDivisionViewModel() {
+        SeasonId = season.Id,
+        SeasonName = season.Name,
+      };
+      return View(dto);
+    }
+
+    [HttpPost]
+    [Authorize(Roles=Roles.Administrators)]
+    [Transaction]
+    public ActionResult AddDivision(AddDivisionViewModel viewModel) {
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
+      }
+
+      Season s = seasonRepository.Get(viewModel.SeasonId);
+      Division d = new Division(viewModel.Name, DateTime.Parse(viewModel.StartingDate));
+      divisionRepository.SaveOrUpdate(d);
+      s.AddDivision(d);
+      seasonRepository.SaveOrUpdate(s);
+
+      return this.RedirectToAction(c => c.View(s.Id));
+    }
+
+    [HttpPost]
+    [Authorize(Roles=Roles.Administrators)]
+    [Transaction]
+    [ValidateAntiForgeryToken]
+    public ActionResult DeleteDivision(int divisionId) {
+      var division = divisionRepository.Get(divisionId);
+      if (null == division) {
+        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+      }
+      var seasonId = division.Season.Id;
+      if (!division.CanDelete()) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The division cannot be deleted";
+      }
+      else {
+        divisionRepository.Delete(division);
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was deleted";
+      }
+      return this.RedirectToAction(c => c.View(seasonId));
+    }
+
+    [HttpGet]
+    [Authorize(Roles=Roles.Administrators)]
+    [Transaction]
+    public ActionResult AddTeamToDivision(int divisionId) {
+      return View();
     }
 
   }
