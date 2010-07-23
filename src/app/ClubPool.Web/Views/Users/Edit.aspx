@@ -44,21 +44,24 @@
           </div>
         </div>
         <div class="form-row form-row-short">
-          <span class="form-label-left">&nbsp;</span>
-          <div style="display: inline-block;">
-            <div>
-            <%= Html.CheckBoxFor(m => m.IsApproved)%>
-            <%= Html.LabelFor(m => m.IsApproved)%>
-            </div><div>
-            <%= Html.CheckBoxFor(m => m.IsLocked)%>
-            <%= Html.LabelFor(m => m.IsLocked)%>
-            </div>
+          <span class="form-label-left">Status:</span>
+          <div class="form-checkbox-list">
+            <ul>
+              <li>
+                <%= Html.CheckBoxFor(m => m.IsApproved)%>
+                <%= Html.LabelFor(m => m.IsApproved)%>
+              </li>
+              <li>
+                <%= Html.CheckBoxFor(m => m.IsLocked)%>
+                <%= Html.LabelFor(m => m.IsLocked)%>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="form-row">
           <span class="form-label-left"><%= Html.LabelFor(m => m.AvailableRoles) %></span>
-          <div style="display:inline-block; margin: 0;">
-            <ul style="list-style-type: none; padding: 0; margin: 0px 0">
+          <div class="form-checkbox-list">
+            <ul>
               <% foreach (var role in Model.AvailableRoles) { %>
               <li>
                 <input type="checkbox" name="Roles" id="<%= "Role" + role.Id.ToString() %>" value="<%= role.Id %>" <%

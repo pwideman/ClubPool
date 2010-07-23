@@ -13,6 +13,9 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.Map(x => x.StartingDate);
       mapping.Map(x => x.Name);
       mapping.References(x => x.Season);
+      mapping.HasMany<Team>(x => x.Teams)
+        .AsBag()
+        .Access.ReadOnlyPropertyThroughCamelCaseField();
     }
   }
 }

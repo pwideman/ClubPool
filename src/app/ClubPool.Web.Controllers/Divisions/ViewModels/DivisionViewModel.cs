@@ -7,10 +7,12 @@ using NHibernate.Validator.Constraints;
 
 using ClubPool.Core;
 
-namespace ClubPool.Web.Controllers.Seasons.ViewModels
+namespace ClubPool.Web.Controllers.Divisions.ViewModels
 {
-  public class AddDivisionViewModel : ValidatableViewModel
+
+  public class DivisionViewModel : ValidatableViewModel
   {
+    public int Id { get; set; }
     public int SeasonId { get; set; }
     public string SeasonName { get; set; }
 

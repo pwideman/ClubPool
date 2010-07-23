@@ -9,8 +9,8 @@ $(document).ready(function () {
     animation: { opacity: "show" },
     speed: "fast"
   });
-  if ($.browser.msie && $.browser.version.substr(0,1) > 7) {
-    
+  if ($.browser.msie && $.browser.version.substr(0, 1) > 7) {
+
     // round the corners on standard elements
     // only do this in IE, others will use css
     // sidebar gadgets

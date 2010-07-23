@@ -190,6 +190,7 @@
     <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\css\images\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="Content\css\jquery-ui-1.8.2.redmond.css" />
     <Content Include="Content\css\menu.css" />
     <Content Include="Content\Images\arrows-ffffff.png" />
     <Content Include="Content\Images\delete.png" />
@@ -216,10 +217,15 @@
     <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
-    <Content Include="Views\Seasons\AddDivision.aspx" />
+    <Content Include="Views\Divisions\Create.aspx" />
+    <Content Include="Views\Shared\SimpleUserListView.ascx" />
+    <Content Include="Views\Shared\TeamView.ascx" />
+    <Content Include="Views\Teams\Create.aspx" />
     <Content Include="Views\Seasons\ChangeActive.aspx" />
     <Content Include="Views\Seasons\Create.aspx" />
+    <Content Include="Views\Divisions\DivisionEditControl.ascx" />
     <Content Include="Views\Seasons\Edit.aspx" />
+    <Content Include="Views\Divisions\Edit.aspx" />
     <Content Include="Views\Seasons\Index.aspx" />
     <Content Include="Views\Seasons\SeasonEditControl.ascx" />
     <Content Include="Views\Seasons\View.aspx" />
@@ -228,6 +234,8 @@
     <Content Include="Views\Shared\FormError.ascx" />
     <Content Include="Views\Shared\NotificationMessage.ascx" />
     <Content Include="Views\Shared\Pager.ascx" />
+    <Content Include="Views\Teams\Edit.aspx" />
+    <Content Include="Views\Teams\TeamEditControl.ascx" />
     <Content Include="Views\Users\Create.aspx" />
     <Content Include="Views\Users\CreateUserControl.ascx" />
     <Content Include="Views\Users\Edit.aspx" />

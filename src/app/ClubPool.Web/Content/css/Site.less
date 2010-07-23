@@ -3,6 +3,7 @@
 @error_background_color: #FFFFD5;
 @error_foreground: red;
 @light_blue: #E0ECF8;
+@extralight_blue: #E9F3FC;
 @dark_blue: #074B8A;
 @menu_background: #8EB1DF;
 @menu_highlight_background: #7795BD;
@@ -325,6 +326,56 @@ div.form-row-span
   }
 }
 
+div.form-checkbox-list
+{
+  display: inline-block;
+  .corner(4px);
+  border: 1px solid lightgrey;
+  background-color: @extralight_blue;
+  padding: 8px;
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0
+  }
+}
+
+div.simple-user-list
+{
+  display: inline-block;
+  .corner(6px);
+  border: 1px solid lightgrey;
+  background-color: white;
+  padding: 8px;
+  max-width: 610px;
+  min-width: 200px;
+  min-height: 60px;
+
+  div.simple-user-list-item {
+    font-size: 85%;
+    display: inline-block;
+    margin: 4px;
+    border: 1px dashed lightgrey;
+    background-color: @extralight_blue;
+    .corner(6px);
+    padding: 4px;
+    width: 180px;
+    overflow: hidden;
+
+    div.simple-user-list-item-heading {
+      background-image: url(../images/user-small.png);
+      background-repeat: no-repeat;
+      padding-left: 20px;
+    }
+
+    ul {
+      font-size: 75%;
+      list-style-type: none;
+      padding: 0;
+      margin: 0
+    }
+  }
+}
 
 div.submit-row
 {
@@ -556,13 +607,13 @@ div.season-view-divisions-list
 div.content-box
 {
   margin-bottom: 8px;
-  .corner;
-  border: 1px solid @dark_blue;
+  .corner(8px);
+  border: 1px solid lightgrey;
 
   div.content-box-title {
     padding: 6px;
-    background-color: @light_blue;
-    .topcorner;
+    background-color: @extralight_blue;
+    .topcorner(8px);
     
     span.content-box-title-heading {
       vertical-align: top;
@@ -591,6 +642,10 @@ div.content-box
   div.content-box-content {
     padding: 12px;
   }
+}
+
+div.team-view-content {
+  
 }
 
 /* End Season View */

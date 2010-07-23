@@ -91,11 +91,14 @@
     <Compile Include="Attributes\ConfigRescueAttribute.cs" />
     <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
+    <Compile Include="Divisions\DivisionsController.cs" />
     <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="PagedListViewModelBase.cs" />
     <Compile Include="Seasons\SeasonsController.cs" />
-    <Compile Include="Seasons\ViewModels\AddDivisionViewModel.cs" />
+    <Compile Include="Divisions\ViewModels\DivisionViewModel.cs" />
+    <Compile Include="Teams\TeamsController.cs" />
+    <Compile Include="Teams\ViewModels\TeamViewModel.cs" />
     <Compile Include="Seasons\ViewModels\ChangeActiveViewModel.cs" />
     <Compile Include="Seasons\ViewModels\IndexViewModel.cs" />
     <Compile Include="Users\ViewModels\CreateViewModel.cs" />

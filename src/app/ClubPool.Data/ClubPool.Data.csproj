@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="NHibernateMaps\DivisionMap.cs" />
     <Compile Include="NHibernateMaps\SeasonMap.cs" />
+    <Compile Include="NHibernateMaps\TeamMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
