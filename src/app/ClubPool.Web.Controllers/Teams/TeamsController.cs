@@ -49,6 +49,7 @@ namespace ClubPool.Web.Controllers.Teams
       var division = divisionRepository.Get(divisionId);
       var viewModel = new TeamViewModel();
       viewModel.Division = new DivisionDto(division);
+      viewModel.AvailablePlayers = userRepository.GetAll().Select(u => new UserDto(u)).ToArray();
       return View(viewModel);
     }
 
@@ -63,6 +64,12 @@ namespace ClubPool.Web.Controllers.Teams
 
       var division = divisionRepository.Get(viewModel.Division.Id);
       var team = new Team(viewModel.Name, division);
+      if (null != viewModel.PlayerIds && viewModel.PlayerIds.Length > 0) {
+        foreach (int playerId in viewModel.PlayerIds) {
+          var player = userRepository.Get(playerId);
+          team.AddPlayer(player);
+        }
+      }
       teamRepository.SaveOrUpdate(team);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was created successfully";
@@ -100,6 +107,7 @@ namespace ClubPool.Web.Controllers.Teams
       viewModel.Id = id;
       viewModel.Name = team.Name;
       viewModel.Players = team.Players.Select(p => new UserDto(p)).ToArray();
+      viewModel.PlayerIds = viewModel.Players.Select(p => p.Id).ToArray();
       viewModel.AvailablePlayers = userRepository.GetAll().Select(u => new UserDto(u)).ToArray();
       return View(viewModel);
     }
@@ -115,6 +123,13 @@ namespace ClubPool.Web.Controllers.Teams
 
       var team = teamRepository.Get(viewModel.Id);
       team.Name = viewModel.Name;
+      team.RemoveAllPlayers();
+      if (null != viewModel.PlayerIds && viewModel.PlayerIds.Length > 0) {
+        foreach (int playerId in viewModel.PlayerIds) {
+          var player = userRepository.Get(playerId);
+          team.AddPlayer(player);
+        }
+      }
       teamRepository.SaveOrUpdate(team);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";

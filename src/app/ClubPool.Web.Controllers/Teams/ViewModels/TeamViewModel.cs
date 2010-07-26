@@ -12,6 +12,16 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
   public class TeamViewModel : ValidatableViewModel
   {
+    public TeamViewModel() {
+      InitMembers();
+    }
+
+    protected void InitMembers() {
+      PlayerIds = new int[0];
+      Players = new UserDto[0];
+      AvailablePlayers = new UserDto[0];
+    }
+
     public DivisionDto Division { get; set; }
     public int Id { get; set; }
 

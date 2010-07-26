@@ -1,4 +1,7 @@
-﻿/* global vars */
+﻿// global vars
+
+// colors
+
 @standard_blue: #648ABD;
 @error_background_color: #FFFFD5;
 @error_foreground: red;
@@ -7,8 +10,13 @@
 @dark_blue: #074B8A;
 @menu_background: #8EB1DF;
 @menu_highlight_background: #7795BD;
+//@extralight_green: #C3E375;
+//@extralight_green: #B8FFB8;
+@light_green: #D9FFB3;
+//@extralight_green: #DEF1B1;
+//@extralight_green: #D8F199;
 
-/* imports */
+// imports
 @import "menu.css";
 @import "base.css";
 
@@ -351,30 +359,38 @@ div.simple-user-list
   min-width: 200px;
   min-height: 60px;
 
-  div.simple-user-list-item {
-    font-size: 85%;
-    display: inline-block;
-    margin: 4px;
-    border: 1px dashed lightgrey;
-    background-color: @extralight_blue;
-    .corner(6px);
-    padding: 4px;
-    width: 180px;
-    overflow: hidden;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline;
+    li.simple-user-list-item {
+      font-size: 85%;
+      display: inline-block;
+      margin: 4px;
+      border: 1px dashed lightgrey;
+      background-color: @light_green;
+      .corner(6px);
+      padding: 4px;
+      width: 180px;
+      overflow: hidden;
 
-    div.simple-user-list-item-heading {
-      background-image: url(../images/user-small.png);
-      background-repeat: no-repeat;
-      padding-left: 20px;
-    }
+      div.simple-user-list-item-heading {
+        background-image: url(../images/user-small.png);
+        background-repeat: no-repeat;
+        padding-left: 20px;
+      }
 
-    ul {
-      font-size: 75%;
-      list-style-type: none;
-      padding: 0;
-      margin: 0
+      ul {
+        font-size: 75%;
+      }
     }
   }
+}
+
+div.simple-user-list-over
+{
+  background-color: #EEFFDC;
 }
 
 div.submit-row
@@ -609,19 +625,26 @@ div.content-box
   margin-bottom: 8px;
   .corner(8px);
   border: 1px solid lightgrey;
+  vertical-align: top;
 
   div.content-box-title {
     padding: 6px;
     background-color: @extralight_blue;
     .topcorner(8px);
-    
+    height: 16px;
+
     span.content-box-title-heading {
-      vertical-align: top;
+      padding-right: 8px;
+      float: left;
+      display: inline-block;
     }
 
     div.content-box-title-toolbar {
       float: right;
-      text-align: right;
+      vertical-align: top;
+      display: inline-block;
+      right: 0;
+
       ul {
         margin: 0;
         padding: 0;

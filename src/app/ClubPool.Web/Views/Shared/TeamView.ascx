@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Core.TeamDto>" %>
-<div class="content-box" style="display: inline-block; min-width: 100px;">
+<div class="content-box" style="display: inline-block;">
   <div class="content-box-title">
     <span class="content-box-title-heading">
       <%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Edit(Model.Id), Model.Name) %>
