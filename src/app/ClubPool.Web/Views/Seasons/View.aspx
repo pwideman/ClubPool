@@ -37,8 +37,13 @@
               </div>
             </div>
             <div class="content-box-content">
-              <% foreach (var team in division.Teams) { %>
-                <% Html.RenderPartial("TeamView", team); %>
+              <% if (division.Teams.Length > 0) {
+                   foreach (var team in division.Teams) { %>
+                    <% Html.RenderPartial("TeamView", team); %>
+              <%   }
+                 }
+                 else { %>
+                   This division has no teams 
               <% } %>
             </div>
           </div>

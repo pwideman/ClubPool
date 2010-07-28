@@ -18,6 +18,7 @@ using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
 
@@ -27,11 +28,11 @@ namespace ClubPool.Web.Controllers.Teams
   {
     protected ILinqRepository<Team> teamRepository;
     protected ILinqRepository<Division> divisionRepository;
-    protected ILinqRepository<User> userRepository;
+    protected IUserRepository userRepository;
 
     public TeamsController(ILinqRepository<Team> teamRepo,
       ILinqRepository<Division> divisionRepo,
-      ILinqRepository<User> userRepo) {
+      IUserRepository userRepo) {
 
       Check.Require(null != teamRepo, "teamRepo cannot be null");
       Check.Require(null != divisionRepo, "divisionRepo cannot be null");
@@ -49,7 +50,7 @@ namespace ClubPool.Web.Controllers.Teams
       var division = divisionRepository.Get(divisionId);
       var viewModel = new TeamViewModel();
       viewModel.Division = new DivisionDto(division);
-      viewModel.AvailablePlayers = userRepository.GetAll().Select(u => new UserDto(u)).ToArray();
+      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(division.Season).Select(u => new UserDto(u)).ToArray();
       return View(viewModel);
     }
 
@@ -64,9 +65,9 @@ namespace ClubPool.Web.Controllers.Teams
 
       var division = divisionRepository.Get(viewModel.Division.Id);
       var team = new Team(viewModel.Name, division);
-      if (null != viewModel.PlayerIds && viewModel.PlayerIds.Length > 0) {
-        foreach (int playerId in viewModel.PlayerIds) {
-          var player = userRepository.Get(playerId);
+      if (null != viewModel.Players && viewModel.Players.Length > 0) {
+        foreach (var playerDto in viewModel.Players) {
+          var player = userRepository.Get(playerDto.Id);
           team.AddPlayer(player);
         }
       }
@@ -107,8 +108,7 @@ namespace ClubPool.Web.Controllers.Teams
       viewModel.Id = id;
       viewModel.Name = team.Name;
       viewModel.Players = team.Players.Select(p => new UserDto(p)).ToArray();
-      viewModel.PlayerIds = viewModel.Players.Select(p => p.Id).ToArray();
-      viewModel.AvailablePlayers = userRepository.GetAll().Select(u => new UserDto(u)).ToArray();
+      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(team.Division.Season).Select(u => new UserDto(u)).ToArray();
       return View(viewModel);
     }
 
@@ -124,9 +124,9 @@ namespace ClubPool.Web.Controllers.Teams
       var team = teamRepository.Get(viewModel.Id);
       team.Name = viewModel.Name;
       team.RemoveAllPlayers();
-      if (null != viewModel.PlayerIds && viewModel.PlayerIds.Length > 0) {
-        foreach (int playerId in viewModel.PlayerIds) {
-          var player = userRepository.Get(playerId);
+      if (null != viewModel.Players && viewModel.Players.Length > 0) {
+        foreach (var playerDto in viewModel.Players) {
+          var player = userRepository.Get(playerDto.Id);
           team.AddPlayer(player);
         }
       }
@@ -135,6 +135,5 @@ namespace ClubPool.Web.Controllers.Teams
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(team.Division.Season.Id));
     }
-
   }
 }

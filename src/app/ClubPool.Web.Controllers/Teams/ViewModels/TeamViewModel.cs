@@ -17,7 +17,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     }
 
     protected void InitMembers() {
-      PlayerIds = new int[0];
+      //PlayerIds = new int[0];
       Players = new UserDto[0];
       AvailablePlayers = new UserDto[0];
     }
@@ -27,7 +27,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
 
     // simple binding requires us to have an array specifically for
     // posting back the ids
-    public int[] PlayerIds { get; set; }
+    //public int[] PlayerIds { get; set; }
     
     [DisplayName("Players:")]
     public UserDto[] Players { get; set; }

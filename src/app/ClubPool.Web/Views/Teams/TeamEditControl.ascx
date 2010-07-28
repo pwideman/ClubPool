@@ -2,8 +2,8 @@
 
 <%= Html.HiddenFor(m => m.Division.Id) %>
 <span id="PlayerIdList">
-<% foreach(var id in Model.PlayerIds) { %>
-<input type="hidden" name="PlayerIds" id="PlayerId<%= id %>" value="<%= id %>" />
+<% foreach(var player in Model.Players) { %>
+<input type="hidden" name="Players" id="PlayerId<%= player.Id %>" value="<%= player.Id %>" />
 <% } %>
 </span>
 <div class="form-row">
@@ -54,7 +54,7 @@
         ui.draggable.css("top", "0").css("left", "0").removeClass("available-player").addClass("player");
         updatePlayersListState();
         var playerId = ui.draggable.attr("id");
-        $("#PlayerIdList").append("<input type='hidden' name='PlayerIds' id='PlayerId" + playerId + "' value='" + playerId + "'/>");
+        $("#PlayerIdList").append("<input type='hidden' name='Players' id='PlayerId" + playerId + "' value='" + playerId + "'/>");
       },
       over: function (event, ui) {
         $(this).addClass("simple-user-list-over");

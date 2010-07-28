@@ -49,6 +49,7 @@ namespace ClubPool.Web
       log4net.Config.XmlConfigurator.Configure();
 
       //ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
+      ModelBinders.Binders.DefaultBinder = new ModelBinder();
 
       // NHV shared engine provider
       // I added this to experiment with the fluent NHV config (loquacious),

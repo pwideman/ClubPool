@@ -76,11 +76,16 @@
     <Compile Include="NHibernateMaps\SeasonMap.cs" />
     <Compile Include="NHibernateMaps\TeamMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.Core\ClubPool.Core.csproj">
       <Project>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</Project>
       <Name>ClubPool.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
+      <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
+      <Name>ClubPool.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +99,9 @@
     <Compile Include="NHibernateMaps\Conventions\TableNameConvention.cs" />
     <Compile Include="NHibernateMaps\RoleMap.cs" />
     <Compile Include="NHibernateMaps\UserMap.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NamedQueries\GetUnassignedPlayersForSeason.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

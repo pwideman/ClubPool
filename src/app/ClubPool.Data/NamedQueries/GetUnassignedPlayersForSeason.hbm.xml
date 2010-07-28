@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+  <sql-query name="GetUnassignedPlayersForSeason">
+    <return alias="User" class="ClubPool.Core.User, ClubPool.Core" />
+    select * from users where IsApproved = 1 and id not in (select distinct u.id from users u, teamsplayers tp, teams t, divisions d, seasons s where u.Id = tp.UserId and s.id in (select SeasonId from divisions where Id in (select divisionid from teams where id = tp.teamid)) and s.id = :SeasonId);
+  </sql-query>
+</hibernate-mapping>

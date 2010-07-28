@@ -65,6 +65,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Contracts\IUserRepository.cs" />
     <Compile Include="Division.cs" />
     <None Include="DivisionDto.cs" />
     <Compile Include="EntityDto.cs" />
@@ -81,6 +82,12 @@
     <Compile Include="User.cs" />
     <Compile Include="UserDto.cs" />
     <Compile Include="ValidatableEntityDto.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
+      <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
+      <Name>ClubPool.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
