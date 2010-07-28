@@ -194,14 +194,6 @@
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
     <Content Include="Content\css\jquery-ui-1.8.2.redmond.css" />
     <Content Include="Content\css\menu.css" />
-    <Content Include="Content\Images\arrows-ffffff.png" />
-    <Content Include="Content\Images\delete.png" />
-    <Content Include="Content\Images\edit.png" />
-    <Content Include="Content\Images\HeaderLogoHarlow.png" />
-    <Content Include="Content\Images\shadow.png" />
-    <Content Include="Content\Images\sharp_arch.jpg" />
-    <Content Include="Content\Images\sharp_arch_small.gif" />
-    <Content Include="Content\Images\users.png" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\clubpool.js" />
@@ -291,6 +283,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\Images\" />
     <Folder Include="logs\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

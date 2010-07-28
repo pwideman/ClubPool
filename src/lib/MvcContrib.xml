@@ -133,6 +133,13 @@
             </summary>
             <param name="objectToSerialize">The object to serialize to XML.</param>
         </member>
+        <member name="M:MvcContrib.ActionResults.XmlResult.#ctor(System.Object,System.Xml.Serialization.XmlAttributeOverrides)">
+            <summary>
+            Creates a new instance of the XMLResult class.
+            </summary>
+            <param name="objectToSerialize">The object to serialize to XML.</param>
+            <param name="xmlAttributeOverrides"></param>
+        </member>
         <member name="M:MvcContrib.ActionResults.XmlResult.ExecuteResult(System.Web.Mvc.ControllerContext)">
             <summary>
             Serialises the object that was passed into the constructor to XML and writes the corresponding XML to the result stream.
@@ -1781,6 +1788,12 @@
         <member name="M:MvcContrib.UI.Grid.GridModel`1.Sort(MvcContrib.UI.Grid.GridSortOptions)">
             <summary>
             Secifies that the grid is currently being sorted by the specified column in a particular direction.
+            </summary>
+        </member>
+        <member name="M:MvcContrib.UI.Grid.GridModel`1.Sort(MvcContrib.UI.Grid.GridSortOptions,System.String)">
+            <summary>
+            Specifies that the grid is currently being sorted by the specified column in a particular direction.
+            This overload allows you to specify a prefix.
             </summary>
         </member>
         <member name="P:MvcContrib.UI.Grid.GridModel`1.Column">

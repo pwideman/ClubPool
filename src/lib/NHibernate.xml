@@ -2756,6 +2756,9 @@
         <member name="F:NHibernate.Cfg.MappingSchema.HbmParent.name">
             <remarks/>
         </member>
+        <member name="F:NHibernate.Cfg.MappingSchema.HbmParent.access">
+            <remarks/>
+        </member>
         <member name="T:NHibernate.Cfg.MappingSchema.HbmManyToOne">
             <remarks/>
         </member>
@@ -2842,6 +2845,11 @@
         </member>
         <member name="F:NHibernate.Cfg.MappingSchema.HbmManyToOne.embedxml">
             <remarks/>
+        </member>
+        <member name="P:NHibernate.Cfg.MappingSchema.HbmManyToOne.ColumnsAndFormulas">
+            <summary>
+            Columns and Formulas, in declared order
+            </summary>
         </member>
         <member name="T:NHibernate.Cfg.MappingSchema.HbmFormula">
             <remarks/>
@@ -5548,6 +5556,14 @@
             Called for all collections
             </remarks>
         </member>
+        <member name="M:NHibernate.Cfg.XmlHbmBinding.ValuePropertyBinder.AddColumnsAndOrFormulas(NHibernate.Cfg.XmlHbmBinding.ColumnsBinder,System.Object[],System.Boolean)">
+            <summary>
+            Bind columns and formulas in the order in which they were mapped.
+            </summary>
+            <param name="binder"></param>
+            <param name="columnsAndFormulas"></param>
+            <param name="isNullable"></param>
+        </member>
         <member name="T:NHibernate.Cfg.ClassExtractor">
             <summary>
             Extracts the names of classes mapped in a given file,
@@ -5724,7 +5740,7 @@
         </member>
         <member name="M:NHibernate.Cfg.Configuration.AddResources(System.Collections.Generic.IEnumerable{System.String},System.Reflection.Assembly)">
             <summary>
-            Adds the mappings from ebedded resources of the assembly.
+            Adds the mappings from embedded resources of the assembly.
             </summary>
             <param name="paths">Paths to the resource files in the assembly.</param>
             <param name="assembly">The assembly that contains the resource files.</param>
@@ -10895,7 +10911,7 @@
             Add arbitrary IProjections to query
             </summary>
         </member>
-        <member name="M:NHibernate.IQueryOver`2.Select(System.Func{NHibernate.Criterion.Lambda.QueryOverProjectionBuilder{`1},NHibernate.Criterion.Lambda.QueryOverProjectionBuilder{`1}})">
+        <member name="M:NHibernate.IQueryOver`2.SelectList(System.Func{NHibernate.Criterion.Lambda.QueryOverProjectionBuilder{`0},NHibernate.Criterion.Lambda.QueryOverProjectionBuilder{`0}})">
             <summary>
             Create a list of projections using a projection builder
             </summary>
@@ -11188,6 +11204,54 @@
         <member name="P:NHibernate.IQueryOver`2.WithSubquery">
             <summary>
             Add a subquery expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsLike(System.String,System.String)">
+            <summary>
+            Apply a "like" restriction in a QueryOver expression
+            Note: throws an exception outside of a QueryOver expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsLike(System.String,System.String,NHibernate.Criterion.MatchMode)">
+            <summary>
+            Apply a "like" restriction in a QueryOver expression
+            Note: throws an exception outside of a QueryOver expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsLike(System.String,System.String,NHibernate.Criterion.MatchMode,System.Nullable{System.Char})">
+            <summary>
+            Apply a "like" restriction in a QueryOver expression
+            Note: throws an exception outside of a QueryOver expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsInsensitiveLike(System.String,System.String)">
+            <summary>
+            Apply a "like" restriction in a QueryOver expression
+            Note: throws an exception outside of a QueryOver expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsInsensitiveLike(System.String,System.String,NHibernate.Criterion.MatchMode)">
+            <summary>
+            Apply a "like" restriction in a QueryOver expression
+            Note: throws an exception outside of a QueryOver expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsIn(System.Object,System.Object[])">
+            <summary>
+            Apply an "in" constraint to the named property 
+            Note: throws an exception outside of a QueryOver expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsIn(System.Object,System.Collections.ICollection)">
+            <summary>
+            Apply an "in" constraint to the named property 
+            Note: throws an exception outside of a QueryOver expression
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.RestrictionExtensions.IsBetween(System.Object,System.Object)">
+            <summary>
+            Apply a "between" constraint to the named property
+            Note: throws an exception outside of a QueryOver expression
             </summary>
         </member>
         <member name="T:NHibernate.Criterion.SelectSubqueryExpression">
@@ -26187,6 +26251,11 @@
             Converts lambda expressions to NHibernate criterion/order
             </summary>
         </member>
+        <member name="M:NHibernate.Impl.ExpressionProcessor.FindValue(System.Linq.Expressions.Expression)">
+            <summary>
+            Invoke the expression to extract its runtime value
+            </summary>
+        </member>
         <member name="M:NHibernate.Impl.ExpressionProcessor.FindMemberExpression(System.Linq.Expressions.Expression)">
             <summary>
             Retrieves the name of the property from a member expression
@@ -26264,6 +26333,13 @@
             <param name="subqueryType">type of subquery</param>
             <param name="expression">lambda expression to convert</param>
             <returns>NHibernate.ICriterion.AbstractCriterion</returns>
+        </member>
+        <member name="M:NHibernate.Impl.ExpressionProcessor.RegisterCustomMethodCall(System.Linq.Expressions.Expression{System.Func{System.Boolean}},System.Func{System.Linq.Expressions.MethodCallExpression,NHibernate.Criterion.ICriterion})">
+            <summary>
+            Register a custom method for use in a QueryOver expression
+            </summary>
+            <param name="function">Lambda expression demonstrating call of custom method</param>
+            <param name="functionProcessor">function to convert MethodCallExpression to ICriterion</param>
         </member>
         <member name="M:NHibernate.Impl.ExpressionQueryImpl.ExpandParameters(System.Collections.Generic.IDictionary{System.String,NHibernate.Engine.TypedValue})">
             <summary> 
@@ -27874,6 +27950,12 @@
         </member>
         <member name="P:NHibernate.Intercept.IFieldInterceptor.IsInitialized">
             <summary> Is the entity to which we are bound completely initialized? </summary>
+        </member>
+        <member name="P:NHibernate.Intercept.IFieldInterceptor.EntityName">
+            <summary> Get the entity-name of the field DeclaringType.</summary>
+        </member>
+        <member name="P:NHibernate.Intercept.IFieldInterceptor.MappedClass">
+            <summary> Get the MappedClass (field container).</summary>
         </member>
         <member name="T:NHibernate.Intercept.FieldInterceptionHelper">
             <summary> Helper class for dealing with enhanced entity classes. </summary>
@@ -37750,6 +37832,19 @@
             <see cref="F:System.Data.DbType.Date"/> column
             </summary>
         </member>
+        <member name="T:NHibernate.UserTypes.IParameterizedType">
+            <summary>
+            Support for parameterizable types. A UserType or CustomUserType may be
+            made parameterizable by implementing this interface. Parameters for a
+            type may be set by using a nested type element for the property element
+            </summary>
+        </member>
+        <member name="M:NHibernate.UserTypes.IParameterizedType.SetParameterValues(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Gets called by Hibernate to pass the configured type parameters to 
+            the implementation.
+            </summary>
+        </member>
         <member name="M:NHibernate.Type.DateType.#ctor">
             <summary></summary>
         </member>
@@ -39581,19 +39676,6 @@
             <param name="factory">The factory. </param>
             <returns> The loggable string representation. </returns>
         </member>
-        <member name="T:NHibernate.UserTypes.IParameterizedType">
-            <summary>
-            Support for parameterizable types. A UserType or CustomUserType may be
-            made parameterizable by implementing this interface. Parameters for a
-            type may be set by using a nested type element for the property element
-            </summary>
-        </member>
-        <member name="M:NHibernate.UserTypes.IParameterizedType.SetParameterValues(System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            Gets called by Hibernate to pass the configured type parameters to 
-            the implementation.
-            </summary>
-        </member>
         <member name="M:NHibernate.UserTypes.IUserCollectionType.Instantiate(NHibernate.Engine.ISessionImplementor,NHibernate.Persister.Collection.ICollectionPersister)">
             <summary>
             Instantiate an uninitialized instance of the collection wrapper
@@ -40377,17 +40459,6 @@
             Try to find a method in a given type.
             </summary>
             <param name="type">The given type.</param>
-            <param name="method">The method info.</param>
-            <returns>The found method or null.</returns>
-            <remarks>
-            The <paramref name="method"/>, in general, become from another <see cref="N:NHibernate.Type"/>.
-            </remarks>
-        </member>
-        <member name="M:NHibernate.Util.ReflectHelper.TryGetMethod(System.Collections.Generic.IEnumerable{System.Type},System.Reflection.MethodInfo)">
-            <summary>
-            Try to find a method in a serie of given types.
-            </summary>
-            <param name="types">The serie of types where find.</param>
             <param name="method">The method info.</param>
             <returns>The found method or null.</returns>
             <remarks>
