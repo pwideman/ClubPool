@@ -28,8 +28,7 @@ namespace ClubPool.MSpecTests
       }
 
       var validator = new Validator();
-      provider.Stub(p => p.GetInstance<IValidator>()).Return(validator);
-
+      validator.AddToServiceLocator<IValidator>();
       return validator;
     }
 
@@ -39,6 +38,8 @@ namespace ClubPool.MSpecTests
       }
 
       provider.Stub(p => p.GetInstance<T>()).Return(o);
+      provider.Stub(p => p.GetInstance(typeof(T))).Return(o);
+      provider.Stub(p => p.GetService(typeof(T))).Return(o);
       return o;
     }
   }
