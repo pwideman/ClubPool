@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using ClubPool.Framework.Validation;
+
 namespace ClubPool.Core
 {
-  public class EntityDto
+  public class EntityDto : ValidatableObject
   {
     public int Id { get; set; }
 

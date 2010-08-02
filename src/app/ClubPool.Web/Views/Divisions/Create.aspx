@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Divisions.ViewModels.DivisionViewModel>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Divisions.ViewModels.CreateDivisionViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
@@ -23,7 +23,7 @@
       </div>
     </fieldset>
     <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Divisions.ViewModels.DivisionViewModel>() %>
+    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Divisions.ViewModels.CreateDivisionViewModel>() %>
   </div>
 </asp:Content>
 

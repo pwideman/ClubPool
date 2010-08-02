@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Net;
 
 using SharpArch.Core.CommonValidator;
 using xVal.ServerSide;
@@ -44,6 +46,14 @@ namespace ClubPool.Web.Controllers
         re.AddModelStateErrors(this.ModelState, null);
         return false;
       }
+    }
+
+    protected void HttpNotFound(string message) {
+      throw new HttpException((int)HttpStatusCode.NotFound, message);
+    }
+
+    protected void HttpNotFound() {
+      HttpNotFound("The requested resource is not found");
     }
   }
 }

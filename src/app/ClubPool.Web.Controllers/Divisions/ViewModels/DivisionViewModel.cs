@@ -9,20 +9,25 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Divisions.ViewModels
 {
-
-  public class DivisionViewModel : ValidatableViewModel
+  public class CreateDivisionViewModel : ValidatableViewModel
   {
-    public int Id { get; set; }
-    public int SeasonId { get; set; }
     public string SeasonName { get; set; }
 
+    [Min(1)]
+    public int SeasonId { get; set; }
+
     [DisplayName("Name:")]
-    [NotNullNotEmpty(Message="Enter a name")]
+    [NotNullNotEmpty(Message="Required")]
     public string Name { get; set; }
 
     [DisplayName("Starting date:")]
-    [NotNullNotEmpty(Message="Enter a starting date")]
+    [NotNullNotEmpty(Message="Required")]
     public string StartingDate { get; set; }
+  }
 
+  public class EditDivisionViewModel : CreateDivisionViewModel
+  {
+    [Min(1)]
+    public int Id { get; set; }
   }
 }

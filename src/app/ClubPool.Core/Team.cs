@@ -66,7 +66,7 @@ namespace ClubPool.Core
     }
   }
 
-  public class TeamDto : ValidatableEntityDto
+  public class TeamDto : EntityDto
   {
     public TeamDto() {
       InitMembers();

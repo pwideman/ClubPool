@@ -45,23 +45,23 @@ namespace ClubPool.Web.Controllers.Divisions
       if (null == season) {
         throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
       }
-      var dto = new DivisionViewModel() {
+      var viewModel = new CreateDivisionViewModel() {
         SeasonId = season.Id,
         SeasonName = season.Name,
       };
-      return View(dto);
+      return View(viewModel);
     }
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
     [Transaction]
-    public ActionResult Create(DivisionViewModel viewModel) {
+    public ActionResult Create(CreateDivisionViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
       DateTime startingDate;
       if (!DateTime.TryParse(viewModel.StartingDate, out startingDate)) {
-        ModelState.AddModelErrorFor<DivisionViewModel>(m => m.StartingDate, "Enter a valid date");
+        ModelState.AddModelErrorFor<CreateDivisionViewModel>(m => m.StartingDate, "Enter a valid date");
         return View(viewModel);
       }
 
@@ -105,7 +105,7 @@ namespace ClubPool.Web.Controllers.Divisions
       if (null == division) {
         throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
       }
-      var viewModel = new DivisionViewModel();
+      var viewModel = new EditDivisionViewModel();
       viewModel.Id = id;
       viewModel.Name = division.Name;
       viewModel.SeasonId = division.Season.Id;
@@ -118,13 +118,13 @@ namespace ClubPool.Web.Controllers.Divisions
     [Authorize(Roles = Roles.Administrators)]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(DivisionViewModel viewModel) {
+    public ActionResult Edit(EditDivisionViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
       DateTime startingDate;
       if (!DateTime.TryParse(viewModel.StartingDate, out startingDate)) {
-        ModelState.AddModelErrorFor<DivisionViewModel>(m => m.StartingDate, "Enter a valid date");
+        ModelState.AddModelErrorFor<EditDivisionViewModel>(m => m.StartingDate, "Enter a valid date");
         return View(viewModel);
       }
 

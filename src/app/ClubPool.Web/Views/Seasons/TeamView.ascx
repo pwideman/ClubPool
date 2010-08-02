@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Core.TeamDto>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Seasons.ViewModels.TeamViewModel>" %>
 <div class="content-box" style="display: inline-block;">
   <div class="content-box-title">
     <span class="content-box-title-heading">
@@ -17,9 +17,15 @@
       </ul>
     </div>
   </div>
-  <div class="content-box-content team-view-content">
-    <% foreach (var player in Model.Players) { %>
-      <%= player.FullName %>
-    <% } %>
+  <div class="team-view-content">
+    <% if (Model.Players.Any()) { %>
+      <ul>
+      <% foreach (var player in Model.Players) { %>
+        <li><%= player.Name%></li>
+      <% } %>
+      </ul>
+      <% } else { %>
+       No Players
+      <% } %>
   </div>
 </div>

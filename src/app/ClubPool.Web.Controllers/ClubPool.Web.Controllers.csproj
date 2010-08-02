@@ -97,6 +97,13 @@
     <Compile Include="PagedListViewModelBase.cs" />
     <Compile Include="Seasons\SeasonsController.cs" />
     <Compile Include="Divisions\ViewModels\DivisionViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\CreateSeasonViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\DivisionViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\EditSeasonViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\SeasonSummaryViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\TeamViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\SeasonViewModel.cs" />
     <Compile Include="Teams\TeamsController.cs" />
     <Compile Include="Teams\ViewModels\TeamViewModel.cs" />
     <Compile Include="Seasons\ViewModels\ChangeActiveViewModel.cs" />

@@ -68,10 +68,10 @@ namespace ClubPool.Core
     }
   }
 
-  public class DivisionDto : ValidatableEntityDto
+  public class DivisionDto : EntityDto
   {
     public DivisionDto() {
-      InitMembers();
+      //InitMembers();
     }
 
     public DivisionDto(Division division)
@@ -79,13 +79,13 @@ namespace ClubPool.Core
       Id = division.Id;
       Name = division.Name;
       StartingDate = division.StartingDate;
-      Teams = division.Teams.Select(t => new TeamDto(t)).ToArray();
+      //Teams = division.Teams.Select(t => new TeamDto(t)).ToArray();
       CanDelete = division.CanDelete();
     }
 
-    private void InitMembers() {
-      Teams = new TeamDto[0];
-    }
+    //private void InitMembers() {
+    //  Teams = new TeamDto[0];
+    //}
 
     public void UpdateDivision(Division division) {
       division.Name = Name;
@@ -100,8 +100,8 @@ namespace ClubPool.Core
     [NotNullNotEmpty]
     public string Name { get; set; }
 
-    [DisplayName("Teams")]
-    public TeamDto[] Teams { get; set; }
+    //[DisplayName("Teams")]
+    //public TeamDto[] Teams { get; set; }
 
     public bool CanDelete { get; set; }
   }

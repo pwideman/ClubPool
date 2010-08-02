@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Text;
@@ -40,7 +39,7 @@ namespace ClubPool.Web.Controllers.Seasons
     [Transaction]
     public ActionResult Index(int? page) {
       int pageSize = 10;
-      var viewModel = new IndexViewModel(seasonRepository.GetAll().Select(s => new SeasonDto(s)), 
+      var viewModel = new IndexViewModel(seasonRepository.GetAll().Select(s => new SeasonSummaryViewModel(s)), 
         page.GetValueOrDefault(1), pageSize);
       return View(viewModel);
     }
@@ -48,24 +47,20 @@ namespace ClubPool.Web.Controllers.Seasons
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
     public ActionResult Create() {
-      var dto = new SeasonDto();
-      return View(dto);
+      var viewModel = new CreateSeasonViewModel();
+      return View(viewModel);
     }
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(SeasonDto dto) {
-      try {
-        dto.Validate();
-      }
-      catch (RulesException re) {
-        re.AddModelStateErrors(this.ModelState, null);
-        return View(dto);
+    public ActionResult Create(CreateSeasonViewModel viewModel) {
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
       }
 
-      var season = new Season(dto.Name);
+      var season = new Season(viewModel.Name);
       seasonRepository.SaveOrUpdate(season);
       
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was created successfully";
@@ -77,34 +72,36 @@ namespace ClubPool.Web.Controllers.Seasons
     [Transaction]
     public ActionResult Edit(int id) {
       var season = seasonRepository.Get(id);
-      var dto = new SeasonDto(season);
-      return View(dto);
+      if (null == season) {
+        HttpNotFound();
+      }
+      var viewModel = new EditSeasonViewModel(season);
+      return View(viewModel);
     }
 
     [HttpPost]
     [Transaction]
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(SeasonDto dto) {
-      try {
-        dto.Validate();
-      }
-      catch (RulesException re) {
-        re.AddModelStateErrors(this.ModelState, null);
-        return View(dto);
+    public ActionResult Edit(EditSeasonViewModel viewModel) {
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
       }
 
-      var season = seasonRepository.Get(dto.Id);
+      var season = seasonRepository.Get(viewModel.Id);
 
-      if (!season.Name.Equals(dto.Name)) {
+      if (null == season) {
+        HttpNotFound();
+      }
+
+      if (!season.Name.Equals(viewModel.Name)) {
         // verify that the new name is not in use
-        if (seasonRepository.GetAll().WithName(dto.Name).Any()) {
+        if (seasonRepository.GetAll().WithName(viewModel.Name).Any()) {
           ModelState.AddModelErrorFor<SeasonDto>(m => m.Name, "The name is already in use");
-          return View(dto);
+          return View(viewModel);
         }
-        season.Name = dto.Name;
+        season.Name = viewModel.Name;
       }
-      seasonRepository.SaveOrUpdate(season);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was updated successfully";
       return this.RedirectToAction(c => c.Index(null));
@@ -116,19 +113,20 @@ namespace ClubPool.Web.Controllers.Seasons
     [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, int? page) {
       var seasonToDelete = seasonRepository.Get(id);
-      if (null != seasonToDelete) {
-        if (seasonToDelete.CanDelete()) {
-          seasonRepository.Delete(seasonToDelete);
-          TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was deleted successfully.";
-        }
-        else {
-          TempData[GlobalViewDataProperty.PageErrorMessage] = 
-            "There is other data in the system that references this season, it cannot be deleted.";
-        }
+
+      if (null == seasonToDelete) {
+        HttpNotFound();
+      }
+
+      if (seasonToDelete.CanDelete()) {
+        seasonRepository.Delete(seasonToDelete);
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was deleted successfully.";
       }
       else {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid season id";
+        TempData[GlobalViewDataProperty.PageErrorMessage] = 
+          "There is other data in the system that references this season, it cannot be deleted.";
       }
+
       return this.RedirectToAction(c => c.Index(page));
     }
 
@@ -151,19 +149,17 @@ namespace ClubPool.Web.Controllers.Seasons
     [ValidateAntiForgeryToken]
     public ActionResult ChangeActive(int id) {
       var newActiveSeason = seasonRepository.Get(id);
+      
       if (null == newActiveSeason) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid season id";
+        HttpNotFound();
       }
-      else {
-        var activeSeasons = seasonRepository.GetAll().WhereActive();
-        foreach (var season in activeSeasons) {
-          season.IsActive = false;
-          seasonRepository.SaveOrUpdate(season);
-        }
-        newActiveSeason.IsActive = true;
-        seasonRepository.SaveOrUpdate(newActiveSeason);
-        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The active season has been changed";
+
+      var activeSeasons = seasonRepository.GetAll().WhereActive();
+      foreach (var season in activeSeasons) {
+        season.IsActive = false;
       }
+      newActiveSeason.IsActive = true;
+      TempData[GlobalViewDataProperty.PageNotificationMessage] = "The active season has been changed";
       return this.RedirectToAction(c => c.Index(null));
     }
 
@@ -173,11 +169,10 @@ namespace ClubPool.Web.Controllers.Seasons
     public ActionResult View(int id) {
       var season = seasonRepository.Get(id);
       if (null == season) {
-        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+        HttpNotFound();
       }
-     
-      var dto = new SeasonDto(season);
-      return View(dto);
+      var viewModel = new SeasonViewModel(season);
+      return View(viewModel);
     }
 
   }

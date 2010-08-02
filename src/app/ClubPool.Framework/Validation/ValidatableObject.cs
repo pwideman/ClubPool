@@ -6,11 +6,9 @@ using System.Text;
 using SharpArch.Core.CommonValidator;
 using SharpArch.Core;
 
-namespace ClubPool.Web.Controllers
+namespace ClubPool.Framework.Validation
 {
-  // this class is heavily influenced by (and most of the code copied from) the ValidatableValueObject
-  // in Who Can Help Me (http://whocanhelpme.codeplex.com/)
-  public class ValidatableViewModel : ViewModelBase, IValidatable
+  public class ValidatableObject : IValidatable
   {
     protected IValidator Validator {
       get { return SafeServiceLocator<IValidator>.GetService(); }

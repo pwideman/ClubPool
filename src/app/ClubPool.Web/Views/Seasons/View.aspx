@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Core.SeasonDto>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Seasons.ViewModels.SeasonViewModel>" %>
 <%@ Import Namespace="ClubPool.Web.Controllers.Divisions" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
@@ -10,7 +10,7 @@
       <span class="content-box-title-heading">Divisions</span>
     </div>
     <div class="content-box-content">
-    <% if (0 == Model.Divisions.Length) { %>
+    <% if (!Model.Divisions.Any()) { %>
       <div>This season has no divisions</div>
     <% }
        else {
@@ -37,7 +37,7 @@
               </div>
             </div>
             <div class="content-box-content">
-              <% if (division.Teams.Length > 0) {
+              <% if (division.Teams.Any()) {
                    foreach (var team in division.Teams) { %>
                     <% Html.RenderPartial("TeamView", team); %>
               <%   }

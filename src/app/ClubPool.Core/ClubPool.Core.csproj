@@ -81,7 +81,7 @@
     <Compile Include="Team.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserDto.cs" />
-    <Compile Include="ValidatableEntityDto.cs" />
+    <None Include="ValidatableEntityDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">

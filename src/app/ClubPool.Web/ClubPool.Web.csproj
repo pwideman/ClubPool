@@ -213,7 +213,7 @@
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Divisions\Create.aspx" />
     <Content Include="Views\Shared\SimpleUserListView.ascx" />
-    <Content Include="Views\Shared\TeamView.ascx" />
+    <Content Include="Views\Seasons\TeamView.ascx" />
     <Content Include="Views\Teams\Create.aspx" />
     <Content Include="Views\Seasons\ChangeActive.aspx" />
     <Content Include="Views\Seasons\Create.aspx" />

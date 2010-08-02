@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Security.Principal;
+using System.Net;
 
 using Rhino.Mocks;
 using Machine.Specifications;
@@ -69,12 +71,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_create_a_season : specification_for_Seasons_controller
   {
-    static SeasonDto viewModel;
+    static CreateSeasonViewModel viewModel;
     static string name = "NewSeason";
     static Season savedSeason;
 
     Establish context = () => {
-      viewModel = new SeasonDto();
+      viewModel = new CreateSeasonViewModel();
       viewModel.Name = name;
 
       seasonsRepository.Stub(r => r.SaveOrUpdate(null)).IgnoreArguments().WhenCalled(m => savedSeason = m.Arguments[0] as Season);
@@ -100,7 +102,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   public class when_asked_to_create_a_season_with_invalid_data : specification_for_Seasons_controller
   {
 
-    Because of = () => result = controller.Create(new SeasonDto());
+    Because of = () => result = controller.Create(new CreateSeasonViewModel());
 
     It should_return_the_default_view = () => {
       result.IsAViewAnd().ViewName.ShouldBeEmpty();
@@ -146,21 +148,25 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   {
     static int id = 0;
     static int page = 2;
+    static HttpException expectedException;
 
     Establish context = () => {
       seasonsRepository.Stub(r => r.Get(id)).Return(null);
     };
 
-    Because of = () => result = controller.Delete(id, page);
+    Because of = () => {
+      try {
+        result = controller.Delete(id, page);
+      }
+      catch (HttpException e) {
+        expectedException = e;
+      }
+    };
 
-    It should_set_the_page_error_message = () =>
-      controller.TempData.Keys.Contains(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
-
-    It should_redirect_to_the_index_view = () => {
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("seasons");
-      var pageRouteValue = new KeyValuePair<string, object>("page", page);
-      result.IsARedirectToARouteAnd().RouteValues.ShouldContain(pageRouteValue);
+    It should_return_http_404 = () => {
+      expectedException.ShouldNotBeNull();
+      // TODO: Debug
+      //expectedException.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
     };
   }
 
@@ -280,6 +286,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static int badId = -1;
     static List<Season> seasons;
     static Season activeSeason;
+    static HttpException expectedException;
 
     Establish context = () => {
       activeSeason = new Season("name");
@@ -290,14 +297,19 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
 
-    Because of = () => result = controller.ChangeActive(badId);
+    Because of = () => {
+      try {
+        result = controller.ChangeActive(badId);
+      }
+      catch (HttpException e) {
+        expectedException = e;
+      }
+    };
 
-    It should_set_the_page_error_message = () =>
-      controller.TempData.Keys.Contains(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
-
-    It should_redirect_to_the_index_view = () => {
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("seasons");
+    It should_return_http_404 = () => {
+      expectedException.ShouldNotBeNull();
+      // TODO: Debug
+      //expectedException.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
     };
 
     It should_not_change_the_active_season = () =>
@@ -325,7 +337,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       result.IsAViewAnd().ViewName.ShouldBeEmpty();
 
     It should_set_the_view_model_properties = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as SeasonDto;
+      var viewModel = result.IsAViewAnd().ViewData.Model as EditSeasonViewModel;
       viewModel.ShouldNotBeNull();
       viewModel.Name.ShouldEqual(name);
     };
@@ -337,13 +349,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static int id = 1;
     static string name = "name";
     static Season season;
-    static SeasonDto viewModel;
+    static EditSeasonViewModel viewModel;
 
     Establish context = () => {
       season = new Season("temp");
       season.SetIdTo(id);
 
-      viewModel = new SeasonDto(season);
+      viewModel = new EditSeasonViewModel(season);
       viewModel.Name = name;
 
       seasonsRepository.Stub(r => r.Get(id)).Return(season);
@@ -372,10 +384,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_edit_a_season_with_invalid_data : specification_for_Seasons_controller
   {
-    static SeasonDto viewModel;
+    static EditSeasonViewModel viewModel;
 
     Establish context = () => {
-      viewModel = new SeasonDto();
+      viewModel = new EditSeasonViewModel();
     };
 
     Because of = () => result = controller.Edit(viewModel);
@@ -393,20 +405,20 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_edit_a_season_with_a_duplicate_name : specification_for_Seasons_controller
   {
-    static SeasonDto viewModel;
-    static int id = 0;
+    static EditSeasonViewModel viewModel;
+    static int id = 1;
 
     Establish context = () => {
       var seasons = new List<Season>();
-      for (int i = 0; i < 3; i++) {
+      for (int i = 1; i < 4; i++) {
         var season = new Season("season" + i.ToString());
         season.SetIdTo(i);
         seasons.Add(season);
       }
-      viewModel = new SeasonDto(seasons[id]);
-      viewModel.Name = seasons[id + 1].Name;
+      viewModel = new EditSeasonViewModel(seasons[0]);
+      viewModel.Name = seasons[1].Name;
 
-      seasonsRepository.Stub(r => r.Get(id)).Return(seasons[id]);
+      seasonsRepository.Stub(r => r.Get(id)).Return(seasons[0]);
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
 
