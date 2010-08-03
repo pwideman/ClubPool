@@ -116,8 +116,10 @@
     <Compile Include="Users\ViewModels\CreateViewModel.cs" />
     <Compile Include="Users\ViewModels\EditViewModel.cs" />
     <Compile Include="Users\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Users\ViewModels\RoleViewModel.cs" />
     <Compile Include="Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="Users\ViewModels\UserSummaryViewModel.cs" />
+    <Compile Include="Users\ViewModels\UserViewModelBase.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />
     <Compile Include="Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />

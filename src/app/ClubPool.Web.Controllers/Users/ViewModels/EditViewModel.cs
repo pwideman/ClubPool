@@ -11,9 +11,9 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class EditViewModel : ValidatableViewModel
+  public class EditViewModel : UserViewModelBase
   {
-    public EditViewModel() {
+    public EditViewModel() : base() {
       InitMembers();
     }
 
@@ -29,23 +29,6 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     [Min(1)]
     public int Id { get; set; }
 
-    [DisplayName("Username:")]
-    [NotNullNotEmpty(Message = "Required")]
-    public string Username { get; set; }
-
-    [DisplayName("First")]
-    [NotNullNotEmpty(Message = "Required")]
-    public string FirstName { get; set; }
-
-    [DisplayName("Last")]
-    [NotNullNotEmpty(Message = "Required")]
-    public string LastName { get; set; }
-
-    [DisplayName("Email address:")]
-    [NotNullNotEmpty(Message = "Required")]
-    [Email(Message = "Enter a valid email address")]
-    public string Email { get; set; }
-
     [DisplayName("Approved")]
     public bool IsApproved { get; set; }
 
@@ -58,17 +41,4 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public IEnumerable<RoleViewModel> AvailableRoles { get; set; }
   }
 
-  public class RoleViewModel
-  {
-    public RoleViewModel() {
-    }
-
-    public RoleViewModel(Role role) {
-      Id = role.Id;
-      Name = role.Name;
-    }
-
-    public int Id { get; set; }
-    public string Name { get; set; }
-  }
 }
