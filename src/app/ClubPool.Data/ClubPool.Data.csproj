@@ -72,10 +72,14 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DivisionRepository.cs" />
     <Compile Include="NHibernateMaps\DivisionMap.cs" />
     <Compile Include="NHibernateMaps\SeasonMap.cs" />
     <Compile Include="NHibernateMaps\TeamMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleRepository.cs" />
+    <Compile Include="SeasonRepository.cs" />
+    <Compile Include="TeamRepository.cs" />
     <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>

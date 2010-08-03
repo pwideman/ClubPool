@@ -29,7 +29,7 @@ namespace ClubPool.Web.Controllers.Users
   {
     protected IAuthenticationService authenticationService;
     protected IMembershipService membershipService;
-    protected ILinqRepository<Role> roleRepository;
+    protected IRoleRepository roleRepository;
     protected IEmailService emailService;
     protected IUserRepository userRepository;
 
@@ -37,7 +37,7 @@ namespace ClubPool.Web.Controllers.Users
       IMembershipService membershipSvc, 
       IEmailService emailSvc,
       IUserRepository userRepo,
-      ILinqRepository<Role> roleRepo)
+      IRoleRepository roleRepo)
     {
 
       Check.Require(null != authSvc, "authSvc cannot be null");

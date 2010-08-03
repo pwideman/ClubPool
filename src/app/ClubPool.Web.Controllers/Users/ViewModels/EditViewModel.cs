@@ -8,6 +8,7 @@ using NHibernate.Validator.Constraints;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
@@ -22,7 +23,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
       AvailableRoles = new List<RoleViewModel>();
     }
 
-    public void LoadAvailableRoles(ILinqRepository<Role> roleRepository) {
+    public void LoadAvailableRoles(IRoleRepository roleRepository) {
       AvailableRoles = roleRepository.GetAll().Select(r => new RoleViewModel(r)).ToList();
     }
 
@@ -40,5 +41,4 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     [DisplayName("Roles:")]
     public IEnumerable<RoleViewModel> AvailableRoles { get; set; }
   }
-
 }

@@ -26,14 +26,14 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   public abstract class specification_for_users_controller
   {
     protected static UsersController controller;
-    protected static ILinqRepository<Role> roleRepository;
+    protected static IRoleRepository roleRepository;
     protected static MockAuthenticationService authenticationService;
     protected static IMembershipService membershipService;
     protected static IUserRepository userRepository;
     protected static IEmailService emailService;
 
     Establish context = () => {
-      roleRepository = MockRepository.GenerateStub<ILinqRepository<Role>>();
+      roleRepository = MockRepository.GenerateStub<IRoleRepository>();
       authenticationService = AuthHelper.CreateMockAuthenticationService();
       membershipService = MockRepository.GenerateStub<IMembershipService>();
       userRepository = MockRepository.GenerateStub<IUserRepository>();

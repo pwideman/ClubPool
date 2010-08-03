@@ -26,12 +26,12 @@ namespace ClubPool.Web.Controllers.Teams
 {
   public class TeamsController : BaseController
   {
-    protected ILinqRepository<Team> teamRepository;
-    protected ILinqRepository<Division> divisionRepository;
+    protected ITeamRepository teamRepository;
+    protected IDivisionRepository divisionRepository;
     protected IUserRepository userRepository;
 
-    public TeamsController(ILinqRepository<Team> teamRepo,
-      ILinqRepository<Division> divisionRepo,
+    public TeamsController(ITeamRepository teamRepo,
+      IDivisionRepository divisionRepo,
       IUserRepository userRepo) {
 
       Check.Require(null != teamRepo, "teamRepo cannot be null");

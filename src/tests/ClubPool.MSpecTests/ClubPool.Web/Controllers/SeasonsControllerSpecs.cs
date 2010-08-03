@@ -12,6 +12,7 @@ using Machine.Specifications;
 using SharpArch.Testing;
 
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Controllers.Seasons.ViewModels;
@@ -22,13 +23,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   public abstract class specification_for_Seasons_controller
   {
     protected static SeasonsController controller;
-    protected static ILinqRepository<Season> seasonsRepository;
-    protected static ILinqRepository<Division> divisionsRepository;
+    protected static ISeasonRepository seasonsRepository;
+    protected static IDivisionRepository divisionsRepository;
     protected static ActionResult result;
 
     Establish context = () => {
-      seasonsRepository = MockRepository.GenerateStub<ILinqRepository<Season>>();
-      divisionsRepository = MockRepository.GenerateStub<ILinqRepository<Division>>();
+      seasonsRepository = MockRepository.GenerateStub<ISeasonRepository>();
+      divisionsRepository = MockRepository.GenerateStub<IDivisionRepository>();
       controller = new SeasonsController(seasonsRepository, divisionsRepository);
 
       ControllerHelper.CreateMockControllerContext(controller);

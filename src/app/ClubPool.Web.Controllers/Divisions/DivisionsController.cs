@@ -18,6 +18,7 @@ using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
 
@@ -26,10 +27,10 @@ namespace ClubPool.Web.Controllers.Divisions
 
   public class DivisionsController : BaseController
   {
-    protected ILinqRepository<Season> seasonRepository;
-    protected ILinqRepository<Division> divisionRepository;
+    protected ISeasonRepository seasonRepository;
+    protected IDivisionRepository divisionRepository;
 
-    public DivisionsController(ILinqRepository<Division> divisionRepo, ILinqRepository<Season> seasonRepo) {
+    public DivisionsController(IDivisionRepository divisionRepo, ISeasonRepository seasonRepo) {
       Check.Require(null != seasonRepo, "seasonRepo cannot be null");
       Check.Require(null != divisionRepo, "divisionRepo cannot be null");
 

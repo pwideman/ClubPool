@@ -44,7 +44,7 @@ namespace ClubPool.SchemaGen
         output(sb.Replace("\n", Environment.NewLine).ToString());
         
         output("Creating roles");
-        var roleRepo = new LinqRepository<Role>();
+        var roleRepo = new RoleRepository();
         Role admin = null;
         Role officer = null;
         using (roleRepo.DbContext.BeginTransaction()) {
@@ -83,7 +83,7 @@ namespace ClubPool.SchemaGen
         }
 
         output("Creating seasons");
-        var seasonRepo = new LinqRepository<Season>();
+        var seasonRepo = new SeasonRepository();
         using (seasonRepo.DbContext.BeginTransaction()) {
           for (int i = 0; i < 5; i++) {
             var s = new Season("Season " + i.ToString());
