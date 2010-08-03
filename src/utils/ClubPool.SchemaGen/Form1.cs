@@ -13,6 +13,7 @@ using SharpArch.Data.NHibernate;
 using NHibernate.Tool.hbm2ddl;
 
 using ClubPool.Core;
+using ClubPool.Data;
 using ClubPool.Data.NHibernateMaps;
 using ClubPool.ApplicationServices.Membership;
 using ClubPool.Framework.NHibernate;
@@ -55,7 +56,7 @@ namespace ClubPool.SchemaGen
         }
 
         output("Creating users");
-        var userRepo = new LinqRepository<User>();
+        var userRepo = new UserRepository();
         using (userRepo.DbContext.BeginTransaction()) {
           var membershipService = new SharpArchMembershipService(userRepo);
           // create admin user

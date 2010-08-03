@@ -12,15 +12,16 @@ using ClubPool.Framework.Extensions;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Queries;
+using ClubPool.Core.Contracts;
 
 namespace ClubPool.ApplicationServices.Membership
 {
   public class SharpArchMembershipService : IMembershipService
   {
-    protected ILinqRepository<User> userRepository;
+    protected IUserRepository userRepository;
     protected const int SALT_SIZE = 16; // same size as the SqlMembershipProvider
 
-    public SharpArchMembershipService(ILinqRepository<User> userRepo) {
+    public SharpArchMembershipService(IUserRepository userRepo) {
       Check.Require(null != userRepo, "The user repository cannot be null");
 
       userRepository = userRepo;

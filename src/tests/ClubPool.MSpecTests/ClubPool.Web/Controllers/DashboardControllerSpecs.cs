@@ -13,6 +13,7 @@ using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Testing.ApplicationServices.Authentication;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
@@ -21,11 +22,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   {
     protected static DashboardController controller;
     protected static MockAuthenticationService authenticationService;
-    protected static ILinqRepository<User> userRepository;
+    protected static IUserRepository userRepository;
 
     Establish context = () => {
       authenticationService = AuthHelper.CreateMockAuthenticationService();
-      userRepository = MockRepository.GenerateStub<ILinqRepository<User>>();
+      userRepository = MockRepository.GenerateStub<IUserRepository>();
 
       controller = new DashboardController(authenticationService, userRepository);
       ControllerHelper.CreateMockControllerContext(controller);

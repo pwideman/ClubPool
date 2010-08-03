@@ -8,6 +8,7 @@ using Machine.Specifications;
 
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.ApplicationServices.Membership;
 using ClubPool.Testing.ApplicationServices.Membership;
@@ -17,10 +18,10 @@ namespace ClubPool.MSpecTests.ClubPool.ApplicationServices.Membership
   public class specification_for_SharpArchMembershipService
   {
     protected static SharpArchMembershipService service;
-    protected static ILinqRepository<User> userRepository;
+    protected static IUserRepository userRepository;
 
     Establish context = () => {
-      userRepository = MockRepository.GenerateStub<ILinqRepository<User>>();
+      userRepository = MockRepository.GenerateStub<IUserRepository>();
 
       service = new SharpArchMembershipService(userRepository);
     };

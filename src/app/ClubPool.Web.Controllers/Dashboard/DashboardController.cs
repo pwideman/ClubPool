@@ -8,6 +8,7 @@ using SharpArch.Core;
 using SharpArch.Web.NHibernate;
 
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
@@ -19,9 +20,9 @@ namespace ClubPool.Web.Controllers.Dashboard
   public class DashboardController : BaseController
   {
     protected IAuthenticationService authenticationService;
-    protected ILinqRepository<User> userRepository;
+    protected IUserRepository userRepository;
 
-    public DashboardController(IAuthenticationService authSvc, ILinqRepository<User> userRepository) {
+    public DashboardController(IAuthenticationService authSvc, IUserRepository userRepository) {
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
 

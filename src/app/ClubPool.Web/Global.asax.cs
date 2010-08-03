@@ -25,6 +25,7 @@ using SharpArch.Web.ModelBinder;
 using log4net;
 
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Validation;
@@ -136,7 +137,7 @@ namespace ClubPool.Web
       // Create an Identity object
       FormsIdentity id = new FormsIdentity(authTicket);
 
-      var userRepository = SafeServiceLocator<ILinqRepository<User>>.GetService();
+      var userRepository = SafeServiceLocator<IUserRepository>.GetService();
       var roles = userRepository.FindOne(UserQueries.UserByUsername(id.Name))
                                 .Roles.Select(RoleQueries.SelectName).ToArray();
       // This principal will flow throughout the request.
