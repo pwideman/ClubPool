@@ -3,14 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using NHibernate.Validator.Constraints;
-using SharpArch.Core.NHibernateValidator;
 using SharpArch.Core.DomainModel;
 using SharpArch.Core;
 
 namespace ClubPool.Core
 {
-  [HasUniqueDomainSignature(Message = "A team already exists with this name")]
   public class Team : Entity
   {
     protected Team() {
@@ -35,7 +32,6 @@ namespace ClubPool.Core
     }
 
     [DomainSignature]
-    [NotNullNotEmpty]
     public virtual string Name { get; set; }
 
     [DomainSignature]
@@ -64,38 +60,5 @@ namespace ClubPool.Core
         players.Add(player);
       }
     }
-  }
-
-  public class TeamDto : EntityDto
-  {
-    public TeamDto() {
-      InitMembers();
-    }
-
-    public TeamDto(Team t)
-      : this() {
-      Id = t.Id;
-      Name = t.Name;
-      Division = t.Division;
-      Players = t.Players.Select(p => new UserDto(p)).ToArray();
-      CanDelete = t.CanDelete();
-    }
-
-    private void InitMembers() {
-      Players = new UserDto[0];
-    }
-
-    [DisplayName("Name:")]
-    [NotNullNotEmpty]
-    public string Name { get; set; }
-
-    [DisplayName("Division:")]
-    [NotNull]
-    public Division Division { get; set; }
-
-    [DisplayName("Players:")]
-    public UserDto[] Players { get; set; }
-
-    public bool CanDelete { get; set; }
   }
 }

@@ -26,7 +26,7 @@
       <tbody>
         <% foreach (var user in Model.UnapprovedUsers) { %>
           <tr>
-            <td><%= Html.Encode(user.FullName) %></td>
+            <td><%= Html.Encode(user.Name) %></td>
             <td><%= Html.Encode(user.Email) %></td>
             <td><input type="checkbox" value="<%= user.Id%>" name="userids" /></td>
           </tr>

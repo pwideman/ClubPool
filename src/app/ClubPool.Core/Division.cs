@@ -3,8 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using NHibernate.Validator.Constraints;
-using SharpArch.Core.NHibernateValidator;
 using SharpArch.Core.DomainModel;
 using SharpArch.Core;
 
@@ -28,10 +26,9 @@ namespace ClubPool.Core
       teams = new List<Team>();
     }
 
-    [NotNull]
     public virtual DateTime StartingDate { get; set; }
 
-    [NotNullNotEmpty]
+    [DomainSignature]
     public virtual string Name { get; set; }
 
     public virtual bool CanDelete() {
@@ -39,6 +36,7 @@ namespace ClubPool.Core
       return teams.Count == 0;
     }
 
+    [DomainSignature]
     public virtual Season Season { get; set; }
 
     protected IList<Team> teams;
@@ -67,43 +65,4 @@ namespace ClubPool.Core
       teams.Clear();
     }
   }
-
-  public class DivisionDto : EntityDto
-  {
-    public DivisionDto() {
-      //InitMembers();
-    }
-
-    public DivisionDto(Division division)
-      : this() {
-      Id = division.Id;
-      Name = division.Name;
-      StartingDate = division.StartingDate;
-      //Teams = division.Teams.Select(t => new TeamDto(t)).ToArray();
-      CanDelete = division.CanDelete();
-    }
-
-    //private void InitMembers() {
-    //  Teams = new TeamDto[0];
-    //}
-
-    public void UpdateDivision(Division division) {
-      division.Name = Name;
-      division.StartingDate = StartingDate;
-    }
-
-    [DisplayName("Starting date")]
-    [NotNull]
-    public DateTime StartingDate { get; set; }
-
-    [DisplayName("Name")]
-    [NotNullNotEmpty]
-    public string Name { get; set; }
-
-    //[DisplayName("Teams")]
-    //public TeamDto[] Teams { get; set; }
-
-    public bool CanDelete { get; set; }
-  }
-
 }

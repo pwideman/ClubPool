@@ -1,8 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Teams.ViewModels.TeamViewModel>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Teams.ViewModels.CreateTeamViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
-    <span>Add team to <%= Model.Division.Name %></span>
+    <span>Add team to <%= Model.DivisionName %></span>
   </div>
   <div class="form-content">
     <div class="form-header">
@@ -15,6 +15,7 @@
     %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>
+      <%= Html.HiddenFor(m => m.DivisionId) %>
       <% Html.RenderPartial("TeamEditControl"); %>
       <div class="spacer">&nbsp;</div>
       <div class="form-row-span">
@@ -22,7 +23,7 @@
       </div>
     </fieldset>
     <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Teams.ViewModels.TeamViewModel>() %>
+    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Teams.ViewModels.CreateTeamViewModel>() %>
   </div>
 </asp:Content>
 

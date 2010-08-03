@@ -1,6 +1,5 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Teams.ViewModels.TeamViewModel>" %>
 
-<%= Html.HiddenFor(m => m.Division.Id) %>
 <span id="PlayerIdList">
 <% foreach(var player in Model.Players) { %>
 <input type="hidden" name="Players" id="PlayerId<%= player.Id %>" value="<%= player.Id %>" />
@@ -16,7 +15,7 @@
 <div class="form-row">
   <span class="form-label-left"><%= Html.LabelFor(m => m.Players) %></span>
   <span id="PlayersList">
-    <% Html.RenderPartial("SimpleUserListView", Model.Players); %>
+    <% Html.RenderPartial("PlayerListView", Model.Players); %>
   </span>
 </div>
 <div class="form-row" style="margin: 10px;padding:0; min-height:0">
@@ -26,7 +25,7 @@
 <div class="form-row">
   <span class="form-label-left"><%= Html.LabelFor(m => m.AvailablePlayers) %></span>
   <span id="AvailablePlayersList">
-    <% Html.RenderPartial("SimpleUserListView", Model.AvailablePlayers); %>
+    <% Html.RenderPartial("PlayerListView", Model.AvailablePlayers); %>
   </span>
 </div>
 <script type="text/javascript">

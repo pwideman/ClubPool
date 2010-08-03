@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using NHibernate.Validator.Constraints;
-
 using SharpArch.Core;
 using SharpArch.Core.DomainModel;
 
@@ -28,7 +26,6 @@ namespace ClubPool.Core
     }
 
     [DomainSignature]
-    [NotNullNotEmpty]
     public virtual string Name { get; set; }
 
     protected IList<User> users;

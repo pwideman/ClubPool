@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-using NHibernate.Validator.Constraints;
 using SharpArch.Core;
 using SharpArch.Core.DomainModel;
-using SharpArch.Core.NHibernateValidator;
 
 namespace ClubPool.Core
 {
-  [HasUniqueDomainSignature(Message="A season with this name already exists")]
   public class Season : Entity
   {
     protected Season() {
@@ -30,7 +27,6 @@ namespace ClubPool.Core
     }
 
     [DomainSignature]
-    //[NotNullNotEmpty]
     public virtual string Name { get; set; }
 
     public virtual bool IsActive { get; set; }
@@ -65,38 +61,4 @@ namespace ClubPool.Core
       return !IsActive && divisions.Count == 0;
     }
   }
-
-  public class SeasonDto : EntityDto
-  {
-    public SeasonDto() {
-      //InitMembers();
-    }
-
-    public SeasonDto(Season season)
-      : this() {
-      Id = season.Id;
-      Name = season.Name;
-      IsActive = season.IsActive;
-      //if (season.Divisions.Any()) {
-      //  Divisions = season.Divisions.Select(d => new DivisionDto(d)).OrderBy(d => d.StartingDate).ToArray();
-      //}
-      CanDelete = season.CanDelete();
-    }
-
-    //protected void InitMembers() {
-    //  Divisions = new DivisionDto[0];
-    //}
-
-    [DisplayName("Name:")]
-    [NotNullNotEmpty]
-    public string Name { get; set; }
-
-    [DisplayName("Active")]
-    public virtual bool IsActive { get; set; }
-
-    public bool CanDelete { get; set; }
-
-    //public DivisionDto[] Divisions { get; set; }
-  }
-
 }

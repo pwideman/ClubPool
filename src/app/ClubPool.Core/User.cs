@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using NHibernate.Validator.Constraints;
-using SharpArch.Core.NHibernateValidator;
 using SharpArch.Core.DomainModel;
 using SharpArch.Core;
 
 namespace ClubPool.Core
 {
-  [HasUniqueDomainSignature(Message = "A user already exists with this username")]
   public class User : Entity
   {
     protected User() {
@@ -37,13 +34,10 @@ namespace ClubPool.Core
     }
 
     [DomainSignature]
-    [NotNullNotEmpty]
     public virtual string Username { get; set; }
 
-    [NotNullNotEmpty]
     public virtual string FirstName { get; set; }
 
-    [NotNullNotEmpty]
     public virtual string LastName { get; set; }
 
     public virtual string FullName { 
@@ -53,12 +47,10 @@ namespace ClubPool.Core
     }
 
 
-    [NotNullNotEmpty]
     public virtual string Password { get; set; }
 
     public virtual string PasswordSalt { get; set; }
 
-    [Email]
     public virtual string Email { get; set; }
 
     public virtual bool IsApproved { get; set; }

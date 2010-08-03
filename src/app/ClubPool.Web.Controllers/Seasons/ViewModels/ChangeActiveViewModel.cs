@@ -9,6 +9,6 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
   {
     public string CurrentActiveSeasonName { get; set; }
 
-    public IEnumerable<SeasonDto> InactiveSeasons { get; set; }
+    public IEnumerable<SeasonSummaryViewModel> InactiveSeasons { get; set; }
   }
 }

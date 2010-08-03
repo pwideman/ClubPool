@@ -14,6 +14,7 @@ using ClubPool.ApplicationServices.Authentication;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Users;
 using ClubPool.Web.Controllers.Users.ViewModels;
@@ -28,14 +29,14 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     protected static ILinqRepository<Role> roleRepository;
     protected static MockAuthenticationService authenticationService;
     protected static IMembershipService membershipService;
-    protected static ILinqRepository<User> userRepository;
+    protected static IUserRepository userRepository;
     protected static IEmailService emailService;
 
     Establish context = () => {
       roleRepository = MockRepository.GenerateStub<ILinqRepository<Role>>();
       authenticationService = AuthHelper.CreateMockAuthenticationService();
       membershipService = MockRepository.GenerateStub<IMembershipService>();
-      userRepository = MockRepository.GenerateStub<ILinqRepository<User>>();
+      userRepository = MockRepository.GenerateStub<IUserRepository>();
       emailService = MockRepository.GenerateStub<IEmailService>();
       controller = new UsersController(authenticationService, membershipService, emailService, userRepository, roleRepository);
       ControllerHelper.CreateMockControllerContext(controller);
@@ -808,8 +809,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       user = new User("temp", "pass", "temp", "temp", "temp@temp.com");
       user.SetIdTo(userId);
       userRepository.Stub(r => r.Get(userId)).Return(user);
+      userRepository.Stub(r => r.DbContext).Return(MockRepository.GenerateStub<SharpArch.Core.PersistenceSupport.IDbContext>());
 
       membershipService.Stub(s => s.UsernameIsInUse(null)).IgnoreArguments().Return(true);
+
+      roleRepository.Stub(s => s.GetAll()).Return(new List<Role>().AsQueryable());
     };
 
     Because of = () => result = controller.Edit(viewModel);
@@ -851,8 +855,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       user = new User("temp", "pass", "temp", "temp", "temp@temp.com");
       user.SetIdTo(userId);
       userRepository.Stub(r => r.Get(userId)).Return(user);
-
+      userRepository.Stub(r => r.DbContext).Return(MockRepository.GenerateStub<SharpArch.Core.PersistenceSupport.IDbContext>());
       membershipService.Stub(s => s.EmailIsInUse(null)).IgnoreArguments().Return(true);
+
+      roleRepository.Stub(s => s.GetAll()).Return(new List<Role>().AsQueryable());
+
     };
 
     Because of = () => result = controller.Edit(viewModel);

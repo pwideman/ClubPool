@@ -48,9 +48,10 @@ namespace ClubPool.Web.Controllers.Teams
     [Transaction]
     public ActionResult Create(int divisionId) {
       var division = divisionRepository.Get(divisionId);
-      var viewModel = new TeamViewModel();
-      viewModel.Division = new DivisionDto(division);
-      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(division.Season).Select(u => new UserDto(u)).ToArray();
+      var viewModel = new CreateTeamViewModel();
+      viewModel.DivisionId = division.Id;
+      viewModel.DivisionName = division.Name;
+      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(division.Season).Select(u => new PlayerViewModel(u)).ToList();
       return View(viewModel);
     }
 
@@ -58,16 +59,16 @@ namespace ClubPool.Web.Controllers.Teams
     [Authorize(Roles=Roles.Administrators)]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(TeamViewModel viewModel) {
+    public ActionResult Create(CreateTeamViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
 
-      var division = divisionRepository.Get(viewModel.Division.Id);
+      var division = divisionRepository.Get(viewModel.DivisionId);
       var team = new Team(viewModel.Name, division);
-      if (null != viewModel.Players && viewModel.Players.Length > 0) {
-        foreach (var playerDto in viewModel.Players) {
-          var player = userRepository.Get(playerDto.Id);
+      if (null != viewModel.Players && viewModel.Players.Any()) {
+        foreach (var playerViewModel in viewModel.Players) {
+          var player = userRepository.Get(playerViewModel.Id);
           team.AddPlayer(player);
         }
       }
@@ -84,7 +85,7 @@ namespace ClubPool.Web.Controllers.Teams
     public ActionResult Delete(int id) {
       var team = teamRepository.Get(id);
       if (null == team) {
-        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+        HttpNotFound();
       }
       if (!team.CanDelete()) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The team cannot be deleted";
@@ -102,13 +103,13 @@ namespace ClubPool.Web.Controllers.Teams
     public ActionResult Edit(int id) {
       var team = teamRepository.Get(id);
       if (null == team) {
-        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+        HttpNotFound();
       }
-      var viewModel = new TeamViewModel();
+      var viewModel = new EditTeamViewModel();
       viewModel.Id = id;
       viewModel.Name = team.Name;
-      viewModel.Players = team.Players.Select(p => new UserDto(p)).ToArray();
-      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(team.Division.Season).Select(u => new UserDto(u)).ToArray();
+      viewModel.Players = team.Players.Select(p => new PlayerViewModel(p)).ToList();
+      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(team.Division.Season).Select(u => new PlayerViewModel(u)).ToList();
       return View(viewModel);
     }
 
@@ -116,7 +117,7 @@ namespace ClubPool.Web.Controllers.Teams
     [Authorize(Roles = Roles.Administrators)]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(TeamViewModel viewModel) {
+    public ActionResult Edit(EditTeamViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
@@ -124,13 +125,12 @@ namespace ClubPool.Web.Controllers.Teams
       var team = teamRepository.Get(viewModel.Id);
       team.Name = viewModel.Name;
       team.RemoveAllPlayers();
-      if (null != viewModel.Players && viewModel.Players.Length > 0) {
-        foreach (var playerDto in viewModel.Players) {
-          var player = userRepository.Get(playerDto.Id);
+      if (null != viewModel.Players && viewModel.Players.Any()) {
+        foreach (var playerViewModel in viewModel.Players) {
+          var player = userRepository.Get(playerViewModel.Id);
           team.AddPlayer(player);
         }
       }
-      teamRepository.SaveOrUpdate(team);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(team.Division.Season.Id));

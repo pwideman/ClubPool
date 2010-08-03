@@ -19,6 +19,7 @@ using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
+using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controls.Captcha;
 
@@ -30,12 +31,12 @@ namespace ClubPool.Web.Controllers.Users
     protected IMembershipService membershipService;
     protected ILinqRepository<Role> roleRepository;
     protected IEmailService emailService;
-    protected ILinqRepository<User> userRepository;
+    protected IUserRepository userRepository;
 
     public UsersController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
       IEmailService emailSvc,
-      ILinqRepository<User> userRepo,
+      IUserRepository userRepo,
       ILinqRepository<Role> roleRepo)
     {
 
@@ -53,11 +54,15 @@ namespace ClubPool.Web.Controllers.Users
       roleRepository = roleRepo;
     }
 
+    protected void RollbackUserTransaction() {
+      userRepository.DbContext.RollbackTransaction();
+    }
+
     [Authorize(Roles=Roles.Administrators)]
     [Transaction]
     public ActionResult Index(int? page) {
       int pageSize = 10;
-      var viewModel = new IndexViewModel(userRepository.GetAll().Select(u => new UserDto(u)),
+      var viewModel = new IndexViewModel(userRepository.GetAll().Select(u => new UserSummaryViewModel(u)),
         page.GetValueOrDefault(1), pageSize);
       return View(viewModel);
     }
@@ -156,7 +161,6 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected void SendNewUserAwaitingApprovalEmail(User newUser) {
-      //var adminUsernames = roleService.GetUsersInRole(Core.Roles.Administrators);
       var officers = roleRepository.FindOne(RoleQueries.RoleByName(Roles.Officers)).Users;
       if (officers.Any()) {
         var officerEmailAddresses = officers.Select(u => u.Email).ToList();
@@ -195,7 +199,7 @@ namespace ClubPool.Web.Controllers.Users
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
       viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList()
-        .Select(u => new UnapprovedUser() { FullName = u.FullName, Email = u.Email, Id = u.Id });
+        .Select(u => new UnapprovedUser() { Name = u.FullName, Email = u.Email, Id = u.Id });
       return View(viewModel);
     }
 
@@ -226,9 +230,9 @@ namespace ClubPool.Web.Controllers.Users
         IsApproved = user.IsApproved,
         IsLocked = user.IsLocked,
         Username = user.Username,
-        Roles = user.Roles.Select(r => r.Id).ToArray(),
-        AvailableRoles = roleRepository.GetAll().Select(r => new RoleDto(r)).ToArray()
+        Roles = user.Roles.Select(r => r.Id).ToArray()
       };
+      viewModel.LoadAvailableRoles(roleRepository);
       return View(viewModel);
     }
 
@@ -237,11 +241,7 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize(Roles=Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
-      try {
-        viewModel.Validate();
-      }
-      catch (RulesException re) {
-        re.AddModelStateErrors(this.ModelState, null);
+      if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
 
@@ -250,6 +250,8 @@ namespace ClubPool.Web.Controllers.Users
         // verify that the new username is not in use
         if (membershipService.UsernameIsInUse(viewModel.Username)) {
           ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
+          viewModel.LoadAvailableRoles(roleRepository);
+          RollbackUserTransaction();
           return View(viewModel);
         }
         user.Username = viewModel.Username;
@@ -258,6 +260,8 @@ namespace ClubPool.Web.Controllers.Users
         // verify that the new email is not in use
         if (membershipService.EmailIsInUse(viewModel.Email)) {
           ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
+          viewModel.LoadAvailableRoles(roleRepository);
+          RollbackUserTransaction();
           return View(viewModel);
         }
         user.Email = viewModel.Email;
@@ -303,11 +307,7 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected User CreateUser(CreateViewModel viewModel, bool approved, bool locked) {
-      try {
-        viewModel.Validate();
-      }
-      catch (RulesException re) {
-        re.AddModelStateErrors(this.ModelState, null);
+      if (!ValidateViewModel(viewModel)) {
         return null;
       }
 

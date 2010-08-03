@@ -43,7 +43,7 @@ namespace ClubPool.Web.Controllers.Divisions
     public ActionResult Create(int seasonId) {
       var season = seasonRepository.Get(seasonId);
       if (null == season) {
-        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+        HttpNotFound();
       }
       var viewModel = new CreateDivisionViewModel() {
         SeasonId = season.Id,
@@ -54,6 +54,7 @@ namespace ClubPool.Web.Controllers.Divisions
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
+    [ValidateAntiForgeryToken]
     [Transaction]
     public ActionResult Create(CreateDivisionViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
@@ -69,7 +70,6 @@ namespace ClubPool.Web.Controllers.Divisions
       Division d = new Division(viewModel.Name, startingDate);
       divisionRepository.SaveOrUpdate(d);
       s.AddDivision(d);
-      seasonRepository.SaveOrUpdate(s);
 
       // I hate doing this here because theoretically /divisions/create could be called
       // from anywhere, but I don't know what else to do now. Same comment applies for all
@@ -84,7 +84,7 @@ namespace ClubPool.Web.Controllers.Divisions
     public ActionResult Delete(int id) {
       var division = divisionRepository.Get(id);
       if (null == division) {
-        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+        HttpNotFound();
       }
       var seasonId = division.Season.Id;
       if (!division.CanDelete()) {
@@ -103,12 +103,11 @@ namespace ClubPool.Web.Controllers.Divisions
     public ActionResult Edit(int id) {
       var division = divisionRepository.Get(id);
       if (null == division) {
-        throw new HttpException((int)HttpStatusCode.NotFound, "The requested resource is not found");
+        HttpNotFound();
       }
       var viewModel = new EditDivisionViewModel();
       viewModel.Id = id;
       viewModel.Name = division.Name;
-      viewModel.SeasonId = division.Season.Id;
       viewModel.SeasonName = division.Season.Name;
       viewModel.StartingDate = division.StartingDate.ToShortDateString();
       return View(viewModel);
@@ -131,10 +130,9 @@ namespace ClubPool.Web.Controllers.Divisions
       var division = divisionRepository.Get(viewModel.Id);
       division.Name = viewModel.Name;
       division.StartingDate = startingDate;
-      divisionRepository.SaveOrUpdate(division);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was updated";
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(viewModel.SeasonId));
+      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
   }
 

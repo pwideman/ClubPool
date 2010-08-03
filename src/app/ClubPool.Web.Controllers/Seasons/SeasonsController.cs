@@ -97,7 +97,7 @@ namespace ClubPool.Web.Controllers.Seasons
       if (!season.Name.Equals(viewModel.Name)) {
         // verify that the new name is not in use
         if (seasonRepository.GetAll().WithName(viewModel.Name).Any()) {
-          ModelState.AddModelErrorFor<SeasonDto>(m => m.Name, "The name is already in use");
+          ModelState.AddModelErrorFor<EditSeasonViewModel>(m => m.Name, "The name is already in use");
           return View(viewModel);
         }
         season.Name = viewModel.Name;
@@ -139,7 +139,7 @@ namespace ClubPool.Web.Controllers.Seasons
       if (null != activeSeason) {
         viewModel.CurrentActiveSeasonName = activeSeason.Name;
       }
-      viewModel.InactiveSeasons = seasonRepository.GetAll().WhereInactive().Select(s => new SeasonDto(s)).ToList();
+      viewModel.InactiveSeasons = seasonRepository.GetAll().WhereInactive().Select(s => new SeasonSummaryViewModel(s)).ToList();
       return View(viewModel);
     }
 

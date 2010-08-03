@@ -92,11 +92,13 @@
     <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="Divisions\DivisionsController.cs" />
+    <Compile Include="Divisions\ViewModels\CreateDivisionViewModel.cs" />
+    <Compile Include="Divisions\ViewModels\DivisionViewModel.cs" />
+    <Compile Include="Divisions\ViewModels\EditDivisionViewModel.cs" />
     <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="PagedListViewModelBase.cs" />
     <Compile Include="Seasons\SeasonsController.cs" />
-    <Compile Include="Divisions\ViewModels\DivisionViewModel.cs" />
     <Compile Include="Seasons\ViewModels\CreateSeasonViewModel.cs" />
     <Compile Include="Seasons\ViewModels\DivisionViewModel.cs" />
     <Compile Include="Seasons\ViewModels\EditSeasonViewModel.cs" />
@@ -105,6 +107,9 @@
     <Compile Include="Seasons\ViewModels\TeamViewModel.cs" />
     <Compile Include="Seasons\ViewModels\SeasonViewModel.cs" />
     <Compile Include="Teams\TeamsController.cs" />
+    <Compile Include="Teams\ViewModels\CreateTeamViewModel.cs" />
+    <Compile Include="Teams\ViewModels\EditTeamViewModel.cs" />
+    <Compile Include="Teams\ViewModels\PlayerViewModel.cs" />
     <Compile Include="Teams\ViewModels\TeamViewModel.cs" />
     <Compile Include="Seasons\ViewModels\ChangeActiveViewModel.cs" />
     <Compile Include="Seasons\ViewModels\IndexViewModel.cs" />
@@ -112,6 +117,7 @@
     <Compile Include="Users\ViewModels\EditViewModel.cs" />
     <Compile Include="Users\ViewModels\IndexViewModel.cs" />
     <Compile Include="Users\ViewModels\UnapprovedViewModel.cs" />
+    <Compile Include="Users\ViewModels\UserSummaryViewModel.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />
     <Compile Include="Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />

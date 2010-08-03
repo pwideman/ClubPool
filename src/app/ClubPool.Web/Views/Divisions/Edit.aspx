@@ -15,7 +15,6 @@
     %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>
-      <%= Html.HiddenFor(m => m.SeasonId)%>
       <%= Html.HiddenFor(m => m.Id) %>
       <% Html.RenderPartial("DivisionEditControl"); %>
       <div class="spacer">&nbsp;</div>

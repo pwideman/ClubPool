@@ -37,7 +37,7 @@
         <tr>
           <td><%= Html.Encode(item.Id) %></td>
           <td><%= Html.Encode(item.Username) %></td>
-          <td><%= Html.Encode(item.FullName) %></td>
+          <td><%= Html.Encode(item.Name) %></td>
           <td><%= Html.Encode(item.Email) %></td>
           <td>
             <% if (!item.IsApproved) { %>
@@ -47,7 +47,7 @@
             <%= Html.ContentImage("lock-medium.png", "Locked")%>
             <% } %>
           </td>
-          <td><%= string.Join(", ", item.RoleNames) %></td>
+          <td><%= string.Join(", ", item.Roles) %></td>
           <td class="action-column">
             <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(item.Id)) %>">
             <%= Html.ContentImage("edit-medium.png", "Edit") %>

@@ -7,7 +7,7 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class UnapprovedViewModel : ViewModelBase
+  public class UnapprovedViewModel
   {
     public IEnumerable<UnapprovedUser> UnapprovedUsers;
   }
@@ -15,7 +15,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
   public class UnapprovedUser
   {
     public int Id { get; set; }
-    public string FullName { get; set; }
+    public string Name { get; set; }
     public string Email { get; set; }
   }
 }

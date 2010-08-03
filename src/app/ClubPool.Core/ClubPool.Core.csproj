@@ -67,21 +67,15 @@
     </Compile>
     <Compile Include="Contracts\IUserRepository.cs" />
     <Compile Include="Division.cs" />
-    <None Include="DivisionDto.cs" />
-    <Compile Include="EntityDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\RoleQueries.cs" />
     <Compile Include="Queries\SeasonQueries.cs" />
     <Compile Include="Queries\UserQueries.cs" />
     <Compile Include="Role.cs" />
-    <Compile Include="RoleDto.cs" />
     <Compile Include="Roles.cs" />
     <Compile Include="Season.cs" />
-    <None Include="SeasonDto.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="UserDto.cs" />
-    <None Include="ValidatableEntityDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
