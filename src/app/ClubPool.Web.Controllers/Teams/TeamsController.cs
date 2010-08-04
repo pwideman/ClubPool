@@ -21,6 +21,7 @@ using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
+using ClubPool.ApplicationServices.DomainManagement.Contracts;
 
 namespace ClubPool.Web.Controllers.Teams
 {
@@ -29,18 +30,22 @@ namespace ClubPool.Web.Controllers.Teams
     protected ITeamRepository teamRepository;
     protected IDivisionRepository divisionRepository;
     protected IUserRepository userRepository;
+    protected ITeamManagementService teamManagementService;
 
     public TeamsController(ITeamRepository teamRepo,
       IDivisionRepository divisionRepo,
-      IUserRepository userRepo) {
+      IUserRepository userRepo,
+      ITeamManagementService teamManagementService) {
 
       Check.Require(null != teamRepo, "teamRepo cannot be null");
       Check.Require(null != divisionRepo, "divisionRepo cannot be null");
       Check.Require(null != userRepo, "userRepo cannot be null");
+      Check.Require(null != teamManagementService, "teamManagementService cannot be null");
 
       teamRepository = teamRepo;
       divisionRepository = divisionRepo;
       userRepository = userRepo;
+      this.teamManagementService = teamManagementService;
     }
 
     [HttpGet]
@@ -48,10 +53,7 @@ namespace ClubPool.Web.Controllers.Teams
     [Transaction]
     public ActionResult Create(int divisionId) {
       var division = divisionRepository.Get(divisionId);
-      var viewModel = new CreateTeamViewModel();
-      viewModel.DivisionId = division.Id;
-      viewModel.DivisionName = division.Name;
-      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(division.Season).Select(u => new PlayerViewModel(u)).ToList();
+      var viewModel = new CreateTeamViewModel(userRepository, division);
       return View(viewModel);
     }
 
@@ -60,13 +62,21 @@ namespace ClubPool.Web.Controllers.Teams
     [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateTeamViewModel viewModel) {
+      var division = divisionRepository.Get(viewModel.DivisionId);
       if (!ValidateViewModel(viewModel)) {
+        viewModel.ReInitialize(userRepository, division.Season);
         return View(viewModel);
       }
 
-      var division = divisionRepository.Get(viewModel.DivisionId);
+      // verify that the team name is not already used
+      if (teamManagementService.TeamNameIsInUse(division, viewModel.Name)) {
+        ModelState.AddModelErrorFor<CreateTeamViewModel>(m => m.Name, "This name is already in use");
+        viewModel.ReInitialize(userRepository, division.Season);
+        return View(viewModel);
+      }
+
       var team = new Team(viewModel.Name, division);
-      if (null != viewModel.Players && viewModel.Players.Any()) {
+      if (viewModel.Players.Any()) {
         foreach (var playerViewModel in viewModel.Players) {
           var player = userRepository.Get(playerViewModel.Id);
           team.AddPlayer(player);
@@ -105,11 +115,7 @@ namespace ClubPool.Web.Controllers.Teams
       if (null == team) {
         HttpNotFound();
       }
-      var viewModel = new EditTeamViewModel();
-      viewModel.Id = id;
-      viewModel.Name = team.Name;
-      viewModel.Players = team.Players.Select(p => new PlayerViewModel(p)).ToList();
-      viewModel.AvailablePlayers = userRepository.GetUnassignedUsersForSeason(team.Division.Season).Select(u => new PlayerViewModel(u)).ToList();
+      var viewModel = new EditTeamViewModel(userRepository, team);
       return View(viewModel);
     }
 
@@ -118,12 +124,22 @@ namespace ClubPool.Web.Controllers.Teams
     [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditTeamViewModel viewModel) {
+      var team = teamRepository.Get(viewModel.Id);
+
       if (!ValidateViewModel(viewModel)) {
+        viewModel.ReInitialize(userRepository, team);
         return View(viewModel);
       }
 
-      var team = teamRepository.Get(viewModel.Id);
-      team.Name = viewModel.Name;
+      if (team.Name != viewModel.Name) {
+        if (teamManagementService.TeamNameIsInUse(team.Division, viewModel.Name)) {
+          ModelState.AddModelErrorFor<EditTeamViewModel>(m => m.Name, "Name is already in use");
+          viewModel.ReInitialize(userRepository, team);
+          return View(viewModel);
+        }
+        team.Name = viewModel.Name;
+      }
+
       team.RemoveAllPlayers();
       if (null != viewModel.Players && viewModel.Players.Any()) {
         foreach (var playerViewModel in viewModel.Players) {

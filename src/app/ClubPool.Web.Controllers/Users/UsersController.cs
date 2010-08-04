@@ -276,7 +276,6 @@ namespace ClubPool.Web.Controllers.Users
           user.AddRole(roleRepository.Get(roleId));
         }
       }
-      userRepository.SaveOrUpdate(user);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
       return this.RedirectToAction(c => c.Index(null));

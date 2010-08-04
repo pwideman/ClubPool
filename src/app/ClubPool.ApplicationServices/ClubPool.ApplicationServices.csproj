@@ -61,6 +61,8 @@
     <Compile Include="Authentication\ClubPoolPrincipal.cs" />
     <Compile Include="Authentication\FormsAuthenticationService.cs" />
     <Compile Include="Authentication\Contracts\IAuthenticationService.cs" />
+    <Compile Include="DomainManagement\Contracts\ITeamManagementService.cs" />
+    <Compile Include="DomainManagement\TeamManagementService.cs" />
     <Compile Include="Membership\Contracts\IMembershipService.cs" />
     <None Include="Membership\Contracts\IRoleService.cs" />
     <None Include="Membership\SharpArchRoleService.cs" />

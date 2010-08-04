@@ -22,6 +22,20 @@ namespace ClubPool.Web.Controllers
       Id = entity.Id;
     }
 
+    public override int GetHashCode() {
+      return Id;
+    }
+
+    public override bool Equals(object obj) {
+      var viewModel = obj as EntityViewModelBase;
+      if (null == viewModel) {
+        return false;
+      }
+      else {
+        return Id == viewModel.Id;
+      }
+    }
+
     [Min(1)]
     public int Id { get; set; }
   }
