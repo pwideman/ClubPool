@@ -19,6 +19,7 @@
 // imports
 @import "menu.css";
 @import "base.css";
+@import "jquery-ui-1.8.2.redmond.css";
 
 .topcorner(@radius: 12px)
 {
@@ -613,13 +614,7 @@ div.action-button-row
   margin-bottom: 20px;
 }
 
-/* Season View */
-
-div.season-view-divisions-list
-{
-  width: 600px;
-}
-
+/*
 div.content-box
 {
   margin-bottom: 8px;
@@ -666,6 +661,36 @@ div.content-box
     padding: 12px;
   }
 }
+*/
+
+div.content-box-header {
+  // the order of these matters
+  .ui-widget-content;
+  .ui-widget-header;
+  .ui-corner-all;
+  padding: 4px;
+  margin: 2px;
+  font-size: 90%;
+}
+
+div.content-box
+{
+  // order matters
+  .ui-widget;
+  .ui-corner-all;
+  .ui-widget-content;
+}
+
+div.content-box-body {
+  padding: 8px;
+}
+
+/* Season View */
+
+div.season-view-divisions-list
+{
+  width: 600px;
+}
 
 div.team-view-content {
   padding: 6px 12px 12px 12px;
@@ -680,6 +705,27 @@ div.team-view-content {
     }
   }
   
+}
+
+div.season-view-player-list {
+  padding: 0;
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style:none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+table.season-view-teams-table {
+  font-size: 85%;
+}
+
+div.season-view-teams-content {
+  display: inline-block;
 }
 
 /* End Season View */
