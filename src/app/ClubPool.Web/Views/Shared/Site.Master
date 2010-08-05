@@ -9,7 +9,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
     <%= Html.Stylesheet("site.less") %>
-    <%= Html.Stylesheet("jquery-ui-1.8.2.redmond.css") %>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>
@@ -21,8 +20,10 @@
     <%= Html.ScriptInclude("jquery.corner.js") %>
     <% } %>
     <%= Html.ScriptInclude("jquery.validate.js") %>
+    <%= Html.ScriptInclude("jquery.cookie.js") %>
     <%= Html.ScriptInclude("xVal.jquery.validate.js") %>
     <%= Html.ScriptInclude("clubpool.js") %>
+
     
     <% // At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded %>
     <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">
