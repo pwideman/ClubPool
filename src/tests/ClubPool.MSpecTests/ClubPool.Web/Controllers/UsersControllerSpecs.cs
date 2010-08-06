@@ -696,7 +696,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     static User user;
     static int userId;
     static List<Role> roles;
-    static User savedUser;
 
     Establish context = () => {
       userId = 1;
@@ -725,7 +724,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
       roleRepository.Stub(r => r.GetAll()).Return(roles.AsQueryable());
       userRepository.Stub(r => r.Get(userId)).Return(user);
-      userRepository.Stub(r => r.SaveOrUpdate(Arg<User>.Is.Anything)).Return(null).WhenCalled(m => savedUser = (User)m.Arguments[0]);
     };
 
     Because of = () => result = controller.Edit(viewModel);
@@ -739,14 +737,14 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
 
     It should_update_the_user_properties = () => {
-      savedUser.Username.ShouldEqual(viewModel.Username);
-      savedUser.FirstName.ShouldEqual(viewModel.FirstName);
-      savedUser.LastName.ShouldEqual(viewModel.LastName);
-      savedUser.Email.ShouldEqual(viewModel.Email);
-      savedUser.IsApproved.ShouldEqual(viewModel.IsApproved);
-      savedUser.IsLocked.ShouldEqual(viewModel.IsLocked);
-      savedUser.Id.ShouldEqual(viewModel.Id);
-      savedUser.Roles.Count().ShouldEqual(viewModel.Roles.Count());
+      user.Username.ShouldEqual(viewModel.Username);
+      user.FirstName.ShouldEqual(viewModel.FirstName);
+      user.LastName.ShouldEqual(viewModel.LastName);
+      user.Email.ShouldEqual(viewModel.Email);
+      user.IsApproved.ShouldEqual(viewModel.IsApproved);
+      user.IsLocked.ShouldEqual(viewModel.IsLocked);
+      user.Id.ShouldEqual(viewModel.Id);
+      user.Roles.Count().ShouldEqual(viewModel.Roles.Count());
     };
   }
 
