@@ -36,26 +36,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   [Subject(typeof(DashboardController))]
   public class when_asked_for_the_default_view_for_nonadmin_user : specification_for_dashboard_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<IndexViewModel> result;
 
     Establish context = () => {
     };
 
-    Because of = () => result = controller.Index();
+    Because of = () => result = new ViewResultHelper<IndexViewModel>(controller.Index());
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
-      viewModel.UserIsAdmin.ShouldBeFalse();
+    It should_indicate_that_the_user_is_not_an_administrator = () => {
+      result.Model.UserIsAdmin.ShouldBeFalse();
     };
   }
 
   [Subject(typeof(DashboardController))]
   public class when_asked_for_the_default_view_for_admin_user : specification_for_dashboard_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<IndexViewModel> result;
 
     Establish context = () => {
       var principal = authenticationService.MockPrincipal;
@@ -63,21 +59,17 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       userRepository.Stub(r => r.GetAll()).Return(new List<User>().AsQueryable());
     };
 
-    Because of = () => result = controller.Index();
+    Because of = () => result = new ViewResultHelper<IndexViewModel>(controller.Index());
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
-      viewModel.UserIsAdmin.ShouldBeTrue();
+    It should_indicate_that_the_user_is_an_administrator = () => {
+      result.Model.UserIsAdmin.ShouldBeTrue();
     };
   }
 
   [Subject(typeof(DashboardController))]
   public class when_asked_for_the_default_view_for_admin_user_and_there_are_unapproved_users : specification_for_dashboard_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<IndexViewModel> result;
     static IList<User> users;
 
     Establish context = () => {
@@ -91,15 +83,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
-    Because of = () => result = controller.Index();
+    Because of = () => result = new ViewResultHelper<IndexViewModel>(controller.Index());
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
-      viewModel.UserIsAdmin.ShouldBeTrue();
-      // TODO: Check for alerts
-    };
+    // TODO: Verify that the unapproved alert is added
   }
 }
