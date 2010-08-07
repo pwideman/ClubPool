@@ -36,22 +36,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   [Subject(typeof(DashboardController))]
   public class when_asked_for_the_default_view_for_nonadmin_user : specification_for_dashboard_controller
   {
-    static ViewResultHelper<IndexViewModel> result;
+    static ViewResultHelper<IndexViewModel> resultHelper;
 
     Establish context = () => {
     };
 
-    Because of = () => result = new ViewResultHelper<IndexViewModel>(controller.Index());
+    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
 
     It should_indicate_that_the_user_is_not_an_administrator = () => {
-      result.Model.UserIsAdmin.ShouldBeFalse();
+      resultHelper.Model.UserIsAdmin.ShouldBeFalse();
     };
   }
 
   [Subject(typeof(DashboardController))]
   public class when_asked_for_the_default_view_for_admin_user : specification_for_dashboard_controller
   {
-    static ViewResultHelper<IndexViewModel> result;
+    static ViewResultHelper<IndexViewModel> resultHelper;
 
     Establish context = () => {
       var principal = authenticationService.MockPrincipal;
@@ -59,17 +59,17 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       userRepository.Stub(r => r.GetAll()).Return(new List<User>().AsQueryable());
     };
 
-    Because of = () => result = new ViewResultHelper<IndexViewModel>(controller.Index());
+    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
 
     It should_indicate_that_the_user_is_an_administrator = () => {
-      result.Model.UserIsAdmin.ShouldBeTrue();
+      resultHelper.Model.UserIsAdmin.ShouldBeTrue();
     };
   }
 
   [Subject(typeof(DashboardController))]
   public class when_asked_for_the_default_view_for_admin_user_and_there_are_unapproved_users : specification_for_dashboard_controller
   {
-    static ViewResultHelper<IndexViewModel> result;
+    static ViewResultHelper<IndexViewModel> resultHelper;
     static IList<User> users;
 
     Establish context = () => {
@@ -83,7 +83,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
-    Because of = () => result = new ViewResultHelper<IndexViewModel>(controller.Index());
+    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
 
     // TODO: Verify that the unapproved alert is added
   }

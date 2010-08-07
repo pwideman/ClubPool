@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Security.Principal;
+using System.Net;
+using System.Web;
 
 using Rhino.Mocks;
 using Machine.Specifications;
@@ -48,7 +50,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_default_view : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<IndexViewModel> resultHelper;
     static int page = 1;
     static int pages = 3;
     static int pageSize = 10;
@@ -61,27 +63,31 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
-    Because of = () => result = controller.Index(page);
+    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(page));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_set_the_number_of_users_to_the_page_size = () =>
+      resultHelper.Model.Items.Count().ShouldEqual(pageSize);
 
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as IndexViewModel;
-      viewModel.ShouldNotBeNull();
-      viewModel.Items.Count().ShouldEqual(pageSize);
-      viewModel.First.ShouldEqual((page-1) * pageSize + 1);
-      viewModel.Last.ShouldEqual(pageSize * page);
-      viewModel.Total.ShouldEqual(pageSize * pages);
-      viewModel.TotalPages.ShouldEqual(pages);
-      viewModel.CurrentPage.ShouldEqual(page);
-    };
+    It should_set_the_first_user_index = () =>
+      resultHelper.Model.First.ShouldEqual((page - 1) * pageSize + 1);
+
+    It should_set_the_last_user_index = () =>
+      resultHelper.Model.Last.ShouldEqual(pageSize * page);
+
+    It should_set_the_current_page_index = () =>
+      resultHelper.Model.CurrentPage.ShouldEqual(page);
+
+    It should_set_the_total_number_of_users = () =>
+      resultHelper.Model.Total.ShouldEqual(pageSize * pages);
+
+    It should_set_the_total_pages = () =>
+      resultHelper.Model.TotalPages.ShouldEqual(pages);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_login_view_and_the_user_is_not_logged_in : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<LoginViewModel> resultHelper;
     static string returnUrl;
 
     Establish context = () => {
@@ -89,43 +95,40 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       returnUrl = "some return url";
     };
 
-    Because of = () => result = controller.Login(returnUrl);
+    Because of = () => resultHelper = new ViewResultHelper<LoginViewModel>(controller.Login(returnUrl));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_set_the_return_url = () =>
+      resultHelper.Model.ReturnUrl.ShouldEqual(returnUrl);
 
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as LoginViewModel;
-      var viewResult = result as ViewResult;
-      viewResult.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeFalse();
-      viewModel.ReturnUrl.ShouldEqual(returnUrl);
-      viewModel.Password.ShouldBeNull();
-      viewModel.StayLoggedIn.ShouldBeFalse();
-      viewModel.Username.ShouldBeNull();
-    };
+    It should_set_the_password_to_empty = () =>
+      resultHelper.Model.Password.ShouldBeNull();
+
+    It should_set_the_username_to_empty = () =>
+      resultHelper.Model.Username.ShouldBeNull();
+
+    It should_set_StayLoggedIn_to_false = () =>
+      resultHelper.Model.StayLoggedIn.ShouldBeFalse();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_login_view_and_the_user_is_logged_in : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
 
     Establish context = () => {
       authenticationService.MockPrincipal.MockIdentity.IsAuthenticated = true;
     };
 
-    Because of = () => result = controller.Login(string.Empty);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Login(string.Empty));
 
-    It should_redirect_to_home_index = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Dashboard");
-      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
-    };
+    It should_redirect_to_the_dashboard_view = () =>
+      resultHelper.ShouldRedirectTo("dashboard");
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_login_with_a_return_url_and_authentication_is_successful : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectResultHelper resultHelper;
     static string username = "TestUser";
     static string password = "TestPassword";
     static bool stayLoggedIn = true;
@@ -142,16 +145,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       };
     };
 
-    Because of = () => result = controller.Login(viewModel);
+    Because of = () => resultHelper = new RedirectResultHelper(controller.Login(viewModel));
 
     It should_redirect_to_the_return_url = () => 
-      result.IsARedirectAnd().Url.ShouldEqual(returnUrl);
+      resultHelper.Result.Url.ShouldEqual(returnUrl);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_login_without_a_return_url_and_authentication_is_successful : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
     static string username = "TestUser";
     static string password = "TestPassword";
     static bool stayLoggedIn = true;
@@ -166,18 +169,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       };
     };
 
-    Because of = () => result = controller.Login(viewModel);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Login(viewModel));
 
-    It should_redirect_to_home_index = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Dashboard");
-      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
-    };
+    It should_redirect_to_the_dashboard_view = () =>
+      resultHelper.ShouldRedirectTo("dashboard");
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_login_and_authentication_is_unsuccessful : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<LoginViewModel> resultHelper;
     static string username = "TestUser";
     static string password = "TestPassword";
     static LoginViewModel viewModel;
@@ -190,46 +191,40 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       };
     };
 
-    Because of = () => result = controller.Login(viewModel);
+    Because of = () => resultHelper = new ViewResultHelper<LoginViewModel>(controller.Login(viewModel));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_set_the_username_to_the_value_provided_by_the_user = () =>
+      resultHelper.Model.Username.ShouldEqual(username);
 
-    It should_set_the_view_model_properties_correctly = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as LoginViewModel;
-      var viewResult = result as ViewResult;
-      vm.Username.ShouldEqual(username);
-      vm.Password.ShouldBeEmpty();
-      viewResult.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
-      viewResult.TempData[GlobalViewDataProperty.PageErrorMessage].ShouldEqual("Invalid username/password");
-    };
+    It should_set_the_password_to_empty = () =>
+      resultHelper.Model.Password.ShouldBeEmpty();
+
+    It should_set_the_page_error_message = () =>
+      resultHelper.Result.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_login_status_view_and_the_user_is_not_logged_in : specification_for_users_controller
   {
-    static ActionResult result;
+    static PartialViewResultHelper<LoginStatusViewModel> resultHelper;
 
     Establish context = () => {
       authenticationService.MockPrincipal.MockIdentity.IsAuthenticated = false;
     };
 
-    Because of = () => result = controller.LoginStatus();
+    Because of = () => resultHelper = new PartialViewResultHelper<LoginStatusViewModel>(controller.LoginStatus());
 
-    It should_return_the_default_view = () =>
-      result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
+    It should_set_the_username_to_empty = () =>
+      resultHelper.Model.Username.ShouldBeNull();
 
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAPartialViewAnd().ViewData.Model as LoginStatusViewModel;
-      viewModel.Username.ShouldBeNull();
-      viewModel.UserIsLoggedIn.ShouldBeFalse();
-    };
+    It should_indicate_that_the_user_is_not_logged_in = () =>
+      resultHelper.Model.UserIsLoggedIn.ShouldBeFalse();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_login_status_view_and_the_user_is_logged_in : specification_for_users_controller
   {
-    static ActionResult result;
+    static PartialViewResultHelper<LoginStatusViewModel> resultHelper;
     static string username = "TestUser";
 
     Establish context = () => {
@@ -238,74 +233,69 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       principal.MockIdentity.IsAuthenticated = true;
     };
 
-    Because of = () => result = controller.LoginStatus();
+    Because of = () => resultHelper = new PartialViewResultHelper<LoginStatusViewModel>(controller.LoginStatus());
 
-    It should_return_the_default_view = () =>
-      result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
+    It should_set_the_username_to_the_username_of_the_user = () =>
+      resultHelper.Model.Username.ShouldEqual(username);
 
-    It should_set_the_view_model_properties_correctly = () => {
-      var viewModel = result.IsAPartialViewAnd().ViewData.Model as LoginStatusViewModel;
-      viewModel.Username.ShouldEqual(username);
-      viewModel.UserIsLoggedIn.ShouldBeTrue();
-    };
+    It should_indicate_that_the_user_is_logged_in = () =>
+      resultHelper.Model.UserIsLoggedIn.ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_logout : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
 
     Establish context = () => {
       authenticationService.MockPrincipal.MockIdentity.IsAuthenticated = true;
     };
 
-    Because of = () => result = controller.Logout();
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Logout());
 
     It should_log_the_user_out = () =>
       authenticationService.MockPrincipal.MockIdentity.IsAuthenticated.ShouldBeFalse();
 
-    It should_redirect_to_home_index = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ShouldEqual("Home");
-      result.IsARedirectToARouteAnd().ActionName().ShouldEqual("Index");
-    };
+    It should_redirect_to_the_home_view = () =>
+      resultHelper.ShouldRedirectTo("home");
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_login_sidebar_gadget : specification_for_users_controller
   {
-    static ActionResult result;
+    static PartialViewResultHelper<LoginViewModel> resultHelper;
 
     Establish context = () => { };
 
-    Because of = () => result = controller.LoginGadget();
+    Because of = () => resultHelper = new PartialViewResultHelper<LoginViewModel>(controller.LoginGadget());
 
-    It should_return_the_default_view = () =>
-      result.IsAPartialViewAnd().ViewName.ShouldBeEmpty();
+    It should_set_the_username_to_empty = () =>
+      resultHelper.Model.Username.ShouldBeEmpty();
 
-    It should_pass_a_login_view_model_object_to_the_view = () =>
-      (result.IsAPartialViewAnd().ViewData.Model is LoginViewModel).ShouldBeTrue();
+    It should_set_the_password_to_empty = () =>
+      resultHelper.Model.Password.ShouldBeEmpty();
+
+    It should_set_the_return_url_to_empty = () =>
+      resultHelper.Model.ReturnUrl.ShouldBeEmpty();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_signup_view : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<SignUpViewModel> resultHelper;
 
     Establish context = () => { };
 
-    Because of = () => result = controller.SignUp();
+    Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp());
 
     It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_pass_a_signup_view_model_object_to_the_view = () =>
-      (result.IsAViewAnd().ViewData.Model is SignUpViewModel).ShouldBeTrue();
+      resultHelper.Result.ViewName.ShouldBeEmpty();
   }
 
   [Subject(typeof(UsersController))]
-  public class when_asked_to_sign_up_a_new_user_and_the_viewModel_is_invalid : specification_for_users_controller
+  public class when_asked_to_sign_up_a_new_user_and_the_view_model_is_invalid : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<SignUpViewModel> resultHelper;
     static SignUpViewModel viewModel;
     static string username = "TestUser";
 
@@ -314,28 +304,19 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       viewModel.Username = username;
     };
 
-    Because of = () => result = controller.SignUp(viewModel, true);
+    Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_pass_the_data_provided_by_the_user_back_to_the_view = () =>
+      resultHelper.Model.Username.ShouldEqual(username);
 
-    It should_pass_the_view_model_back_to_the_view = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
-      vm.ShouldNotBeNull();
-      vm.Username.ShouldEqual(username);
-    };
-
-    It should_set_the_model_state_errors = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.IsValid.ShouldBeFalse();
-      modelState.Count.ShouldBeGreaterThan(0);
-    };
+    It should_indicate_that_there_was_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_sign_up_a_new_user_and_password_and_confirm_password_do_not_match : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<SignUpViewModel> resultHelper;
     static SignUpViewModel viewModel;
 
     Establish context = () => {
@@ -348,29 +329,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       viewModel.LastName = "test";
     };
 
-    Because of = () => result = controller.SignUp(viewModel, true);
+    Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_pass_the_data_provided_by_the_user_back_to_the_view = () =>
+      resultHelper.Model.Username.ShouldEqual(viewModel.Username);
 
-    It should_pass_the_view_model_back_to_the_view = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
-      vm.ShouldNotBeNull();
-      vm.Username.ShouldEqual(viewModel.Username);
-    };
+    It should_indicate_that_there_was_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-    It should_set_the_model_state_errors = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.IsValid.ShouldBeFalse();
-      modelState.Count.ShouldBeGreaterThan(0);
-      modelState.Keys.Contains("ConfirmPassword").ShouldBeTrue();
-    };
+    It should_indicate_that_the_error_was_related_to_the_ConfirmPassword_field = () =>
+      resultHelper.Result.ViewData.ModelState.Keys.Contains("ConfirmPassword").ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_sign_up_a_new_user_with_duplicate_username : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<SignUpViewModel> resultHelper;
     static SignUpViewModel viewModel;
     static string username = "TestUser";
 
@@ -386,25 +360,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       membershipService.Expect(s => s.UsernameIsInUse(null)).IgnoreArguments().Return(true);
     };
 
-    Because of = () => result = controller.SignUp(viewModel, true);
+    Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_indicate_that_there_was_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-    It should_pass_the_view_model_back_to_the_view_with_error_message = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
-      vm.ShouldNotBeNull();
-      vm.Username.ShouldEqual(username);
-      var viewResult = result as ViewResult;
-      viewResult.ViewData.ModelState.ContainsKey("Username").ShouldBeTrue();
-      viewResult.ViewData.ModelState["Username"].Errors.Count.ShouldBeGreaterThan(0);
-    };
+    It should_indicate_that_the_error_was_related_to_the_Username_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Username").ShouldBeTrue();
+
+    It should_retain_the_data_that_the_user_has_already_entered = () =>
+      resultHelper.Model.Username.ShouldEqual(username);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_sign_up_a_new_user_with_duplicate_email : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<SignUpViewModel> resultHelper;
     static SignUpViewModel viewModel;
     static string email = "TestEmail@email.com";
 
@@ -420,25 +391,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       membershipService.Expect(s => s.EmailIsInUse(null)).IgnoreArguments().Return(true);
     };
 
-    Because of = () => result = controller.SignUp(viewModel, true);
+    Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_indicate_that_there_was_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-    It should_pass_the_view_model_back_to_the_view_with_error_message = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
-      vm.ShouldNotBeNull();
-      vm.Email.ShouldEqual(email);
-      var viewResult = result as ViewResult;
-      viewResult.ViewData.ModelState.ContainsKey("Email").ShouldBeTrue();
-      viewResult.ViewData.ModelState["Email"].Errors.Count.ShouldBeGreaterThan(0);
-    };
+    It should_indicate_that_the_error_was_related_to_the_Email_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Email").ShouldBeTrue();
+
+    It should_retain_the_data_that_the_user_has_already_entered = () =>
+      resultHelper.Model.Email.ShouldEqual(email);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_sign_up_a_new_user_with_valid_info : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<object> resultHelper;
     static SignUpViewModel viewModel;
     static User user;
     static string username = "TestUser";
@@ -464,21 +432,20 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       roleRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(role);
     };
 
-    Because of = () => result = controller.SignUp(viewModel, true);
+    Because of = () => resultHelper = new ViewResultHelper<object>(controller.SignUp(viewModel, true));
 
     It should_return_the_SignUpComplete_view = () =>
-      result.IsAViewAnd().ViewName.ShouldEqual("SignUpComplete");
+      resultHelper.Result.ViewName.ShouldEqual("SignUpComplete");
 
-    It should_send_new_user_awaiting_approval_email_to_all_admins = () => {
+    It should_send_new_user_awaiting_approval_email_to_all_admins = () =>
       emailService.AssertWasCalled(s => s.SendSystemEmail(new List<string>(), null, null),
         o => o.IgnoreArguments());
-    };
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_sign_up_a_new_user_and_the_captcha_is_invalid : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<SignUpViewModel> resultHelper;
     static SignUpViewModel viewModel;
     static string username = "TestUser";
 
@@ -487,29 +454,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       viewModel.Username = username;
     };
 
-    Because of = () => result = controller.SignUp(viewModel, false);
+    Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, false));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_indicate_that_there_was_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-    It should_pass_the_view_model_back_to_the_view = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as SignUpViewModel;
-      vm.ShouldNotBeNull();
-      vm.Username.ShouldEqual(username);
-    };
+    It should_indicate_that_the_error_was_related_to_the_captcha_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("captcha").ShouldBeTrue();
 
-    It should_set_the_model_state_errors = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.IsValid.ShouldBeFalse();
-      modelState.Count.ShouldBeGreaterThan(0);
-      modelState.Keys.Contains("captcha").ShouldBeTrue();
-    };
+    It should_retain_the_data_that_the_user_has_already_entered = () =>
+      resultHelper.Model.Username.ShouldEqual(username);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_unapproved_users_and_there_are_none : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<UnapprovedViewModel> resultHelper;
     static IList<User> users;
 
     Establish context = () => {
@@ -517,22 +477,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
-    Because of = () => result = controller.Unapproved();
+    Because of = () => resultHelper = new ViewResultHelper<UnapprovedViewModel>(controller.Unapproved());
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_not_display_any_unapproved_users = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as UnapprovedViewModel;
-      vm.ShouldNotBeNull();
-      vm.UnapprovedUsers.Count().ShouldEqual(0);
-    };
+    It should_not_return_any_unapproved_users = () =>
+      resultHelper.Model.UnapprovedUsers.Count().ShouldEqual(0);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_for_the_unapproved_users_view : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<UnapprovedViewModel> resultHelper;
     static IList<User> users;
 
     Establish context = () => {
@@ -544,22 +498,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
-    Because of = () => result = controller.Unapproved();
+    Because of = () => resultHelper = new ViewResultHelper<UnapprovedViewModel>(controller.Unapproved());
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_pass_the_view_model_to_the_view = () => {
-      var vm = result.IsAViewAnd().ViewData.Model as UnapprovedViewModel;
-      vm.ShouldNotBeNull();
-      vm.UnapprovedUsers.Count().ShouldEqual(2);
-    };
+    It should_return_the_correct_number_of_unapproved_users = () =>
+      resultHelper.Model.UnapprovedUsers.Count().ShouldEqual(2);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_approve_users : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
     static IList<User> users;
 
     Establish context = () => {
@@ -571,84 +519,82 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
-    Because of = () => result = controller.Approve(new int[] {1,2});
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Approve(new int[] {1,2}));
 
-    It should_set_the_IsApproved_property_on_the_approved_user = () => {
+    It should_approve_the_selected_users = () => {
       users[0].IsApproved.ShouldBeTrue();
       users[1].IsApproved.ShouldBeTrue();
+    };
+
+    It should_not_approve_the_unselected_users = () =>
       users[2].IsApproved.ShouldBeFalse();
-    };
 
-    It should_redirect_to_the_unapproved_view = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("unapproved");
-    };
+    It should_redirect_to_the_unapproved_users_view = () =>
+      resultHelper.ShouldRedirectTo("users", "unapproved");
 
-    It should_set_the_tempdata_message = () =>
+    It should_return_a_notification_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_delete_a_user : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
     static int userId = 1;
     static User user;
     static int page = 5;
+    static KeyValuePair<string, object> pageRouteValue;
 
     Establish context = () => {
       user = new User("test", "test", "test", "test", "test");
       userRepository.Stub(r => r.Get(userId)).Return(user);
       userRepository.Expect(r => r.Delete(user));
+      pageRouteValue = new KeyValuePair<string, object>("page", page);
     };
 
-    Because of = () => result = controller.Delete(userId, page);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(userId, page));
 
     It should_delete_the_user = () =>
       userRepository.VerifyAllExpectations();
 
-    It should_redirect_to_the_users_index_view = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      var pageRouteValue = new KeyValuePair<string, object>("page", page);
-      result.IsARedirectToARouteAnd().RouteValues.ShouldContain(pageRouteValue);
-    };
+    It should_redirect_to_the_users__view = () =>
+      resultHelper.ShouldRedirectTo("users");
 
-    It should_set_the_notification_message = () =>
+    It should_retain_the_current_page = () =>
+      resultHelper.Result.RouteValues.ShouldContain(pageRouteValue);
+
+    It should_return_a_notification_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_delete_an_invalid_user : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
     static int userId = 1;
     static int page = 5;
+    static KeyValuePair<string, object> pageRouteValue;
+    static Exception exception;
 
     Establish context = () => {
       userRepository.Stub(r => r.Get(userId)).Return(null);
+      pageRouteValue = new KeyValuePair<string, object>("page", page);
     };
 
-    Because of = () => result = controller.Delete(userId, 5);
+    Because of = () => exception = Catch.Exception(() => controller.Delete(userId, 5));
 
     It should_not_delete_the_user = () =>
       userRepository.AssertWasNotCalled(r => r.Delete(null), x => x.IgnoreArguments());
 
-    It should_redirect_to_the_users_index_view = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      var pageRouteValue = new KeyValuePair<string, object>("page", page);
-      result.IsARedirectToARouteAnd().RouteValues.ShouldContain(pageRouteValue);
-    };
-
-    It should_set_the_error_message = () =>
-      controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+    It should_return_http_not_found_status = () =>
+      exception.ShouldBeOfType<HttpException>();
+      // TODO: verify http status code 404
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_edit_a_user : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<EditViewModel> resultHelper;
     static int userId = 1;
     static User user;
     static List<Role> roles;
@@ -668,23 +614,35 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       roleRepository.Stub(r => r.GetAll()).Return(roles.AsQueryable());
     };
 
-    Because of = () => result = controller.Edit(userId);
+    Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(userId));
 
-    It should_display_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_initialize_the_Username_field = () =>
+      resultHelper.Model.Username.ShouldEqual(user.Username);
 
-    It should_set_the_view_model_properties = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as EditViewModel;
-      viewModel.ShouldNotBeNull();
-      viewModel.Id.ShouldEqual(user.Id);
-      viewModel.FirstName.ShouldEqual(user.FirstName);
-      viewModel.LastName.ShouldEqual(user.LastName);
-      viewModel.IsApproved.ShouldEqual(user.IsApproved);
-      viewModel.Email.ShouldEqual(user.Email);
-      viewModel.IsLocked.ShouldEqual(user.IsLocked);
-      viewModel.Username.ShouldEqual(user.Username);
-      viewModel.Roles.Count().ShouldEqual(user.Roles.Count());
-      viewModel.AvailableRoles.Count().ShouldEqual(roles.Count);
+    It should_initialize_the_FirstName_field = () =>
+      resultHelper.Model.FirstName.ShouldEqual(user.FirstName);
+
+    It should_initialize_the_LastName_field = () =>
+      resultHelper.Model.LastName.ShouldEqual(user.LastName);
+
+    It should_initialize_the_Approved_field = () =>
+      resultHelper.Model.IsApproved.ShouldEqual(user.IsApproved);
+
+    It should_initialize_the_Locked_field = () =>
+      resultHelper.Model.IsLocked.ShouldEqual(user.IsLocked);
+
+    It should_initialize_the_Email_field = () =>
+      resultHelper.Model.Email.ShouldEqual(user.Email);
+
+    It should_initiaize_the_users_roles = () => {
+      foreach (var role in user.Roles)
+        resultHelper.Model.Roles.ShouldContain(role.Id);
+    };
+
+    It should_initialize_the_available_roles = () => {
+      foreach (var role in roles) {
+        resultHelper.Model.AvailableRoles.ShouldContain(new RoleViewModel(role));
+      }
     };
   }
 
