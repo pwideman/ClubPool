@@ -179,17 +179,15 @@ namespace ClubPool.Web.Controllers.Users
     [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, int page) {
       User userToDelete = userRepository.Get(id);
-      if (null != userToDelete) {
-        if (userToDelete.CanDelete()) {
-          userRepository.Delete(userToDelete);
-          TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
-        }
-        else {
-          TempData[GlobalViewDataProperty.PageErrorMessage] = "There is data in the system referencing this user, the user cannot be deleted.";
-        }
+      if (null == userToDelete) {
+        HttpNotFound();
+      }
+      if (userToDelete.CanDelete()) {
+        userRepository.Delete(userToDelete);
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
       }
       else {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid user id";
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "There is data in the system referencing this user, the user cannot be deleted.";
       }
       return this.RedirectToAction(c => c.Index(page));
     }
