@@ -7,17 +7,15 @@ using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class RoleViewModel
+  public class RoleViewModel : EntityViewModelBase
   {
-    public RoleViewModel() {
+    public RoleViewModel() : base() {
     }
 
-    public RoleViewModel(Role role) {
-      Id = role.Id;
+    public RoleViewModel(Role role) : base(role) {
       Name = role.Name;
     }
 
-    public int Id { get; set; }
     public string Name { get; set; }
   }
 }

@@ -197,7 +197,7 @@ namespace ClubPool.Web.Controllers.Users
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
       viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList()
-        .Select(u => new UnapprovedUser() { Name = u.FullName, Email = u.Email, Id = u.Id });
+        .Select(u => new UnapprovedUser(u));
       return View(viewModel);
     }
 

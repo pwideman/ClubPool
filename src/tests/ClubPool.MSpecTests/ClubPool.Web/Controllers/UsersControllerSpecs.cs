@@ -21,6 +21,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Users;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
+using ClubPool.Framework.Extensions;
 using ClubPool.Testing.ApplicationServices.Authentication;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
@@ -280,19 +281,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
-  public class when_asked_for_the_signup_view : specification_for_users_controller
-  {
-    static ViewResultHelper<SignUpViewModel> resultHelper;
-
-    Establish context = () => { };
-
-    Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp());
-
-    It should_return_the_default_view = () =>
-      resultHelper.Result.ViewName.ShouldBeEmpty();
-  }
-
-  [Subject(typeof(UsersController))]
   public class when_asked_to_sign_up_a_new_user_and_the_view_model_is_invalid : specification_for_users_controller
   {
     static ViewResultHelper<SignUpViewModel> resultHelper;
@@ -307,7 +295,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
 
     It should_pass_the_data_provided_by_the_user_back_to_the_view = () =>
-      resultHelper.Model.Username.ShouldEqual(username);
+      resultHelper.Model.ShouldEqual(viewModel);
 
     It should_indicate_that_there_was_an_error = () =>
       resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
@@ -332,7 +320,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     Because of = () => resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
 
     It should_pass_the_data_provided_by_the_user_back_to_the_view = () =>
-      resultHelper.Model.Username.ShouldEqual(viewModel.Username);
+      resultHelper.Model.ShouldEqual(viewModel);
 
     It should_indicate_that_there_was_an_error = () =>
       resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
@@ -369,7 +357,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       resultHelper.Result.ViewData.ModelState.ContainsKey("Username").ShouldBeTrue();
 
     It should_retain_the_data_that_the_user_has_already_entered = () =>
-      resultHelper.Model.Username.ShouldEqual(username);
+      resultHelper.Model.ShouldEqual(viewModel);
   }
 
   [Subject(typeof(UsersController))]
@@ -400,7 +388,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       resultHelper.Result.ViewData.ModelState.ContainsKey("Email").ShouldBeTrue();
 
     It should_retain_the_data_that_the_user_has_already_entered = () =>
-      resultHelper.Model.Email.ShouldEqual(email);
+      resultHelper.Model.ShouldEqual(viewModel);
   }
 
   [Subject(typeof(UsersController))]
@@ -463,7 +451,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       resultHelper.Result.ViewData.ModelState.ContainsKey("captcha").ShouldBeTrue();
 
     It should_retain_the_data_that_the_user_has_already_entered = () =>
-      resultHelper.Model.Username.ShouldEqual(username);
+      resultHelper.Model.ShouldEqual(viewModel);
   }
 
   [Subject(typeof(UsersController))]
@@ -500,8 +488,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     Because of = () => resultHelper = new ViewResultHelper<UnapprovedViewModel>(controller.Unapproved());
 
-    It should_return_the_correct_number_of_unapproved_users = () =>
-      resultHelper.Model.UnapprovedUsers.Count().ShouldEqual(2);
+    It should_return_the_unapproved_users = () =>
+      users.Where(u => !u.IsApproved).Each(u => resultHelper.Model.UnapprovedUsers.ShouldContain(new UnapprovedUser(u)));
   }
 
   [Subject(typeof(UsersController))]
@@ -634,22 +622,17 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_initialize_the_Email_field = () =>
       resultHelper.Model.Email.ShouldEqual(user.Email);
 
-    It should_initiaize_the_users_roles = () => {
-      foreach (var role in user.Roles)
-        resultHelper.Model.Roles.ShouldContain(role.Id);
-    };
+    It should_initiaize_the_users_roles = () => 
+      user.Roles.Each(r => resultHelper.Model.Roles.ShouldContain(r.Id));
 
-    It should_initialize_the_available_roles = () => {
-      foreach (var role in roles) {
-        resultHelper.Model.AvailableRoles.ShouldContain(new RoleViewModel(role));
-      }
-    };
+    It should_initialize_the_available_roles = () => 
+      roles.Each(r => resultHelper.Model.AvailableRoles.ShouldContain(new RoleViewModel(r)));
   }
 
   [Subject(typeof(UsersController))]
   public class when_the_edit_form_is_posted_with_valid_data : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
     static EditViewModel viewModel;
     static User user;
     static int userId;
@@ -677,39 +660,54 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
         Roles = new int[] { 0, 1 }
       };
 
-      user = new User("temp", "pass", "temp", "temp", "temp@temp.com");
+      user = new User("temp", "pass", "temp", "temp", "temp@temp.com") {
+        IsLocked = !viewModel.IsLocked,
+        IsApproved = !viewModel.IsApproved
+      };
       user.SetIdTo(userId);
 
       roleRepository.Stub(r => r.GetAll()).Return(roles.AsQueryable());
       userRepository.Stub(r => r.Get(userId)).Return(user);
     };
 
-    Because of = () => result = controller.Edit(viewModel);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
 
-    It should_redirect_to_the_default_view = () => {
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("users");
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
+    It should_redirect_to_the_default_users_view = () => {
+      resultHelper.ShouldRedirectTo("users");
     };
 
-    It should_set_the_page_notification_message = () => 
+    It should_return_a_notification_message = () => 
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
 
-    It should_update_the_user_properties = () => {
+    It should_update_the_username = () =>
       user.Username.ShouldEqual(viewModel.Username);
+
+    It should_update_the_first_name = () =>
       user.FirstName.ShouldEqual(viewModel.FirstName);
+
+    It should_update_the_last_name = () =>
       user.LastName.ShouldEqual(viewModel.LastName);
+
+    It should_update_the_email = () =>
       user.Email.ShouldEqual(viewModel.Email);
+
+    It should_update_the_users_approved_status = () =>
       user.IsApproved.ShouldEqual(viewModel.IsApproved);
+
+    It should_update_the_users_locked_status = () =>
       user.IsLocked.ShouldEqual(viewModel.IsLocked);
+
+    It should_update_the_roles = () =>
+      user.Roles.Each(r => viewModel.Roles.ShouldContain(r.Id));
+
+    It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
-      user.Roles.Count().ShouldEqual(viewModel.Roles.Count());
-    };
   }
 
   [Subject(typeof(UsersController))]
   public class when_the_edit_form_is_posted_with_a_model_state_error : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<EditViewModel> resultHelper;
     static EditViewModel viewModel;
     static int userId;
 
@@ -727,24 +725,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       };
     };
 
-    Because of = () => result = controller.Edit(viewModel);
+    Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(viewModel));
 
-    It should_return_the_viewmodel_to_the_default_view = () => {
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-      result.IsAViewAnd().ViewData.Model.ShouldEqual(viewModel);
-    };
+    It should_retain_the_data_entered_by_the_user = () =>
+      resultHelper.Model.ShouldEqual(viewModel);
 
-    It should_add_the_model_state_error = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.IsValid.ShouldBeFalse();
-      modelState.Count.ShouldBeGreaterThan(0);
-    };
+    It should_indicate_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
+
+    It should_indicate_the_error_was_related_to_the_username_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Username").ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
   public class when_the_edit_form_is_posted_with_a_duplicate_username : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<EditViewModel> resultHelper;
     static EditViewModel viewModel;
     static int userId;
     static User user;
@@ -772,25 +768,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       roleRepository.Stub(s => s.GetAll()).Return(new List<Role>().AsQueryable());
     };
 
-    Because of = () => result = controller.Edit(viewModel);
+    Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(viewModel));
 
-    It should_return_the_viewmodel_to_the_default_view = () => {
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-      result.IsAViewAnd().ViewData.Model.ShouldEqual(viewModel);
-    };
+    It should_retain_the_data_already_entered_by_the_user = () =>
+      resultHelper.Model.ShouldEqual(viewModel);
 
-    It should_add_the_model_state_error = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.IsValid.ShouldBeFalse();
-      modelState.Count.ShouldBeGreaterThan(0);
-      modelState.Keys.Contains("Username").ShouldBeTrue();
-    };
+    It should_indicate_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
+
+    It should_indicate_the_error_was_related_to_the_username_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Username").ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
   public class when_the_edit_form_is_posted_with_a_duplicate_email : specification_for_users_controller
   {
-    static ActionResult result;
+    static ViewResultHelper<EditViewModel> resultHelper;
     static EditViewModel viewModel;
     static int userId;
     static User user;
@@ -818,30 +811,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     };
 
-    Because of = () => result = controller.Edit(viewModel);
+    Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(viewModel));
 
-    It should_return_the_viewmodel_to_the_default_view = () => {
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-      result.IsAViewAnd().ViewData.Model.ShouldEqual(viewModel);
-    };
+    It should_retain_the_data_already_entered_by_the_user = () =>
+      resultHelper.Model.ShouldEqual(viewModel);
 
-    It should_add_the_model_state_error = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.IsValid.ShouldBeFalse();
-      modelState.Count.ShouldBeGreaterThan(0);
-      modelState.Keys.Contains("Email").ShouldBeTrue();
-    };
-  }
+    It should_indicate_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-  [Subject(typeof(UsersController))]
-  public class when_asked_for_the_create_view : specification_for_users_controller
-  {
-    static ActionResult result;
-
-    Because of = () => result = controller.Create();
-
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_indicate_the_error_was_related_to_the_email_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Email").ShouldBeTrue();
   }
 
   // we don't have to test much with Create because it's the same code as SignUp.
@@ -849,7 +828,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   [Subject(typeof(UsersController))]
   public class when_asked_to_create_a_user : specification_for_users_controller
   {
-    static ActionResult result;
+    static RedirectToRouteResultHelper resultHelper;
     static User user;
     static CreateViewModel viewModel;
 
@@ -870,15 +849,15 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       });
     };
 
-    Because of = () => result = controller.Create(viewModel);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Create(viewModel));
 
-    It should_create_the_user_approved_and_unlocked = () => {
-      user.Username.ShouldEqual(viewModel.Username);
-      user.FirstName.ShouldEqual(viewModel.FirstName);
-      user.LastName.ShouldEqual(viewModel.LastName);
-      // etc.
-      user.IsLocked.ShouldBeFalse();
+    It should_create_an_approved_user = () =>
       user.IsApproved.ShouldBeTrue();
-    };
+
+    It should_create_an_unlocked_user = () =>
+      user.IsLocked.ShouldBeFalse();
+
+    It should_redirect_to_the_default_users_view = () =>
+      resultHelper.ShouldRedirectTo("users");
   }
 }
