@@ -6,6 +6,8 @@ using System.Web.Mvc;
 
 using Machine.Specifications;
 
+using ClubPool.Web.Controllers;
+
 namespace ClubPool.MSpecTests
 {
   public class ActionResultHelper<T> where T : ActionResult
@@ -22,11 +24,15 @@ namespace ClubPool.MSpecTests
     where TModel : class
   {
     public TModel Model;
+    public SidebarGadgetCollection SidebarGadgets;
 
     public ViewResultBaseHelper(ActionResult result)
       : base(result) {
 
       Model = Result.ViewData.Model as TModel;
+      if (Result.ViewData.ContainsKey(GlobalViewDataProperty.SidebarGadgetCollection)) {
+        SidebarGadgets = Result.ViewData[GlobalViewDataProperty.SidebarGadgetCollection] as SidebarGadgetCollection;
+      }
     }
   }
 
