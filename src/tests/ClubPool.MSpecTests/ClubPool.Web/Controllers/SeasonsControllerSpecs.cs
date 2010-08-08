@@ -17,6 +17,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Framework.NHibernate;
+using ClubPool.Framework.Extensions;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
 {
@@ -44,6 +45,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static int page = 1;
     static int pages = 3;
     static int pageSize = 10;
+    static ViewResultHelper<IndexViewModel> resultHelper;
 
     Establish context = () => {
       var seasons = new List<Season>();
@@ -53,25 +55,31 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
 
-    Because of = () => result = controller.Index(page);
+    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(page));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-  }
+    It should_set_the_number_of_seasons_to_the_page_size = () =>
+      resultHelper.Model.Items.Count().ShouldEqual(pageSize);
 
-  [Subject(typeof(SeasonsController))]
-  public class when_asked_for_the_create_view : specification_for_Seasons_controller
-  {
+    It should_set_the_first_season_index = () =>
+      resultHelper.Model.First.ShouldEqual((page - 1) * pageSize + 1);
 
-    Because of = () => result = controller.Create();
+    It should_set_the_last_season_index = () =>
+      resultHelper.Model.Last.ShouldEqual(pageSize * page);
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_set_the_current_page_index = () =>
+      resultHelper.Model.CurrentPage.ShouldEqual(page);
+
+    It should_set_the_total_number_of_seasons = () =>
+      resultHelper.Model.Total.ShouldEqual(pageSize * pages);
+
+    It should_set_the_total_pages = () =>
+      resultHelper.Model.TotalPages.ShouldEqual(pages);
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_create_a_season : specification_for_Seasons_controller
   {
+    static RedirectToRouteResultHelper resultHelper;
     static CreateSeasonViewModel viewModel;
     static string name = "NewSeason";
     static Season savedSeason;
@@ -83,65 +91,63 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.SaveOrUpdate(null)).IgnoreArguments().WhenCalled(m => savedSeason = m.Arguments[0] as Season);
     };
 
-    Because of = () => result = controller.Create(viewModel);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Create(viewModel));
 
-    It should_redirect_to_the_default_view = () => {
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("seasons");
-    };
+    It should_redirect_to_the_default_view = () =>
+      resultHelper.ShouldRedirectTo("seasons");
 
-    It should_set_the_page_notification_message = () =>
+    It should_return_a_notification_message = () =>
       controller.TempData.Keys.Contains(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
 
-    It should_save_the_season = () => {
+    It should_save_the_new_season = () =>
       savedSeason.ShouldNotBeNull();
+
+    It should_set_the_name_of_the_new_season = () =>
       savedSeason.Name.ShouldEqual(name);
-    };
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_create_a_season_with_invalid_data : specification_for_Seasons_controller
   {
+    static ViewResultHelper<CreateSeasonViewModel> resultHelper;
 
-    Because of = () => result = controller.Create(new CreateSeasonViewModel());
+    Because of = () => resultHelper = new ViewResultHelper<CreateSeasonViewModel>(controller.Create(new CreateSeasonViewModel()));
 
-    It should_return_the_default_view = () => {
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-    };
+    It should_indicate_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-    It should_add_the_model_error = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.Count.ShouldBeGreaterThan(0);
-      modelState.Keys.Contains("Name").ShouldBeTrue();
-    };
+    It should_indicate_the_error_was_related_to_the_name_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Name").ShouldBeTrue();
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_delete_a_season : specification_for_Seasons_controller
   {
+    static RedirectToRouteResultHelper resultHelper;
     static int id = 1;
     static int page = 2;
+    static KeyValuePair<string, object> pageRouteValue;
 
     Establish context = () => {
       var season = new Season("Test");
       seasonsRepository.Stub(r => r.Get(id)).Return(season);
       seasonsRepository.Expect(r => r.Delete(season));
+      pageRouteValue = new KeyValuePair<string, object>("page", page);
     };
 
-    Because of = () => result = controller.Delete(id, page);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(id, page));
 
     It should_delete_the_season = () =>
       seasonsRepository.VerifyAllExpectations();
 
-    It should_set_the_page_notification_message = () =>
+    It should_return_a_notification_message = () =>
       controller.TempData.Keys.Contains(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
 
-    It should_redirect_to_the_index_view = () => {
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("seasons");
-      var pageRouteValue = new KeyValuePair<string, object>("page", page);
-      result.IsARedirectToARouteAnd().RouteValues.ShouldContain(pageRouteValue);
-    };
+    It should_redirect_to_the_default_view = () =>
+      resultHelper.ShouldRedirectTo("seasons");
+
+    It should_redisplay_the_previous_page = () =>
+      resultHelper.Result.RouteValues.ShouldContain(pageRouteValue);
   }
 
   [Subject(typeof(SeasonsController))]
@@ -149,56 +155,53 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   {
     static int id = 0;
     static int page = 2;
-    static HttpException expectedException;
+    static Exception Exception;
 
     Establish context = () => {
       seasonsRepository.Stub(r => r.Get(id)).Return(null);
     };
 
-    Because of = () => {
-      try {
-        result = controller.Delete(id, page);
-      }
-      catch (HttpException e) {
-        expectedException = e;
-      }
-    };
+    Because of = () => Exception = Catch.Exception(() => controller.Delete(id, page));
 
-    It should_return_http_404 = () => {
-      expectedException.ShouldNotBeNull();
-      // TODO: Debug
-      //expectedException.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
-    };
+    It should_return_an_http_error = () =>
+      Exception.ShouldBeOfType<HttpException>();
+
+    // TODO: Debug
+    //It should_return_a_status_code_of_404_not_found = () =>
+      //Exception.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_delete_a_season_that_cannot_be_deleted : specification_for_Seasons_controller
   {
+    static RedirectToRouteResultHelper resultHelper;
     static int id = 0;
     static int page = 2;
+    static KeyValuePair<string, object> pageRouteValue;
 
     Establish context = () => {
       var season = new Season("name");
       season.IsActive = true; // will make CanDelete() return false
       seasonsRepository.Stub(r => r.Get(id)).Return(season);
+      pageRouteValue = new KeyValuePair<string, object>("page", page);
     };
 
-    Because of = () => result = controller.Delete(id, page);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(id, page));
 
-    It should_set_the_page_error_message = () =>
+    It should_return_an_error_message = () =>
       controller.TempData.Keys.Contains(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
 
-    It should_redirect_to_the_index_view = () => {
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("seasons");
-      var pageRouteValue = new KeyValuePair<string, object>("page", page);
-      result.IsARedirectToARouteAnd().RouteValues.ShouldContain(pageRouteValue);
-    };
+    It should_redirect_to_the_default_view = () =>
+      resultHelper.ShouldRedirectTo("seasons");
+
+    It should_redisplay_the_previous_page = () =>
+      resultHelper.Result.RouteValues.ShouldContain(pageRouteValue);
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_for_the_change_active_season_view : specification_for_Seasons_controller
   {
+    static ViewResultHelper<ChangeActiveViewModel> resultHelper;
     static string name = "active";
     static List<Season> seasons;
     static int inactiveCount = 5;
@@ -217,22 +220,19 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
 
-    Because of = () => result = controller.ChangeActive();
+    Because of = () => resultHelper = new ViewResultHelper<ChangeActiveViewModel>(controller.ChangeActive());
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_return_the_correct_current_active_season = () =>
+      resultHelper.Model.CurrentActiveSeasonName.ShouldEqual(name);
 
-    It should_set_the_view_model_properties = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as ChangeActiveViewModel;
-      viewModel.ShouldNotBeNull();
-      viewModel.CurrentActiveSeasonName.ShouldEqual(name);
-      viewModel.InactiveSeasons.Count().ShouldEqual(inactiveCount);
-    };
+    It should_return_the_inactive_seasons = () =>
+      seasons.Where(s => !s.IsActive).Each(s => resultHelper.Model.InactiveSeasons.Select(inactiveSeason => inactiveSeason.Id).ShouldContain(s.Id));
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_change_the_active_season : specification_for_Seasons_controller
   {
+    static RedirectToRouteResultHelper resultHelper;
     static string name = "active";
     static List<Season> seasons;
     static int inactiveCount = 5;
@@ -261,7 +261,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.Get(newActiveSeasonId)).Return(newActiveSeason);
     };
 
-    Because of = () => result = controller.ChangeActive(newActiveSeasonId);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.ChangeActive(newActiveSeasonId));
 
     It should_set_the_previous_active_season_to_inactive = () =>
       activeSeason.IsActive.ShouldBeFalse();
@@ -272,13 +272,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     It should_save_the_new_active_season = () =>
       seasonsRepository.VerifyAllExpectations();
 
-    It should_set_the_page_notification_message = () =>
+    It should_return_a_notification_message = () =>
       controller.TempData.Keys.Contains(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
 
-    It should_redirect_to_the_index_view = () => {
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("seasons");
-    };
+    It should_redirect_to_the_default_view = () =>
+      resultHelper.ShouldRedirectTo("seasons");
   }
 
   [Subject(typeof(SeasonsController))]
@@ -287,7 +285,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static int badId = -1;
     static List<Season> seasons;
     static Season activeSeason;
-    static HttpException expectedException;
+    static Exception Exception;
 
     Establish context = () => {
       activeSeason = new Season("name");
@@ -298,31 +296,26 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
 
-    Because of = () => {
-      try {
-        result = controller.ChangeActive(badId);
-      }
-      catch (HttpException e) {
-        expectedException = e;
-      }
-    };
-
-    It should_return_http_404 = () => {
-      expectedException.ShouldNotBeNull();
-      // TODO: Debug
-      //expectedException.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
-    };
+    Because of = () => Exception = Catch.Exception(() => controller.ChangeActive(badId));
 
     It should_not_change_the_active_season = () =>
       activeSeason.IsActive.ShouldBeTrue();
 
     It should_not_save_anything = () =>
       seasonsRepository.AssertWasNotCalled(r => r.SaveOrUpdate(null), o => o.IgnoreArguments());
+
+    It should_return_an_http_error = () =>
+      Exception.ShouldBeOfType<HttpException>();
+
+    // TODO: Debug
+    //It should_return_a_status_code_of_404_not_found = () =>
+    //Exception.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_for_the_edit_view : specification_for_Seasons_controller
   {
+    static ViewResultHelper<EditSeasonViewModel> resultHelper;
     static int id = 1;
     static string name = "name";
 
@@ -332,21 +325,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.Get(id)).Return(season);
     };
 
-    Because of = () => result = controller.Edit(id);
+    Because of = () => resultHelper = new ViewResultHelper<EditSeasonViewModel>(controller.Edit(id));
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
-
-    It should_set_the_view_model_properties = () => {
-      var viewModel = result.IsAViewAnd().ViewData.Model as EditSeasonViewModel;
-      viewModel.ShouldNotBeNull();
-      viewModel.Name.ShouldEqual(name);
-    };
+    It should_initialize_the_name_field = () =>
+      resultHelper.Model.Name.ShouldEqual(name);
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_edit_a_season : specification_for_Seasons_controller
   {
+    static RedirectToRouteResultHelper resultHelper;
     static int id = 1;
     static string name = "name";
     static Season season;
@@ -364,48 +352,44 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Expect(r => r.SaveOrUpdate(season)).IgnoreArguments().Return(season);
     };
 
-    Because of = () => result = controller.Edit(viewModel);
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
 
     It should_save_the_season = () =>
       seasonsRepository.VerifyAllExpectations();
 
-    It should_update_the_season_properties = () => {
+    It should_update_the_season_name = () =>
       season.Name.ShouldEqual(name);
-    };
 
-    It should_set_the_page_notification_message = () =>
+    It should_return_a_notification_message = () =>
       controller.TempData.Keys.Contains(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
 
-    It should_redirect_to_index = () => {
-      result.IsARedirectToARouteAnd().ActionName().ToLower().ShouldEqual("index");
-      result.IsARedirectToARouteAnd().ControllerName().ToLower().ShouldEqual("seasons");
-    };
+    It should_redirect_to_the_default_view = () =>
+      resultHelper.ShouldRedirectTo("seasons");
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_edit_a_season_with_invalid_data : specification_for_Seasons_controller
   {
+    static ViewResultHelper<EditSeasonViewModel> resultHelper;
     static EditSeasonViewModel viewModel;
 
     Establish context = () => {
       viewModel = new EditSeasonViewModel();
     };
 
-    Because of = () => result = controller.Edit(viewModel);
+    Because of = () => resultHelper = new ViewResultHelper<EditSeasonViewModel>(controller.Edit(viewModel));
 
-    It should_set_the_model_state_errors = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.Count.ShouldBeGreaterThan(0);
-      modelState.Keys.Contains("Name").ShouldBeTrue();
-    };
+    It should_indicate_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_indicate_the_error_was_related_to_the_name_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Name").ShouldBeTrue();
   }
 
   [Subject(typeof(SeasonsController))]
   public class when_asked_to_edit_a_season_with_a_duplicate_name : specification_for_Seasons_controller
   {
+    static ViewResultHelper<EditSeasonViewModel> resultHelper;
     static EditSeasonViewModel viewModel;
     static int id = 1;
 
@@ -423,16 +407,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
 
-    Because of = () => result = controller.Edit(viewModel);
+    Because of = () => resultHelper = new ViewResultHelper<EditSeasonViewModel>(controller.Edit(viewModel));
 
-    It should_set_the_model_state_errors = () => {
-      var modelState = result.IsAViewAnd().ViewData.ModelState;
-      modelState.Count.ShouldBeGreaterThan(0);
-      modelState.Keys.Contains("Name").ShouldBeTrue();
-    };
+    It should_indicate_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
-    It should_return_the_default_view = () =>
-      result.IsAViewAnd().ViewName.ShouldBeEmpty();
+    It should_indicate_the_error_was_related_to_the_name_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Name").ShouldBeTrue();
   }
 
 }
