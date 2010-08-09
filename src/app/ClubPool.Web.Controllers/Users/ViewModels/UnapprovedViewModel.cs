@@ -12,18 +12,18 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public IEnumerable<UnapprovedUser> UnapprovedUsers;
   }
 
-  public class UnapprovedUser : EntityViewModelBase
+  public class UnapprovedUser
   {
-    public UnapprovedUser()
-      : base() {
+    public UnapprovedUser() {
     }
 
-    public UnapprovedUser(User user)
-      : base(user) {
+    public UnapprovedUser(User user) {
+      Id = user.Id;
       Name = user.FullName;
       Email = user.Email;
     }
 
+    public int Id { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
   }

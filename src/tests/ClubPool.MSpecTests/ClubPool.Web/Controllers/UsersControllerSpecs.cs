@@ -489,7 +489,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     Because of = () => resultHelper = new ViewResultHelper<UnapprovedViewModel>(controller.Unapproved());
 
     It should_return_the_unapproved_users = () =>
-      users.Where(u => !u.IsApproved).Each(u => resultHelper.Model.UnapprovedUsers.ShouldContain(new UnapprovedUser(u)));
+      users.Where(u => !u.IsApproved).Each(u => resultHelper.Model.UnapprovedUsers.Where(uu => uu.Id == u.Id).Any().ShouldBeTrue());
   }
 
   [Subject(typeof(UsersController))]
@@ -612,11 +612,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_initialize_the_Email_field = () =>
       resultHelper.Model.Email.ShouldEqual(user.Email);
 
-    It should_initiaize_the_users_roles = () => 
+    It should_initialize_the_users_roles = () => 
       user.Roles.Each(r => resultHelper.Model.Roles.ShouldContain(r.Id));
 
     It should_initialize_the_available_roles = () => 
-      roles.Each(r => resultHelper.Model.AvailableRoles.ShouldContain(new RoleViewModel(r)));
+      roles.Each(r => resultHelper.Model.AvailableRoles.Where(ar => ar.Id == r.Id).Any().ShouldBeTrue());
   }
 
   [Subject(typeof(UsersController))]
