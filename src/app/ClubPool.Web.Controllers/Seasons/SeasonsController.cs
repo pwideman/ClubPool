@@ -74,7 +74,7 @@ namespace ClubPool.Web.Controllers.Seasons
     public ActionResult Edit(int id) {
       var season = seasonRepository.Get(id);
       if (null == season) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       var viewModel = new EditSeasonViewModel(season);
       return View(viewModel);
@@ -92,7 +92,7 @@ namespace ClubPool.Web.Controllers.Seasons
       var season = seasonRepository.Get(viewModel.Id);
 
       if (null == season) {
-        HttpNotFound();
+        return HttpNotFound();
       }
 
       if (!season.Name.Equals(viewModel.Name)) {
@@ -116,7 +116,7 @@ namespace ClubPool.Web.Controllers.Seasons
       var seasonToDelete = seasonRepository.Get(id);
 
       if (null == seasonToDelete) {
-        HttpNotFound();
+        return HttpNotFound();
       }
 
       if (seasonToDelete.CanDelete()) {
@@ -152,7 +152,7 @@ namespace ClubPool.Web.Controllers.Seasons
       var newActiveSeason = seasonRepository.Get(id);
       
       if (null == newActiveSeason) {
-        HttpNotFound();
+        return HttpNotFound();
       }
 
       var activeSeasons = seasonRepository.GetAll().WhereActive();
@@ -170,7 +170,7 @@ namespace ClubPool.Web.Controllers.Seasons
     public ActionResult View(int id) {
       var season = seasonRepository.Get(id);
       if (null == season) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       var viewModel = new SeasonViewModel(season);
       return View(viewModel);

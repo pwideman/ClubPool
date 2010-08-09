@@ -26,7 +26,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     protected static SeasonsController controller;
     protected static ISeasonRepository seasonsRepository;
     protected static IDivisionRepository divisionsRepository;
-    protected static ActionResult result;
 
     Establish context = () => {
       seasonsRepository = MockRepository.GenerateStub<ISeasonRepository>();
@@ -155,20 +154,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   {
     static int id = 0;
     static int page = 2;
-    static Exception Exception;
+    static HttpNotFoundResultHelper resultHelper;
 
     Establish context = () => {
       seasonsRepository.Stub(r => r.Get(id)).Return(null);
     };
 
-    Because of = () => Exception = Catch.Exception(() => controller.Delete(id, page));
+    Because of = () => resultHelper = new HttpNotFoundResultHelper(controller.Delete(id, page));
 
-    It should_return_an_http_error = () =>
-      Exception.ShouldBeOfType<HttpException>();
-
-    // TODO: Debug
-    //It should_return_a_status_code_of_404_not_found = () =>
-      //Exception.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
+    It should_return_an_http_not_found_result = () =>
+      resultHelper.Result.ShouldNotBeNull();
   }
 
   [Subject(typeof(SeasonsController))]
@@ -285,7 +280,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static int badId = -1;
     static List<Season> seasons;
     static Season activeSeason;
-    static Exception Exception;
+    static HttpNotFoundResultHelper resultHelper;
 
     Establish context = () => {
       activeSeason = new Season("name");
@@ -296,7 +291,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
 
-    Because of = () => Exception = Catch.Exception(() => controller.ChangeActive(badId));
+    Because of = () => resultHelper = new HttpNotFoundResultHelper(controller.ChangeActive(badId));
 
     It should_not_change_the_active_season = () =>
       activeSeason.IsActive.ShouldBeTrue();
@@ -304,12 +299,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     It should_not_save_anything = () =>
       seasonsRepository.AssertWasNotCalled(r => r.SaveOrUpdate(null), o => o.IgnoreArguments());
 
-    It should_return_an_http_error = () =>
-      Exception.ShouldBeOfType<HttpException>();
-
-    // TODO: Debug
-    //It should_return_a_status_code_of_404_not_found = () =>
-    //Exception.ErrorCode.ShouldEqual((int)HttpStatusCode.NotFound);
+    It should_return_an_http_not_found_result = () =>
+      resultHelper.Result.ShouldNotBeNull();
   }
 
   [Subject(typeof(SeasonsController))]
@@ -415,5 +406,27 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     It should_indicate_the_error_was_related_to_the_name_field = () =>
       resultHelper.Result.ViewData.ModelState.ContainsKey("Name").ShouldBeTrue();
   }
+
+  [Subject(typeof(SeasonsController))]
+  public class when_asked_for_the_detail_view : specification_for_Seasons_controller
+  {
+    static ViewResultHelper<SeasonViewModel> resultHelper;
+    static int id = 1;
+
+    Establish context = () => {
+    };
+  }
+
+  [Subject(typeof(SeasonsController))]
+  public class when_asked_for_the_detail_view_for_a_nonexistent_season : specification_for_Seasons_controller
+  {
+    static HttpNotFoundResultHelper resultHelper;
+
+    Because of = () => resultHelper = new HttpNotFoundResultHelper(controller.View(0));
+
+    It should_return_an_http_not_found_result = () =>
+      resultHelper.Result.ShouldNotBeNull();
+  }
+
 
 }

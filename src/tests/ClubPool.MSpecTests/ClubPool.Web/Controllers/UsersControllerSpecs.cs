@@ -558,25 +558,15 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   [Subject(typeof(UsersController))]
   public class when_asked_to_delete_an_invalid_user : specification_for_users_controller
   {
-    static RedirectToRouteResultHelper resultHelper;
-    static int userId = 1;
-    static int page = 5;
-    static KeyValuePair<string, object> pageRouteValue;
-    static Exception exception;
+    static HttpNotFoundResultHelper resultHelper;
 
-    Establish context = () => {
-      userRepository.Stub(r => r.Get(userId)).Return(null);
-      pageRouteValue = new KeyValuePair<string, object>("page", page);
-    };
-
-    Because of = () => exception = Catch.Exception(() => controller.Delete(userId, 5));
+    Because of = () => resultHelper = new HttpNotFoundResultHelper(controller.Delete(0, 5));
 
     It should_not_delete_the_user = () =>
       userRepository.AssertWasNotCalled(r => r.Delete(null), x => x.IgnoreArguments());
 
-    It should_return_http_not_found_status = () =>
-      exception.ShouldBeOfType<HttpException>();
-      // TODO: verify http status code 404
+    It should_return_an_http_not_found_result = () =>
+      resultHelper.Result.ShouldNotBeNull();
   }
 
   [Subject(typeof(UsersController))]

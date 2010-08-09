@@ -127,6 +127,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceLocatorHelper.cs" />
     <Compile Include="ServiceLocatorInitializer.cs" />
+    <None Include="Machine.Specifications.dll.tdnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
@@ -160,6 +163,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="Machine.Specifications.TDNetRunner.csproj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="NHibernate.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

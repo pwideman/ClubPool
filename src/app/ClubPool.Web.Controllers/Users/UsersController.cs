@@ -180,7 +180,7 @@ namespace ClubPool.Web.Controllers.Users
     public ActionResult Delete(int id, int page) {
       User userToDelete = userRepository.Get(id);
       if (null == userToDelete) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       if (userToDelete.CanDelete()) {
         userRepository.Delete(userToDelete);

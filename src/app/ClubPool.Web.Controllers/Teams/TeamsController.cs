@@ -95,7 +95,7 @@ namespace ClubPool.Web.Controllers.Teams
     public ActionResult Delete(int id) {
       var team = teamRepository.Get(id);
       if (null == team) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       if (!team.CanDelete()) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The team cannot be deleted";
@@ -113,7 +113,7 @@ namespace ClubPool.Web.Controllers.Teams
     public ActionResult Edit(int id) {
       var team = teamRepository.Get(id);
       if (null == team) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       var viewModel = new EditTeamViewModel(userRepository, team);
       return View(viewModel);

@@ -97,6 +97,7 @@
     <Compile Include="Divisions\ViewModels\EditDivisionViewModel.cs" />
     <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
+    <Compile Include="HttpNotFoundResult.cs" />
     <Compile Include="PagedListViewModelBase.cs" />
     <Compile Include="Seasons\SeasonsController.cs" />
     <Compile Include="Seasons\ViewModels\CreateSeasonViewModel.cs" />

@@ -44,7 +44,7 @@ namespace ClubPool.Web.Controllers.Divisions
     public ActionResult Create(int seasonId) {
       var season = seasonRepository.Get(seasonId);
       if (null == season) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       var viewModel = new CreateDivisionViewModel() {
         SeasonId = season.Id,
@@ -85,7 +85,7 @@ namespace ClubPool.Web.Controllers.Divisions
     public ActionResult Delete(int id) {
       var division = divisionRepository.Get(id);
       if (null == division) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       var seasonId = division.Season.Id;
       if (!division.CanDelete()) {
@@ -104,7 +104,7 @@ namespace ClubPool.Web.Controllers.Divisions
     public ActionResult Edit(int id) {
       var division = divisionRepository.Get(id);
       if (null == division) {
-        HttpNotFound();
+        return HttpNotFound();
       }
       var viewModel = new EditDivisionViewModel();
       viewModel.Id = id;

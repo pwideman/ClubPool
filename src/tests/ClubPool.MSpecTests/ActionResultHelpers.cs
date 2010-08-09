@@ -84,4 +84,11 @@ namespace ClubPool.MSpecTests
       : base(result) {
     }
   }
+
+  public class HttpNotFoundResultHelper : ActionResultHelper<HttpNotFoundResult>
+  {
+    public HttpNotFoundResultHelper(ActionResult result)
+      : base(result) {
+    }
+  }
 }

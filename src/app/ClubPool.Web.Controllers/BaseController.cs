@@ -48,12 +48,12 @@ namespace ClubPool.Web.Controllers
       }
     }
 
-    protected void HttpNotFound(string message) {
-      throw new HttpException((int)HttpStatusCode.NotFound, message);
+    protected HttpNotFoundResult HttpNotFound(string message) {
+      return new HttpNotFoundResult(message);
     }
 
-    protected void HttpNotFound() {
-      HttpNotFound("The requested resource is not found");
+    protected HttpNotFoundResult HttpNotFound() {
+      return HttpNotFound(string.Empty);
     }
   }
 }
