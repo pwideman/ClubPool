@@ -68,9 +68,19 @@ namespace ClubPool.Web.Controllers.Divisions
       }
 
       Season s = seasonRepository.Get(viewModel.SeasonId);
-      Division d = new Division(viewModel.Name, startingDate);
-      divisionRepository.SaveOrUpdate(d);
-      s.AddDivision(d);
+      if (null == s) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid/missing season, cannot create division";
+        return View(viewModel);
+      }
+
+      if (divisionRepository.GetAll().Where(d => d.Season == s && d.Name == viewModel.Name).Any()) {
+        ModelState.AddModelErrorFor<CreateDivisionViewModel>(m => m.Name, "This name is already in use");
+        return View(viewModel);
+      }
+
+      Division division = new Division(viewModel.Name, startingDate);
+      divisionRepository.SaveOrUpdate(division);
+      s.AddDivision(division);
 
       // I hate doing this here because theoretically /divisions/create could be called
       // from anywhere, but I don't know what else to do now. Same comment applies for all
@@ -129,6 +139,12 @@ namespace ClubPool.Web.Controllers.Divisions
       }
 
       var division = divisionRepository.Get(viewModel.Id);
+
+      if (null == division) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid/missing division ID, cannot edit";
+        return View(viewModel);
+      }
+
       division.Name = viewModel.Name;
       division.StartingDate = startingDate;
 

@@ -119,6 +119,7 @@
     <Compile Include="ClubPool.Data\TestDoubles\EntityDuplicateCheckerStub.cs" />
     <Compile Include="ClubPool.Web\Controllers\ControllerHelper.cs" />
     <Compile Include="ClubPool.Web\Controllers\DashboardControllerSpecs.cs" />
+    <Compile Include="ClubPool.Web\Controllers\DivisionsControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\HomeControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\NavigationControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\PagedListViewModelBaseSpecs.cs" />
