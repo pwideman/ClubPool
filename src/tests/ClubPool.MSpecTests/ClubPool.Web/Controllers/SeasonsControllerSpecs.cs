@@ -221,7 +221,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
       resultHelper.Model.CurrentActiveSeasonName.ShouldEqual(name);
 
     It should_return_the_inactive_seasons = () =>
-      seasons.Where(s => !s.IsActive).Each(s => resultHelper.Model.InactiveSeasons.Select(inactiveSeason => inactiveSeason.Id).ShouldContain(s.Id));
+      seasons.Where(s => !s.IsActive).Each(s => resultHelper.Model.InactiveSeasons.Where(inactive => inactive.Id == s.Id).Any().ShouldBeTrue());
   }
 
   [Subject(typeof(SeasonsController))]
@@ -412,9 +412,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   {
     static ViewResultHelper<SeasonViewModel> resultHelper;
     static int id = 1;
+    static Season season;
 
     Establish context = () => {
+      season = new Season("test");
+      season.SetIdTo(id);
+
+      seasonsRepository.Stub(r => r.Get(id)).Return(season);
     };
+
+    Because of = () => resultHelper = new ViewResultHelper<SeasonViewModel>(controller.View(id));
+
+    It should_initialize_the_season_id = () =>
+      resultHelper.Model.Id.ShouldEqual(season.Id);
+
+    It should_initialize_the_season_name = () =>
+      resultHelper.Model.Name.ShouldEqual(season.Name);
   }
 
   [Subject(typeof(SeasonsController))]
