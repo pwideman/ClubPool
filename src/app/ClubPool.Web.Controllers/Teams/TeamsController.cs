@@ -53,6 +53,9 @@ namespace ClubPool.Web.Controllers.Teams
     [Transaction]
     public ActionResult Create(int divisionId) {
       var division = divisionRepository.Get(divisionId);
+      if (null == division) {
+        return HttpNotFound();
+      }
       var viewModel = new CreateTeamViewModel(userRepository, division);
       return View(viewModel);
     }
@@ -63,6 +66,7 @@ namespace ClubPool.Web.Controllers.Teams
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateTeamViewModel viewModel) {
       var division = divisionRepository.Get(viewModel.DivisionId);
+
       if (!ValidateViewModel(viewModel)) {
         viewModel.ReInitialize(userRepository, division.Season);
         return View(viewModel);

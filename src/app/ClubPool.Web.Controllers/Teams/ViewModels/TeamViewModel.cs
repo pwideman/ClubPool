@@ -64,7 +64,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     }
 
     [DisplayName("Players:")]
-    public IList<PlayerViewModel> Players { get; set; }
+    public IEnumerable<PlayerViewModel> Players { get; set; }
 
     [DisplayName("Available players:")]
     public IEnumerable<PlayerViewModel> AvailablePlayers { get { return availablePlayers; } }
