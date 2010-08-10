@@ -21,6 +21,7 @@ using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
+using ClubPool.ApplicationServices.DomainManagement.Contracts;
 
 namespace ClubPool.Web.Controllers.Divisions
 {
@@ -29,13 +30,17 @@ namespace ClubPool.Web.Controllers.Divisions
   {
     protected ISeasonRepository seasonRepository;
     protected IDivisionRepository divisionRepository;
+    protected IDivisionManagementService divisionManagementService;
 
-    public DivisionsController(IDivisionRepository divisionRepo, ISeasonRepository seasonRepo) {
-      Check.Require(null != seasonRepo, "seasonRepo cannot be null");
-      Check.Require(null != divisionRepo, "divisionRepo cannot be null");
+    public DivisionsController(IDivisionRepository divisionRepository, ISeasonRepository seasonRepository,
+      IDivisionManagementService divisionManagementService) {
+      Check.Require(null != seasonRepository, "seasonRepository cannot be null");
+      Check.Require(null != divisionRepository, "divisionRepository cannot be null");
+      Check.Require(null != divisionManagementService, "divisionManagementService cannot be null");
 
-      seasonRepository = seasonRepo;
-      divisionRepository = divisionRepo;
+      this.seasonRepository = seasonRepository;
+      this.divisionRepository = divisionRepository;
+      this.divisionManagementService = divisionManagementService;
     }
 
     [HttpGet]
@@ -67,25 +72,26 @@ namespace ClubPool.Web.Controllers.Divisions
         return View(viewModel);
       }
 
-      Season s = seasonRepository.Get(viewModel.SeasonId);
-      if (null == s) {
+      Season season = seasonRepository.Get(viewModel.SeasonId);
+      if (null == season) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid/missing season, cannot create division";
         return View(viewModel);
       }
 
-      if (divisionRepository.GetAll().Where(d => d.Season == s && d.Name == viewModel.Name).Any()) {
+      if (divisionManagementService.DivisionNameIsInUse(season, viewModel.Name)) {
         ModelState.AddModelErrorFor<CreateDivisionViewModel>(m => m.Name, "This name is already in use");
         return View(viewModel);
       }
 
+      // TODO: division constructor needs to require season
       Division division = new Division(viewModel.Name, startingDate);
       divisionRepository.SaveOrUpdate(division);
-      s.AddDivision(division);
+      season.AddDivision(division);
 
       // I hate doing this here because theoretically /divisions/create could be called
       // from anywhere, but I don't know what else to do now. Same comment applies for all
       // redirects in this controller
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(s.Id));
+      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(season.Id));
     }
 
     [HttpPost]
@@ -139,13 +145,14 @@ namespace ClubPool.Web.Controllers.Divisions
       }
 
       var division = divisionRepository.Get(viewModel.Id);
-
-      if (null == division) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid/missing division ID, cannot edit";
-        return View(viewModel);
+      if (!division.Name.Equals(viewModel.Name)) {
+        // verify that the new name is not already in use
+        if (divisionManagementService.DivisionNameIsInUse(division.Season, viewModel.Name)) {
+          ModelState.AddModelErrorFor<EditDivisionViewModel>(m => m.Name, "Name is in use");
+          return View(viewModel);
+        }
+        division.Name = viewModel.Name;
       }
-
-      division.Name = viewModel.Name;
       division.StartingDate = startingDate;
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was updated";

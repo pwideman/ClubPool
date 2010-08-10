@@ -18,19 +18,22 @@ using ClubPool.Web.Controllers.Divisions;
 using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
+using ClubPool.ApplicationServices.DomainManagement.Contracts;
 
-namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
+namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
 {
   public abstract class specification_for_Divisions_controller
   {
     protected static DivisionsController controller;
     protected static ISeasonRepository seasonsRepository;
     protected static IDivisionRepository divisionsRepository;
+    protected static IDivisionManagementService divisionManagementService;
 
     Establish context = () => {
       seasonsRepository = MockRepository.GenerateStub<ISeasonRepository>();
       divisionsRepository = MockRepository.GenerateStub<IDivisionRepository>();
-      controller = new DivisionsController(divisionsRepository, seasonsRepository);
+      divisionManagementService = MockRepository.GenerateStub<IDivisionManagementService>();
+      controller = new DivisionsController(divisionsRepository, seasonsRepository, divisionManagementService);
 
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
@@ -191,6 +194,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       var divisions = new List<Division>();
       divisions.Add(division);
       divisionsRepository.Stub(r => r.GetAll()).Return(divisions.AsQueryable());
+      divisionManagementService.Stub(s => s.DivisionNameIsInUse(season, name)).Return(true);
     };
 
     Because of = () => resultHelper = new ViewResultHelper<CreateDivisionViewModel>(controller.Create(viewModel));
@@ -405,17 +409,26 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(DivisionsController))]
-  public class when_asked_to_edit_a_division_with_an_invalid_id : specification_for_Divisions_controller
+  public class when_asked_to_edit_a_division_with_a_duplicate_name : specification_for_Divisions_controller
   {
     static ViewResultHelper<EditDivisionViewModel> resultHelper;
     static int id = 1;
     static EditDivisionViewModel viewModel;
+    static Division division;
+    static string name = "MyDivision";
 
     Establish context = () => {
       viewModel = new EditDivisionViewModel();
       viewModel.Id = id;
-      viewModel.Name = "name";
-      viewModel.StartingDate = "1/1/2001";
+      viewModel.Name = name;
+      viewModel.StartingDate = "11/30/2010";
+
+      division = new Division("temp", DateTime.Now);
+      division.Season = new Season("temp");
+      division.Season.SetIdTo(1);
+      division.SetIdTo(id);
+      divisionsRepository.Stub(r => r.Get(id)).Return(division);
+      divisionManagementService.Stub(s => s.DivisionNameIsInUse(division.Season, name)).Return(true);
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditDivisionViewModel>(controller.Edit(viewModel));
@@ -423,8 +436,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_return_the_default_view = () =>
       resultHelper.Result.ViewName.ShouldBeEmpty();
 
-    It should_return_an_error_message = () =>
-      controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+    It should_indicate_an_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
+
+    It should_indicate_the_error_is_related_to_the_name_field = () =>
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Name").ShouldBeTrue();
 
     It should_retain_the_data_entered_by_the_user = () =>
       resultHelper.Model.ShouldEqual(viewModel);
