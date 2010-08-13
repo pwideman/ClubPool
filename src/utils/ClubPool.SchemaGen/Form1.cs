@@ -55,10 +55,10 @@ namespace ClubPool.SchemaGen
           roleRepo.DbContext.CommitTransaction();
         }
 
-        output("Creating users");
+        output("Creating special users");
         var userRepo = new UserRepository();
+        var membershipService = new SharpArchMembershipService(userRepo);
         using (userRepo.DbContext.BeginTransaction()) {
-          var membershipService = new SharpArchMembershipService(userRepo);
           // create admin user
           var user = membershipService.CreateUser("admin", "admin", "admin", "user", "admin@admin.com", true, false);
           user.AddRole(admin);
@@ -67,35 +67,42 @@ namespace ClubPool.SchemaGen
           user = membershipService.CreateUser("officer", "officer", "officer", "user", "officer@email.com", true, false);
           user.AddRole(officer);
           userRepo.SaveOrUpdate(user);
-          // create normal user
-          membershipService.CreateUser("user", "user", "normal", "user", "user@user.com", true, false);
-          // create some dummy unapproved users
-          for (int i = 0; i < 10; i++) {
-            var name = "user" + i.ToString();
-            membershipService.CreateUser(name, name, "user", i.ToString(), name + "@email.com", false, false);
-          }
-          // create some dummy locked users
-          for (int i = 10; i < 20; i++) {
-            var name = "user" + i.ToString();
-            membershipService.CreateUser(name, name, "user", i.ToString(), name + "@email.com", true, true);
-          }
           userRepo.DbContext.CommitTransaction();
         }
 
-        output("Creating seasons");
+        output("Creating dummy data");
         var seasonRepo = new SeasonRepository();
+        var divisionRepo = new DivisionRepository();
+        var teamRepo = new TeamRepository();
+        int userIndex = 1;
         using (seasonRepo.DbContext.BeginTransaction()) {
-          for (int i = 0; i < 5; i++) {
-            var s = new Season("Season " + i.ToString());
-            s.IsActive = false;
-            seasonRepo.SaveOrUpdate(s);
+          for (int seasonIndex = 1; seasonIndex <= 5; seasonIndex++) {
+            output("Creating season " + seasonIndex.ToString());
+            var season = new Season("Season " + seasonIndex.ToString());
+            season.IsActive = false;
+            seasonRepo.SaveOrUpdate(season);
+            for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
+              output("Creating division " + divisionIndex.ToString());
+              var division = new Division("Division " + divisionIndex.ToString(), DateTime.Parse("1/" + divisionIndex.ToString() + "/200" + seasonIndex.ToString()), season);
+              divisionRepo.SaveOrUpdate(division);
+              season.AddDivision(division);
+              for (int teamIndex = 1; teamIndex <= 12; teamIndex++) {
+                output("Creating team " + teamIndex.ToString());
+                var team = new Team("Team " + teamIndex.ToString(), division);
+                teamRepo.SaveOrUpdate(team);
+                division.AddTeam(team);
+                for (int playerIndex = 1; playerIndex <= 2; playerIndex++) {
+                  var username = "player" + userIndex.ToString();
+                  output("Creating player " + username);
+                  var player = membershipService.CreateUser(username, "pass", "player", userIndex.ToString(), username + "@email.com", true, false);
+                  team.AddPlayer(player);
+                  userIndex++;
+                }
+              }
+            }
           }
-          var active = new Season("Active Season");
-          active.IsActive = true;
-          seasonRepo.SaveOrUpdate(active);
           seasonRepo.DbContext.CommitTransaction();
         }
-
         output("Finished");
       }
       catch (Exception ex) {

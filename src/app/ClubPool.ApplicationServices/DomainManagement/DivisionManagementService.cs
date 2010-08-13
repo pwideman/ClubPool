@@ -11,7 +11,7 @@ using ClubPool.Core.Contracts;
 
 namespace ClubPool.ApplicationServices.DomainManagement
 {
-  public class DivisionManagementService
+  public class DivisionManagementService : IDivisionManagementService
   {
     protected IDivisionRepository divisionRepository;
 
