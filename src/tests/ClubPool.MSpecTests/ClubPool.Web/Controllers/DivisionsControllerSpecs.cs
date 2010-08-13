@@ -189,8 +189,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
       season.SetIdTo(seasonId);
       seasonsRepository.Stub(r => r.Get(seasonId)).Return(season);
 
-      var division = new Division(name, DateTime.Now);
-      division.Season = season;
+      var division = new Division(name, DateTime.Now, season);
       var divisions = new List<Division>();
       divisions.Add(division);
       divisionsRepository.Stub(r => r.GetAll()).Return(divisions.AsQueryable());
@@ -230,11 +229,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
     static int id = 1;
 
     Establish context = () => {
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(id);
       var season = new Season("temp");
       season.SetIdTo(1);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
       division.AddTeam(new Team("temp", division));
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
     };
@@ -256,11 +254,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
     static Division division;
 
     Establish context = () => {
-      division = new Division("temp", DateTime.Now);
-      division.SetIdTo(id);
       var season = new Season("temp");
       season.SetIdTo(1);
-      division.Season = season;
+      division = new Division("temp", DateTime.Now, season);
+      season.AddDivision(division);
+      division.SetIdTo(id);
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
     };
 
@@ -295,9 +293,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
     static Division division;
 
     Establish context = () => {
-      division = new Division("temp", DateTime.Now);
+      division = new Division("temp", DateTime.Now, new Season("temp"));
       division.SetIdTo(id);
-      division.Season = new Season("temp");
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
     };
 
@@ -330,9 +327,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
       viewModel.Name = "NewName";
       viewModel.StartingDate = "11/30/2010";
 
-      division = new Division("temp", DateTime.Now);
-      division.Season = new Season("temp");
-      division.Season.SetIdTo(1);
+      var season = new Season("temp");
+      season.SetIdTo(1);
+      division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
     };
@@ -423,9 +420,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
       viewModel.Name = name;
       viewModel.StartingDate = "11/30/2010";
 
-      division = new Division("temp", DateTime.Now);
-      division.Season = new Season("temp");
-      division.Season.SetIdTo(1);
+      var season = new Season("temp");
+      season.SetIdTo(1);
+      division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
       divisionManagementService.Stub(s => s.DivisionNameIsInUse(division.Season, name)).Return(true);

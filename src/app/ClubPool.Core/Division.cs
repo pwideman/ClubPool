@@ -14,12 +14,14 @@ namespace ClubPool.Core
       InitMembers();
     }
 
-    public Division(string name, DateTime startingDate) : this() {
-      Check.Require(!string.IsNullOrEmpty(name), "Name cannot be null");
-      Check.Require(null != startingDate, "Starting date cannot be null");
+    public Division(string name, DateTime startingDate, Season season) : this() {
+      Check.Require(!string.IsNullOrEmpty(name), "name cannot be null");
+      Check.Require(null != startingDate, "startingDate cannot be null");
+      Check.Require(null != season, "season cannot be null");
 
       Name = name;
       StartingDate = startingDate;
+      Season = season;
     }
 
     protected virtual void InitMembers() {

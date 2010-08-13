@@ -83,8 +83,7 @@ namespace ClubPool.Web.Controllers.Divisions
         return View(viewModel);
       }
 
-      // TODO: division constructor needs to require season
-      Division division = new Division(viewModel.Name, startingDate);
+      Division division = new Division(viewModel.Name, startingDate, season);
       divisionRepository.SaveOrUpdate(division);
       season.AddDivision(division);
 

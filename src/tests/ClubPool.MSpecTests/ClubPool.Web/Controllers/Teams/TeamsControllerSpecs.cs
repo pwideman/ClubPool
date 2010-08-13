@@ -51,7 +51,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static List<User> users;
 
     Establish context = () => {
-      var division = new Division(divisionName, DateTime.Now);
+      var division = new Division(divisionName, DateTime.Now, new Season("temp"));
       division.SetIdTo(divisionId);
       divisionRepository.Stub(r => r.Get(divisionId)).Return(division);
 
@@ -100,12 +100,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       viewModel.Name = name;
       viewModel.DivisionId = divisionId;
 
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(divisionId);
-
       var season = new Season("temp");
       season.SetIdTo(1);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(divisionId);
 
       divisionRepository.Stub(r => r.Get(divisionId)).Return(division);
       teamService.Stub(s => s.TeamNameIsInUse(division, name)).IgnoreArguments().Return(false);
@@ -148,11 +146,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       viewModel = new CreateTeamViewModel();
       viewModel.DivisionId = divisionId;
 
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(1);
       var season = new Season("temp");
       season.SetIdTo(1);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(1);
 
       divisionRepository.Stub(r => r.Get(divisionId)).Return(division);
 
@@ -194,11 +191,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       viewModel.Name = name;
       viewModel.DivisionId = divisionId;
 
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(1);
       var season = new Season("temp");
       season.SetIdTo(1);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(1);
 
       divisionRepository.Stub(r => r.Get(divisionId)).Return(division);
 
@@ -250,11 +246,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static int id = 1;
 
     Establish context = () => {
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(id);
       var season = new Season("temp");
       season.SetIdTo(id);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
       var team = new Team("temp", division);
       team.AddPlayer(new User("temp", "pass", "first", "last", "email"));
       teamRepository.Stub(r => r.Get(id)).Return(team);
@@ -277,11 +272,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static Team team;
 
     Establish context = () => {
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(id);
       var season = new Season("temp");
       season.SetIdTo(id);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
       team = new Team("temp", division);
       teamRepository.Stub(r => r.Get(id)).Return(team);
     };
@@ -319,9 +313,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static int playerId = 10;
 
     Establish context = () => {
-      var division = new Division("temp", DateTime.Now);
+      var division = new Division("temp", DateTime.Now, new Season("temp"));
       division.SetIdTo(id);
-      division.Season = new Season("temp");
 
       users = DomainHelpers.GetUsers(5);
       userRepository.Stub(r => r.GetUnassignedUsersForSeason(null)).IgnoreArguments().Return(users);
@@ -363,12 +356,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(id);
-
       var season = new Season("temp");
       season.SetIdTo(id);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
 
       team = new Team("temp", division);
       team.SetIdTo(id);
@@ -413,12 +404,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(id);
-
       var season = new Season("temp");
       season.SetIdTo(id);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
 
       team = new Team("temp", division);
       team.SetIdTo(id);
@@ -475,12 +464,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var division = new Division("temp", DateTime.Now);
-      division.SetIdTo(id);
-
       var season = new Season("temp");
       season.SetIdTo(id);
-      division.Season = season;
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
 
       team = new Team("temp", division);
       team.SetIdTo(id);
