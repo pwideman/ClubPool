@@ -11,7 +11,6 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
-using MvcContrib.Castle;
 using NHibernate.Cfg;
 using NHibernate.Validator.Cfg.Loquacious;
 using NHibernate.Validator.Event;
