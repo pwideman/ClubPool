@@ -4,7 +4,7 @@ html, body, img
 {
   padding: 0;
   margin: 0;
-  font: 14px Verdana, Arial, Helvetica;
+  font: 12px Verdana, Arial, Helvetica;
 }
 
 table
@@ -174,7 +174,7 @@ div.rescuediv
 #maincontent
 {
   width: 100%;
-  padding: 10px 20px;
+  padding: 0 20px 10px 20px;
 }
 
 div.blue-button 

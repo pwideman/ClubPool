@@ -200,10 +200,10 @@ div.sidebar-form-gadget
 /* Normal page heading */
 
 div.heading {
-  font-size: 200%;
+  font-size: 140%;
   font-weight: bold;
   color: @dark_blue;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 
   span {
     display: inline-block;
@@ -596,14 +596,19 @@ span.pager-links {
 }
 
 td.action-column {
-  width: 32px;
+  //width: 32px;
+}
+
+form.invisible {
+  display: inline;
 }
 
 
 div.action-button
 {
+  font-size: 90%;
   display: inline-block;
-  padding: 4px 8px;
+  padding: 2px 4px;
   img {
     vertical-align: middle;
   }
@@ -721,7 +726,14 @@ div.season-view-player-list {
 }
 
 table.season-view-teams-table {
-  font-size: 85%;
+  font-size: 90%;
+  tbody {
+    tr {
+      td {
+        min-width: 80px;
+      }
+    }
+  }
 }
 
 div.season-view-teams-content {

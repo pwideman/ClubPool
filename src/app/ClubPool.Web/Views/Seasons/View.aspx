@@ -61,7 +61,6 @@
                 <th>Name</th>
                 <th>Players</th>
                 <th></th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -84,10 +83,8 @@
                   <a href="<%= Html.BuildUrlFromExpression<TeamsController>(c => c.Edit(team.Id)) %>">
                   <%= Html.ContentImage("edit-medium.png", "Edit")%>
                   </a>
-                </td>
-                <td class="action-column">
                   <% if (team.CanDelete) {
-                       using (var form = Html.BeginForm<TeamsController>(c => c.Delete(team.Id), FormMethod.Post)) { %>
+                       using (var form = Html.BeginForm<TeamsController>(c => c.Delete(team.Id), FormMethod.Post, new { @class = "invisible" })) { %>
                     <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
                     <%= Html.AntiForgeryToken()%>
                   <%   }
