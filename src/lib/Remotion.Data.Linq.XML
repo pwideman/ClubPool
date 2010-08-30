@@ -496,9 +496,13 @@
             </summary><param name="queryModel">The query model to be executed.</param><param name="executor">The executor to use.</param></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo.DataType"><summary>
             Gets the type of the data described by this <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" /> instance. For a sequence, this is a type implementing 
             <see cref="T:System.Collections.Generic.IEnumerable`1" />, where <c>T</c> is instantiated with a concrete type. For a single value, this is the value type.
-            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedScalarValueInfo"><summary>
-            Describes a scalar value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A scalar value corresponds to a
-            value calculated from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.CountResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.ContainsResultOperator" />, for instance.
+            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedForcedSingleValueInfo"><summary>
+            Describes a single value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A single value corresponds to one
+            item from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.FirstResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.SingleResultOperator" />, for instance.
+            The <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedForcedSingleValueInfo" /> is set by the handler for the single result operator.
+            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSingleValueInfo"><summary>
+            Describes a single value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A single value corresponds to one
+            item from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.FirstResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.SingleResultOperator" />, for instance.
             </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo"><summary>
             Describes a single or scalar value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />.
             </summary></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.MakeClosedGenericExecuteMethod(System.Reflection.MethodInfo)"><summary>
@@ -507,6 +511,9 @@
             </summary><param name="genericMethodDefinition">The generic method definition to instantiate.</param></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.DataType"><summary>
             Gets the type of the data described by this <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" /> instance. This is the type of the streamed value, or 
             <see cref="T:System.Object" /> if the value is <see langword="null" />.
+            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedScalarValueInfo"><summary>
+            Describes a scalar value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A scalar value corresponds to a
+            value calculated from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.CountResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.ContainsResultOperator" />, for instance.
             </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequence"><summary>
             Holds the data needed to represent the output or input of a part of a query in memory. This is mainly used for 
             <see cref="M:Remotion.Data.Linq.Clauses.ResultOperatorBase.ExecuteInMemory(Remotion.Data.Linq.Clauses.StreamedData.IStreamedData)" />.  The data consists of a sequence of items.
@@ -530,9 +537,6 @@
             <see cref="T:System.Collections.Generic.IEnumerable`1" />, where <c>T</c> is instantiated with a concrete type.
             </summary></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.ItemExpression"><summary>
             Gets an expression that describes the structure of the items held by the sequence described by this object.
-            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSingleValueInfo"><summary>
-            Describes a single value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A single value corresponds to one
-            item from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.FirstResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.SingleResultOperator" />, for instance.
             </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedValue"><summary>
             Holds the data needed to represent the output or input of a part of a query in memory. This is mainly used for 
             <see cref="M:Remotion.Data.Linq.Clauses.ResultOperatorBase.ExecuteInMemory(Remotion.Data.Linq.Clauses.StreamedData.IStreamedData)" />.  The data is a single, non-sequence value and can only be consumed by result operators 

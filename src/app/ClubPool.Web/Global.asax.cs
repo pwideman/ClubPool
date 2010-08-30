@@ -9,6 +9,7 @@ using System.Web.Security;
 
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using Castle.Windsor.Installer;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate.Cfg;
@@ -83,7 +84,7 @@ namespace ClubPool.Web
       ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
 
       container.RegisterControllers(typeof(BaseController).Assembly);
-      ComponentRegistrar.AddComponentsTo(container);
+      container.Install(FromAssembly.This());
 
     }
 

@@ -1350,6 +1350,30 @@
             <param name="value">Setting value</param>
             <returns>Configuration builder</returns>
         </member>
+        <member name="M:FluentNHibernate.Cfg.Db.PersistenceConfiguration`2.CollectionTypeFactory(System.String)">
+            <summary>
+            Sets the collectiontype.factory_class property.
+            NOTE: NHibernate 2.1 only
+            </summary>
+            <param name="collectionTypeFactoryClass">factory class</param>
+            <returns>Configuration</returns>
+        </member>
+        <member name="M:FluentNHibernate.Cfg.Db.PersistenceConfiguration`2.CollectionTypeFactory(System.Type)">
+            <summary>
+            Sets the collectiontype.factory_class property.
+            NOTE: NHibernate 2.1 only
+            </summary>
+            <param name="collectionTypeFactoryClass">factory class</param>
+            <returns>Configuration</returns>
+        </member>
+        <member name="M:FluentNHibernate.Cfg.Db.PersistenceConfiguration`2.CollectionTypeFactory``1">
+            <summary>
+            Sets the collectiontype.factory_class property.
+            NOTE: NHibernate 2.1 only
+            </summary>
+            <typeparam name="TCollectionTypeFactory">factory class</typeparam>
+            <returns>Configuration</returns>
+        </member>
         <member name="M:FluentNHibernate.Cfg.Db.PersistenceConfiguration`2.ProxyFactoryFactory(System.String)">
             <summary>
             Sets the proxyfactory.factory_class property.
@@ -3339,6 +3363,11 @@
             Sets the access-strategy to use the backing-field of an auto-property.
             </summary>
         </member>
+        <member name="M:FluentNHibernate.Mapping.AccessStrategyBuilder.ReadOnly">
+            <summary>
+            Sets the access-strategy to readonly.
+            </summary>
+        </member>
         <member name="M:FluentNHibernate.Mapping.AccessStrategyBuilder.CamelCaseField">
             <summary>
             Sets the access-strategy to field and the naming-strategy to camelcase (field.camelcase).
@@ -4274,6 +4303,12 @@
             <summary>
             Sets the access-strategy to use the backing-field of an auto-property.
             </summary>
+        </member>
+        <member name="M:FluentNHibernate.Mapping.AccessStrategyBuilder`1.ReadOnly">
+            <summary>
+            Sets the access-strategy to readonly.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:FluentNHibernate.Mapping.AccessStrategyBuilder`1.CamelCaseField">
             <summary>

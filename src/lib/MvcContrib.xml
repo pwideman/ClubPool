@@ -1863,6 +1863,11 @@
             Specifies that the grid is currently sorted
             </summary>
         </member>
+        <member name="M:MvcContrib.UI.Grid.Syntax.IGridWithOptions`1.Sort(MvcContrib.UI.Grid.GridSortOptions,System.String)">
+            <summary>
+            Specifies that the grid is sorted. Column links will have the specified prefix prepended.
+            </summary>
+        </member>
         <member name="M:MvcContrib.UI.Grid.Syntax.IGridWithOptions`1.Render">
             <summary>
             Renders the grid to the TextWriter specified at creation

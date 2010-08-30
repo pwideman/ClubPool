@@ -40,10 +40,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.MicroKernel, Version=2.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Castle.MicroKernel.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Windsor, Version=2.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Castle.Windsor.dll</HintPath>
@@ -154,12 +150,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CastleWindsor\ComponentRegistrar.cs" />
+    <Compile Include="CastleWindsor\ApplicationServicesInstaller.cs" />
+    <Compile Include="CastleWindsor\CustomRepositoriesInstaller.cs" />
+    <Compile Include="CastleWindsor\GenericRepositoriesInstaller.cs" />
+    <Compile Include="CastleWindsor\ValidatorInstaller.cs" />
     <Compile Include="Code\HtmlHelperExtensions.cs" />
     <Compile Include="Code\ModelBinder.cs" />
     <Compile Include="Code\UrlHelperExtensions.cs" />
-    <Compile Include="Code\WindsorControllerFactory.cs" />
-    <Compile Include="Code\WindsorExtensions.cs" />
+    <Compile Include="CastleWindsor\WindsorControllerFactory.cs" />
+    <Compile Include="CastleWindsor\WindsorExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

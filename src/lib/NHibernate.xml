@@ -332,6 +332,17 @@
             <see cref="T:System.Data.IDataReader"/>s it can have are followed.
             </remarks>
         </member>
+        <member name="M:NHibernate.Engine.IBatcher.ExpandQueryParameters(System.Data.IDbCommand,NHibernate.SqlCommand.SqlString)">
+            <summary>
+            Expand the parameters of the cmd to have a single parameter for each parameter in the
+            sql string
+            </summary>
+            <remarks>
+            This is for databases that do not support named parameters.  So, instead of a single parameter
+            for 'select ... from MyTable t where t.Col1 = @p0 and t.Col2 = @p0' we can issue
+            'select ... from MyTable t where t.Col1 = ? and t.Col2 = ?'
+            </remarks>
+        </member>
         <member name="M:NHibernate.Engine.IBatcher.AbortBatch(System.Exception)">
             <summary>
             Must be called when an exception occurs.
@@ -1915,19 +1926,6 @@
         </member>
         <member name="F:NHibernate.Cfg.ConfigurationSchema.CfgXmlHelper.SessionFactoryListenersExpression">
             <summary>XPath expression for session-factory.listener nodes</summary>
-        </member>
-        <member name="M:NHibernate.Cfg.ConfigurationSchema.CfgXmlHelper.ByteCodeProviderConvertFrom(System.String)">
-            <summary>
-            Convert a string to <see cref="T:NHibernate.Cfg.ConfigurationSchema.BytecodeProviderType"/>.
-            </summary>
-            <param name="byteCodeProvider">The string that represent <see cref="T:NHibernate.Cfg.ConfigurationSchema.BytecodeProviderType"/>.</param>
-            <returns>
-            The <paramref name="byteCodeProvider"/> converted to <see cref="T:NHibernate.Cfg.ConfigurationSchema.BytecodeProviderType"/>.
-            <see cref="F:NHibernate.Cfg.ConfigurationSchema.BytecodeProviderType.Null"/> for invalid values.
-            </returns>
-            <remarks>
-            See <see cref="T:NHibernate.Cfg.ConfigurationSchema.BytecodeProviderType"/> for allowed values.
-            </remarks>
         </member>
         <member name="M:NHibernate.Cfg.ConfigurationSchema.CfgXmlHelper.ClassCacheIncludeConvertFrom(System.String)">
             <summary>
@@ -6605,6 +6603,11 @@
             Settings that affect the behavior of NHibernate at runtime.
             </summary>
         </member>
+        <member name="P:NHibernate.Cfg.Settings.LinqToHqlGeneratorsRegistry">
+            <summary>
+            Get the registry to provide Hql-Generators for known properties/methods.
+            </summary>
+        </member>
         <member name="T:NHibernate.Cfg.SettingsFactory">
             <summary>
             Reads configuration properties and configures a <see cref="T:NHibernate.Cfg.Settings"/> instance. 
@@ -7983,8 +7986,14 @@
         <member name="T:NHibernate.Context.ManagedWebSessionContext">
             <summary>
             Provides a <see cref="M:NHibernate.ISessionFactory.GetCurrentSession">current session</see>
-            for each <see cref="T:System.Web.HttpContext"/>.
+            for each System.Web.HttpContext.
             Works only with Web Applications.
+            </summary>
+        </member>
+        <member name="T:NHibernate.Context.ReflectiveHttpContext">
+            <summary>
+            This class allows access to the HttpContext without referring to HttpContext at compile time.
+            The accessors are cached as delegates for performance.
             </summary>
         </member>
         <member name="T:NHibernate.Context.ThreadLocalSessionContext">
@@ -8035,7 +8044,7 @@
         <member name="T:NHibernate.Context.WebSessionContext">
             <summary>
             Provides a <see cref="M:NHibernate.ISessionFactory.GetCurrentSession">current session</see>
-            for each <see cref="T:System.Web.HttpContext"/>. Works only with web applications.
+            for each System.Web.HttpContext. Works only with web applications.
             </summary>
         </member>
         <member name="M:NHibernate.Criterion.Lambda.LambdaRestrictionBuilder.#ctor(System.String)">
@@ -8594,18 +8603,6 @@
             </summary>
         </member>
         <member name="M:NHibernate.Criterion.AbstractCriterion.op_True(NHibernate.Criterion.AbstractCriterion)">
-            <summary>
-            See here for details:
-            http://steve.emxsoftware.com/NET/Overloading+the++and++operators
-            </summary>
-        </member>
-        <member name="M:NHibernate.Criterion.AbstractEmptinessExpression.op_False(NHibernate.Criterion.AbstractEmptinessExpression)">
-            <summary>
-            See here for details:
-            http://steve.emxsoftware.com/NET/Overloading+the++and++operators
-            </summary>
-        </member>
-        <member name="M:NHibernate.Criterion.AbstractEmptinessExpression.op_True(NHibernate.Criterion.AbstractEmptinessExpression)">
             <summary>
             See here for details:
             http://steve.emxsoftware.com/NET/Overloading+the++and++operators
@@ -9899,6 +9896,12 @@
             <summary>
             When adding values to the query string it is imperative that they are reported via this function back to the query builder. 
             Do not report the same item multiple times as it will be assumed to be a separate parameter.
+            </summary>
+        </member>
+        <member name="M:NHibernate.Criterion.ICriteriaQuery.CreatePagingParameter(System.Int32)">
+            <summary>
+            Creates a dummy parameter index for the supplied paged value.
+            Returns null if the Dialect does not support limit parameters
             </summary>
         </member>
         <member name="T:NHibernate.Criterion.IdentifierEqExpression">
@@ -12348,6 +12351,16 @@
             <param name="value">The boolean value </param>
             <returns> The appropriate SQL literal. </returns>
         </member>
+        <member name="M:NHibernate.Dialect.Dialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Add a <c>LIMIT</c> clause to the given SQL <c>SELECT</c>
+            when the dialect supports variable limits (i.e., parameters for the limit constraints)
+            </summary>
+            <param name="querySqlString">A Query in the form of a SqlString.</param>
+            <param name="offset">Offset of the first row to be returned by the query (zero-based)</param>
+            <param name="limit">Maximum number of rows to be returned by the query</param>
+            <returns>A new SqlString that contains the <c>LIMIT</c> clause.</returns>
+        </member>
         <member name="M:NHibernate.Dialect.Dialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32)">
             <summary>
             Add a <c>LIMIT</c> clause to the given SQL <c>SELECT</c>
@@ -13064,7 +13077,7 @@
         <member name="M:NHibernate.Dialect.DB2Dialect.GetDropSequenceString(System.String)">
             <summary></summary>
         </member>
-        <member name="M:NHibernate.Dialect.DB2Dialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Boolean)">
+        <member name="M:NHibernate.Dialect.DB2Dialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Add a <c>LIMIT</c> clause to the given SQL <c>SELECT</c>
             </summary>
@@ -13624,30 +13637,18 @@
             </summary>
             <returns>false, unless overridden</returns>
         </member>
-        <member name="M:NHibernate.Dialect.MsSql2005Dialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32)">
+        <member name="M:NHibernate.Dialect.MsSql2005Dialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Add a <c>LIMIT</c> clause to the given SQL <c>SELECT</c>
             </summary>
             <param name="querySqlString">The <see cref="T:NHibernate.SqlCommand.SqlString"/> to base the limit query off of.</param>
             <param name="offset">Offset of the first row to be returned by the query (zero-based)</param>
-            <param name="last">Maximum number of rows to be returned by the query</param>
+            <param name="limit">Maximum number of rows to be returned by the query</param>
+            <param name="offsetParameterIndex">Optionally, the Offset parameter index</param>
+            <param name="limitParameterIndex">Optionally, the Limit parameter index</param>
             <returns>A new <see cref="T:NHibernate.SqlCommand.SqlString"/> with the <c>LIMIT</c> clause applied.</returns>
             <remarks>
-            The <c>LIMIT</c> SQL will look like
-            <code>
-            
-            SELECT
-            	TOP last (columns)
-            FROM
-            	(SELECT (columns), ROW_NUMBER() OVER(ORDER BY {original order by, with un-aliased column names) as __hibernate_sort_row
-            	{original from}) as query
-            WHERE query.__hibernate_sort_row &gt; offset
-            ORDER BY query.__hibernate_sort_row
-            
-            </code>
-            
-            Note that we need to add explicitly specify the columns, because we need to be able to use them
-            in a paged subselect. NH-1155
+            Note that we need to explicitly specify the columns, because we need to be able to use them in a paged subselect [NH-1155]
             </remarks>
         </member>
         <member name="M:NHibernate.Dialect.MsSql2005Dialect.HasMatchingParens(System.Collections.Generic.IEnumerable{System.Char})">
@@ -13735,7 +13736,7 @@
             </list>
             </remarks>
         </member>
-        <member name="M:NHibernate.Dialect.MySQLDialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Boolean)">
+        <member name="M:NHibernate.Dialect.MySQLDialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             
             </summary>
@@ -13923,7 +13924,7 @@
         <member name="M:NHibernate.Dialect.PostgreSQLDialect.#ctor">
             <summary></summary>
         </member>
-        <member name="M:NHibernate.Dialect.PostgreSQLDialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Boolean)">
+        <member name="M:NHibernate.Dialect.PostgreSQLDialect.GetLimitString(NHibernate.SqlCommand.SqlString,System.Int32,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             
             </summary>
@@ -14353,6 +14354,17 @@
             <param name="sqlType">The SqlType to set for IDbDataParameter.</param>
             <returns>An IDbDataParameter ready to be added to an IDbCommand.</returns>
         </member>
+        <member name="M:NHibernate.Driver.IDriver.ExpandQueryParameters(System.Data.IDbCommand,NHibernate.SqlCommand.SqlString)">
+            <summary>
+            Expand the parameters of the cmd to have a single parameter for each parameter in the
+            sql string
+            </summary>
+            <remarks>
+            This is for databases that do not support named parameters.  So, instead of a single parameter
+            for 'select ... from MyTable t where t.Col1 = @p0 and t.Col2 = @p0' we can issue
+            'select ... from MyTable t where t.Col1 = ? and t.Col2 = ?'
+            </remarks>
+        </member>
         <member name="P:NHibernate.Driver.IDriver.SupportsMultipleOpenReaders">
             <summary>
             Does this Driver support having more than 1 open IDataReader with
@@ -14476,6 +14488,17 @@
             <param name="connectionTypeName">Connection type name.</param>
             <param name="commandTypeName">Command type name.</param>
         </member>
+        <member name="M:NHibernate.Driver.ReflectionBasedDriver.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of <see cref="T:NHibernate.Driver.ReflectionBasedDriver"/> with
+            type names that are loaded from the specified assembly.
+            </summary>
+            <param name="providerInvariantName">The Invariant name of a provider.</param>
+            <param name="driverAssemblyName">Assembly to load the types from.</param>
+            <param name="connectionTypeName">Connection type name.</param>
+            <param name="commandTypeName">Command type name.</param>
+            <seealso cref="M:System.Data.Common.DbProviderFactories.GetFactory(System.String)"/>
+        </member>
         <member name="M:NHibernate.Driver.ASA10ClientDriver.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:NHibernate.Driver.ASAClientDriver"/> class.
@@ -14518,6 +14541,30 @@
             <summary>
             iAnywhere.Data.AsaClient use the <c>string.Empty</c> to locate parameters in sql.
             </summary>
+        </member>
+        <member name="T:NHibernate.Driver.CsharpSqliteDriver">
+            <summary>
+            NHibernate driver for the Community CsharpSqlite data provider.
+            <p>
+            Author: <a href="mailto:nick_tountas@hotmail.com"> Nikolaos Tountas </a>
+            </p>
+            </summary>
+            <remarks>
+            <p>
+            In order to use this Driver you must have the Community.CsharpSqlite.dll and Community.CsharpSqlite.SQLiteClient assemblies referenced.
+            </p>
+            <p>
+            Please check <a href="http://code.google.com/p/csharp-sqlite/"> http://code.google.com/p/csharp-sqlite/ </a> for more information regarding csharp-sqlite.
+            </p>
+            </remarks>
+        </member>
+        <member name="M:NHibernate.Driver.CsharpSqliteDriver.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:NHibernate.Driver.CsharpSqliteDriver"/>.
+            </summary>
+            <exception cref="T:NHibernate.HibernateException">
+            Thrown when the <c>Community.CsharpSqlite.dll</c> assembly can not be loaded.
+            </exception>
         </member>
         <member name="T:NHibernate.Driver.DB2400Driver">
             <summary>
@@ -19903,137 +19950,6 @@
             <param name="entityName">The entity name for the instance to be removed. </param>
             <param name="obj">the instance to be removed </param>
         </member>
-        <member name="M:NHibernate.ISession.Find(System.String)">
-            <summary>
-            Execute a query
-            </summary>
-            <param name="query">A query expressed in Hibernate's query language</param>
-            <returns>A distinct list of instances</returns>
-            <remarks>See <see cref="M:NHibernate.IQuery.List"/> for implications of <c>cache</c> usage.</remarks>
-        </member>
-        <member name="M:NHibernate.ISession.Find(System.String,System.Object,NHibernate.Type.IType)">
-            <summary>
-            Execute a query, binding a value to a "?" parameter in the query string.
-            </summary>
-            <param name="query">The query string</param>
-            <param name="value">A value to be bound to a "?" placeholder</param>
-            <param name="type">The Hibernate type of the value</param>
-            <returns>A distinct list of instances</returns>
-            <remarks>See <see cref="M:NHibernate.IQuery.List"/> for implications of <c>cache</c> usage.</remarks>
-        </member>
-        <member name="M:NHibernate.ISession.Find(System.String,System.Object[],NHibernate.Type.IType[])">
-            <summary>
-            Execute a query, binding an array of values to a "?" parameters in the query string.
-            </summary>
-            <param name="query">The query string</param>
-            <param name="values">An array of values to be bound to the "?" placeholders</param>
-            <param name="types">An array of Hibernate types of the values</param>
-            <returns>A distinct list of instances</returns>
-            <remarks>See <see cref="M:NHibernate.IQuery.List"/> for implications of <c>cache</c> usage.</remarks>
-        </member>
-        <member name="M:NHibernate.ISession.Enumerable(System.String)">
-            <summary>
-            Execute a query and return the results in an interator.
-            </summary>
-            <remarks>
-            <para>
-            If the query has multiple return values, values will be returned in an array of 
-            type <c>object[]</c>.
-            </para>
-            <para>
-            Entities returned as results are initialized on demand. The first SQL query returns
-            identifiers only. So <c>Enumerator()</c> is usually a less efficient way to retrieve
-            object than <c>List()</c>.
-            </para>
-            </remarks>
-            <param name="query">The query string</param>
-            <returns>An enumerator</returns>
-        </member>
-        <member name="M:NHibernate.ISession.Enumerable(System.String,System.Object,NHibernate.Type.IType)">
-            <summary>
-            Execute a query and return the results in an interator, 
-            binding a value to a "?" parameter in the query string.
-            </summary>
-            <remarks>
-            <para>
-            If the query has multiple return values, values will be returned in an array of 
-            type <c>object[]</c>.
-            </para>
-            <para>
-            Entities returned as results are initialized on demand. The first SQL query returns
-            identifiers only. So <c>Enumerator()</c> is usually a less efficient way to retrieve
-            object than <c>List()</c>.
-            </para>
-            </remarks>
-            <param name="query">The query string</param>
-            <param name="value">A value to be written to a "?" placeholder in the query string</param>
-            <param name="type">The hibernate type of the value</param>
-            <returns>An enumerator</returns>
-        </member>
-        <member name="M:NHibernate.ISession.Enumerable(System.String,System.Object[],NHibernate.Type.IType[])">
-            <summary>
-            Execute a query and return the results in an interator, 
-            binding the values to "?"s parameters in the query string.
-            </summary>
-            <remarks>
-            <para>
-            If the query has multiple return values, values will be returned in an array of 
-            type <c>object[]</c>.
-            </para>
-            <para>
-            Entities returned as results are initialized on demand. The first SQL query returns
-            identifiers only. So <c>Enumerator()</c> is usually a less efficient way to retrieve
-            object than <c>List()</c>.
-            </para>
-            </remarks>
-            <param name="query">The query string</param>
-            <param name="values">A list of values to be written to "?" placeholders in the query</param>
-            <param name="types">A list of hibernate types of the values</param>
-            <returns>An enumerator</returns>
-        </member>
-        <member name="M:NHibernate.ISession.Filter(System.Object,System.String)">
-            <summary>
-            Apply a filter to a persistent collection.
-            </summary>
-            <remarks>
-            A filter is a Hibernate query that may refer to <c>this</c>, the collection element.
-            Filters allow efficient access to very large lazy collections. (Executing the filter
-            does not initialize the collection.)
-            </remarks>
-            <param name="collection">A persistent collection to filter</param>
-            <param name="filter">A filter query string</param>
-            <returns>The resulting collection</returns>
-        </member>
-        <member name="M:NHibernate.ISession.Filter(System.Object,System.String,System.Object,NHibernate.Type.IType)">
-            <summary>
-            Apply a filter to a persistent collection, binding the given parameter to a "?" placeholder
-            </summary>
-            <remarks>
-            A filter is a Hibernate query that may refer to <c>this</c>, the collection element.
-            Filters allow efficient access to very large lazy collections. (Executing the filter
-            does not initialize the collection.)
-            </remarks>
-            <param name="collection">A persistent collection to filter</param>
-            <param name="filter">A filter query string</param>
-            <param name="value">A value to be written to a "?" placeholder in the query</param>
-            <param name="type">The hibernate type of value</param>
-            <returns>A collection</returns>
-        </member>
-        <member name="M:NHibernate.ISession.Filter(System.Object,System.String,System.Object[],NHibernate.Type.IType[])">
-            <summary>
-            Apply a filter to a persistent collection, binding the given parameters to "?" placeholders.
-            </summary>
-            <remarks>
-            A filter is a Hibernate query that may refer to <c>this</c>, the collection element.
-            Filters allow efficient access to very large lazy collections. (Executing the filter
-            does not initialize the collection.)
-            </remarks>
-            <param name="collection">A persistent collection to filter</param>
-            <param name="filter">A filter query string</param>
-            <param name="values">The values to be written to "?" placeholders in the query</param>
-            <param name="types">The hibernate types of the values</param>
-            <returns>A collection</returns>
-        </member>
         <member name="M:NHibernate.ISession.Delete(System.String)">
             <summary>
             Delete all objects returned by the query.
@@ -20224,24 +20140,6 @@
             <remarks>
             The query can be either in <c>HQL</c> or <c>SQL</c> format.
             </remarks>
-        </member>
-        <member name="M:NHibernate.ISession.CreateSQLQuery(System.String,System.String,System.Type)">
-            <summary>
-            Create a new instance of <c>IQuery</c> for the given SQL string.
-            </summary>
-            <param name="sql">a query expressed in SQL</param>
-            <param name="returnAlias">a table alias that appears inside <c>{}</c> in the SQL string</param>
-            <param name="returnClass">the returned persistent class</param>
-            <returns>An <see cref="T:NHibernate.IQuery"/> from the SQL string</returns>
-        </member>
-        <member name="M:NHibernate.ISession.CreateSQLQuery(System.String,System.String[],System.Type[])">
-            <summary>
-            Create a new instance of <see cref="T:NHibernate.IQuery"/> for the given SQL string.
-            </summary>
-            <param name="sql">a query expressed in SQL</param>
-            <param name="returnAliases">an array of table aliases that appear inside <c>{}</c> in the SQL string</param>
-            <param name="returnClasses">the returned persistent classes</param>
-            <returns>An <see cref="T:NHibernate.IQuery"/> from the SQL string</returns>
         </member>
         <member name="M:NHibernate.ISession.CreateSQLQuery(System.String)">
             <summary>
@@ -25812,6 +25710,7 @@
             <param name="joinType">The type of join to use.</param>
             <returns>this (for method chaining)</returns>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:NHibernate.ICriteria.CreateAlias(System.String,System.String,NHibernate.SqlCommand.JoinType,NHibernate.Criterion.ICriterion)" -->
         <member name="M:NHibernate.ICriteria.CreateCriteria(System.String)">
             <summary>
             Create a new <see cref="T:NHibernate.ICriteria"/>, "rooted" at the associated entity
@@ -25847,6 +25746,7 @@
             <param name="joinType">The type of join to use.</param>
             <returns>The created "sub criteria"</returns>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:NHibernate.ICriteria.CreateCriteria(System.String,System.String,NHibernate.SqlCommand.JoinType,NHibernate.Criterion.ICriterion)" -->
         <member name="M:NHibernate.ICriteria.SetResultTransformer(NHibernate.Transform.IResultTransformer)">
             <summary>
             Set a strategy for handling the query results. This determines the
@@ -26012,76 +25912,6 @@
             The Clone is supported only by a root criteria.
             </summary>
             <returns>The clone of the root criteria.</returns>
-        </member>
-        <member name="T:NHibernate.Impl.DbCommandSet`2">
-            <summary>
-            Expose the batch functionality in ADO.Net 2.0
-            Microsoft in its wisdom decided to make my life hard and mark it internal.
-            Through the use of Reflection and some delegates magic, I opened up the functionality.
-            
-            Observable performance benefits are 50%+ when used, so it is really worth it.
-            </summary>
-        </member>
-        <member name="M:NHibernate.Impl.IDbCommandSet.Append(System.Data.IDbCommand)">
-            <summary>
-            Append a command to the batch
-            </summary>
-            <param name="command"></param>
-        </member>
-        <member name="M:NHibernate.Impl.IDbCommandSet.ExecuteNonQuery">
-            <summary>
-            Executes the batch
-            </summary>
-            <returns>
-            This seems to be returning the total number of affected rows in all queries
-            </returns>
-        </member>
-        <member name="P:NHibernate.Impl.IDbCommandSet.BatchCommand">
-            <summary>
-            Return the batch command to be executed
-            </summary>
-        </member>
-        <member name="P:NHibernate.Impl.IDbCommandSet.CountOfCommands">
-            <summary>
-            The number of commands batched in this instance
-            </summary>
-        </member>
-        <member name="M:NHibernate.Impl.DbCommandSet`2.Append(System.Data.IDbCommand)">
-            <summary>
-            Append a command to the batch
-            </summary>
-            <param name="command"></param>
-        </member>
-        <member name="M:NHibernate.Impl.DbCommandSet`2.AssertHasParameters(System.Data.IDbCommand)">
-            <summary>
-            This is required because SqlClient.SqlCommandSet will throw if 
-            the command has no parameters.
-            </summary>
-            <param name="command"></param>
-        </member>
-        <member name="M:NHibernate.Impl.DbCommandSet`2.ExecuteNonQuery">
-            <summary>
-            Executes the batch
-            </summary>
-            <returns>
-            This seems to be returning the total number of affected rows in all queries
-            </returns>
-        </member>
-        <member name="M:NHibernate.Impl.DbCommandSet`2.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-            <filterpriority>2</filterpriority>
-        </member>
-        <member name="P:NHibernate.Impl.DbCommandSet`2.BatchCommand">
-            <summary>
-            Return the batch command to be executed
-            </summary>
-        </member>
-        <member name="P:NHibernate.Impl.DbCommandSet`2.CountOfCommands">
-            <summary>
-            The number of commands batched in this instance
-            </summary>
         </member>
         <member name="T:NHibernate.Impl.DetachedNamedQuery">
             <summary>
@@ -26709,103 +26539,124 @@
             <summary>
             Get all the results
             </summary>
+            <remarks>
+            The result is a IList of IList.
+            </remarks>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add(System.Type,NHibernate.IQuery)">
             <summary>
-            Adds the specified criteria to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
+            Adds the specified query to the query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
             </summary>
             <param name="resultGenericListType">Return results in a <see cref="T:System.Collections.Generic.List`1"/></param>
-            <param name="criteria">The criteria.</param>
-            <returns></returns>
+            <param name="query">The query.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add``1(NHibernate.IQuery)">
             <summary>
             Add the specified HQL query to the multi query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
             </summary>
+            <param name="query">The query</param>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add``1(System.String,NHibernate.IQuery)">
             <summary>
             Add the specified HQL query to the multi query, and associate it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
             </summary>
-            <param name="key"></param>
-            <param name="query"></param>
-            <returns></returns>
+            <param name="key">The key to get results of the specific query.</param>
+            <param name="query">The query</param>
+            <returns>The instance for method chain.</returns>
+            <seealso cref="M:NHibernate.IMultiQuery.GetResult(System.String)"/>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add``1(System.String,System.String)">
             <summary>
             Add the specified HQL Query to the multi query, and associate it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
             </summary>
-            <param name="key"></param>
-            <param name="hql"></param>
-            <returns></returns>
+            <param name="key">The key to get results of the specific query.</param>
+            <param name="hql">The query</param>
+            <returns>The instance for method chain.</returns>
+            <seealso cref="M:NHibernate.IMultiQuery.GetResult(System.String)"/>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add``1(System.String)">
             <summary>
             Add the specified HQL query to the multi query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
             </summary>
+            <param name="hql">The query</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.AddNamedQuery``1(System.String)">
             <summary>
             Add a named query to the multi query. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
             </summary>
+            <param name="queryName">The query</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.AddNamedQuery``1(System.String,System.String)">
             <summary>
             Add a named query to the multi query, and associate it with the given key. The result will be contained in a <see cref="T:System.Collections.Generic.List`1"/>
             </summary>
-            <param name="key"></param>
-            <param name="namedKey"></param>
-            <returns></returns>
+            <param name="key">The key to get results of the specific query.</param>
+            <param name="queryName">The query</param>
+            <returns>The instance for method chain.</returns>
+            <seealso cref="M:NHibernate.IMultiQuery.GetResult(System.String)"/>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add(System.String,NHibernate.IQuery)">
             <summary>
             Add the specified HQL query to the multi query, and associate it with the given key
             </summary>
-            <param name="key"></param>
-            <param name="query"></param>
-            <returns></returns>
+            <param name="key">The key to get results of the specific query.</param>
+            <param name="query">The query</param>
+            <returns>The instance for method chain.</returns>
+            <seealso cref="M:NHibernate.IMultiQuery.GetResult(System.String)"/>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add(NHibernate.IQuery)">
             <summary>
             Add the specified HQL query to the multi query
             </summary>
+            <param name="query">The query</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add(System.String,System.String)">
             <summary>
             Add the specified HQL Query to the multi query, and associate it with the given key
             </summary>
-            <param name="key"></param>
-            <param name="hql"></param>
-            <returns></returns>
+            <param name="key">The key to get results of the specific query.</param>
+            <param name="hql">The query</param>
+            <returns>The instance for method chain.</returns>
+            <seealso cref="M:NHibernate.IMultiQuery.GetResult(System.String)"/>
         </member>
         <member name="M:NHibernate.IMultiQuery.Add(System.String)">
             <summary>
             Add the specified HQL query to the multi query
             </summary>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.AddNamedQuery(System.String)">
             <summary>
             Add a named query to the multi query
             </summary>
+            <param name="queryName">The query</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.AddNamedQuery(System.String,System.String)">
             <summary>
             Add a named query to the multi query, and associate it with the given key
             </summary>
-            <param name="key"></param>
-            <param name="namedKey"></param>
-            <returns></returns>
+            <param name="key">The key to get results of the specific query.</param>
+            <param name="queryName">The query</param>
+            <returns>The instance for method chain.</returns>
+            <seealso cref="M:NHibernate.IMultiQuery.GetResult(System.String)"/>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetCacheable(System.Boolean)">
             <summary>
             Enable caching of this query result set.
             </summary>
             <param name="cacheable">Should the query results be cacheable?</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetCacheRegion(System.String)">
             Set the name of the cache region.
             <param name="region">The name of a query cache region, or <see langword="null" />
             for the default query cache</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetForceCacheRefresh(System.Boolean)">
             Should the query force a refresh of the specified query cache region?
@@ -26815,12 +26666,14 @@
             based on its knowledge of those events.
             <param name="forceCacheRefresh">Should the query result in a forcible refresh of
             the query cache?</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetTimeout(System.Int32)">
             <summary>
             The timeout for the underlying ADO query
             </summary>
             <param name="timeout"></param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetParameter(System.String,System.Object,NHibernate.Type.IType)">
             <summary>
@@ -26829,6 +26682,7 @@
             <param name="name">The name of the parameter</param>
             <param name="val">The possibly null parameter value</param>
             <param name="type">The NHibernate <see cref="T:NHibernate.Type.IType"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetParameter(System.String,System.Object)">
             <summary>
@@ -26837,6 +26691,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">The non-null parameter value</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetParameterList(System.String,System.Collections.ICollection,NHibernate.Type.IType)">
             <summary>
@@ -26846,6 +26701,7 @@
             <param name="name">The name of the parameter</param>
             <param name="vals">A collection of values to list</param>
             <param name="type">The Hibernate type of the values</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetParameterList(System.String,System.Collections.ICollection)">
             <summary>
@@ -26855,6 +26711,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="vals">A collection of values to list</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetAnsiString(System.String,System.String)">
             <summary>
@@ -26863,6 +26720,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.String"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetBinary(System.String,System.Byte[])">
             <summary>
@@ -26871,6 +26729,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Byte"/> array.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetBoolean(System.String,System.Boolean)">
             <summary>
@@ -26879,6 +26738,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Boolean"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetByte(System.String,System.Byte)">
             <summary>
@@ -26887,6 +26747,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Byte"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetCharacter(System.String,System.Char)">
             <summary>
@@ -26895,6 +26756,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Char"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetDateTime(System.String,System.DateTime)">
             <summary>
@@ -26903,6 +26765,7 @@
             </summary>
             <param name="val">A non-null instance of a <see cref="T:System.DateTime"/>.</param>
             <param name="name">The name of the parameter</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetDecimal(System.String,System.Decimal)">
             <summary>
@@ -26911,6 +26774,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Decimal"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetDouble(System.String,System.Double)">
             <summary>
@@ -26919,6 +26783,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Double"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetEntity(System.String,System.Object)">
             <summary>
@@ -26926,6 +26791,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a persistent class</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetEnum(System.String,System.Enum)">
             <summary>
@@ -26934,6 +26800,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a persistent enumeration</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetInt16(System.String,System.Int16)">
             <summary>
@@ -26942,6 +26809,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Int16"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetInt32(System.String,System.Int32)">
             <summary>
@@ -26950,6 +26818,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Int32"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetInt64(System.String,System.Int64)">
             <summary>
@@ -26958,6 +26827,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Int64"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetSingle(System.String,System.Single)">
             <summary>
@@ -26966,6 +26836,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.Single"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetString(System.String,System.String)">
             <summary>
@@ -26974,6 +26845,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.String"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetGuid(System.String,System.Guid)">
             <summary>
@@ -26982,6 +26854,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">An instance of a <see cref="T:System.Guid"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetTime(System.String,System.DateTime)">
             <summary>
@@ -26990,6 +26863,7 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.DateTime"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetTimestamp(System.String,System.DateTime)">
             <summary>
@@ -26998,24 +26872,30 @@
             </summary>
             <param name="name">The name of the parameter</param>
             <param name="val">A non-null instance of a <see cref="T:System.DateTime"/>.</param>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetFlushMode(NHibernate.FlushMode)">
             <summary>
             Override the current session flush mode, just for this query.
             </summary>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.SetResultTransformer(NHibernate.Transform.IResultTransformer)">
             <summary>
             Set a strategy for handling the query results. This can be used to change
             "shape" of the query result.
             </summary>
+            <remarks>
+            The <param name="transformer"/> will be applied after the transformer of each single query.
+            </remarks>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.IMultiQuery.GetResult(System.String)">
             <summary>
-            Returns the result of one of the Criteria based on the key
+            Returns the result of one of the query based on the key
             </summary>
             <param name="key">The key</param>
-            <returns></returns>
+            <returns>The instance for method chain.</returns>
         </member>
         <member name="M:NHibernate.Impl.MultiQueryImpl.List">
             <summary>
@@ -27305,13 +27185,6 @@
         </member>
         <member name="M:NHibernate.Impl.SessionImpl.Delete(System.String,System.Object)">
             <summary> Delete a persistent object (by explicit entity name)</summary>
-        </member>
-        <member name="M:NHibernate.Impl.SessionImpl.Find(System.String)">
-            <summary>
-            Retrieve a list of persistent objects using a Hibernate query
-            </summary>
-            <param name="query"></param>
-            <returns></returns>
         </member>
         <member name="M:NHibernate.Impl.SessionImpl.CreateFilter(System.Object,System.String)">
             <summary>
@@ -28036,6 +27909,40 @@
             <summary>
             Performs bottom-up analysis to determine which nodes that match a certain predicate
             </summary>
+        </member>
+        <member name="M:NHibernate.Linq.ReflectionHelper.GetMethodDefinition``1(System.Linq.Expressions.Expression{System.Action{``0}})">
+            <summary>
+            Extract the <see cref="T:System.Reflection.MethodInfo"/> from a given expression.
+            </summary>
+            <typeparam name="TSource">The declaring-type of the method.</typeparam>
+            <param name="method">The method.</param>
+            <returns>The <see cref="T:System.Reflection.MethodInfo"/> of the no-generic method or the generic-definition for a generic-method.</returns>
+            <seealso cref="M:System.Reflection.MethodInfo.GetGenericMethodDefinition"/>
+        </member>
+        <member name="M:NHibernate.Linq.ReflectionHelper.GetMethodDefinition(System.Linq.Expressions.Expression{System.Action})">
+            <summary>
+            Extract the <see cref="T:System.Reflection.MethodInfo"/> from a given expression.
+            </summary>
+            <param name="method">The method.</param>
+            <returns>The <see cref="T:System.Reflection.MethodInfo"/> of the no-generic method or the generic-definition for a generic-method.</returns>
+            <seealso cref="M:System.Reflection.MethodInfo.GetGenericMethodDefinition"/>
+        </member>
+        <member name="M:NHibernate.Linq.ReflectionHelper.GetProperty``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Gets the field or property to be accessed.
+            </summary>
+            <typeparam name="TSource">The declaring-type of the property.</typeparam>
+            <typeparam name="TResult">The type of the property.</typeparam>
+            <param name="property">The expression representing the property getter.</param>
+            <returns>The <see cref="T:System.Reflection.MemberInfo"/> of the property.</returns>
+        </member>
+        <member name="M:NHibernate.Linq.ReflectionHelper.IsMethodOf(System.Reflection.MethodInfo,System.Type)">
+            <summary>
+            Check if a method is declared in a given <see cref="T:System.Type"/>.
+            </summary>
+            <param name="source">The method to check.</param>
+            <param name="realDeclaringType">The where the method is really declared.</param>
+            <returns>True if the method is an implementation of the method declared in <paramref name="realDeclaringType"/>; false otherwise. </returns>
         </member>
         <member name="T:NHibernate.Linq.NhQueryable`1">
             <summary>
@@ -34095,7 +34002,7 @@
             An Oracle-style (theta) Join
             </summary>
         </member>
-        <member name="M:NHibernate.SqlCommand.OracleJoinFragment.AddLeftOuterJoinCondition(System.String)">
+        <member name="M:NHibernate.SqlCommand.OracleJoinFragment.AddLeftOuterJoinCondition(NHibernate.SqlCommand.SqlString)">
             <summary>
             This method is a bit of a hack, and assumes
             that the column on the "right" side of the
@@ -34116,6 +34023,11 @@
             before we rearranged the query.
             This is the ADO parameter position that this SqlString parameter is
             bound to.  The SqlString can be safely rearranged once this is set.
+            </summary>
+        </member>
+        <member name="M:NHibernate.SqlCommand.Parameter.WithIndex(System.Int32)">
+            <summary>
+            Create a parameter with the specified position
             </summary>
         </member>
         <member name="M:NHibernate.SqlCommand.Parameter.GenerateParameters(System.Int32)">
@@ -37103,6 +37015,23 @@
             for the System.Type.
             </remarks>
         </member>
+        <member name="T:NHibernate.Type.DateTimeType">
+            <summary>
+            Maps a <see cref="T:System.DateTime"/> Property to a <see cref="F:System.Data.DbType.DateTime"/> column that 
+            stores date &amp; time down to the accuracy of a second.
+            </summary>
+            <remarks>
+            This only stores down to a second, so if you are looking for the most accurate
+            date and time storage your provider can give you use the <see cref="T:NHibernate.Type.TimestampType"/>. 
+            or the <see cref="T:NHibernate.Type.TicksType"/>
+            </remarks>
+        </member>
+        <member name="M:NHibernate.Type.DateTimeType.#ctor">
+            <summary></summary>
+        </member>
+        <member name="P:NHibernate.Type.DateTimeType.Name">
+            <summary></summary>
+        </member>
         <member name="T:NHibernate.Type.AbstractEnumType">
             <summary>
             Base class for enum types.
@@ -37797,23 +37726,6 @@
             <summary>
             Maps a <see cref="T:System.DateTime"/> Property to a <see cref="F:System.Data.DbType.DateTime"/>
             </summary>
-        </member>
-        <member name="T:NHibernate.Type.DateTimeType">
-            <summary>
-            Maps a <see cref="T:System.DateTime"/> Property to a <see cref="F:System.Data.DbType.DateTime"/> column that 
-            stores date &amp; time down to the accuracy of a second.
-            </summary>
-            <remarks>
-            This only stores down to a second, so if you are looking for the most accurate
-            date and time storage your provider can give you use the <see cref="T:NHibernate.Type.TimestampType"/>. 
-            or the <see cref="T:NHibernate.Type.TicksType"/>
-            </remarks>
-        </member>
-        <member name="M:NHibernate.Type.DateTimeType.#ctor">
-            <summary></summary>
-        </member>
-        <member name="P:NHibernate.Type.DateTimeType.Name">
-            <summary></summary>
         </member>
         <member name="M:NHibernate.Type.DateTime2Type.#ctor">
             <summary></summary>
@@ -41585,6 +41497,16 @@
             NHibernate date type
             </summary>
         </member>
+        <member name="F:NHibernate.NHibernateUtil.LocalDateTime">
+            <summary>
+            NHibernate local date type
+            </summary>
+        </member>
+        <member name="F:NHibernate.NHibernateUtil.UtcDateTime">
+            <summary>
+            NHibernate utc date type
+            </summary>
+        </member>
         <member name="F:NHibernate.NHibernateUtil.DateTimeOffset">
             <summary>
             NHibernate date type
@@ -41741,13 +41663,6 @@
             </summary>
             <param name="metaType">a type mapping <see cref="T:NHibernate.Type.IType"/> to a single column</param>
             <param name="identifierType">the entity identifier type</param>
-            <returns></returns>
-        </member>
-        <member name="M:NHibernate.NHibernateUtil.Association(System.Type)">
-            <summary>
-            A NHibernate persistent object (entity) type
-            </summary>
-            <param name="persistentClass">a mapped entity class</param>
             <returns></returns>
         </member>
         <member name="M:NHibernate.NHibernateUtil.Entity(System.Type)">

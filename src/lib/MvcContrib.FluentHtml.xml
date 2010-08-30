@@ -460,6 +460,14 @@
             </summary>
             <param name="value">A format string.</param>
         </member>
+        <member name="M:MvcContrib.FluentHtml.Elements.CheckBoxListBase`1.EachOption(System.Action{MvcContrib.FluentHtml.Elements.CheckBox,System.Object,System.Int32})">
+            <summary>
+            An action performed after each CheckBox element has been created.  This is useful to
+            modify the element before is rendered.
+            </summary>
+            <param name="action">The action to perform. The parameters to the action are the CheckBox element, 
+            the option, and the position of the option.</param>
+        </member>
         <member name="T:MvcContrib.FluentHtml.Elements.Label">
             <summary>
             Generate a label (provides no visual difference, but can be tied to an input element to help with naviagation).
@@ -698,6 +706,14 @@
             </summary>
             <param name="value">A format string.</param>
         </member>
+        <member name="M:MvcContrib.FluentHtml.Elements.RadioSetBase`1.EachOption(System.Action{MvcContrib.FluentHtml.Elements.RadioButton,System.Object,System.Int32})">
+            <summary>
+            An action performed after each RadioButton element has been created.  This is useful to
+            modify the element before is rendered.
+            </summary>
+            <param name="action">The action to perform. The parameters to the action are the RadioButton element, 
+            the option, and the position of the option.</param>
+        </member>
         <member name="M:MvcContrib.FluentHtml.Elements.TypeStamp.#ctor(System.String,System.Type)">
             <summary>
             Generates an HTML input element of type 'hidden' that denotes an instance type stamp
@@ -855,6 +871,14 @@
             </summary>
             <param name="hideFirstOption">True to hide the first option, otherwise false.</param>
             <returns></returns>
+        </member>
+        <member name="M:MvcContrib.FluentHtml.Elements.SelectBase`1.EachOption(System.Action{MvcContrib.FluentHtml.Elements.Option,System.Object,System.Int32})">
+            <summary>
+            An action performed after each Option element has been created.  This is useful to
+            modify the element before is rendered.
+            </summary>
+            <param name="action">The action to perform. The parameters to the action are the Option element, 
+            the option item, and the position of the option.</param>
         </member>
         <member name="M:MvcContrib.FluentHtml.Elements.MultiSelect.#ctor(System.String)">
             <summary>

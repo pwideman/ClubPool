@@ -7,7 +7,7 @@ using System.Web.Routing;
 
 using Castle.Windsor;
 
-namespace ClubPool.Web.Code
+namespace ClubPool.Web.CastleWindsor
 {
   /// <summary>
   /// Copied from MvcContrib.Castle. MvcContrib.Castle is not compatible with Castle 2.5,

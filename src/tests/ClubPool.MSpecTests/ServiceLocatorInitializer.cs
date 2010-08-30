@@ -1,6 +1,7 @@
 using System;
 
 using Castle.Windsor;
+using Castle.MicroKernel.Registration;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
 
@@ -17,12 +18,9 @@ namespace Specs
   {
     public static void Init() {
       IWindsorContainer container = new WindsorContainer();
-      container.AddComponent("validator",
-          typeof(IValidator), typeof(Validator));
-      container.AddComponent("entityDuplicateChecker",
-          typeof(IEntityDuplicateChecker), typeof(EntityDuplicateCheckerStub));
-      container.AddComponent("linqRepositoryType",
-          typeof(ILinqRepository<>), typeof(LinqRepository<>));
+      container.Register(Component.For<IValidator>().ImplementedBy<Validator>());
+      container.Register(Component.For<IEntityDuplicateChecker>().ImplementedBy<EntityDuplicateCheckerStub>());
+      container.Register(Component.For(typeof(ILinqRepository<>)).ImplementedBy(typeof(LinqRepository<>)));
       ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
     }
   }

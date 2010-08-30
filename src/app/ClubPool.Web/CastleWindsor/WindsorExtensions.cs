@@ -7,9 +7,10 @@ using System.Web.Mvc;
 
 using MvcContrib;
 using Castle.Windsor;
+using Castle.MicroKernel.Registration;
 using Castle.Core;
 
-namespace ClubPool.Web.Code
+namespace ClubPool.Web.CastleWindsor
 {
   /// <summary>
   /// Copied from MvcContrib.Castle. MvcContrib.Castle is not compatible with Castle 2.5,
@@ -25,7 +26,7 @@ namespace ClubPool.Web.Code
     public static IWindsorContainer RegisterControllers(this IWindsorContainer container, params Type[] controllerTypes) {
       foreach (var type in controllerTypes) {
         if (ControllerExtensions.IsController(type)) {
-          container.AddComponentLifeStyle(type.FullName.ToLower(), type, LifestyleType.Transient);
+          container.Register(Component.For(type).Named(type.FullName.ToLower()).LifeStyle.Is(LifestyleType.Transient));
         }
       }
 
