@@ -25,6 +25,9 @@
     if (Model.DisplayAdminMenu) { %>
   <li><a href="#">Admin</a>
     <ul>
+      <% if (Model.ActiveSeasonId > 0) { %>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.View(Model.ActiveSeasonId), "Active Season")%></li>
+      <% } %>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Index(null), "Users") %></li>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(null), "Seasons") %></li>
     </ul>

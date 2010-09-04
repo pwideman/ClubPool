@@ -9,5 +9,6 @@ namespace ClubPool.Web.Controllers.Navigation.ViewModels
   {
     public bool DisplayAdminMenu { get; set; }
     public bool UserIsLoggedIn { get; set; }
+    public int ActiveSeasonId { get; set; }
   }
 }
