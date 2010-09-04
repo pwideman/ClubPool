@@ -75,12 +75,23 @@ namespace ClubPool.SchemaGen
         var divisionRepo = new DivisionRepository();
         var teamRepo = new TeamRepository();
         int userIndex = 1;
+        var users = new List<User>();
+        using (userRepo.DbContext.BeginTransaction()) {
+          for (userIndex = 1; userIndex <= 60; userIndex++) {
+            var username = "user " + userIndex.ToString();
+            users.Add(membershipService.CreateUser(username, "user", "user", userIndex.ToString(), 
+              "user" + userIndex.ToString() + "@email.com", true, false));
+          }
+          userRepo.DbContext.CommitTransaction();
+        }
+
         using (seasonRepo.DbContext.BeginTransaction()) {
           for (int seasonIndex = 1; seasonIndex <= 5; seasonIndex++) {
             output("Creating season " + seasonIndex.ToString());
             var season = new Season("Season " + seasonIndex.ToString());
             season.IsActive = false;
             seasonRepo.SaveOrUpdate(season);
+            userIndex = 0;
             for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
               output("Creating division " + divisionIndex.ToString());
               var division = new Division("Division " + divisionIndex.ToString(), DateTime.Parse("1/" + divisionIndex.ToString() + "/200" + seasonIndex.ToString()), season);
@@ -91,13 +102,8 @@ namespace ClubPool.SchemaGen
                 var team = new Team("Team " + teamIndex.ToString(), division);
                 teamRepo.SaveOrUpdate(team);
                 division.AddTeam(team);
-                for (int playerIndex = 1; playerIndex <= 2; playerIndex++) {
-                  var username = "player" + userIndex.ToString();
-                  output("Creating player " + username);
-                  var player = membershipService.CreateUser(username, "pass", "player", userIndex.ToString(), username + "@email.com", true, false);
-                  team.AddPlayer(player);
-                  userIndex++;
-                }
+                team.AddPlayer(users[userIndex++]);
+                team.AddPlayer(users[userIndex++]);
               }
             }
           }
