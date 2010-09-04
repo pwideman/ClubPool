@@ -4,7 +4,7 @@ namespace ClubPool.Framework.Extensions
 {
   public static class StringExtensions
   {
-    public static bool IsNullOrEmptyOrBlank(this string value) {
+    public static bool IsNullOrWhitespace(this string value) {
       return (string.IsNullOrEmpty(value) || value.Trim().Equals(string.Empty));
     }
 

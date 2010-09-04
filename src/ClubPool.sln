@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Generation", "Code Generation", "{78C7D02A-6BA6-4EC4-9563-4F955A4967D0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "utils", "utils", "{5A1FF92A-9722-4044-86C2-85DA4063D4E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FA163A84-D8B8-414D-BE32-E780A473CB09}"
@@ -15,11 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Data", "app\ClubPo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Web.Controllers", "app\ClubPool.Web.Controllers\ClubPool.Web.Controllers.csproj", "{2EBEB3C2-E3E7-4782-9288-6FBA771C031F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Tests", "tests\ClubPool.Tests\ClubPool.Tests.csproj", "{3BE889FE-B744-4F3D-8669-B267F156C16E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Web", "app\ClubPool.Web\ClubPool.Web.csproj", "{4230FBF1-9D6D-4F42-8040-7519F25251AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudScaffolding", "tools\CrudScaffolding\CrudScaffolding.csproj", "{008D756B-8DFE-426D-879F-C549BF2BF8E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.SchemaGen", "utils\ClubPool.SchemaGen\ClubPool.SchemaGen.csproj", "{CCEA23AA-F37D-4C51-8E63-214D4185C996}"
 EndProject
@@ -37,10 +31,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -62,14 +52,10 @@ Global
 		{2EBEB3C2-E3E7-4782-9288-6FBA771C031F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EBEB3C2-E3E7-4782-9288-6FBA771C031F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EBEB3C2-E3E7-4782-9288-6FBA771C031F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BE889FE-B744-4F3D-8669-B267F156C16E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BE889FE-B744-4F3D-8669-B267F156C16E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{008D756B-8DFE-426D-879F-C549BF2BF8E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{008D756B-8DFE-426D-879F-C549BF2BF8E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -95,10 +81,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{008D756B-8DFE-426D-879F-C549BF2BF8E0} = {78C7D02A-6BA6-4EC4-9563-4F955A4967D0}
 		{CCEA23AA-F37D-4C51-8E63-214D4185C996} = {5A1FF92A-9722-4044-86C2-85DA4063D4E3}
-		{3BE889FE-B744-4F3D-8669-B267F156C16E} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

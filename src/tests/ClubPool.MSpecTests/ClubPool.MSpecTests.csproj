@@ -51,9 +51,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Machine.Specifications, Version=0.3.0.0, Culture=neutral, PublicKeyToken=5c474de7a495cff1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\lib\Machine.Specifications.dll</HintPath>
+      <HintPath>..\..\lib\Machine.Specifications.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,7 +69,7 @@
     </Reference>
     <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\tools\lib\Rhino.Mocks.dll</HintPath>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="SharpArch, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -170,6 +170,9 @@
     <Content Include="Hibernate.cfg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ClubPool.Framework\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

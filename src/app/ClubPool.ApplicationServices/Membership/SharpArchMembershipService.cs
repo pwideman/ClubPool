@@ -53,10 +53,11 @@ namespace ClubPool.ApplicationServices.Membership
     }
 
     protected string EncodePassword(string password, string salt) {
-        Check.Require(!salt.IsNullOrEmptyOrBlank(), "Hashed passwords require a salt value");
-        var hash = new HMACSHA1();
-        hash.Key = Convert.FromBase64String(salt);
-        return Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
+      Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
+      Check.Require(!string.IsNullOrEmpty(salt), "Hashed passwords require a salt value");
+      var hash = new HMACSHA1();
+      hash.Key = Convert.FromBase64String(salt);
+      return Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(password)));
     }
 
     public User CreateUser(string username, 
