@@ -157,6 +157,14 @@ namespace ClubPool.Web.Controllers.Divisions
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was updated";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
+
+    [HttpPost]
+    [Authorize(Roles = Roles.Administrators)]
+    [Transaction]
+    [ValidateAntiForgeryToken]
+    public ActionResult CreateSchedule(int id) {
+      return View();
+    }
   }
 
 }

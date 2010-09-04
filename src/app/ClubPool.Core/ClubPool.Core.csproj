@@ -66,11 +66,13 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Contracts\IDivisionRepository.cs" />
+    <Compile Include="Contracts\IMeetRepository.cs" />
     <Compile Include="Contracts\IRoleRepository.cs" />
     <Compile Include="Contracts\ISeasonRepository.cs" />
     <Compile Include="Contracts\ITeamRepository.cs" />
     <Compile Include="Contracts\IUserRepository.cs" />
     <Compile Include="Division.cs" />
+    <Compile Include="Meet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\RoleQueries.cs" />
     <Compile Include="Queries\SeasonQueries.cs" />

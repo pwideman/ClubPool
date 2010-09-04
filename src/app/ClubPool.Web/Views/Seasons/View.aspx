@@ -16,16 +16,16 @@
     </div>
   </div>
 
-  <div id="tabs">
+  <div id="divisiontabs">
     <ul>
       <% foreach (var division in Model.Divisions) { %>
       <li>
-        <a href="#tab-<%= division.Id %>"><%= division.Name%></a>
+        <a href="#division-<%= division.Id %>"><%= division.Name%></a>
       </li>
       <% } %>
     </ul>
     <% foreach (var division in Model.Divisions) { %>
-    <div id="tab-<%= division.Id %>">
+    <div id="division-<%= division.Id %>">
       <div class="action-button-row">
         <div class="action-button">
           <%= Html.ContentImage("edit-medium.png", "Edit Division") %>
@@ -45,59 +45,69 @@
         </div>     
         <% } %>
       </div>
-      <!--<div class="content-box season-view-teams-content">
-        <div class="content-box-title">
-          <span class="content-box-title-heading">Teams</span>
+      <div id="division-<%= division.Id %>-tabs" class="division-details-tabs">
+        <ul>
+          <li><a href="#division-<%= division.Id %>-teams">Teams</a></li>
+          <li><a href="#division-<%= division.Id %>-schedule">Schedule</a></li>
+        </ul>
+        <div id="division-<%= division.Id %>-teams">
+          <% if (division.Teams.Any()) { %>
+            <table class="season-view-teams-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Players</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+              <% foreach (var team in division.Teams) { %>
+                <tr>
+                  <td><%= team.Id%></td>
+                  <td><%= team.Name%></td>
+                  <td>
+                  <% if (team.Players.Any()) { %>
+                    <div class="season-view-player-list">
+                      <ul>
+                      <% foreach (var player in team.Players) { %>
+                        <li><%= player.Name%></li>
+                      <% } %>
+                      </ul>
+                    </div>
+                  <% } %>
+                  </td>
+                  <td class="action-column">
+                    <a href="<%= Html.BuildUrlFromExpression<TeamsController>(c => c.Edit(team.Id)) %>">
+                    <%= Html.ContentImage("edit-medium.png", "Edit")%>
+                    </a>
+                    <% if (team.CanDelete) {
+                          using (var form = Html.BeginForm<TeamsController>(c => c.Delete(team.Id), FormMethod.Post, new { @class = "invisible" })) { %>
+                      <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
+                      <%= Html.AntiForgeryToken()%>
+                    <%   }
+                        } %>
+                  </td>
+                </tr>
+              <% } %>
+              </tbody>
+            </table>
+          <% }
+              else { %>
+          This division has no teams
+          <% } %>
         </div>
-        <div class="content-box-content">-->
-      <div class="content-box" style="display: inline-block;">
-        <div class="content-box-header">Teams</div>
-        <div class="content-box-body">
-        <% if (division.Teams.Any()) { %>
-          <table class="season-view-teams-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Players</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-            <% foreach (var team in division.Teams) { %>
-              <tr>
-                <td><%= team.Id%></td>
-                <td><%= team.Name%></td>
-                <td>
-                <% if (team.Players.Any()) { %>
-                  <div class="season-view-player-list">
-                    <ul>
-                    <% foreach (var player in team.Players) { %>
-                      <li><%= player.Name%></li>
-                    <% } %>
-                    </ul>
-                  </div>
-                <% } %>
-                </td>
-                <td class="action-column">
-                  <a href="<%= Html.BuildUrlFromExpression<TeamsController>(c => c.Edit(team.Id)) %>">
-                  <%= Html.ContentImage("edit-medium.png", "Edit")%>
-                  </a>
-                  <% if (team.CanDelete) {
-                       using (var form = Html.BeginForm<TeamsController>(c => c.Delete(team.Id), FormMethod.Post, new { @class = "invisible" })) { %>
-                    <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
-                    <%= Html.AntiForgeryToken()%>
-                  <%   }
-                     } %>
-                </td>
-             </tr>
-            <% } %>
-            </tbody>
-          </table>
-        <% }
-           else { %>
-        This division has no teams
-        <% } %>
+        <div id="division-<%= division.Id %>-schedule">
+          <% if (division.HasSchedule) { %>
+          Show Schedule
+          <% } else { %>
+          <p>The schedule for this division has not been created.</p>
+          <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id), FormMethod.Post, new { @class = "normal" })) { %>
+            <%= Html.Hidden("id", division.Id)%>
+            <%= Html.AntiForgeryToken() %>
+            <input class="submit-button" type="submit" value="Create Schedule" />
+          <% } 
+          } %>
         </div>
       </div>
 
@@ -122,7 +132,10 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
   <script type="text/javascript">
     $(document).ready(function () {
-      $("#tabs").tabs({
+      $("#divisiontabs").tabs({
+        cookie: {}
+      });
+      $(".division-details-tabs").tabs({
         cookie: {}
       });
       $(".delete-form-link").click(function () {

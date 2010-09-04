@@ -17,12 +17,14 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
       Id = division.Id;
       Name = division.Name;
       CanDelete = division.CanDelete();
+      HasSchedule = division.Schedule.Any();
       Teams = division.Teams.Select(t => new TeamViewModel(t)).ToList();
     }
 
     public int Id { get; set; }
     public string Name { get; set; }
     public bool CanDelete { get; set; }
+    public bool HasSchedule { get; set; }
     public IEnumerable<TeamViewModel> Teams { get; set; }
   }
 }

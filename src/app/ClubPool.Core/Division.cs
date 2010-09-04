@@ -41,6 +41,10 @@ namespace ClubPool.Core
     [DomainSignature]
     public virtual Season Season { get; set; }
 
+    protected IList<Meet> schedule;
+
+    public virtual IEnumerable<Meet> Schedule { get { return schedule; } }
+
     protected IList<Team> teams;
 
     public virtual IEnumerable<Team> Teams { get { return teams; } }
