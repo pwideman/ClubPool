@@ -101,15 +101,24 @@
         <div id="division-<%= division.Id %>-schedule">
           <% if (division.HasSchedule) { %>
           <table>
-            <% foreach (var week in division.Schedule) { %>
+            <thead>
               <tr>
-                <td>Week <%= week.Week %></td>
+                <td>Week</td>
+                <td>Date</td>
+                <td colspan="<%= division.Schedule.NumberOfMeetsPerWeek %>">Matches</td>
+              </tr>
+            </thead>
+            <% foreach (var week in division.Schedule.Weeks) { %>
+            <tbody>
+              <tr>
+                <td><%= week.Week %></td>
+                <td><%= week.Date.ToShortDateString() %></td>
               <% foreach (var meet in week.Meets) { %>
                 <td><%= string.Join(" vs ", meet.TeamNames) %></td>
               <% } %>
               </tr>
             <% } %>
-            <tr></tr>
+            </tbody>
           </table>
           <% } else { %>
           <p>The schedule for this division has not been created.</p>

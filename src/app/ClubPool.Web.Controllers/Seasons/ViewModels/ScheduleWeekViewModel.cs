@@ -8,6 +8,7 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
   public class ScheduleWeekViewModel
   {
     public int Week { get; set; }
+    public DateTime Date { get; set; }
     public IEnumerable<MeetViewModel> Meets { get; set; }
   }
 }
