@@ -35,5 +35,9 @@ namespace ClubPool.Framework.NHibernate
     public T FindOne(Expression<Func<T, bool>> criteria) {
       return Session.Query<T>().SingleOrDefault(criteria);
     }
+
+    public void Refresh(T entity) {
+      Session.Refresh(entity);
+    }
   }
 }

@@ -2,6 +2,7 @@
 <%@ Import Namespace="ClubPool.Web.Controllers.Divisions" %>
 <%@ Import Namespace="ClubPool.Web.Controllers.Teams" %>
 <%@ Import Namespace="ClubPool.Web.Controllers.Seasons" %>
+<%@ Import Namespace="ClubPool.Framework.Extensions" %>
 <%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
@@ -99,11 +100,20 @@
         </div>
         <div id="division-<%= division.Id %>-schedule">
           <% if (division.HasSchedule) { %>
-          Show Schedule
+          <table>
+            <% foreach (var week in division.Schedule) { %>
+              <tr>
+                <td>Week <%= week.Week %></td>
+              <% foreach (var meet in week.Meets) { %>
+                <td><%= string.Join(" vs ", meet.TeamNames) %></td>
+              <% } %>
+              </tr>
+            <% } %>
+            <tr></tr>
+          </table>
           <% } else { %>
           <p>The schedule for this division has not been created.</p>
           <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id), FormMethod.Post, new { @class = "normal" })) { %>
-            <%= Html.Hidden("id", division.Id)%>
             <%= Html.AntiForgeryToken() %>
             <input class="submit-button" type="submit" value="Create Schedule" />
           <% } 

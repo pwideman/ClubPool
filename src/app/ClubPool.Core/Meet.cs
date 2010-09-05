@@ -10,7 +10,7 @@ namespace ClubPool.Core
 {
   public class Meet : Entity
   {
-    protected List<Team> teams;
+    protected IList<Team> teams;
 
     protected Meet() {
       InitMembers();

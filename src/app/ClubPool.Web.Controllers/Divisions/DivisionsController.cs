@@ -163,7 +163,9 @@ namespace ClubPool.Web.Controllers.Divisions
     [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult CreateSchedule(int id) {
-      return View();
+      var division = divisionRepository.Get(id);
+      divisionManagementService.CreateSchedule(division);
+      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
   }
 

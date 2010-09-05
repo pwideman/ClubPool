@@ -26,6 +26,7 @@ namespace ClubPool.Core
 
     protected virtual void InitMembers() {
       teams = new List<Team>();
+      schedule = new List<Meet>();
     }
 
     public virtual DateTime StartingDate { get; set; }

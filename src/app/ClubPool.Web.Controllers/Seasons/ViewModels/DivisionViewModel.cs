@@ -11,13 +11,19 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
   {
     public DivisionViewModel() {
       Teams = new List<TeamViewModel>();
+      Schedule = new List<ScheduleWeekViewModel>();
     }
 
     public DivisionViewModel(Division division) {
       Id = division.Id;
       Name = division.Name;
       CanDelete = division.CanDelete();
-      HasSchedule = division.Schedule.Any();
+      Schedule = division.Schedule.GroupBy(meet => meet.Week)
+        .Select(g => new ScheduleWeekViewModel() { 
+          Week = g.Key,
+          Meets = g.Select(meet => new MeetViewModel(meet)) 
+        });
+      HasSchedule = Schedule.Any();
       Teams = division.Teams.Select(t => new TeamViewModel(t)).ToList();
     }
 
@@ -26,5 +32,6 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
     public bool CanDelete { get; set; }
     public bool HasSchedule { get; set; }
     public IEnumerable<TeamViewModel> Teams { get; set; }
+    public IEnumerable<ScheduleWeekViewModel> Schedule { get; set; }
   }
 }

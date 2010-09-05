@@ -48,9 +48,14 @@ namespace ClubPool.Framework.NHibernate
     T SaveOrUpdate(T entity);
 
     /// <summary>
-    /// I'll let you guess what this does.
+    /// Delete an entity
     /// </summary>
     void Delete(T entity);
+
+    /// <summary>
+    /// Refresh an entity
+    /// </summary>
+    void Refresh(T entity);
 
     /// <summary>
     /// Provides a handle to application wide DB activities such as committing any pending changes,

@@ -103,7 +103,9 @@
     <Compile Include="Seasons\ViewModels\CreateSeasonViewModel.cs" />
     <Compile Include="Seasons\ViewModels\DivisionViewModel.cs" />
     <Compile Include="Seasons\ViewModels\EditSeasonViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\MeetViewModel.cs" />
     <Compile Include="Seasons\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Seasons\ViewModels\ScheduleWeekViewModel.cs" />
     <Compile Include="Seasons\ViewModels\SeasonSummaryViewModel.cs" />
     <Compile Include="Seasons\ViewModels\TeamViewModel.cs" />
     <Compile Include="Seasons\ViewModels\SeasonViewModel.cs" />
