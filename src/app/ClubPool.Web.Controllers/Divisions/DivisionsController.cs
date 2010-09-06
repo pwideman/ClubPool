@@ -167,6 +167,17 @@ namespace ClubPool.Web.Controllers.Divisions
       divisionManagementService.CreateSchedule(division);
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
+
+    [HttpPost]
+    [Authorize(Roles = Roles.Administrators)]
+    [Transaction]
+    [ValidateAntiForgeryToken]
+    public ActionResult RecreateSchedule(int id) {
+      var division = divisionRepository.Get(id);
+      divisionManagementService.ClearSchedule(division);
+      divisionManagementService.CreateSchedule(division);
+      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
+    }
   }
 
 }

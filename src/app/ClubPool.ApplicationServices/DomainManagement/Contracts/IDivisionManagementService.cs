@@ -11,5 +11,6 @@ namespace ClubPool.ApplicationServices.DomainManagement.Contracts
   {
     bool DivisionNameIsInUse(Season season, string name);
     void CreateSchedule(Division division);
+    void ClearSchedule(Division division);
   }
 }

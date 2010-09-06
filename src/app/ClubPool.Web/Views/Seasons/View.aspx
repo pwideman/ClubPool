@@ -41,7 +41,7 @@
           <% using (var form = Html.BeginForm<DivisionsController>(c => c.Delete(division.Id), FormMethod.Post)) { %>
           <%= Html.AntiForgeryToken()%>
           <%= Html.ContentImage("delete-medium.png", "Delete Team") %>
-          <a href="#" class="delete-form-link">Delete this division</a>
+          <a href="#" class="submit-form-link">Delete this division</a>
           <% } %>
         </div>     
         <% } %>
@@ -100,6 +100,15 @@
         </div>
         <div id="division-<%= division.Id %>-schedule">
           <% if (division.HasSchedule) { %>
+          <div class="action-button-row">
+            <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.RecreateSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
+              <%= Html.AntiForgeryToken() %>
+              <div class="action-button">
+                <%= Html.ContentImage("refresh-medium.png", "Recreate Schedule") %>
+                <a href="#" class="submit-form-link">Recreate the schedule</a>
+              </div>
+            <% } %>
+          </div>
           <table class="schedule-table">
             <thead>
               <tr>
@@ -157,7 +166,7 @@
       $(".division-details-tabs").tabs({
         cookie: {}
       });
-      $(".delete-form-link").click(function () {
+      $(".submit-form-link").click(function () {
         $(this).parents("form:first").submit();
       });
     });

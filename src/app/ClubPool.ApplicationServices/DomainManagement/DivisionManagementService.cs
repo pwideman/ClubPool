@@ -25,6 +25,15 @@ namespace ClubPool.ApplicationServices.DomainManagement
       this.meetRepository = meetRepository;
     }
 
+    public void ClearSchedule(Division division) {
+      using (meetRepository.DbContext.BeginTransaction()) {
+        foreach (var meet in division.Schedule) {
+          meetRepository.Delete(meet);
+        }
+        meetRepository.DbContext.CommitTransaction();
+      }
+    }
+
     public void CreateSchedule(Division division) {
       var teams = new List<Team>();
       division.Teams.Each(t => teams.Add(t));
