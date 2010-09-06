@@ -12,33 +12,35 @@ table
   border-collapse: collapse;
 }
 
-thead {
-  th {
-    color: @dark_blue;
-    border-bottom: 2px solid @dark_blue;
-    padding: 0 12px 10px 12px;
-    margin-bottom: 10px;
-  }
-}
-
-tbody {
-  td {
-    padding: 8px 16px;
-    text-align: center;
-    border-bottom: 1px solid @light_blue;
-  }
-  tr:hover {
-    td {
-      background-color: @light_blue;
+table.domain-list {
+  thead {
+    th {
+      color: @dark_blue;
+      border-bottom: 2px solid @dark_blue;
+      padding: 0 12px 10px 12px;
+      margin-bottom: 10px;
     }
   }
-}
 
-tfoot 
-{
-  td 
+  tbody {
+    td {
+      padding: 8px 16px;
+      text-align: center;
+      border-bottom: 1px solid @light_blue;
+    }
+    tr:hover {
+      td {
+        background-color: @light_blue;
+      }
+    }
+  }
+
+  tfoot 
   {
-    padding: 12px;
+    td 
+    {
+      padding: 12px;
+    }
   }
 }
 

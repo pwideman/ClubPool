@@ -18,8 +18,8 @@
       <%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(u => u.Unapproved(), "Unapproved users") %>
     </div>
   </div>
-    <div>
-    <table>
+  <div>
+    <table class="domain-list">
       <thead>
         <tr>
           <th>Id</th>

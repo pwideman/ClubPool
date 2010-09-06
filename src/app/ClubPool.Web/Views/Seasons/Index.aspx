@@ -15,7 +15,7 @@
     </div>
   </div>
   <div>
-    <table style="width: 500px;">
+    <table class="domain-list" style="width: 500px;">
       <thead>
         <tr>
           <th>Id</th>

@@ -53,7 +53,7 @@
         </ul>
         <div id="division-<%= division.Id %>-teams">
           <% if (division.Teams.Any()) { %>
-            <table class="season-view-teams-table">
+            <table class="season-view-teams-table domain-list">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -100,12 +100,12 @@
         </div>
         <div id="division-<%= division.Id %>-schedule">
           <% if (division.HasSchedule) { %>
-          <table>
+          <table class="schedule-table">
             <thead>
               <tr>
-                <td>Week</td>
-                <td>Date</td>
-                <td colspan="<%= division.Schedule.NumberOfMeetsPerWeek %>">Matches</td>
+                <th>Week</th>
+                <th>Date</th>
+                <th colspan="<%= division.Schedule.NumberOfMeetsPerWeek %>">Matches</th>
               </tr>
             </thead>
             <% foreach (var week in division.Schedule.Weeks) { %>
