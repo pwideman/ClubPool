@@ -63,6 +63,7 @@
     <Compile Include="Authentication\Contracts\IAuthenticationService.cs" />
     <Compile Include="DomainManagement\Contracts\IDivisionManagementService.cs" />
     <Compile Include="DomainManagement\Contracts\ITeamManagementService.cs" />
+    <Compile Include="DomainManagement\CreateScheduleException.cs" />
     <Compile Include="DomainManagement\DivisionManagementService.cs" />
     <Compile Include="DomainManagement\TeamManagementService.cs" />
     <Compile Include="Membership\Contracts\IMembershipService.cs" />

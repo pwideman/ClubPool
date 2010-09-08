@@ -22,6 +22,7 @@ using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
 using ClubPool.ApplicationServices.DomainManagement.Contracts;
+using ClubPool.ApplicationServices.DomainManagement;
 
 namespace ClubPool.Web.Controllers.Divisions
 {
@@ -164,7 +165,12 @@ namespace ClubPool.Web.Controllers.Divisions
     [ValidateAntiForgeryToken]
     public ActionResult CreateSchedule(int id) {
       var division = divisionRepository.Get(id);
-      divisionManagementService.CreateSchedule(division);
+      try {
+        divisionManagementService.CreateSchedule(division);
+      }
+      catch (CreateScheduleException e) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = e.Message;
+      }
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
 
