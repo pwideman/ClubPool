@@ -15,9 +15,9 @@ using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
+using ClubPool.Framework;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
-using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
@@ -220,16 +220,7 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize(Roles=Roles.Administrators)]
     public ActionResult Edit(int id) {
       var user = userRepository.Get(id);
-      var viewModel = new EditViewModel() {
-        Id = user.Id,
-        FirstName = user.FirstName,
-        LastName = user.LastName,
-        Email = user.Email,
-        IsApproved = user.IsApproved,
-        IsLocked = user.IsLocked,
-        Username = user.Username,
-        Roles = user.Roles.Select(r => r.Id).ToArray()
-      };
+      var viewModel = new EditViewModel(user);
       viewModel.LoadAvailableRoles(roleRepository);
       return View(viewModel);
     }
@@ -239,43 +230,50 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize(Roles=Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
-        return View(viewModel);
-      }
-
-      var user = userRepository.Get(viewModel.Id);
-      if (!user.Username.Equals(viewModel.Username)) {
-        // verify that the new username is not in use
-        if (membershipService.UsernameIsInUse(viewModel.Username)) {
-          ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
-          viewModel.LoadAvailableRoles(roleRepository);
-          RollbackUserTransaction();
+      try {
+        if (!ValidateViewModel(viewModel)) {
           return View(viewModel);
         }
-        user.Username = viewModel.Username;
-      }
-      if (!user.Email.Equals(viewModel.Email)) {
-        // verify that the new email is not in use
-        if (membershipService.EmailIsInUse(viewModel.Email)) {
-          ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
-          viewModel.LoadAvailableRoles(roleRepository);
-          RollbackUserTransaction();
-          return View(viewModel);
-        }
-        user.Email = viewModel.Email;
-      }
-      user.FirstName = viewModel.FirstName;
-      user.LastName = viewModel.LastName;
-      user.IsApproved = viewModel.IsApproved;
-      user.IsLocked = viewModel.IsLocked;
-      user.RemoveAllRoles();
-      if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
-        foreach (int roleId in viewModel.Roles) {
-          user.AddRole(roleRepository.Get(roleId));
-        }
-      }
 
-      TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
+        var user = userRepository.Get(viewModel.Id);
+        if (viewModel.Version != user.Version) {
+          throw new StaleEntityStateException(user.GetType().Name, user.Id);
+        }
+        if (!user.Username.Equals(viewModel.Username)) {
+          // verify that the new username is not in use
+          if (membershipService.UsernameIsInUse(viewModel.Username)) {
+            ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
+            viewModel.LoadAvailableRoles(roleRepository);
+            RollbackUserTransaction();
+            return View(viewModel);
+          }
+          user.Username = viewModel.Username;
+        }
+        if (!user.Email.Equals(viewModel.Email)) {
+          // verify that the new email is not in use
+          if (membershipService.EmailIsInUse(viewModel.Email)) {
+            ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
+            viewModel.LoadAvailableRoles(roleRepository);
+            RollbackUserTransaction();
+            return View(viewModel);
+          }
+          user.Email = viewModel.Email;
+        }
+        user.FirstName = viewModel.FirstName;
+        user.LastName = viewModel.LastName;
+        user.IsApproved = viewModel.IsApproved;
+        user.IsLocked = viewModel.IsLocked;
+        user.RemoveAllRoles();
+        if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
+          foreach (int roleId in viewModel.Roles) {
+            user.AddRole(roleRepository.Get(roleId));
+          }
+        }
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
+      }
+      catch (StaleEntityStateException e) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The user was updated or deleted by another transaction";
+      }
       return this.RedirectToAction(c => c.Index(null));
     }
 

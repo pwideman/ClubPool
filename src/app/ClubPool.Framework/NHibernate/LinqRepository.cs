@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 
 using NHibernate.Linq;
-
+using NHibernate;
 using SharpArch.Data.NHibernate;
 
 namespace ClubPool.Framework.NHibernate
@@ -38,6 +38,15 @@ namespace ClubPool.Framework.NHibernate
 
     public void Refresh(T entity) {
       Session.Refresh(entity);
+    }
+
+    public override T SaveOrUpdate(T entity) {
+      try {
+        return base.SaveOrUpdate(entity);
+      }
+      catch (StaleObjectStateException e) {
+        throw new StaleEntityStateException(e.EntityName, e.Identifier, e);
+      }
     }
   }
 }
