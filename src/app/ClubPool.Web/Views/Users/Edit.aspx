@@ -16,6 +16,7 @@
       <fieldset>
         <%= Html.AntiForgeryToken()%>
         <%= Html.HiddenFor(m => m.Id) %>
+        <%= Html.HiddenFor(m => m.Version) %>
         <div class="form-row">
           <span class="form-label-left"><%= Html.LabelFor(m => m.Username)%></span>
           <div class="form-input">

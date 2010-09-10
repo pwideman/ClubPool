@@ -23,6 +23,7 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.Map(x => x.LastName);
       mapping.Map(x => x.Password);
       mapping.Map(x => x.PasswordSalt);
+      mapping.Version(x => x.Version);
     }
   }
 }

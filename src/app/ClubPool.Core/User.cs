@@ -57,6 +57,8 @@ namespace ClubPool.Core
 
     public virtual bool IsLocked { get; set; }
 
+    public virtual int Version { get; set; }
+
     protected IList<Role> roles;
 
     public virtual IEnumerable<Role> Roles { get { return roles; } }

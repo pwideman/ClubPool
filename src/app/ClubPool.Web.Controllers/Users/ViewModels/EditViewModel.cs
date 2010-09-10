@@ -18,6 +18,19 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
       InitMembers();
     }
 
+    public EditViewModel(User user)
+      : this() {
+      Id = user.Id;
+      FirstName = user.FirstName;
+      LastName = user.LastName;
+      Email = user.Email;
+      IsApproved = user.IsApproved;
+      IsLocked = user.IsLocked;
+      Username = user.Username;
+      Version = user.Version;
+      Roles = user.Roles.Select(r => r.Id).ToArray();
+    }
+
     protected void InitMembers() {
       Roles = new int[0];
       AvailableRoles = new List<RoleViewModel>();
@@ -35,6 +48,8 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
 
     [DisplayName("Locked")]
     public bool IsLocked { get; set; }
+
+    public int Version { get; set; }
 
     public int[] Roles { get; set; }
 
