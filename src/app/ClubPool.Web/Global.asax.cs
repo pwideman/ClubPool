@@ -12,6 +12,7 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
+using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Validator.Cfg.Loquacious;
 using NHibernate.Validator.Event;
@@ -156,6 +157,13 @@ namespace ClubPool.Web
           new string[] { Server.MapPath("~/bin/ClubPool.Data.dll") },
           new AutoPersistenceModelGenerator().Generate());
       NHibernateSession.ValidatorEngine = NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine();
+    }
+
+    protected void Application_Error() {
+      var exception = Server.GetLastError();
+      if (exception is StaleObjectStateException) {
+        this.Response.Redirect("~/home/staleobjectstateerror");
+      }
     }
 
   }

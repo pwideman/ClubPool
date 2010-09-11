@@ -67,7 +67,6 @@
   <ItemGroup>
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\IQueryableExtensions.cs" />
-    <Compile Include="StaleEntityStateException.cs" />
     <Compile Include="Validation\CompareAttribute.cs" />
     <Compile Include="Validation\IValidateMultipleProperties.cs" />
     <Compile Include="Validation\NHValidatorRulesProvider.cs" />

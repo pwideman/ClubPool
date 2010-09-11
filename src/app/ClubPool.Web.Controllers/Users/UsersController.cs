@@ -230,50 +230,53 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize(Roles=Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
-      try {
-        if (!ValidateViewModel(viewModel)) {
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
+      }
+
+      var user = userRepository.Get(viewModel.Id);
+      if (null == user) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The user you were editing was deleted by another user";
+        return this.RedirectToAction(c => c.Index(null));
+      }
+
+      if (viewModel.Version != user.Version) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = 
+          "This user was updated by another user while you were viewing this page. Enter your changes again.";
+        return this.RedirectToAction(c => c.Edit(viewModel.Id));
+      }
+
+      if (!user.Username.Equals(viewModel.Username)) {
+        // verify that the new username is not in use
+        if (membershipService.UsernameIsInUse(viewModel.Username)) {
+          ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
+          viewModel.LoadAvailableRoles(roleRepository);
+          RollbackUserTransaction();
           return View(viewModel);
         }
-
-        var user = userRepository.Get(viewModel.Id);
-        if (viewModel.Version != user.Version) {
-          throw new StaleEntityStateException(user.GetType().Name, user.Id);
-        }
-        if (!user.Username.Equals(viewModel.Username)) {
-          // verify that the new username is not in use
-          if (membershipService.UsernameIsInUse(viewModel.Username)) {
-            ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
-            viewModel.LoadAvailableRoles(roleRepository);
-            RollbackUserTransaction();
-            return View(viewModel);
-          }
-          user.Username = viewModel.Username;
-        }
-        if (!user.Email.Equals(viewModel.Email)) {
-          // verify that the new email is not in use
-          if (membershipService.EmailIsInUse(viewModel.Email)) {
-            ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
-            viewModel.LoadAvailableRoles(roleRepository);
-            RollbackUserTransaction();
-            return View(viewModel);
-          }
-          user.Email = viewModel.Email;
-        }
-        user.FirstName = viewModel.FirstName;
-        user.LastName = viewModel.LastName;
-        user.IsApproved = viewModel.IsApproved;
-        user.IsLocked = viewModel.IsLocked;
-        user.RemoveAllRoles();
-        if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
-          foreach (int roleId in viewModel.Roles) {
-            user.AddRole(roleRepository.Get(roleId));
-          }
-        }
-        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
+        user.Username = viewModel.Username;
       }
-      catch (StaleEntityStateException e) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "The user was updated or deleted by another transaction";
+      if (!user.Email.Equals(viewModel.Email)) {
+        // verify that the new email is not in use
+        if (membershipService.EmailIsInUse(viewModel.Email)) {
+          ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
+          viewModel.LoadAvailableRoles(roleRepository);
+          RollbackUserTransaction();
+          return View(viewModel);
+        }
+        user.Email = viewModel.Email;
       }
+      user.FirstName = viewModel.FirstName;
+      user.LastName = viewModel.LastName;
+      user.IsApproved = viewModel.IsApproved;
+      user.IsLocked = viewModel.IsLocked;
+      user.RemoveAllRoles();
+      if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
+        foreach (int roleId in viewModel.Roles) {
+          user.AddRole(roleRepository.Get(roleId));
+        }
+      }
+      TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
       return this.RedirectToAction(c => c.Index(null));
     }
 
