@@ -92,7 +92,14 @@ namespace ClubPool.Web.Controllers.Seasons
       var season = seasonRepository.Get(viewModel.Id);
 
       if (null == season) {
-        return HttpNotFound();
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The season you were editing was deleted by another user";
+        return this.RedirectToAction(c => c.Index(null));
+      }
+
+      if (viewModel.Version != season.Version) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] =
+          "This season was updated by another user while you were viewing this page. Enter your changes again.";
+        return this.RedirectToAction(c => c.Edit(viewModel.Id));
       }
 
       if (!season.Name.Equals(viewModel.Name)) {

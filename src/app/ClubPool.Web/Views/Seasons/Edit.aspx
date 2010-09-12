@@ -13,6 +13,7 @@
     <fieldset>
       <%= Html.AntiForgeryToken()%>
       <% Html.RenderPartial("SeasonEditControl"); %>
+      <%= Html.HiddenFor(m => m.Version) %>
       <div class="spacer">&nbsp;</div>
       <div class="form-row-span">
         <input class="submit-button" type="submit" value="Save" />

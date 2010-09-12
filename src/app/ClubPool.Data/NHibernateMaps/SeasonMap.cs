@@ -12,6 +12,7 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.Id(x => x.Id);
       mapping.Map(x => x.IsActive);
       mapping.Map(x => x.Name);
+      mapping.Version(x => x.Version);
       mapping.HasMany<Division>(x => x.Divisions)
         .AsBag()
         .Access.ReadOnlyPropertyThroughCamelCaseField();

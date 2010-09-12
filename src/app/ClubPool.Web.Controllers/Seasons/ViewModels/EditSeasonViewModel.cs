@@ -18,9 +18,13 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
     public EditSeasonViewModel(Season season) {
       Id = season.Id;
       Name = season.Name;
+      Version = season.Version;
     }
 
     [Min(1)]
     public int Id { get; set; }
+
+    [Min(1)]
+    public int Version { get; set; }
   }
 }
