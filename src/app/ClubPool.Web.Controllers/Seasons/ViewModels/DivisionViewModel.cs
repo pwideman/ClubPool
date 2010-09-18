@@ -23,6 +23,12 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
         HasSchedule = true;
       }
       Teams = division.Teams.Select(t => new TeamViewModel(t)).ToList();
+      if (Teams.Count() > 1) {
+        HasEnoughTeamsForSchedule = true;
+      }
+      else {
+        HasEnoughTeamsForSchedule = false;
+      }
     }
 
     public int Id { get; set; }
@@ -30,6 +36,7 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
     public string Name { get; set; }
     public bool CanDelete { get; set; }
     public bool HasSchedule { get; set; }
+    public bool HasEnoughTeamsForSchedule { get; set; }
     public IEnumerable<TeamViewModel> Teams { get; set; }
     public ScheduleViewModel Schedule { get; set; }
   }
