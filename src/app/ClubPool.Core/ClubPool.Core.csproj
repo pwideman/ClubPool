@@ -82,6 +82,7 @@
     <Compile Include="Season.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="IEntityWithVersion.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">

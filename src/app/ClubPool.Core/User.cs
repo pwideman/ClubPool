@@ -6,7 +6,7 @@ using SharpArch.Core;
 
 namespace ClubPool.Core
 {
-  public class User : Entity
+  public class User : Entity, IEntityWithVersion
   {
     protected User() {
       InitMembers();

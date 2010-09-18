@@ -39,6 +39,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
     </Reference>
+    <Reference Include="SharpArch, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\SharpArch.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -55,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ApplicationServices\Authentication\AuthHelper.cs" />
     <Compile Include="ApplicationServices\Membership\PasswordHelper.cs" />
+    <Compile Include="EntityVersionSetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +69,10 @@
     <ProjectReference Include="..\..\app\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
       <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
       <Name>ClubPool.ApplicationServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\app\ClubPool.Core\ClubPool.Core.csproj">
+      <Project>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</Project>
+      <Name>ClubPool.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

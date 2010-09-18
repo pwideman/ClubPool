@@ -23,6 +23,7 @@ using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
 using ClubPool.Testing.ApplicationServices.Authentication;
+using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 {
@@ -692,6 +693,45 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_with_an_out_of_date_version : specification_for_users_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static int userId = 1;
+    static EditViewModel viewModel;
+    static int version = 2;
+    static string username = "test";
+    
+    Establish context = () => {
+      viewModel = new EditViewModel() {
+        FirstName = "user",
+        LastName = "test",
+        Username = "testuser",
+        Email = "user@user.com",
+        IsLocked = false,
+        IsApproved = true,
+        Id = userId,
+        Version = 1
+      };
+      
+      var user = new User(username, "pass", "temp", "temp", "temp@temp.com") {
+        IsLocked = !viewModel.IsLocked,
+        IsApproved = !viewModel.IsApproved
+      };
+      user.SetIdTo(userId);
+      user.SetVersionTo(version);
+      userRepository.Stub(r => r.Get(userId)).Return(user);
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_edit_view = () =>
+      resultHelper.ShouldRedirectTo("users", "edit");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
   }
 
   [Subject(typeof(UsersController))]
