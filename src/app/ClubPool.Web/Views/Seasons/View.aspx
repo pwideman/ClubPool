@@ -49,7 +49,9 @@
       <div id="division-<%= division.Id %>-tabs" class="division-details-tabs">
         <ul>
           <li><a href="#division-<%= division.Id %>-teams">Teams</a></li>
+          <% if (division.Teams.Any()) { %>
           <li><a href="#division-<%= division.Id %>-schedule">Schedule</a></li>
+          <% } %>
         </ul>
         <div id="division-<%= division.Id %>-teams">
           <% if (division.Teams.Any()) { %>
@@ -98,45 +100,47 @@
           This division has no teams
           <% } %>
         </div>
-        <div id="division-<%= division.Id %>-schedule">
-          <% if (division.HasSchedule) { %>
-          <div class="action-button-row">
-            <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.RecreateSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
-              <%= Html.AntiForgeryToken() %>
-              <div class="action-button">
-                <%= Html.ContentImage("refresh-medium.png", "Recreate Schedule") %>
-                <a href="#" class="submit-form-link">Recreate the schedule</a>
-              </div>
-            <% } %>
-          </div>
-          <table class="schedule-table">
-            <thead>
-              <tr>
-                <th>Week</th>
-                <th>Date</th>
-                <th colspan="<%= division.Schedule.NumberOfMeetsPerWeek %>">Matches</th>
-              </tr>
-            </thead>
-            <% foreach (var week in division.Schedule.Weeks) { %>
-            <tbody>
-              <tr>
-                <td><%= week.Week %></td>
-                <td><%= week.Date.ToShortDateString() %></td>
-              <% foreach (var meet in week.Meets) { %>
-                <td><%= string.Join(" vs ", meet.TeamNames) %></td>
+        <% if (division.Teams.Any()) { %>
+          <div id="division-<%= division.Id %>-schedule">
+            <% if (division.HasSchedule) { %>
+            <div class="action-button-row">
+              <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.RecreateSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
+                <%= Html.AntiForgeryToken()%>
+                <div class="action-button">
+                  <%= Html.ContentImage("refresh-medium.png", "Recreate Schedule")%>
+                  <a href="#" class="submit-form-link">Recreate the schedule</a>
+                </div>
               <% } %>
-              </tr>
-            <% } %>
-            </tbody>
-          </table>
-          <% } else { %>
-          <p>The schedule for this division has not been created.</p>
-          <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id), FormMethod.Post, new { @class = "normal" })) { %>
-            <%= Html.AntiForgeryToken() %>
-            <input class="submit-button" type="submit" value="Create Schedule" />
-          <% } 
-          } %>
-        </div>
+            </div>
+            <table class="schedule-table">
+              <thead>
+                <tr>
+                  <th>Week</th>
+                  <th>Date</th>
+                  <th colspan="<%= division.Schedule.NumberOfMeetsPerWeek %>">Matches</th>
+                </tr>
+              </thead>
+              <% foreach (var week in division.Schedule.Weeks) { %>
+              <tbody>
+                <tr>
+                  <td><%= week.Week%></td>
+                  <td><%= week.Date.ToShortDateString()%></td>
+                <% foreach (var meet in week.Meets) { %>
+                  <td><%= string.Join(" vs ", meet.TeamNames)%></td>
+                <% } %>
+                </tr>
+              <% } %>
+              </tbody>
+            </table>
+            <% } else { %>
+            <p>The schedule for this division has not been created.</p>
+            <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id), FormMethod.Post, new { @class = "normal" })) { %>
+              <%= Html.AntiForgeryToken()%>
+              <input class="submit-button" type="submit" value="Create Schedule" />
+            <% }
+               } %>
+          </div>
+        <% } %>
       </div>
 
     </div>
