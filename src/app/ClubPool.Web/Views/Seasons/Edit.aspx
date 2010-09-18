@@ -6,7 +6,7 @@
   </div>
   <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
         Html.RenderPartial("ErrorMessage");
-      } %>
+     } %>
   <div class="form-content edit-season-properties-form">
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
     <fieldset>

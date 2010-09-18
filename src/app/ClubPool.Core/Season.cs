@@ -31,7 +31,7 @@ namespace ClubPool.Core
 
     public virtual bool IsActive { get; set; }
 
-    public virtual int Version { get; set; }
+    public virtual int Version { get; protected set; }
 
     protected IList<Division> divisions;
 
