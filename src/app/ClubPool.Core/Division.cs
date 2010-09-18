@@ -8,7 +8,7 @@ using SharpArch.Core;
 
 namespace ClubPool.Core
 {
-  public class Division : Entity
+  public class Division : Entity, IEntityWithVersion
   {
     protected Division() {
       InitMembers();

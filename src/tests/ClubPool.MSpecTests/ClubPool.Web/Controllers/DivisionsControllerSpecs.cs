@@ -19,6 +19,7 @@ using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
 using ClubPool.ApplicationServices.DomainManagement.Contracts;
+using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
 {
@@ -318,20 +319,24 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
   {
     static RedirectToRouteResultHelper resultHelper;
     static int id = 1;
+    static int version = 1;
     static EditDivisionViewModel viewModel;
     static Division division;
 
     Establish context = () => {
-      viewModel = new EditDivisionViewModel();
-      viewModel.Id = id;
-      viewModel.Name = "NewName";
-      viewModel.StartingDate = "11/30/2010";
 
       var season = new Season("temp");
       season.SetIdTo(1);
+      season.SetVersionTo(version);
+
       division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
+      division.SetVersionTo(version);
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
+
+      viewModel = new EditDivisionViewModel(division);
+      viewModel.Name = "NewName";
+      viewModel.StartingDate = "11/30/2010";
     };
 
     Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
@@ -354,11 +359,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
   {
     static ViewResultHelper<EditDivisionViewModel> resultHelper;
     static int id = 1;
+    static int version = 1;
     static EditDivisionViewModel viewModel;
 
     Establish context = () => {
       viewModel = new EditDivisionViewModel();
       viewModel.Id = id;
+      viewModel.Version = version;
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditDivisionViewModel>(controller.Edit(viewModel));
@@ -381,11 +388,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
   {
     static ViewResultHelper<EditDivisionViewModel> resultHelper;
     static int id = 1;
+    static int version = 1;
     static EditDivisionViewModel viewModel;
 
     Establish context = () => {
       viewModel = new EditDivisionViewModel();
       viewModel.Id = id;
+      viewModel.Version = version;
       viewModel.Name = "name";
       viewModel.StartingDate = "some bad date";
     };
@@ -410,22 +419,25 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
   {
     static ViewResultHelper<EditDivisionViewModel> resultHelper;
     static int id = 1;
+    static int version = 1;
     static EditDivisionViewModel viewModel;
     static Division division;
     static string name = "MyDivision";
 
     Establish context = () => {
-      viewModel = new EditDivisionViewModel();
-      viewModel.Id = id;
-      viewModel.Name = name;
-      viewModel.StartingDate = "11/30/2010";
-
       var season = new Season("temp");
       season.SetIdTo(1);
+      season.SetVersionTo(version);
+
       division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
+      division.SetVersionTo(version);
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
       divisionManagementService.Stub(s => s.DivisionNameIsInUse(division.Season, name)).Return(true);
+
+      viewModel = new EditDivisionViewModel(division);
+      viewModel.Name = name;
+      viewModel.StartingDate = "11/30/2010";
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditDivisionViewModel>(controller.Edit(viewModel));

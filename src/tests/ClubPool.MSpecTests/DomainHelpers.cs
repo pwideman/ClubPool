@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using ClubPool.Core;
 using SharpArch.Testing;
+
+using ClubPool.Core;
+using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests
 {
@@ -16,6 +18,7 @@ namespace ClubPool.MSpecTests
         var id = startingId + i;
         var user = new User("user" + id.ToString(), "pass", "first" + id.ToString(), "last" + id.ToString(), "user" + id.ToString() + "@email.com");
         user.SetIdTo(id);
+        user.SetVersionTo(1);
         users.Add(user);
       }
       return users;

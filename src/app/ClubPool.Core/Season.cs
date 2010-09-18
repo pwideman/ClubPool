@@ -9,7 +9,7 @@ using SharpArch.Core.DomainModel;
 
 namespace ClubPool.Core
 {
-  public class Season : Entity
+  public class Season : Entity, IEntityWithVersion
   {
     protected Season() {
       InitMembers();

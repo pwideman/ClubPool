@@ -735,14 +735,43 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_with_an_invalid_id : specification_for_users_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static int userId = 1;
+    static EditViewModel viewModel;
+
+    Establish context = () => {
+      viewModel = new EditViewModel() {
+        FirstName = "user",
+        LastName = "test",
+        Username = "testuser",
+        Email = "user@user.com",
+        IsLocked = false,
+        IsApproved = true,
+        Id = userId,
+        Version = 1
+      };
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_index_view = () =>
+      resultHelper.ShouldRedirectTo("users", "index");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+  }
+
+  [Subject(typeof(UsersController))]
   public class when_the_edit_form_is_posted_with_a_model_state_error : specification_for_users_controller
   {
     static ViewResultHelper<EditViewModel> resultHelper;
     static EditViewModel viewModel;
-    static int userId;
+    static int userId = 1;
+    static int version = 1;
 
     Establish context = () => {
-      userId = 1;
       viewModel = new EditViewModel() {
         FirstName = "user",
         LastName = "test",
@@ -751,7 +780,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
         IsLocked = false,
         IsApproved = true,
         Id = userId,
-        Roles = new int[] { 0, 1 }
+        Roles = new int[] { 0, 1 },
+        Version = version
       };
     };
 

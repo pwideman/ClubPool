@@ -18,6 +18,7 @@ using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
+using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
 {
@@ -327,6 +328,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   {
     static RedirectToRouteResultHelper resultHelper;
     static int id = 1;
+    static int version = 1;
     static string name = "name";
     static Season season;
     static EditSeasonViewModel viewModel;
@@ -334,6 +336,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     Establish context = () => {
       season = new Season("temp");
       season.SetIdTo(id);
+      season.SetVersionTo(version);
 
       viewModel = new EditSeasonViewModel(season);
       viewModel.Name = name;
@@ -383,12 +386,14 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static ViewResultHelper<EditSeasonViewModel> resultHelper;
     static EditSeasonViewModel viewModel;
     static int id = 1;
+    static int version = 1;
 
     Establish context = () => {
       var seasons = new List<Season>();
       for (int i = 1; i < 4; i++) {
         var season = new Season("season" + i.ToString());
         season.SetIdTo(i);
+        season.SetVersionTo(version);
         seasons.Add(season);
       }
       viewModel = new EditSeasonViewModel(seasons[0]);

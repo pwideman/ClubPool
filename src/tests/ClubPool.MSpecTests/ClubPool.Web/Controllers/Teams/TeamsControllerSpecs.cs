@@ -19,6 +19,7 @@ using ClubPool.Web.Controllers.Teams;
 using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
+using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 {
@@ -352,6 +353,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static string name = "MyTeam";
     static int id = 1;
     static Team team;
+    static int version = 1;
     static List<User> users;
 
     Establish context = () => {
@@ -363,6 +365,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
       team = new Team("temp", division);
       team.SetIdTo(id);
+      team.SetVersionTo(version);
       teamRepository.Stub(r => r.Get(id)).Return(team);
 
       users = DomainHelpers.GetUsers(5);
@@ -371,6 +374,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
       viewModel = new EditTeamViewModel(userRepository, team);
       viewModel.Name = name;
+      viewModel.Version = version;
       viewModel.Players = new List<PlayerViewModel>() { 
         new PlayerViewModel() { Id = users[0].Id },
         new PlayerViewModel() { Id = users[1].Id }
@@ -399,6 +403,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static ViewResultHelper<EditTeamViewModel> resultHelper;
     static EditTeamViewModel viewModel;
     static int id = 1;
+    static int version = 1;
     static Team team;
     static List<User> users;
 
@@ -406,11 +411,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
       var season = new Season("temp");
       season.SetIdTo(id);
+      season.SetVersionTo(version);
+
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
+      division.SetVersionTo(version);
 
       team = new Team("temp", division);
       team.SetIdTo(id);
+      team.SetVersionTo(version);
+
       var players = DomainHelpers.GetUsers(10, 2);
       players.Each(p => team.AddPlayer(p));
       teamRepository.Stub(r => r.Get(id)).Return(team);
@@ -458,6 +468,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static ViewResultHelper<EditTeamViewModel> resultHelper;
     static EditTeamViewModel viewModel;
     static int id = 1;
+    static int version = 1;
     static string name = "MyTeam";
     static Team team;
     static List<User> users;
@@ -471,6 +482,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
       team = new Team("temp", division);
       team.SetIdTo(id);
+      team.SetVersionTo(version);
       var players = DomainHelpers.GetUsers(10, 2);
       players.Each(p => team.AddPlayer(p));
       teamRepository.Stub(r => r.Get(id)).Return(team);
@@ -481,6 +493,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
       viewModel = new EditTeamViewModel(userRepository, team);
       viewModel.Name = name;
+      viewModel.Version = version;
       viewModel.Players = new List<PlayerViewModel>() { 
         new PlayerViewModel() { Id = users[0].Id },
         new PlayerViewModel() { Id = users[1].Id }
