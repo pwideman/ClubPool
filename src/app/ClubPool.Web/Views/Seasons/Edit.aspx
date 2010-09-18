@@ -4,12 +4,11 @@
   <div class="heading">
     <span>Edit Season</span>
   </div>
+  <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+        Html.RenderPartial("ErrorMessage");
+      } %>
   <div class="form-content edit-season-properties-form">
-    <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-          Html.RenderPartial("ErrorMessage");
-        } 
-        using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) {
-    %>
+    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>
       <% Html.RenderPartial("SeasonEditControl"); %>

@@ -10,16 +10,13 @@ namespace ClubPool.Web.Controllers
 {
   public abstract class PagedListViewModelBase<T> : PagedListViewModelBase
   {
-    protected int page;
-    protected int pageSize;
-
     public PagedListViewModelBase(IQueryable<T> source, int page, int pageSize) {
       Total = source.Count();
-      var index = Math.Max(page-1, 0);
+      TotalPages = (int)Math.Ceiling((double)Total / (double)pageSize);
+      CurrentPage = Math.Min(page, TotalPages);
+      var index = Math.Max(CurrentPage - 1, 0);
       Items = source.Page(index, pageSize).ToList();
       First = index * pageSize + 1;
-      TotalPages = (int)Math.Ceiling((double)Total / (double)pageSize);
-      CurrentPage = page;
       Last = First + Items.Count() - 1;
     }
 

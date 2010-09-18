@@ -5,13 +5,13 @@
     <%= Html.ContentImage("edituser-large.png", "Edit User") %>
     <span>Edit User</span>
   </div>
+  <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+        Html.RenderPartial("ErrorMessage");
+      } %>
   <div class="form-content edit-user-form">
     <div class="form-header">
       All fields are required
     </div>
-    <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-          Html.RenderPartial("ErrorMessage");
-        } %>
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
       <fieldset>
         <%= Html.AntiForgeryToken()%>
