@@ -122,11 +122,7 @@ namespace ClubPool.Web.Controllers.Divisions
       if (null == division) {
         return HttpNotFound();
       }
-      var viewModel = new EditDivisionViewModel();
-      viewModel.Id = id;
-      viewModel.Name = division.Name;
-      viewModel.SeasonName = division.Season.Name;
-      viewModel.StartingDate = division.StartingDate.ToShortDateString();
+      var viewModel = new EditDivisionViewModel(division);
       return View(viewModel);
     }
 
@@ -145,6 +141,18 @@ namespace ClubPool.Web.Controllers.Divisions
       }
 
       var division = divisionRepository.Get(viewModel.Id);
+
+      if (null == division) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The division you were editing was deleted by another user";
+        return this.RedirectToAction<Seasons.SeasonsController>(c => c.Index(null));
+      }
+
+      if (viewModel.Version != division.Version) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] =
+          "This division was updated by another user while you were viewing this page. Enter your changes again.";
+        return this.RedirectToAction(c => c.Edit(viewModel.Id));
+      }
+      
       if (!division.Name.Equals(viewModel.Name)) {
         // verify that the new name is not already in use
         if (divisionManagementService.DivisionNameIsInUse(division.Season, viewModel.Name)) {

@@ -4,18 +4,18 @@
   <div class="heading">
     <span>Edit division <%= Model.Name %> - <%= Model.SeasonName %></span>
   </div>
+  <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+        Html.RenderPartial("ErrorMessage");
+      } %>
   <div class="form-content">
     <div class="form-header">
       All fields are required
     </div>
-    <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-          Html.RenderPartial("ErrorMessage");
-        }
-       using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) {
-    %>
+    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>
       <%= Html.HiddenFor(m => m.Id) %>
+      <%= Html.HiddenFor(m => m.Version) %>
       <% Html.RenderPartial("DivisionEditControl"); %>
       <div class="spacer">&nbsp;</div>
       <div class="form-row-span">

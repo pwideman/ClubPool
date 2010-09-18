@@ -12,6 +12,7 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.Id(x => x.Id);
       mapping.Map(x => x.StartingDate);
       mapping.Map(x => x.Name);
+      mapping.Version(x => x.Version);
       mapping.References(x => x.Season);
       mapping.HasMany<Team>(x => x.Teams)
         .AsBag()

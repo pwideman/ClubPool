@@ -21,5 +21,14 @@ namespace ClubPool.Web.Controllers.Divisions.ViewModels
     [DisplayName("Starting date:")]
     [NotNullNotEmpty(Message = "Required")]
     public string StartingDate { get; set; }
+
+    public DivisionViewModel() {
+    }
+
+    public DivisionViewModel(Division division) {
+      SeasonName = division.Season.Name;
+      Name = division.Name;
+      StartingDate = division.StartingDate.ToShortDateString();
+    }
   }
 }
