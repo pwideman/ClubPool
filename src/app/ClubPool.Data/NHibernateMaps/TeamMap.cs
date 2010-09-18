@@ -11,6 +11,7 @@ namespace ClubPool.Data.NHibernateMaps
     public void Override(AutoMapping<Team> mapping) {
       mapping.Id(x => x.Id);
       mapping.Map(x => x.Name);
+      mapping.Version(x => x.Version);
       mapping.References(x => x.Division);
       mapping.HasManyToMany<User>(x => x.Players)
         .Access.ReadOnlyPropertyThroughCamelCaseField()

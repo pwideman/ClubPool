@@ -130,6 +130,17 @@ namespace ClubPool.Web.Controllers.Teams
     public ActionResult Edit(EditTeamViewModel viewModel) {
       var team = teamRepository.Get(viewModel.Id);
 
+      if (null == team) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The team you were editing was deleted by another user";
+        return this.RedirectToAction<Seasons.SeasonsController>(c => c.Index(null));
+      }
+
+      if (viewModel.Version != team.Version) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] =
+          "This team was updated by another user while you were viewing this page. Enter your changes again.";
+        return this.RedirectToAction(c => c.Edit(viewModel.Id));
+      }
+      
       if (!ValidateViewModel(viewModel)) {
         viewModel.ReInitialize(userRepository, team);
         return View(viewModel);
