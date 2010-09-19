@@ -396,6 +396,80 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     It should_redirect_to_the_view_season_view = () =>
       resultHelper.ShouldRedirectTo("seasons", "view");
   }
+  
+  [Subject(typeof(TeamsController))]
+  public class when_asked_to_edit_a_team_with_an_invalid_id : specification_for_Teams_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static EditTeamViewModel viewModel;
+    static int id = 1;
+    static int version = 1;
+    static List<User> users;
+
+    Establish context = () => {
+
+      var season = new Season("temp");
+      season.SetIdTo(id);
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
+
+      var team = new Team("temp", division);
+      team.SetIdTo(id);
+      team.SetVersionTo(version);
+
+      users = DomainHelpers.GetUsers(5);
+      userRepository.Stub(r => r.GetUnassignedUsersForSeason(null)).IgnoreArguments().Return(users);
+      users.Each(u => userRepository.Stub(r => r.Get(u.Id)).Return(u));
+
+      viewModel = new EditTeamViewModel(userRepository, team);
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_seasons_index_view = () =>
+      resultHelper.ShouldRedirectTo("seasons", "index");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+  }
+
+  [Subject(typeof(TeamsController))]
+  public class when_asked_to_edit_a_team_with_a_stale_version : specification_for_Teams_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static EditTeamViewModel viewModel;
+    static int id = 1;
+    static int version = 2;
+    static List<User> users;
+
+    Establish context = () => {
+
+      var season = new Season("temp");
+      season.SetIdTo(id);
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
+
+      var team = new Team("temp", division);
+      team.SetIdTo(id);
+      team.SetVersionTo(version);
+      teamRepository.Stub(r => r.Get(id)).Return(team);
+
+      users = DomainHelpers.GetUsers(5);
+      userRepository.Stub(r => r.GetUnassignedUsersForSeason(null)).IgnoreArguments().Return(users);
+      users.Each(u => userRepository.Stub(r => r.Get(u.Id)).Return(u));
+
+      viewModel = new EditTeamViewModel(userRepository, team);
+      viewModel.Version = 1;
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_edit_view = () =>
+      resultHelper.ShouldRedirectTo("teams", "edit");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+  }
 
   [Subject(typeof(TeamsController))]
   public class when_asked_to_edit_a_team_with_a_model_error : specification_for_Teams_controller

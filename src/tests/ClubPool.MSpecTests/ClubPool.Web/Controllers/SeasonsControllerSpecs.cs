@@ -381,6 +381,61 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
   }
 
   [Subject(typeof(SeasonsController))]
+  public class when_asked_to_edit_a_season_with_an_invalid_id : specification_for_Seasons_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static EditSeasonViewModel viewModel;
+    static int id = 1;
+    static int version = 1;
+
+    Establish context = () => {
+      viewModel = new EditSeasonViewModel();
+      viewModel.Id = id;
+      viewModel.Version = version;
+      viewModel.Name = "NewName";
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_index_view = () =>
+      resultHelper.ShouldRedirectTo("seasons", "index");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+  }
+
+  [Subject(typeof(SeasonsController))]
+  public class when_asked_to_edit_a_season_with_a_stale_version : specification_for_Seasons_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static EditSeasonViewModel viewModel;
+    static int id = 1;
+    static int version = 2;
+    static string name = "name";
+    static Season season;
+
+    Establish context = () => {
+      season = new Season("temp");
+      season.SetIdTo(id);
+      season.SetVersionTo(version);
+
+      viewModel = new EditSeasonViewModel(season);
+      viewModel.Version = 1;
+      viewModel.Name = name;
+
+      seasonsRepository.Stub(r => r.Get(id)).Return(season);
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_edit_view = () =>
+      resultHelper.ShouldRedirectTo("seasons", "edit");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+  }
+
+  [Subject(typeof(SeasonsController))]
   public class when_asked_to_edit_a_season_with_a_duplicate_name : specification_for_Seasons_controller
   {
     static ViewResultHelper<EditSeasonViewModel> resultHelper;

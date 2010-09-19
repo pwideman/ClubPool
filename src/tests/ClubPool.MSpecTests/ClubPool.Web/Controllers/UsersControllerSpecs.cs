@@ -696,7 +696,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
-  public class when_the_edit_form_is_posted_with_an_out_of_date_version : specification_for_users_controller
+  public class when_the_edit_form_is_posted_with_a_stale_version : specification_for_users_controller
   {
     static RedirectToRouteResultHelper resultHelper;
     static int userId = 1;

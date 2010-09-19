@@ -326,7 +326,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
     Establish context = () => {
 
       var season = new Season("temp");
-      season.SetIdTo(1);
+      season.SetIdTo(id);
       season.SetVersionTo(version);
 
       division = new Division("temp", DateTime.Now, season);
@@ -352,6 +352,68 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
 
     It should_redirect_to_the_view_season_view = () =>
       resultHelper.ShouldRedirectTo("seasons", "view");
+  }
+
+  [Subject(typeof(DivisionsController))]
+  public class when_asked_to_edit_a_division_with_an_invalid_id : specification_for_Divisions_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static int id = 1;
+    static int version = 1;
+    static EditDivisionViewModel viewModel;
+    static Division division;
+
+    Establish context = () => {
+      var season = new Season("temp");
+      season.SetIdTo(id);
+      season.SetVersionTo(version);
+
+      division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
+      division.SetVersionTo(version);
+
+      viewModel = new EditDivisionViewModel(division);
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_index_view = () =>
+      resultHelper.ShouldRedirectTo("seasons", "index");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+  }
+
+  [Subject(typeof(DivisionsController))]
+  public class when_asked_to_edit_a_division_with_a_stale_version : specification_for_Divisions_controller
+  {
+    static RedirectToRouteResultHelper resultHelper;
+    static int id = 1;
+    static int version = 2;
+    static EditDivisionViewModel viewModel;
+    static Division division;
+
+    Establish context = () => {
+      var season = new Season("temp");
+      season.SetIdTo(id);
+      season.SetVersionTo(version);
+
+      division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(id);
+      division.SetVersionTo(version);
+      divisionsRepository.Stub(r => r.Get(id)).Return(division);
+
+      viewModel = new EditDivisionViewModel(division);
+      viewModel.Version = 1;
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_edit_view = () =>
+      resultHelper.ShouldRedirectTo("divisions", "edit");
+
+    It should_indicate_an_error = () =>
+      controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
   }
 
   [Subject(typeof(DivisionsController))]
