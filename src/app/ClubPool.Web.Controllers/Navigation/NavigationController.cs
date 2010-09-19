@@ -39,7 +39,11 @@ namespace ClubPool.Web.Controllers.Navigation
         viewModel.UserIsLoggedIn = false;
       }
       if (seasonRepository.FindAll(s => s.IsActive).Any()) {
+        viewModel.HasActiveSeason = true;
         viewModel.ActiveSeasonId = seasonRepository.FindOne(s => s.IsActive).Id;
+      }
+      else {
+        viewModel.HasActiveSeason = false;
       }
       return PartialView(viewModel);
     }

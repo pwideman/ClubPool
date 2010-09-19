@@ -11,6 +11,10 @@
       <li><a href="/league/rules">Rules</a></li>
     </ul>
   </li>
+  <% if (Model.HasActiveSeason) { %>
+  <li><a href="#">Current Season</a>
+  </li>
+  <% } %>
   <% if (Model.UserIsLoggedIn) { %>
   <li><a href="#">My</a>
     <ul>
@@ -25,7 +29,7 @@
     if (Model.DisplayAdminMenu) { %>
   <li><a href="#">Admin</a>
     <ul>
-      <% if (Model.ActiveSeasonId > 0) { %>
+      <% if (Model.HasActiveSeason) { %>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.View(Model.ActiveSeasonId), "Active Season")%></li>
       <% } %>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Index(null), "Users") %></li>
