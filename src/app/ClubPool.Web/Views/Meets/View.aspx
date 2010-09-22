@@ -5,7 +5,7 @@
     <span>Match Details</span>
   </div>
   <p>
-    <strong><%= Model.Teams[0] %></strong> vs. <strong><%= Model.Teams[1] %></strong>, 
+    <strong><%= Model.Team1.Name %></strong> vs. <strong><%= Model.Team2.Name %></strong>, 
     scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate.ToShortDateString() %>)
   </p>
 </asp:Content>
