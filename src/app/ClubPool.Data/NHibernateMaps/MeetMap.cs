@@ -13,10 +13,9 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.Map(x => x.IsComplete);
       mapping.Map(x => x.Week);
       mapping.References(x => x.Division);
-      mapping.HasManyToMany<Team>(x => x.Teams)
-        .Access.ReadOnlyPropertyThroughCamelCaseField()
-        .AsBag()
-        .Table("MeetsTeams");
+      mapping.References(x => x.Team1);
+      mapping.References(x => x.Team2);
+      mapping.IgnoreProperty(x => x.Teams);
     }
   }
 }

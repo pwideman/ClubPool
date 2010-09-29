@@ -15,9 +15,8 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public MeetViewModel(Meet meet) {
       ScheduledWeek = meet.Week + 1;
       ScheduledDate = meet.Division.StartingDate.AddDays(meet.Week * 7);
-      var teams = meet.Teams.Select(t => new TeamViewModel(t)).ToArray();
-      Team1 = teams[0];
-      Team2 = teams[1];
+      Team1 = new TeamViewModel(meet.Team1);
+      Team2 = new TeamViewModel(meet.Team2);
     }
 
     public int ScheduledWeek { get; set; }

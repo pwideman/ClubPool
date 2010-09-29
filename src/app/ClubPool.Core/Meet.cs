@@ -10,10 +10,7 @@ namespace ClubPool.Core
 {
   public class Meet : Entity
   {
-    protected IList<Team> teams;
-
     protected Meet() {
-      InitMembers();
     }
 
     public Meet(Team team1, Team team2, int week) {
@@ -22,15 +19,10 @@ namespace ClubPool.Core
       Check.Require(team1.Division == team2.Division, "teams must be in the same division");
       Check.Require(week >= 0, "week must be >= 0");
 
-      InitMembers();
-      teams.Add(team1);
-      teams.Add(team2);
+      Team1 = team1;
+      Team2 = team2;
       Division = team1.Division;
       Week = week;
-    }
-
-    protected virtual void InitMembers() {
-      teams = new List<Team>();
     }
 
     public virtual int Week { get; protected set; }
@@ -39,8 +31,10 @@ namespace ClubPool.Core
 
     public virtual bool IsComplete { get; set; }
 
-    public virtual IEnumerable<Team> Teams { get { return teams; } }
+    public virtual IEnumerable<Team> Teams { get { return new Team[2] { Team1, Team2 }; } }
 
+    public virtual Team Team1 { get; protected set; }
 
+    public virtual Team Team2 { get; protected set; }
   }
 }

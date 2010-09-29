@@ -10,7 +10,8 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
 {
   public class MeetViewModel
   {
-    public string[] TeamNames { get; set; }
+    public string Team1Name { get; set; }
+    public string Team2Name { get; set; }
     public bool IsComplete { get; set; }
     public int Week { get; set; }
     public int Id { get; set; }
@@ -22,7 +23,8 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
       Id = meet.Id;
       Week = meet.Week;
       IsComplete = meet.IsComplete;
-      TeamNames = meet.Teams.Select(team => team.Name).ToArray();
+      Team1Name = meet.Team1.Name;
+      Team2Name = meet.Team2.Name;
     }
   }
 }
