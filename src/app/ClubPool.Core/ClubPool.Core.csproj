@@ -72,6 +72,8 @@
     <Compile Include="Contracts\ITeamRepository.cs" />
     <Compile Include="Contracts\IUserRepository.cs" />
     <Compile Include="Division.cs" />
+    <Compile Include="Match.cs" />
+    <Compile Include="MatchResult.cs" />
     <Compile Include="Meet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\RoleQueries.cs" />

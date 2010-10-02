@@ -16,6 +16,9 @@ namespace ClubPool.Data.NHibernateMaps
       mapping.References(x => x.Team1);
       mapping.References(x => x.Team2);
       mapping.IgnoreProperty(x => x.Teams);
+      mapping.HasMany<Team>(x => x.Matches)
+        .AsBag()
+        .Access.ReadOnlyPropertyThroughCamelCaseField();
     }
   }
 }
