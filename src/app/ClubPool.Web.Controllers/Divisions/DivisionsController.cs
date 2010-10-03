@@ -31,17 +31,13 @@ namespace ClubPool.Web.Controllers.Divisions
   {
     protected ISeasonRepository seasonRepository;
     protected IDivisionRepository divisionRepository;
-    protected IDivisionManagementService divisionManagementService;
 
-    public DivisionsController(IDivisionRepository divisionRepository, ISeasonRepository seasonRepository,
-      IDivisionManagementService divisionManagementService) {
+    public DivisionsController(IDivisionRepository divisionRepository, ISeasonRepository seasonRepository) {
       Check.Require(null != seasonRepository, "seasonRepository cannot be null");
       Check.Require(null != divisionRepository, "divisionRepository cannot be null");
-      Check.Require(null != divisionManagementService, "divisionManagementService cannot be null");
 
       this.seasonRepository = seasonRepository;
       this.divisionRepository = divisionRepository;
-      this.divisionManagementService = divisionManagementService;
     }
 
     [HttpGet]
@@ -79,7 +75,7 @@ namespace ClubPool.Web.Controllers.Divisions
         return View(viewModel);
       }
 
-      if (divisionManagementService.DivisionNameIsInUse(season, viewModel.Name)) {
+      if (season.DivisionNameIsInUse(viewModel.Name)) {
         ModelState.AddModelErrorFor<CreateDivisionViewModel>(m => m.Name, "This name is already in use");
         return View(viewModel);
       }
@@ -155,7 +151,7 @@ namespace ClubPool.Web.Controllers.Divisions
       
       if (!division.Name.Equals(viewModel.Name)) {
         // verify that the new name is not already in use
-        if (divisionManagementService.DivisionNameIsInUse(division.Season, viewModel.Name)) {
+        if (division.Season.DivisionNameIsInUse(viewModel.Name)) {
           ModelState.AddModelErrorFor<EditDivisionViewModel>(m => m.Name, "Name is in use");
           return View(viewModel);
         }
@@ -174,7 +170,7 @@ namespace ClubPool.Web.Controllers.Divisions
     public ActionResult CreateSchedule(int id) {
       var division = divisionRepository.Get(id);
       try {
-        divisionManagementService.CreateSchedule(division);
+        division.CreateSchedule(divisionRepository);
       }
       catch (CreateScheduleException e) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = e.Message;
@@ -188,8 +184,8 @@ namespace ClubPool.Web.Controllers.Divisions
     [ValidateAntiForgeryToken]
     public ActionResult RecreateSchedule(int id) {
       var division = divisionRepository.Get(id);
-      divisionManagementService.ClearSchedule(division);
-      divisionManagementService.CreateSchedule(division);
+      division.ClearSchedule();
+      division.CreateSchedule(divisionRepository);
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
   }

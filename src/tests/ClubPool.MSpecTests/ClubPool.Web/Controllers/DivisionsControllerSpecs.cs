@@ -28,13 +28,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
     protected static DivisionsController controller;
     protected static ISeasonRepository seasonsRepository;
     protected static IDivisionRepository divisionsRepository;
-    protected static IDivisionManagementService divisionManagementService;
 
     Establish context = () => {
       seasonsRepository = MockRepository.GenerateStub<ISeasonRepository>();
       divisionsRepository = MockRepository.GenerateStub<IDivisionRepository>();
-      divisionManagementService = MockRepository.GenerateStub<IDivisionManagementService>();
-      controller = new DivisionsController(divisionsRepository, seasonsRepository, divisionManagementService);
+      controller = new DivisionsController(divisionsRepository, seasonsRepository);
 
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
@@ -188,13 +186,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
 
       var season = new Season("temp");
       season.SetIdTo(seasonId);
+      season.AddDivision(new Division(name, DateTime.Now, season));
       seasonsRepository.Stub(r => r.Get(seasonId)).Return(season);
 
       var division = new Division(name, DateTime.Now, season);
       var divisions = new List<Division>();
       divisions.Add(division);
       divisionsRepository.Stub(r => r.GetAll()).Return(divisions.AsQueryable());
-      divisionManagementService.Stub(s => s.DivisionNameIsInUse(season, name)).Return(true);
     };
 
     Because of = () => resultHelper = new ViewResultHelper<CreateDivisionViewModel>(controller.Create(viewModel));
@@ -490,12 +488,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
       var season = new Season("temp");
       season.SetIdTo(1);
       season.SetVersionTo(version);
+      season.AddDivision(new Division(name, DateTime.Now, season));
 
       division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
       division.SetVersionTo(version);
       divisionsRepository.Stub(r => r.Get(id)).Return(division);
-      divisionManagementService.Stub(s => s.DivisionNameIsInUse(division.Season, name)).Return(true);
 
       viewModel = new EditDivisionViewModel(division);
       viewModel.Name = name;

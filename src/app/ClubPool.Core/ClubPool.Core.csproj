@@ -71,6 +71,7 @@
     <Compile Include="Contracts\ISeasonRepository.cs" />
     <Compile Include="Contracts\ITeamRepository.cs" />
     <Compile Include="Contracts\IUserRepository.cs" />
+    <Compile Include="CreateScheduleException.cs" />
     <Compile Include="Division.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="MatchResult.cs" />

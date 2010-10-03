@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ClubPool.ApplicationServices.DomainManagement
+namespace ClubPool.Core
 {
   public class CreateScheduleException : Exception
   {

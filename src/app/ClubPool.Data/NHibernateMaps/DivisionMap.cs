@@ -19,6 +19,7 @@ namespace ClubPool.Data.NHibernateMaps
         .Access.ReadOnlyPropertyThroughCamelCaseField();
       mapping.HasMany<Meet>(x => x.Schedule)
         .AsBag()
+        .Cascade.All()
         .Access.ReadOnlyPropertyThroughCamelCaseField();
     }
   }
