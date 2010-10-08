@@ -21,7 +21,6 @@ using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
-using ClubPool.ApplicationServices.DomainManagement.Contracts;
 
 namespace ClubPool.Web.Controllers.Teams
 {
@@ -30,22 +29,18 @@ namespace ClubPool.Web.Controllers.Teams
     protected ITeamRepository teamRepository;
     protected IDivisionRepository divisionRepository;
     protected IUserRepository userRepository;
-    protected ITeamManagementService teamManagementService;
 
     public TeamsController(ITeamRepository teamRepo,
       IDivisionRepository divisionRepo,
-      IUserRepository userRepo,
-      ITeamManagementService teamManagementService) {
+      IUserRepository userRepo) {
 
       Check.Require(null != teamRepo, "teamRepo cannot be null");
       Check.Require(null != divisionRepo, "divisionRepo cannot be null");
       Check.Require(null != userRepo, "userRepo cannot be null");
-      Check.Require(null != teamManagementService, "teamManagementService cannot be null");
 
       teamRepository = teamRepo;
       divisionRepository = divisionRepo;
       userRepository = userRepo;
-      this.teamManagementService = teamManagementService;
     }
 
     [HttpGet]
@@ -73,7 +68,7 @@ namespace ClubPool.Web.Controllers.Teams
       }
 
       // verify that the team name is not already used
-      if (teamManagementService.TeamNameIsInUse(division, viewModel.Name)) {
+      if (division.TeamNameIsInUse(viewModel.Name)) {
         ModelState.AddModelErrorFor<CreateTeamViewModel>(m => m.Name, "This name is already in use");
         viewModel.ReInitialize(userRepository, division.Season);
         return View(viewModel);
@@ -147,7 +142,7 @@ namespace ClubPool.Web.Controllers.Teams
       }
 
       if (team.Name != viewModel.Name) {
-        if (teamManagementService.TeamNameIsInUse(team.Division, viewModel.Name)) {
+        if (team.Division.TeamNameIsInUse(viewModel.Name)) {
           ModelState.AddModelErrorFor<EditTeamViewModel>(m => m.Name, "Name is already in use");
           viewModel.ReInitialize(userRepository, team);
           return View(viewModel);

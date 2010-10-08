@@ -78,6 +78,10 @@ namespace ClubPool.Core
       teams.Clear();
     }
 
+    public virtual bool TeamNameIsInUse(string name) {
+      return Teams.Where(t => t.Name.Equals(name)).Any();
+    }
+
     public virtual void ClearSchedule() {
       schedule.Clear();
     }

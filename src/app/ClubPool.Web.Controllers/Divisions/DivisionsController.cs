@@ -21,8 +21,6 @@ using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
-using ClubPool.ApplicationServices.DomainManagement.Contracts;
-using ClubPool.ApplicationServices.DomainManagement;
 
 namespace ClubPool.Web.Controllers.Divisions
 {

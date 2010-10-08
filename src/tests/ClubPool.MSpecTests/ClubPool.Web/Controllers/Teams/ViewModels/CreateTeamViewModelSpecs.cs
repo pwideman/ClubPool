@@ -13,7 +13,6 @@ using SharpArch.Testing;
 
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
-using ClubPool.ApplicationServices.DomainManagement.Contracts;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Teams;
 using ClubPool.Web.Controllers.Teams.ViewModels;

@@ -13,7 +13,6 @@ using SharpArch.Testing;
 
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
-using ClubPool.ApplicationServices.DomainManagement.Contracts;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Teams;
 using ClubPool.Web.Controllers.Teams.ViewModels;
@@ -29,14 +28,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     protected static IUserRepository userRepository;
     protected static IDivisionRepository divisionRepository;
     protected static ITeamRepository teamRepository;
-    protected static ITeamManagementService teamService;
 
     Establish context = () => {
       userRepository = MockRepository.GenerateStub<IUserRepository>();
       divisionRepository = MockRepository.GenerateStub<IDivisionRepository>();
       teamRepository = MockRepository.GenerateStub<ITeamRepository>();
-      teamService = MockRepository.GenerateStub<ITeamManagementService>();
-      controller = new TeamsController(teamRepository, divisionRepository, userRepository, teamService);
+      controller = new TeamsController(teamRepository, divisionRepository, userRepository);
 
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
@@ -107,7 +104,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       division.SetIdTo(divisionId);
 
       divisionRepository.Stub(r => r.Get(divisionId)).Return(division);
-      teamService.Stub(s => s.TeamNameIsInUse(division, name)).IgnoreArguments().Return(false);
       teamRepository.Stub(r => r.SaveOrUpdate(null)).IgnoreArguments().Return(null).WhenCalled(m => savedTeam = m.Arguments[0] as Team);
 
       users = DomainHelpers.GetUsers(5);
@@ -196,15 +192,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       season.SetIdTo(1);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(1);
-
+      division.AddTeam(new Team(name, division));
       divisionRepository.Stub(r => r.Get(divisionId)).Return(division);
 
       users = DomainHelpers.GetUsers(5);
       userRepository.Stub(r => r.GetUnassignedUsersForSeason(null)).IgnoreArguments().Return(users);
       users.Each(u => userRepository.Stub(r => r.Get(u.Id)).Return(u));
       viewModel.Players = new List<PlayerViewModel>() { new PlayerViewModel() { Id = users[0].Id } };
-
-      teamService.Stub(s => s.TeamNameIsInUse(division, viewModel.Name)).Return(true);
     };
 
     Because of = () => resultHelper = new ViewResultHelper<CreateTeamViewModel>(controller.Create(viewModel));
@@ -553,6 +547,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       season.SetIdTo(id);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
+      division.AddTeam(new Team(name, division));
 
       team = new Team("temp", division);
       team.SetIdTo(id);
@@ -572,8 +567,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
         new PlayerViewModel() { Id = users[0].Id },
         new PlayerViewModel() { Id = users[1].Id }
       };
-
-      teamService.Stub(s => s.TeamNameIsInUse(division, name)).Return(true);
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditTeamViewModel>(controller.Edit(viewModel));
