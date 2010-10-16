@@ -1871,5 +1871,37 @@
             Gets the name of this error log implementation.
             </summary>
         </member>
+        <member name="T:Elmah.XmlSerializer">
+            <summary>
+            Serializes object to and from XML documents.
+            </summary>
+        </member>
+        <member name="T:Elmah.XmlText">
+            <summary>
+            XML 1.0 services.
+            </summary>
+        </member>
+        <member name="M:Elmah.XmlText.StripIllegalXmlCharacters(System.String)">
+            <summary>
+            Replaces illegal XML characters with a question mark (?).
+            </summary>
+            <remarks>
+            Only strips illegal characters as per XML 1.0, not 1.1. 
+            See section <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#charsets">2.2 Characters</a>
+            of <a href="http://www.w3.org/TR/2006/REC-xml-20060816">Extensible Markup Language (XML) 1.0 (Fourth Edition)</a>.
+            </remarks>
+        </member>
+        <member name="M:Elmah.XmlText.StripIllegalXmlCharacters(System.String,System.String)">
+            <summary>
+            Replaces illegal XML characters with a replacement string,
+            with the default being a question mark (?) if the replacement
+            is null reference.
+            </summary>
+            <remarks>
+            Only strips illegal characters as per XML 1.0, not 1.1. 
+            See section <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#charsets">2.2 Characters</a>
+            of <a href="http://www.w3.org/TR/2006/REC-xml-20060816">Extensible Markup Language (XML) 1.0 (Fourth Edition)</a>.
+            </remarks>
+        </member>
     </members>
 </doc>

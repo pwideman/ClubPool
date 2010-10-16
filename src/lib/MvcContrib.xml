@@ -332,8 +332,8 @@
         <member name="T:MvcContrib.Filters.PassParametersDuringRedirectAttribute">
             <summary>
             When placed on a controller or action, this attribute will ensure
-            that parameters passed into RedirectToAction&lt;T&gt;() will get
-            passed to the controller or action that this attribute is placed on.
+            that reference-type-parameters (or value types which cannot be converted from a string) passed into 
+            RedirectToAction&lt;T&gt;() will get passed to the controller or action that this attribute is placed on.
             </summary>
         </member>
         <member name="M:MvcContrib.Filters.PassParametersDuringRedirectAttribute.OnActionExecuting(System.Web.Mvc.ActionExecutingContext)">

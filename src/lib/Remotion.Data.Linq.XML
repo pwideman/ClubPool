@@ -186,7 +186,7 @@
             Calls the <see cref="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Reduce" /> method and checks certain invariants before returning the result. This method can only be called when
             <see cref="P:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.CanReduce" /> returns <see langword="true" />.
             </summary></member><member name="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.Accept(Remotion.Data.Linq.Parsing.ExpressionTreeVisitor)"><summary>
-            Accepts the specified visitor, by default dispatching to <see cref="M:Remotion.Data.Linq.Parsing.ExpressionTreeVisitor.VisitUnknownExpression(System.Linq.Expressions.Expression)" />. 
+            Accepts the specified visitor, by default dispatching to <see cref="M:Remotion.Data.Linq.Parsing.ExpressionTreeVisitor.VisitExtensionExpression(Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression)" />. 
             Inheritors of the <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression" /> class can override this method in order to dispatch to a specific Visit method.
             </summary><param name="visitor">The visitor whose Visit method should be invoked.</param></member><member name="M:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression.VisitChildren(Remotion.Data.Linq.Parsing.ExpressionTreeVisitor)"><summary>
             Must be overridden by <see cref="T:Remotion.Data.Linq.Clauses.Expressions.ExtensionExpression" /> subclasses by calling <see cref="M:Remotion.Data.Linq.Parsing.ExpressionTreeVisitor.VisitExpression(System.Linq.Expressions.Expression)" /> on all 
@@ -493,27 +493,27 @@
             Executes the specified <see cref="T:Remotion.Data.Linq.QueryModel" /> with the given <see cref="T:Remotion.Data.Linq.IQueryExecutor" />, calling either 
             <see cref="M:Remotion.Data.Linq.IQueryExecutor.ExecuteScalar``1(Remotion.Data.Linq.QueryModel)" /> or <see cref="M:Remotion.Data.Linq.IQueryExecutor.ExecuteCollection``1(Remotion.Data.Linq.QueryModel)" />, depending on the type of data streamed
             from this interface.
-            </summary><param name="queryModel">The query model to be executed.</param><param name="executor">The executor to use.</param></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo.DataType"><summary>
+            </summary><param name="queryModel">The query model to be executed.</param><param name="executor">The executor to use.</param></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo.AdjustDataType(System.Type)"><summary>
+            Returns a new <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" /> of the same type as this instance, but with a new <see cref="P:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo.DataType" />.
+            </summary><param name="dataType">The type to use for the <see cref="P:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo.DataType" /> property. The type must be compatible with the data described by this 
+            <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" />, otherwise an exception is thrown.
+            The type may be a generic type definition if the <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" /> supports generic types; in this case,
+            the type definition is automatically closed with generic parameters to match the data described by this <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" />.</param></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo.DataType"><summary>
             Gets the type of the data described by this <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" /> instance. For a sequence, this is a type implementing 
             <see cref="T:System.Collections.Generic.IEnumerable`1" />, where <c>T</c> is instantiated with a concrete type. For a single value, this is the value type.
-            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedForcedSingleValueInfo"><summary>
-            Describes a single value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A single value corresponds to one
-            item from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.FirstResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.SingleResultOperator" />, for instance.
-            The <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedForcedSingleValueInfo" /> is set by the handler for the single result operator.
-            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSingleValueInfo"><summary>
-            Describes a single value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A single value corresponds to one
-            item from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.FirstResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.SingleResultOperator" />, for instance.
+            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedScalarValueInfo"><summary>
+            Describes a scalar value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A scalar value corresponds to a
+            value calculated from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.CountResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.ContainsResultOperator" />, for instance.
             </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo"><summary>
             Describes a single or scalar value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />.
-            </summary></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.MakeClosedGenericExecuteMethod(System.Reflection.MethodInfo)"><summary>
+            </summary></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.ExecuteQueryModel(Remotion.Data.Linq.QueryModel,Remotion.Data.Linq.IQueryExecutor)"></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.CloneWithNewDataType(System.Type)"><summary>
+            Returns a new instance of the same <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo" /> type with a different <see cref="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.DataType" />.
+            </summary><param name="dataType">The new data type.</param></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.AdjustDataType(System.Type)"></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.MakeClosedGenericExecuteMethod(System.Reflection.MethodInfo)"><summary>
             Takes the given <paramref name="genericMethodDefinition" /> and instantiates it, substituting its generic parameter with the value
             type of the value held by this object. The method must have exactly one generic parameter.
             </summary><param name="genericMethodDefinition">The generic method definition to instantiate.</param></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedValueInfo.DataType"><summary>
             Gets the type of the data described by this <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.IStreamedDataInfo" /> instance. This is the type of the streamed value, or 
             <see cref="T:System.Object" /> if the value is <see langword="null" />.
-            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedScalarValueInfo"><summary>
-            Describes a scalar value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A scalar value corresponds to a
-            value calculated from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.CountResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.ContainsResultOperator" />, for instance.
             </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequence"><summary>
             Holds the data needed to represent the output or input of a part of a query in memory. This is mainly used for 
             <see cref="M:Remotion.Data.Linq.Clauses.ResultOperatorBase.ExecuteInMemory(Remotion.Data.Linq.Clauses.StreamedData.IStreamedData)" />.  The data consists of a sequence of items.
@@ -529,14 +529,21 @@
             </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo"><summary>
             Describes sequence data streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. Sequence data can be held by an object
             implementing <see cref="T:System.Collections.Generic.IEnumerable`1" />, and its items are described via a <see cref="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.ItemExpression" />.
-            </summary></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.MakeClosedGenericExecuteMethod(System.Reflection.MethodInfo)"><summary>
+            </summary></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.AdjustDataType(System.Type)"><summary>
+            Returns a new <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo" /> with an adjusted <see cref="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.DataType" />.
+            </summary><param name="dataType">The type to use for the <see cref="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.DataType" /> property. The type must be convertible from the previous type, otherwise
+            an exception is thrown. The type may be a generic type definition; in this case,
+            the type definition is automatically closed with the type of the <see cref="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.ItemExpression" />.</param></member><member name="M:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.MakeClosedGenericExecuteMethod(System.Reflection.MethodInfo)"><summary>
             Takes the given <paramref name="genericMethodDefinition" /> and instantiates it, substituting its generic parameter with the 
             item type of the sequence described by this object. The method must have exactly one generic parameter.
-            </summary><param name="genericMethodDefinition">The generic method definition to instantiate.</param></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.DataType"><summary>
+            </summary><param name="genericMethodDefinition">The generic method definition to instantiate.</param></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.ItemExpression"><summary>
+            Gets an expression that describes the structure of the items held by the sequence described by this object.
+            </summary></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.DataType"><summary>
             Gets the type of the data described by this <see cref="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo" /> instance. This is a type implementing
             <see cref="T:System.Collections.Generic.IEnumerable`1" />, where <c>T</c> is instantiated with a concrete type.
-            </summary></member><member name="P:Remotion.Data.Linq.Clauses.StreamedData.StreamedSequenceInfo.ItemExpression"><summary>
-            Gets an expression that describes the structure of the items held by the sequence described by this object.
+            </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedSingleValueInfo"><summary>
+            Describes a single value streamed out of a <see cref="T:Remotion.Data.Linq.QueryModel" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" />. A single value corresponds to one
+            item from the result set, as produced by <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.FirstResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.SingleResultOperator" />, for instance.
             </summary></member><member name="T:Remotion.Data.Linq.Clauses.StreamedData.StreamedValue"><summary>
             Holds the data needed to represent the output or input of a part of a query in memory. This is mainly used for 
             <see cref="M:Remotion.Data.Linq.Clauses.ResultOperatorBase.ExecuteInMemory(Remotion.Data.Linq.Clauses.StreamedData.IStreamedData)" />.  The data is a single, non-sequence value and can only be consumed by result operators 
@@ -793,7 +800,9 @@
             Wraps the <paramref name="queryModel" /> into a subquery after a node that indicates the end of the query (
             <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.ResultOperatorExpressionNodeBase" /> or <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.GroupByExpressionNode" />). Override this method
             when implementing a <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.IExpressionNode" /> that does not need a subquery to be created if it occurs after the query end.
-            </summary></member><member name="T:Remotion.Data.Linq.EagerFetching.FetchFilteringQueryModelVisitor"><summary>
+            </summary></member><member name="M:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.MethodCallExpressionNodeBase.SetResultTypeOverride(Remotion.Data.Linq.QueryModel)"><summary>
+            Sets the result type override of the given <see cref="T:Remotion.Data.Linq.QueryModel" />.
+            </summary><param name="queryModel">The query model to set the <see cref="P:Remotion.Data.Linq.QueryModel.ResultTypeOverride" /> of.</param></member><member name="T:Remotion.Data.Linq.EagerFetching.FetchFilteringQueryModelVisitor"><summary>
             Visits a <see cref="T:Remotion.Data.Linq.QueryModel" />, removing all <see cref="T:Remotion.Data.Linq.EagerFetching.FetchRequestBase" /> instances from its <see cref="P:Remotion.Data.Linq.QueryModel.ResultOperators" />
             collection and returning <see cref="T:Remotion.Data.Linq.EagerFetching.FetchQueryModelBuilder" /> objects for them.
             </summary></member><member name="T:Remotion.Data.Linq.EagerFetching.FetchManyRequest"><summary>
@@ -1142,16 +1151,23 @@
             re-linq assembly automatically registered, as long as they offer a public static <c>SupportedMethods</c> field.
             </summary></member><member name="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.GetRegisterableMethodDefinition(System.Reflection.MethodInfo)"><summary>
             Gets the registerable method definition from a given <see cref="T:System.Reflection.MethodInfo" />. A registerable method is a <see cref="T:System.Reflection.MethodInfo" /> object
-            that can be registered via a call to <see cref="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.Register(System.Collections.Generic.IEnumerable{System.Reflection.MethodInfo},System.Type)" />. When the given <paramref name="method" /> is passed to 
+            that can be registered via a call to <see cref="O:Register" />. When the given <paramref name="method" /> is passed to 
             <see cref="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.GetNodeType(System.Reflection.MethodInfo)" /> and its corresponding registerable method was registered, the correct node type is returned.
             </summary><param name="method">The method for which the registerable method should be retrieved.</param></member><member name="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.Register(System.Collections.Generic.IEnumerable{System.Reflection.MethodInfo},System.Type)"><summary>
-            Registers the specified <paramref name="methods" /> with the given <paramref name="nodeType" />. The given methods must either be non-generic
+            Registers the specific <paramref name="methods" /> with the given <paramref name="nodeType" />. The given methods must either be non-generic
             or open generic method definitions. If a method has already been registered before, the later registration overwrites the earlier one.
-            </summary></member><member name="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.IsRegistered(System.Reflection.MethodInfo)"><summary>
+            </summary></member><member name="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.Register(System.Collections.Generic.IEnumerable{System.String},System.Type)"><summary>
+            Registers the specific method names with the givven <paramref name="nodeType" />. If a nethod has already been registered before, the later
+            registrations overwrites the earlier one.
+            </summary><param name="methodNames"></param><param name="nodeType"></param></member><member name="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.IsRegistered(System.Reflection.MethodInfo)"><summary>
             Determines whether the specified method was registered with this <see cref="T:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry" />.
             </summary></member><member name="M:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.GetNodeType(System.Reflection.MethodInfo)"><summary>
             Gets the type of <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.IExpressionNode" /> registered with this <see cref="T:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry" /> instance that
             matches the given <paramref name="method" />, throwing a <see cref="T:System.Collections.Generic.KeyNotFoundException" /> if none can be found.
+            </summary></member><member name="P:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.RegisteredMethodInfoCount"><summary>
+            Returns the count of the registered <see cref="T:System.Reflection.MethodInfo" />s.
+            </summary></member><member name="P:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionNodeTypeRegistry.RegisteredNamesCount"><summary>
+            Returns the count of the registered method names.
             </summary></member><member name="T:Remotion.Data.Linq.Parsing.Structure.MethodCallExpressionParser"><summary>
             Parses a <see cref="T:System.Linq.Expressions.MethodCallExpression" /> and creates an <see cref="T:Remotion.Data.Linq.Parsing.Structure.IntermediateModel.IExpressionNode" /> from it. This is used by 
             <see cref="T:Remotion.Data.Linq.Parsing.Structure.ExpressionTreeParser" /> for parsing whole expression trees.
@@ -1196,6 +1212,31 @@
             <see cref="T:Remotion.Data.Linq.Clauses.AdditionalFromClause" />) that contain subqueries with equivalent flattened clauses. Subqueries that contain a 
             <see cref="T:Remotion.Data.Linq.Clauses.ResultOperatorBase" /> (such as <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.DistinctResultOperator" /> or <see cref="T:Remotion.Data.Linq.Clauses.ResultOperators.TakeResultOperator" />) cannot be
             flattened.
+            </summary></member><member name="T:JetBrains.Annotations.AssertionConditionAttribute"><summary>
+            Indicates the condition parameter of the assertion method. 
+            The method itself should be marked by <see cref="T:JetBrains.Annotations.AssertionMethodAttribute" /> attribute.
+            The mandatory argument of the attribute is the assertion type.
+            </summary></member><member name="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)"><summary>
+            Initializes new instance of AssertionConditionAttribute
+            </summary><param name="conditionType">Specifies condition type</param></member><member name="P:JetBrains.Annotations.AssertionConditionAttribute.ConditionType"><summary>
+            Gets condition type
+            </summary></member><member name="T:JetBrains.Annotations.AssertionConditionType"><summary>
+            Specifies assertion type. If the assertion method argument satisifes the condition, then the execution continues. 
+            Otherwise, execution is assumed to be halted
+            </summary></member><member name="F:JetBrains.Annotations.AssertionConditionType.IS_TRUE"><summary>
+            Indicates that the marked parameter should be evaluated to true
+            </summary></member><member name="F:JetBrains.Annotations.AssertionConditionType.IS_FALSE"><summary>
+            Indicates that the marked parameter should be evaluated to false
+            </summary></member><member name="F:JetBrains.Annotations.AssertionConditionType.IS_NULL"><summary>
+            Indicates that the marked parameter should be evaluated to null value
+            </summary></member><member name="F:JetBrains.Annotations.AssertionConditionType.IS_NOT_NULL"><summary>
+            Indicates that the marked parameter should be evaluated to not null value
+            </summary></member><member name="T:JetBrains.Annotations.AssertionMethodAttribute"><summary>
+            Indicates that the marked method is assertion method, i.e. it halts control flow if one of the conditions is satisfied. 
+            To set the condition, mark one of the parameters with <see cref="T:JetBrains.Annotations.AssertionConditionAttribute" /> attribute
+            </summary></member><member name="T:JetBrains.Annotations.InvokerParameterNameAttribute"><summary>
+            Indicates that the function argument should be string literal and match one  of the parameters of the caller function.
+            For example, <see cref="T:System.ArgumentNullException" /> has such parameter.
             </summary></member><member name="T:Remotion.Data.Linq.Utilities.ArgumentEmptyException"><summary>
             This exception is thrown if an argument is empty although it must have a content.
             </summary></member><member name="T:Remotion.Data.Linq.Utilities.ArgumentTypeException"><summary>
