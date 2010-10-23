@@ -234,30 +234,34 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       resultHelper.Result.ShouldNotBeNull();
   }
 
-  [Subject(typeof(TeamsController))]
-  public class when_asked_to_delete_a_team_that_contains_players : specification_for_Teams_controller
-  {
-    static RedirectToRouteResultHelper resultHelper;
-    static int id = 1;
+  // entity deletion logic needs to change - we should always be able to delete an entity,
+  // but if it will result in deleting completed matches then the user needs to be warned
+  // and the associated skill levels need to be recalculated.
 
-    Establish context = () => {
-      var season = new Season("temp");
-      season.SetIdTo(id);
-      var division = new Division("temp", DateTime.Now, season);
-      division.SetIdTo(id);
-      var team = new Team("temp", division);
-      team.AddPlayer(new User("temp", "pass", "first", "last", "email"));
-      teamRepository.Stub(r => r.Get(id)).Return(team);
-    };
+  //[Subject(typeof(TeamsController))]
+  //public class when_asked_to_delete_a_team_that_contains_players : specification_for_Teams_controller
+  //{
+  //  static RedirectToRouteResultHelper resultHelper;
+  //  static int id = 1;
 
-    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(id));
+  //  Establish context = () => {
+  //    var season = new Season("temp");
+  //    season.SetIdTo(id);
+  //    var division = new Division("temp", DateTime.Now, season);
+  //    division.SetIdTo(id);
+  //    var team = new Team("temp", division);
+  //    team.AddPlayer(new User("temp", "pass", "first", "last", "email"));
+  //    teamRepository.Stub(r => r.Get(id)).Return(team);
+  //  };
 
-    It should_return_an_error_message = () =>
-      controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+  //  Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(id));
 
-    It should_redirect_to_the_view_season_view = () =>
-      resultHelper.ShouldRedirectTo("seasons", "view");
-  }
+  //  It should_return_an_error_message = () =>
+  //    controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+
+  //  It should_redirect_to_the_view_season_view = () =>
+  //    resultHelper.ShouldRedirectTo("seasons", "view");
+  //}
 
   [Subject(typeof(TeamsController))]
   public class when_asked_to_delete_a_team_with_no_players : specification_for_Teams_controller
@@ -349,29 +353,43 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static Team team;
     static int version = 1;
     static List<User> users;
+    static Division division;
 
     Establish context = () => {
 
       var season = new Season("temp");
       season.SetIdTo(id);
-      var division = new Division("temp", DateTime.Now, season);
+      division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
-
-      team = new Team("temp", division);
-      team.SetIdTo(id);
-      team.SetVersionTo(version);
-      teamRepository.Stub(r => r.Get(id)).Return(team);
 
       users = DomainHelpers.GetUsers(5);
       userRepository.Stub(r => r.GetUnassignedUsersForSeason(null)).IgnoreArguments().Return(users);
       users.Each(u => userRepository.Stub(r => r.Get(u.Id)).Return(u));
+
+      team = new Team("Team 1", division);
+      team.SetIdTo(id);
+      team.SetVersionTo(version);
+      teamRepository.Stub(r => r.Get(id)).Return(team);
+      team.AddPlayer(users[0]);
+      team.AddPlayer(users[1]);
+      division.AddTeam(team);
+
+      var team2 = new Team("Team 2", division);
+      team2.SetIdTo(2);
+      team.SetVersionTo(1);
+      teamRepository.Stub(r => r.Get(2)).Return(team2);
+      team2.AddPlayer(users[2]);
+      team2.AddPlayer(users[3]);
+      division.AddTeam(team2);
+
+      division.CreateSchedule(divisionRepository);
 
       viewModel = new EditTeamViewModel(userRepository, team);
       viewModel.Name = name;
       viewModel.Version = version;
       viewModel.Players = new List<PlayerViewModel>() { 
         new PlayerViewModel() { Id = users[0].Id },
-        new PlayerViewModel() { Id = users[1].Id }
+        new PlayerViewModel() { Id = users[4].Id }
       };
 
     };
@@ -383,6 +401,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     It should_update_the_players = () =>
       team.Players.Select(p => p.Id).ToArray().ShouldEqual(viewModel.Players.Select(p => p.Id).ToArray());
+
+    It should_remove_the_previous_player_from_the_teams_matches = () =>
+      division.Schedule.First().Matches.Where(match => match.Players.Contains(users[1])).Count().ShouldEqual(0);
+
+    It should_add_the_new_player_to_the_teams_matches = () =>
+      division.Schedule.First().Matches.Where(match => match.Players.Contains(users[4])).Count().ShouldEqual(2);
 
     It should_return_a_notification_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();

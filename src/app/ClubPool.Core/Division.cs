@@ -51,7 +51,7 @@ namespace ClubPool.Core
 
     public virtual bool CanDelete() {
       // can delete if we have no teams
-      return teams.Count == 0;
+      return true;// teams.Count == 0;
     }
 
     public virtual void AddTeam(Team team) {

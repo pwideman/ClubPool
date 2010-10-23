@@ -60,7 +60,7 @@ namespace ClubPool.Core
     }
 
     public virtual bool CanDelete() {
-      return !IsActive && divisions.Count == 0;
+      return !IsActive;// && divisions.Count == 0;
     }
 
     public virtual bool DivisionNameIsInUse(string name) {

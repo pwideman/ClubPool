@@ -40,11 +40,14 @@ namespace ClubPool.Core
 
     public virtual bool CanDelete() {
       // if there are no players this team can be deleted
-      return players.Count == 0;
+      return true;// players.Count == 0;
     }
 
     public virtual void RemoveAllPlayers() {
-      players.Clear();
+      var tempPlayers = players.ToArray();
+      foreach (var player in tempPlayers) {
+        RemovePlayer(player);
+      }
     }
 
     public virtual void RemovePlayer(User player) {
@@ -52,7 +55,18 @@ namespace ClubPool.Core
 
       if (players.Contains(player)) {
         players.Remove(player);
+        // remove the player from any incomplete matches
+        var meets = Division.Schedule.Where(m => m.Teams.Contains(this));
+        foreach (var meet in meets) {
+          var matches = meet.Matches.ToList();
+          foreach (var match in matches) {
+            if (match.Players.Contains(player) && !match.IsComplete) {
+              meet.RemoveMatch(match);
+            }
+          }
+        }
       }
+
     }
 
     public virtual void AddPlayer(User player) {
@@ -60,6 +74,22 @@ namespace ClubPool.Core
 
       if (!players.Contains(player)) {
         players.Add(player);
+        // add this player to meets
+        var meets = Division.Schedule.Where(m => m.Teams.Contains(this));
+        foreach (var meet in meets) {
+          var opposingTeam = meet.Teams.Where(t => t != this).First();
+          foreach (var opponent in opposingTeam.Players) {
+            // loop through each player on the opposing team and see if they do not
+            // already have a match against each player on this team. If not, add
+            // a new match for the new player vs. opponent. We must do this check
+            // because it's possible that some matches were played ahead of time
+            // and one of the players in the match was removed from their team and
+            // replaced by another player. In this case, the completed match stands.
+            if (meet.Matches.Where(m => m.Players.Contains(opponent)).Count() < players.Count) {
+              meet.AddMatch(new Match(meet, player, opponent));
+            }
+          }
+        }
       }
     }
   }

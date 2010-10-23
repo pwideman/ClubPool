@@ -108,6 +108,13 @@
                     <a href="#" class="submit-form-link">Recreate the schedule</a>
                   </div>
                 <% } %>
+                <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.ClearSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
+                <%= Html.AntiForgeryToken()%>
+                <div class="action-button">
+                  <%= Html.ContentImage("refresh-medium.png", "Clear Schedule")%>
+                  <a href="#" class="submit-form-link">Clear the schedule</a>
+                </div>
+                <% } %>
               </div>
               <table class="schedule-table">
                 <thead>
@@ -131,7 +138,7 @@
               </table>
               <% }
                else { %>
-              <p>The schedule for this division has not been created.</p>
+              <p>This division does not have a schedule.</p>
               <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id), FormMethod.Post, new { @class = "normal" })) { %>
                 <%= Html.AntiForgeryToken()%>
                 <input class="submit-button" type="submit" value="Create Schedule" />

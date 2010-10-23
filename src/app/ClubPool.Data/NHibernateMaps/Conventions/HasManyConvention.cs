@@ -7,7 +7,7 @@ namespace ClubPool.Data.NHibernateMaps.Conventions
   {
     public void Apply(IOneToManyCollectionInstance instance) {
       instance.Key.Column(instance.EntityType.Name + "Id");
-      instance.Cascade.SaveUpdate();
+      instance.Cascade.AllDeleteOrphan();
       instance.Access.ReadOnlyPropertyThroughCamelCaseField();
     }
   }

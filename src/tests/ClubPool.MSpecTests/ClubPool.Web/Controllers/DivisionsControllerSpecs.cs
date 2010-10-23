@@ -220,29 +220,33 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions
       resultHelper.Result.ShouldNotBeNull();
   }
 
-  [Subject(typeof(DivisionsController))]
-  public class when_asked_to_delete_a_division_that_contains_teams : specification_for_Divisions_controller
-  {
-    static RedirectToRouteResultHelper resultHelper;
-    static int id = 1;
+  // entity deletion logic needs to change - we should always be able to delete an entity,
+  // but if it will result in deleting completed matches then the user needs to be warned
+  // and the associated skill levels need to be recalculated.
 
-    Establish context = () => {
-      var season = new Season("temp");
-      season.SetIdTo(1);
-      var division = new Division("temp", DateTime.Now, season);
-      division.SetIdTo(id);
-      division.AddTeam(new Team("temp", division));
-      divisionsRepository.Stub(r => r.Get(id)).Return(division);
-    };
+  //[Subject(typeof(DivisionsController))]
+  //public class when_asked_to_delete_a_division_that_contains_teams : specification_for_Divisions_controller
+  //{
+  //  static RedirectToRouteResultHelper resultHelper;
+  //  static int id = 1;
 
-    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(id));
+  //  Establish context = () => {
+  //    var season = new Season("temp");
+  //    season.SetIdTo(1);
+  //    var division = new Division("temp", DateTime.Now, season);
+  //    division.SetIdTo(id);
+  //    division.AddTeam(new Team("temp", division));
+  //    divisionsRepository.Stub(r => r.Get(id)).Return(division);
+  //  };
 
-    It should_return_an_error_message = () =>
-      controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+  //  Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(id));
 
-    It should_redirect_to_the_view_season_view = () =>
-      resultHelper.ShouldRedirectTo("seasons", "view");
-  }
+  //  It should_return_an_error_message = () =>
+  //    controller.TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage).ShouldBeTrue();
+
+  //  It should_redirect_to_the_view_season_view = () =>
+  //    resultHelper.ShouldRedirectTo("seasons", "view");
+  //}
 
   [Subject(typeof(DivisionsController))]
   public class when_asked_to_delete_a_division_with_no_teams : specification_for_Divisions_controller

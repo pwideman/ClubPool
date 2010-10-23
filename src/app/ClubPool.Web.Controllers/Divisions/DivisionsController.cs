@@ -180,6 +180,16 @@ namespace ClubPool.Web.Controllers.Divisions
     [Authorize(Roles = Roles.Administrators)]
     [Transaction]
     [ValidateAntiForgeryToken]
+    public ActionResult ClearSchedule(int id) {
+      var division = divisionRepository.Get(id);
+      division.ClearSchedule();
+      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
+    }
+
+    [HttpPost]
+    [Authorize(Roles = Roles.Administrators)]
+    [Transaction]
+    [ValidateAntiForgeryToken]
     public ActionResult RecreateSchedule(int id) {
       var division = divisionRepository.Get(id);
       division.ClearSchedule();

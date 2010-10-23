@@ -150,12 +150,28 @@ namespace ClubPool.Web.Controllers.Teams
         team.Name = viewModel.Name;
       }
 
-      team.RemoveAllPlayers();
       if (null != viewModel.Players && viewModel.Players.Any()) {
+        var newPlayers = new List<User>();
         foreach (var playerViewModel in viewModel.Players) {
           var player = userRepository.Get(playerViewModel.Id);
-          team.AddPlayer(player);
+          newPlayers.Add(player);
         }
+        // first remove all players that aren't in the view model's players list
+        var teamPlayers = team.Players.ToList();
+        foreach (var teamPlayer in teamPlayers) {
+          if (!newPlayers.Contains(teamPlayer)) {
+            team.RemovePlayer(teamPlayer);
+          }
+        }
+        // now add all new players to the team
+        foreach (var newPlayer in newPlayers) {
+          if (!team.Players.Contains(newPlayer)) {
+            team.AddPlayer(newPlayer);
+          }
+        }
+      }
+      else {
+        team.RemoveAllPlayers();
       }
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";
