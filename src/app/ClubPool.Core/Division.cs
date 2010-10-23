@@ -12,6 +12,24 @@ namespace ClubPool.Core
 {
   public class Division : Entity, IEntityWithVersion
   {
+    private static readonly object scheduleLock = new object();
+    protected IList<Meet> schedule;
+    protected IList<Team> teams;
+
+    public virtual DateTime StartingDate { get; set; }
+
+    [DomainSignature]
+    public virtual string Name { get; set; }
+
+    [DomainSignature]
+    public virtual Season Season { get; set; }
+
+    public virtual int Version { get; protected set; }
+
+    public virtual IEnumerable<Meet> Schedule { get { return schedule; } }
+
+    public virtual IEnumerable<Team> Teams { get { return teams; } }
+
     protected Division() {
       InitMembers();
     }
@@ -31,30 +49,10 @@ namespace ClubPool.Core
       schedule = new List<Meet>();
     }
 
-    private static readonly object scheduleLock = new object();
-
-    public virtual DateTime StartingDate { get; set; }
-
-    [DomainSignature]
-    public virtual string Name { get; set; }
-
     public virtual bool CanDelete() {
       // can delete if we have no teams
       return teams.Count == 0;
     }
-
-    [DomainSignature]
-    public virtual Season Season { get; set; }
-
-    public virtual int Version { get; protected set; }
-
-    protected IList<Meet> schedule;
-
-    public virtual IEnumerable<Meet> Schedule { get { return schedule; } }
-
-    protected IList<Team> teams;
-
-    public virtual IEnumerable<Team> Teams { get { return teams; } }
 
     public virtual void AddTeam(Team team) {
       Check.Require(null != team, "team cannot be null");
@@ -75,6 +73,9 @@ namespace ClubPool.Core
     }
 
     public virtual void RemoveAllTeams() {
+      foreach (var team in teams) {
+        team.Division = null;
+      }
       teams.Clear();
     }
 

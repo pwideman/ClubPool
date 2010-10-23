@@ -12,8 +12,7 @@ namespace ClubPool.Core
     protected MatchResult() {
     }
 
-    public MatchResult(Match match, User player, int innings, int wins) {
-      Check.Require(null != match, "match cannot be null");
+    public MatchResult(User player, int innings, int wins) {
       Check.Require(null != player, "player cannot be null");
       Check.Require(innings >= 0, "innings must be >= 0");
       Check.Require(wins >= 0, "wins must be >= 0");
@@ -21,7 +20,6 @@ namespace ClubPool.Core
       Player = player;
       Innings = innings;
       Wins = wins;
-      Match = match;
     }
 
     public virtual Match Match { get; set; }

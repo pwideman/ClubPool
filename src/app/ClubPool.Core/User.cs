@@ -8,6 +8,29 @@ namespace ClubPool.Core
 {
   public class User : Entity, IEntityWithVersion
   {
+    // fields
+    protected IList<Role> roles;
+
+    // mapped properties
+    [DomainSignature]
+    public virtual string Username { get; set; }
+    public virtual string FirstName { get; set; }
+    public virtual string LastName { get; set; }
+    public virtual string Password { get; set; }
+    public virtual string PasswordSalt { get; set; }
+    public virtual string Email { get; set; }
+    public virtual bool IsApproved { get; set; }
+    public virtual bool IsLocked { get; set; }
+    public virtual int Version { get; protected set; }
+    public virtual IEnumerable<Role> Roles { get { return roles; } }
+
+    // generated properties
+    public virtual string FullName {
+      get {
+        return string.Format("{0} {1}", FirstName, LastName);
+      }
+    }
+
     protected User() {
       InitMembers();
     }
@@ -32,36 +55,6 @@ namespace ClubPool.Core
       IsApproved = false;
       IsLocked = false;
     }
-
-    [DomainSignature]
-    public virtual string Username { get; set; }
-
-    public virtual string FirstName { get; set; }
-
-    public virtual string LastName { get; set; }
-
-    public virtual string FullName { 
-      get { 
-        return string.Format("{0} {1}", FirstName, LastName);
-      }
-    }
-
-
-    public virtual string Password { get; set; }
-
-    public virtual string PasswordSalt { get; set; }
-
-    public virtual string Email { get; set; }
-
-    public virtual bool IsApproved { get; set; }
-
-    public virtual bool IsLocked { get; set; }
-
-    public virtual int Version { get; protected set; }
-
-    protected IList<Role> roles;
-
-    public virtual IEnumerable<Role> Roles { get { return roles; } }
 
     public virtual void RemoveAllRoles() {
       roles.Clear();

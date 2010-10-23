@@ -10,6 +10,18 @@ namespace ClubPool.Core
 {
   public class Team : Entity, IEntityWithVersion
   {
+    protected IList<User> players;
+
+    [DomainSignature]
+    public virtual string Name { get; set; }
+
+    [DomainSignature]
+    public virtual Division Division { get; set; }
+
+    public virtual int Version { get; protected set; }
+    
+    public virtual IEnumerable<User> Players { get { return players; } }
+
     protected Team() {
       InitMembers();
     }
@@ -30,18 +42,6 @@ namespace ClubPool.Core
       // if there are no players this team can be deleted
       return players.Count == 0;
     }
-
-    [DomainSignature]
-    public virtual string Name { get; set; }
-
-    [DomainSignature]
-    public virtual Division Division { get; set; }
-
-    public virtual int Version { get; protected set; }
-
-    protected IList<User> players;
-
-    public virtual IEnumerable<User> Players { get { return players; } }
 
     public virtual void RemoveAllPlayers() {
       players.Clear();

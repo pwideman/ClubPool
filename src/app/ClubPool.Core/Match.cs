@@ -9,6 +9,16 @@ namespace ClubPool.Core
 {
   public class Match : Entity
   {
+    protected IList<MatchResult> results;
+
+    public virtual Meet Meet { get; set; }
+    public virtual bool IsComplete { get; set; }
+    public virtual User Player1 { get; set; }
+    public virtual User Player2 { get; set; }
+    public virtual IEnumerable<User> Players { get { return new User[2] { Player1, Player2 }; } }
+    public virtual User Winner { get; set; }
+    public virtual IEnumerable<MatchResult> Results { get { return results; } }
+
     protected Match() {
       InitMembers();
     }
@@ -29,16 +39,6 @@ namespace ClubPool.Core
       results = new List<MatchResult>();
     }
 
-    protected IList<MatchResult> results;
-
-    public virtual Meet Meet { get; set; }
-    public virtual bool IsComplete { get; set; }
-    public virtual User Player1 { get; set; }
-    public virtual User Player2 { get; set; }
-    public virtual IEnumerable<User> Players { get { return new User[2] { Player1, Player2 }; } }
-    public virtual User Winner { get; set; }
-    public virtual IEnumerable<MatchResult> Results { get { return results; } }
-
     public virtual void AddResult(MatchResult result) {
       if (!Players.Contains(result.Player)) {
         throw new ArgumentException("The match result must apply to one of this match's players", "result");
@@ -52,10 +52,14 @@ namespace ClubPool.Core
     public virtual void RemoveResult(MatchResult result) {
       if (results.Contains(result)) {
         results.Remove(result);
+        result.Match = null;
       }
     }
 
     public virtual void RemoveAllResults() {
+      foreach (var result in results) {
+        result.Match = null;
+      }
       results.Clear();
     }
   }

@@ -10,6 +10,12 @@ namespace ClubPool.Core
 {
   public class Role : Entity
   {
+    protected IList<User> users;
+
+    [DomainSignature]
+    public virtual string Name { get; set; }
+    public virtual IEnumerable<User> Users { get { return users; } }
+    
     protected Role() {
       InitMembers();
     }
@@ -25,12 +31,6 @@ namespace ClubPool.Core
       users = new List<User>();
     }
 
-    [DomainSignature]
-    public virtual string Name { get; set; }
-
-    protected IList<User> users;
-
-    public virtual IEnumerable<User> Users { get { return users; } }
 
   }
 }

@@ -11,6 +11,14 @@ namespace ClubPool.Core
 {
   public class Season : Entity, IEntityWithVersion
   {
+    protected IList<Division> divisions;
+
+    [DomainSignature]
+    public virtual string Name { get; set; }
+    public virtual bool IsActive { get; set; }
+    public virtual int Version { get; protected set; }
+    public virtual IEnumerable<Division> Divisions { get { return divisions; } }
+
     protected Season() {
       InitMembers();
     }
@@ -26,17 +34,6 @@ namespace ClubPool.Core
       divisions = new List<Division>();
     }
 
-    [DomainSignature]
-    public virtual string Name { get; set; }
-
-    public virtual bool IsActive { get; set; }
-
-    public virtual int Version { get; protected set; }
-
-    protected IList<Division> divisions;
-
-    public virtual IEnumerable<Division> Divisions { get { return divisions; } }
-
     public virtual void RemoveDivision(Division division) {
       Check.Require(null != division, "division cannot be null");
 
@@ -47,6 +44,9 @@ namespace ClubPool.Core
     }
 
     public virtual void RemoveAllDivisions() {
+      foreach (var division in divisions) {
+        division.Season = null;
+      }
       divisions.Clear();
     }
 

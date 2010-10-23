@@ -72,8 +72,6 @@ namespace ClubPool.SchemaGen
 
         output("Creating dummy data");
         var seasonRepo = new SeasonRepository();
-        var divisionRepo = new DivisionRepository();
-        var teamRepo = new TeamRepository();
         int userIndex = 1;
         var users = new List<User>();
         using (userRepo.DbContext.BeginTransaction()) {
@@ -90,23 +88,24 @@ namespace ClubPool.SchemaGen
             output("Creating season " + seasonIndex.ToString());
             var season = new Season("Season " + seasonIndex.ToString());
             season.IsActive = false;
-            seasonRepo.SaveOrUpdate(season);
             userIndex = 0;
             for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
               output("Creating division " + divisionIndex.ToString());
               var division = new Division("Division " + divisionIndex.ToString(), DateTime.Parse("1/" + divisionIndex.ToString() + "/200" + seasonIndex.ToString()), season);
-              divisionRepo.SaveOrUpdate(division);
               season.AddDivision(division);
               for (int teamIndex = 1; teamIndex <= 12; teamIndex++) {
                 output("Creating team " + teamIndex.ToString());
                 var team = new Team("Team " + teamIndex.ToString(), division);
-                teamRepo.SaveOrUpdate(team);
                 division.AddTeam(team);
                 team.AddPlayer(users[userIndex++]);
                 team.AddPlayer(users[userIndex++]);
               }
             }
+            seasonRepo.SaveOrUpdate(season);
           }
+          var firstSeason = seasonRepo.GetAll().First();
+          firstSeason.IsActive = true;
+          seasonRepo.SaveOrUpdate(firstSeason);
           seasonRepo.DbContext.CommitTransaction();
         }
         output("Finished");

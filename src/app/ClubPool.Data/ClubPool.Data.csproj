@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="DivisionRepository.cs" />
     <Compile Include="MeetRepository.cs" />
+    <Compile Include="NHibernateMaps\ClubPoolMappingConfiguration.cs" />
     <Compile Include="NHibernateMaps\DivisionMap.cs" />
     <Compile Include="NHibernateMaps\MatchMap.cs" />
     <Compile Include="NHibernateMaps\MatchResultMap.cs" />

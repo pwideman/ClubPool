@@ -9,7 +9,14 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
 {
   public class MeetViewModel
   {
+    public int ScheduledWeek { get; set; }
+    public DateTime ScheduledDate { get; set; }
+    public TeamViewModel Team1 { get; set; }
+    public TeamViewModel Team2 { get; set; }
+    public IEnumerable<MatchViewModel> Matches { get; protected set; }
+
     public MeetViewModel() {
+      Matches = new MatchViewModel[0];
     }
 
     public MeetViewModel(Meet meet) {
@@ -17,12 +24,13 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       ScheduledDate = meet.Division.StartingDate.AddDays(meet.Week * 7);
       Team1 = new TeamViewModel(meet.Team1);
       Team2 = new TeamViewModel(meet.Team2);
+      var matches = new List<MatchViewModel>();
+      foreach (var match in meet.Matches) {
+        matches.Add(new MatchViewModel(match));
+      }
+      Matches = matches;
     }
 
-    public int ScheduledWeek { get; set; }
-    public DateTime ScheduledDate { get; set; }
-    public TeamViewModel Team1 { get; set; }
-    public TeamViewModel Team2 { get; set; }
   }
 
   public class TeamViewModel
@@ -50,6 +58,26 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     }
 
     public string Name { get; set; }
+  }
+
+  public class MatchViewModel
+  {
+    public PlayerViewModel Player1 { get; set; }
+    public PlayerViewModel Player2 { get; set; }
+    public bool IsComplete { get; set; }
+    public PlayerViewModel Winner { get; set; }
+
+    public MatchViewModel() {
+    }
+
+    public MatchViewModel(Match match) {
+      Player1 = new PlayerViewModel(match.Player1);
+      Player2 = new PlayerViewModel(match.Player2);
+      IsComplete = match.IsComplete;
+      if (IsComplete) {
+        Winner = new PlayerViewModel(match.Winner);
+      }
+    }
   }
 
 }

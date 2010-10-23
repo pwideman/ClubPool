@@ -8,6 +8,30 @@
     <strong><%= Model.Team1.Name %></strong> vs. <strong><%= Model.Team2.Name %></strong>, 
     scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate.ToShortDateString() %>)
   </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Player 1</th>
+        <th>Player 2</th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% foreach(var match in Model.Matches) { %>
+      <tr>
+        <td><%= match.Player1.Name %></td>
+        <td><%= match.Player2.Name %></td>
+        <td>
+        <% if (match.IsComplete) { %>
+          Winner: <%= match.Winner.Name%>
+        <% } else { %>
+          Incomplete
+        <% } %>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
