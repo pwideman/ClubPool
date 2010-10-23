@@ -180,9 +180,6 @@
     <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\css\images\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
-    <None Include="Content\css\base2.less" />
-    <None Include="Content\css\Copy of menu.less" />
-    <None Include="Content\css\jqueryui.less" />
     <None Include="Content\css\menu.less" />
     <None Include="Content\css\jquery-ui-1.8.5.redmond.less" />
     <Content Include="Default.aspx" />
