@@ -18,6 +18,7 @@ namespace ClubPool.Core
     public virtual IEnumerable<User> Players { get { return new User[2] { Player1, Player2 }; } }
     public virtual User Winner { get; set; }
     public virtual IEnumerable<MatchResult> Results { get { return results; } }
+    public virtual DateTime DatePlayed { get; set; }
 
     protected Match() {
       InitMembers();

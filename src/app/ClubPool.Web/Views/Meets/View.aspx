@@ -5,30 +5,54 @@
     <span>Match Details</span>
   </div>
   <p>
-    <strong><%= Model.Team1.Name %></strong> vs. <strong><%= Model.Team2.Name %></strong>, 
+    <strong><%= Model.Team1Name %></strong> vs. <strong><%= Model.Team2Name %></strong>, 
     scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate.ToShortDateString() %>)
   </p>
-  <table>
+  <table class="match-details">
     <thead>
       <tr>
-        <th>Player 1</th>
-        <th>Player 2</th>
-        <th>Result</th>
+        <th>Team</th>
+        <th>Player</th>
+        <th>Innings</th>
+        <th>Defensive Shots</th>
+        <th>Wins</th>
+        <th>Winner</th>
+        <th>Date and Time Played</th>
       </tr>
     </thead>
     <tbody>
-      <% foreach(var match in Model.Matches) { %>
-      <tr>
-        <td><%= match.Player1.Name %></td>
-        <td><%= match.Player2.Name %></td>
-        <td>
-        <% if (match.IsComplete) { %>
-          Winner: <%= match.Winner.Name%>
-        <% } else { %>
-          Incomplete
-        <% } %>
-        </td>
-      </tr>
+      <% 
+        var firstMatch = true;
+        foreach (var match in Model.Matches) {
+          if (!firstMatch) { %>
+            <tr class="spacer-row"><td colspan="99"></td></tr>
+          <% }
+           var firstResult = true;
+           foreach (var result in match.Results) { %>
+            <tr>
+              <td><%= result.TeamName%></td>
+              <td><%= result.PlayerName%></td>
+              <% if (match.IsComplete) { %>
+              <td><%= result.Innings.ToString()%></td>
+              <td><%= result.DefensiveShots.ToString() %></td>
+              <td><%= result.Wins.ToString() %></td>
+              <td><%= result.Winner.ToString() %></td>
+              <td>
+              <% if (firstResult) {
+                   firstResult = false; %>
+                <%= match.DatePlayed%>
+              <% } %>
+              </td>
+              <% } else { %>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <% } %>
+            </tr>
+          <% }
+            firstMatch = false; %>
       <% } %>
     </tbody>
   </table>
