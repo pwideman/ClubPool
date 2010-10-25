@@ -9,6 +9,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
 {
   public class MeetViewModel
   {
+    public int Id { get; set; }
     public int ScheduledWeek { get; set; }
     public DateTime ScheduledDate { get; set; }
     public string Team1Name { get; set; }
@@ -20,6 +21,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     }
 
     public MeetViewModel(Meet meet) {
+      Id = meet.Id;
       ScheduledWeek = meet.Week + 1;
       ScheduledDate = meet.Division.StartingDate.AddDays(meet.Week * 7);
       Team1Name = meet.Team1.Name;

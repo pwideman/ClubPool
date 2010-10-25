@@ -1,5 +1,2 @@
-1) Use smtp desktop test util for email sending code
-2) Get cascading deletes working
-3) Make sure versioning still works
-4) See if I can use the Sharp NH config caching
-5) Investigate using DataAnnotations for view model validation, like new Sharp builds
+-- Use smtp desktop test util for email sending code
+-- Get cascading deletes working

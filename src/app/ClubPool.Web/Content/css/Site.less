@@ -762,28 +762,39 @@ form.inline {
 /* End Season View */
 
 table.match-details {
+  border: 0;
+  margin-top: 30px;
   thead {
-    tr {
-      th {
-        background-color: @light_blue;
-        text-align: center;
-        border: 1px solid @standard_blue;
-        padding: 6px;
+    th {
+      color: @dark_blue;
+      border-bottom: 2px solid @dark_blue;
+      padding: 0 12px 10px 12px;
+    }
+  }
+
+  tbody {
+    td {
+      padding: 8px 16px;
+      text-align: center;
+    }
+    tr:nth-child(odd) {
+      td {
+        padding-top: 20px;
+        border-bottom: 1px solid lightgray;
+      }
+    }
+    tr:nth-child(even) {
+      td {
+        border-bottom: 2px solid @standard_blue;
       }
     }
   }
-  tbody {
-    tr {
-      td {
-        padding: 8px;
-        text-align: center;
-        border: 1px solid @standard_blue;
-      }
-    }
-    tr.spacer-row {
-      td {
-        background-color: lightgray;
-      }
+
+  tfoot 
+  {
+    td 
+    {
+      padding: 12px;
     }
   }
 }

@@ -8,9 +8,16 @@
     <strong><%= Model.Team1Name %></strong> vs. <strong><%= Model.Team2Name %></strong>, 
     scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate.ToShortDateString() %>)
   </p>
-  <table class="match-details">
+  <div class="action-button-row">
+    <div class="action-button">
+      <%= Html.ContentImage("printer-medium.png", "Print a soresheet") %>
+      <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.PrintScoresheet(Model.Id), "Print a scoresheet") %>
+    </div>
+  </div>
+  <table class="match-details" cellpadding="0" cellspacing="0">
     <thead>
       <tr>
+        <th>Match</th>
         <th>Team</th>
         <th>Player</th>
         <th>Innings</th>
@@ -18,18 +25,22 @@
         <th>Wins</th>
         <th>Winner</th>
         <th>Date and Time Played</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <% 
-        var firstMatch = true;
+        var matchIndex = 0;
         foreach (var match in Model.Matches) {
-          if (!firstMatch) { %>
-            <tr class="spacer-row"><td colspan="99"></td></tr>
-          <% }
-           var firstResult = true;
-           foreach (var result in match.Results) { %>
+            var firstResult = true;
+            matchIndex++;
+            foreach (var result in match.Results) { %>
             <tr>
+              <td>
+              <% if (firstResult) { %>
+              <%= matchIndex.ToString() %>
+              <% } %>
+              </td>
               <td><%= result.TeamName%></td>
               <td><%= result.PlayerName%></td>
               <% if (match.IsComplete) { %>
@@ -38,8 +49,7 @@
               <td><%= result.Wins.ToString() %></td>
               <td><%= result.Winner.ToString() %></td>
               <td>
-              <% if (firstResult) {
-                   firstResult = false; %>
+              <% if (firstResult) { %>
                 <%= match.DatePlayed%>
               <% } %>
               </td>
@@ -50,10 +60,15 @@
               <td></td>
               <td></td>
               <% } %>
+              <td>
+              <% if (firstResult) { %>
+              commands
+              <% } %>
+              </td>
             </tr>
-          <% }
-            firstMatch = false; %>
-      <% } %>
+        <%    firstResult = false;
+            }
+      } %>
     </tbody>
   </table>
 </asp:Content>
