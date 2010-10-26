@@ -182,6 +182,7 @@
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
     <None Include="Content\css\menu.less" />
     <None Include="Content\css\jquery-ui-1.8.5.redmond.less" />
+    <Content Include="Content\css\scoresheet.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\clubpool.js" />
@@ -201,6 +202,7 @@
     <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Home\StaleObjectStateError.aspx" />
+    <Content Include="Views\Meets\Scoresheet.aspx" />
     <Content Include="Views\Meets\View.aspx" />
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Divisions\Create.aspx" />

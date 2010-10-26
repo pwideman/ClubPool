@@ -11,7 +11,7 @@
   <div class="action-button-row">
     <div class="action-button">
       <%= Html.ContentImage("printer-medium.png", "Print a soresheet") %>
-      <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.PrintScoresheet(Model.Id), "Print a scoresheet") %>
+      <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.Scoresheet(Model.Id), "Print a scoresheet") %>
     </div>
   </div>
   <table class="match-details" cellpadding="0" cellspacing="0">

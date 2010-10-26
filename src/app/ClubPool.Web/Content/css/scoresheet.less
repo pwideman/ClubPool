@@ -1,0 +1,58 @@
+﻿html 
+{
+  font: .8em Verdana, Arial, Helvetica;
+}
+
+div.header 
+{
+  width: 100%;
+  text-align: center;
+  font-size: 150%;
+  font-weight: bold;
+  padding: 12px;
+  margin: 10px;
+}
+
+table.scoresheet 
+{
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid black;
+
+  th, td 
+  {
+    border: 1px solid black;
+    padding: 6px;
+    white-space: nowrap;
+  }
+
+  th.innings-column 
+  {
+    width: 100%;
+  }
+
+  th.defshots-column
+  {
+    width: 140px;
+  }
+
+  tr.spacer-row td
+  {
+    height: 30px;
+    background-color: #CCCCCC;
+  }
+}
+
+table.innings-table {
+  width: 100%;
+  border-collapse: collapse;
+  tr {
+    td {
+      border: none;
+    }
+  }
+  tr:nth-child(odd) {
+    border-bottom: 1px solid black;
+  }
+}
+
