@@ -182,7 +182,6 @@
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
     <None Include="Content\css\menu.less" />
     <None Include="Content\css\jquery-ui-1.8.5.redmond.less" />
-    <Content Include="Content\css\scoresheet.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\clubpool.js" />
@@ -242,6 +241,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Content\css\scoresheet.less" />
     <None Include="Content\css\site.less" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
