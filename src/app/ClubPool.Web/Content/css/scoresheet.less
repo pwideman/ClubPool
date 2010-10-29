@@ -3,6 +3,11 @@
   font: .8em Verdana, Arial, Helvetica;
 }
 
+body
+{
+  padding: 10px;
+}
+
 div.header 
 {
   width: 100%;
@@ -13,9 +18,10 @@ div.header
   margin: 10px;
 }
 
-table.scoresheet 
+table.scoresheet
 {
-  width: 100%;
+  margin: auto;
+  width: 9in;
   border-collapse: collapse;
   border: 1px solid black;
 
@@ -23,36 +29,41 @@ table.scoresheet
   {
     border: 1px solid black;
     padding: 4px;
-    white-space: nowrap;
+    text-align: center;
   }
 
-  th.innings-column 
-  {
-    width: 100%;
+  td {
+    overflow: hidden;
+    white-space: normal;
+    hr {
+      border-top: 1px solid black;
+      margin: 34px 4px;
+    }
+  }
+  
+  td.name-column {
+    max-width: 1.5in;
   }
 
-  th.defshots-column
+  td.innings-column 
   {
-    width: 140px;
+    min-width: 5in;
+  }
+
+  td.defshots-column
+  {
+    min-width: 1.5in;
+  }
+
+  td.wins-column
+  {
+    min-width: 1in;
   }
 
   tr.spacer-row td
   {
-    height: 20px;
+    font-size: 0;
+    height: 8px;
     background-color: #CCCCCC;
   }
 }
-
-table.innings-table {
-  width: 100%;
-  border-collapse: collapse;
-  tr {
-    td {
-      border: none;
-    }
-  }
-  tr:nth-child(odd) {
-    border-bottom: 1px solid black;
-  }
-}
-

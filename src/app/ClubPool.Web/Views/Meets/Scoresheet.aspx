@@ -21,8 +21,8 @@
             <th>Player</th>
             <th>SL</th>
             <th>GTW</th>
-            <th class="innings-column">Innings</th>
-            <th class="defshots-column">Defensive Shots</th>
+            <th>Innings</th>
+            <th>Defensive Shots</th>
             <th>Wins</th>
           </tr>
         </thead>
@@ -42,8 +42,8 @@
                   <%= matchIndex.ToString() %>
                   <% } %>
                   </td>
-                  <td><%= result.TeamName %></td>
-                  <td><%= result.PlayerName %></td>
+                  <td class="name-column"><%= result.TeamName %></td>
+                  <td class="name-column"><%= result.PlayerName %></td>
                   <td>SL</td>
                   <td>GTW</td>
                   <% if (match.IsComplete) { %>
@@ -51,19 +51,9 @@
                   <td><%= result.DefensiveShots.ToString() %></td>
                   <td><%= result.Wins.ToString() %></td>
                   <% } else { %>
-                  <td>
-                    <table class="innings-table">
-                      <tr><td>&nbsp;</td></tr>
-                      <tr><td>&nbsp;</td></tr>
-                    </table>
-                  </td>
-                  <td>
-                    <table class="innings-table">
-                      <tr><td>&nbsp;</td></tr>
-                      <tr><td>&nbsp;</td></tr>
-                    </table>
-                  </td>
-                  <td></td>
+                  <td class="innings-column"><hr/></td>
+                  <td class="defshots-column"><hr/></td>
+                  <td class="wins-column"></td>
                   <% } %>
                 </tr>
             <%    firstResult = false;
