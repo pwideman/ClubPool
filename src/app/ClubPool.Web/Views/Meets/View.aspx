@@ -14,6 +14,8 @@
       <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.Scoresheet(Model.Id), "Print a scoresheet") %>
     </div>
   </div>
+  <% if (Model.CompletedMatches.Any()) { %>
+  <h4>Completed Matches</h4>
   <table class="match-details" cellpadding="0" cellspacing="0">
     <thead>
       <tr>
@@ -31,7 +33,7 @@
     <tbody>
       <% 
         var matchIndex = 0;
-        foreach (var match in Model.Matches) {
+        foreach (var match in Model.CompletedMatches) {
             var firstResult = true;
             matchIndex++;
             foreach (var result in match.Results) { %>
@@ -43,7 +45,6 @@
               </td>
               <td><%= result.TeamName%></td>
               <td><%= result.PlayerName%></td>
-              <% if (match.IsComplete) { %>
               <td><%= result.Innings.ToString()%></td>
               <td><%= result.DefensiveShots.ToString() %></td>
               <td><%= result.Wins.ToString() %></td>
@@ -53,13 +54,6 @@
                 <%= match.DatePlayed%>
               <% } %>
               </td>
-              <% } else { %>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <% } %>
               <td>
               <% if (firstResult) { %>
               commands
@@ -71,6 +65,11 @@
       } %>
     </tbody>
   </table>
+  <% }
+    if (Model.IncompleteMatches.Any()) {
+
+    }
+  %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">

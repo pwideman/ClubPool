@@ -14,10 +14,12 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public DateTime ScheduledDate { get; set; }
     public string Team1Name { get; set; }
     public string Team2Name { get; set; }
-    public IEnumerable<MatchViewModel> Matches { get; protected set; }
+    public IEnumerable<MatchViewModel> CompletedMatches { get; protected set; }
+    public IEnumerable<MatchViewModel> IncompleteMatches { get; protected set; }
 
     public MeetViewModel() {
-      Matches = new MatchViewModel[0];
+      CompletedMatches = new MatchViewModel[0];
+      IncompleteMatches = new MatchViewModel[0];
     }
 
     public MeetViewModel(Meet meet) {
@@ -26,11 +28,18 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       ScheduledDate = meet.Division.StartingDate.AddDays(meet.Week * 7);
       Team1Name = meet.Team1.Name;
       Team2Name = meet.Team2.Name;
-      var matches = new List<MatchViewModel>();
+      var completedMatches = new List<MatchViewModel>();
+      var incompleteMatches = new List<MatchViewModel>();
       foreach (var match in meet.Matches) {
-        matches.Add(new MatchViewModel(match));
+        if (match.IsComplete) {
+          completedMatches.Add(new MatchViewModel(match));
+        }
+        else {
+          incompleteMatches.Add(new MatchViewModel(match));
+        }
       }
-      Matches = matches;
+      CompletedMatches = completedMatches;
+      IncompleteMatches = incompleteMatches;
     }
 
   }
