@@ -46,16 +46,50 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
 
   public class IncompleteMatchViewModel
   {
-    public IEnumerable<PlayerViewModel> Players;
+    public PlayerViewModel Player1;
+    public PlayerViewModel Player2;
 
     public IncompleteMatchViewModel(Match match) {
-      var players = new List<PlayerViewModel>();
-      foreach (var player in match.Players) {
-        var team = match.Meet.Teams.Where(t => t.Players.Contains(player)).First();
-        players.Add(new PlayerViewModel(player, team));
-      }
-      Players = players;
+      var team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player1)).First();
+      Player1 = new PlayerViewModel(match.Player1, team);
+
+      team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player2)).First();
+      Player2 = new PlayerViewModel(match.Player2, team);
+
+      Player1.GamesToWin = CalculateGamesToWin(Player1.SkillLevel, Player2.SkillLevel);
+      Player2.GamesToWin = CalculateGamesToWin(Player2.SkillLevel, Player1.SkillLevel);
     }
+
+    private int CalculateGamesToWin(int skillLevel, int opponentSkillLevel) {
+      int gtw = 0;
+      int maxDifference = 1; // number of games to reduce skill level by
+      // compute GTW
+      if (0 == skillLevel || 0 == opponentSkillLevel) {
+        gtw = 4;
+      }
+      else {
+        int difference = 0;
+        if (skillLevel > opponentSkillLevel) {
+          if (opponentSkillLevel > 3) {
+            difference = opponentSkillLevel - 3;
+            if (difference > maxDifference) {
+              difference = maxDifference;
+            }
+          }
+        }
+        else {
+          if (skillLevel > 3) {
+            difference = skillLevel - 3;
+          }
+          if (difference > maxDifference) {
+            difference = maxDifference;
+          }
+        }
+        gtw = skillLevel - difference;
+      }
+      return gtw;
+    }
+
   }
 
   //public class TeamViewModel
@@ -81,7 +115,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public int Wins { get; set; }
     public int Losses { get; set; }
     public double WinPercentage { get; set; }
-    public int Ranking { get; set; }
+    public int GamesToWin { get; set; }
 
     public PlayerViewModel() {
     }
@@ -99,7 +133,6 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
         SkillLevel = 0;
       }
 
-      //var playerMatches = team.Division.Schedule.Where(m => m.Teams.Contains(team)).Select(;
       var completedMatches = from meet in team.Division.Schedule
                              where meet.Teams.Contains(team)
                              from match in meet.Matches
@@ -117,7 +150,6 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       if (Wins + Losses > 0) {
         WinPercentage = (double)Wins / (double)(Wins + Losses);
       }
-      Ranking = 1;
     }
   }
 

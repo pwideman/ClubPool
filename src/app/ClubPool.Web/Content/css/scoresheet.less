@@ -36,13 +36,15 @@ table.scoresheet
     overflow: hidden;
     white-space: normal;
     hr {
-      border-top: 1px solid black;
+      border: none;
+      border-top: 1px dashed gray;
       margin: 34px 4px;
     }
   }
   
   td.name-column {
     max-width: 1.5in;
+    min-width: .75in;
   }
 
   td.innings-column 
@@ -57,7 +59,7 @@ table.scoresheet
 
   td.wins-column
   {
-    min-width: 1in;
+    min-width: .75in;
   }
 
   tr.spacer-row td

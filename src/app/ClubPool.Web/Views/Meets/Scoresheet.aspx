@@ -29,36 +29,32 @@
         <tbody>
           <% 
             var matchIndex = 0;
-            foreach (var match in Model.Matches) {
+            foreach (var match in Model.IncompleteMatches) {
               if (matchIndex > 0) { %>
                 <tr class="spacer-row"><td colspan="99">&nbsp;</td></tr>
            <% }
-                var firstResult = true;
-                matchIndex++;
-                foreach (var result in match.Results) { %>
+                matchIndex++; %>
                 <tr>
-                  <td>
-                  <% if (firstResult) { %>
-                  <%= matchIndex.ToString() %>
-                  <% } %>
-                  </td>
-                  <td class="name-column"><%= result.TeamName %></td>
-                  <td class="name-column"><%= result.PlayerName %></td>
-                  <td>SL</td>
-                  <td>GTW</td>
-                  <% if (match.IsComplete) { %>
-                  <td><%= result.Innings.ToString() %></td>
-                  <td><%= result.DefensiveShots.ToString() %></td>
-                  <td><%= result.Wins.ToString() %></td>
-                  <% } else { %>
+                  <td><%= matchIndex.ToString() %></td>
+                  <td class="name-column"><%= match.Player1.TeamName%></td>
+                  <td class="name-column"><%= match.Player1.Name%></td>
+                  <td><%= match.Player1.SkillLevel > 0 ? match.Player1.SkillLevel.ToString() : "N/A" %></td>
+                  <td><%= match.Player1.GamesToWin.ToString() %></td>
                   <td class="innings-column"><hr/></td>
                   <td class="defshots-column"><hr/></td>
                   <td class="wins-column"></td>
-                  <% } %>
                 </tr>
-            <%    firstResult = false;
-                } 
-            } %>
+                <tr>
+                  <td></td>
+                  <td class="name-column"><%= match.Player2.TeamName%></td>
+                  <td class="name-column"><%= match.Player2.Name%></td>
+                  <td><%= match.Player2.SkillLevel > 0 ? match.Player2.SkillLevel.ToString() : "N/A" %></td>
+                  <td><%= match.Player2.GamesToWin.ToString() %></td>
+                  <td class="innings-column"><hr/></td>
+                  <td class="defshots-column"><hr/></td>
+                  <td class="wins-column"></td>
+                </tr>
+          <% } %>
         </tbody>
       </table>
     </div>

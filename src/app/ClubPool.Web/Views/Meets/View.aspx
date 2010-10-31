@@ -33,7 +33,6 @@
             <th>Player</th>
             <th>Skill Level</th>
             <th>Record</th>
-            <th>Ranking</th>
             <th/>
           </tr>
         </thead>
@@ -41,29 +40,24 @@
           <% 
         var matchIndex = 0;
         foreach (var match in Model.IncompleteMatches) {
-          var firstResult = true;
-          matchIndex++;
-          foreach (var player in match.Players) { %>
+          matchIndex++; %>
             <tr>
-              <td>
-              <% if (firstResult) { %>
-              <%= matchIndex.ToString()%>
-              <% } %>
-              </td>
-              <td><%= player.TeamName%></td>
-              <td><%= player.Name%></td>
-              <td><%= player.SkillLevel > 0 ? player.SkillLevel.ToString() : "None" %></td>
-              <td><%= player.Wins.ToString()%> - <%= player.Losses.ToString()%> (<%= player.WinPercentage.ToString(".00")%>)</td>
-              <td><%= player.Ranking.ToString()%></td>
-              <td>
-              <% if (firstResult) { %>
-              commands
-              <% } %>
-              </td>
+              <td><%= matchIndex.ToString()%></td>
+              <td><%= match.Player1.TeamName%></td>
+              <td><%= match.Player1.Name%></td>
+              <td><%= match.Player1.SkillLevel > 0 ? match.Player1.SkillLevel.ToString() : "None" %></td>
+              <td><%= match.Player1.Wins.ToString()%> - <%= match.Player1.Losses.ToString()%> (<%= match.Player1.WinPercentage.ToString(".00")%>)</td>
+              <td>commands</td>
             </tr>
-        <%    firstResult = false;
-          }
-        } %>
+            <tr>
+              <td></td>
+              <td><%= match.Player2.TeamName%></td>
+              <td><%= match.Player2.Name%></td>
+              <td><%= match.Player2.SkillLevel > 0 ? match.Player2.SkillLevel.ToString() : "None" %></td>
+              <td><%= match.Player2.Wins.ToString()%> - <%= match.Player2.Losses.ToString()%> (<%= match.Player2.WinPercentage.ToString(".00")%>)</td>
+              <td></td>
+            </tr>
+        <% } %>
         </tbody>
       </table>
     </div>
