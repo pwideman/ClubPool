@@ -66,10 +66,50 @@
     </tbody>
   </table>
   <% }
-    if (Model.IncompleteMatches.Any()) {
-
-    }
-  %>
+    if (Model.IncompleteMatches.Any()) { %>
+  <h4>Incomplete Matches</h4>
+  <table class="match-details">
+    <thead>
+      <tr>
+        <th>Match</th>
+        <th>Team</th>
+        <th>Player</th>
+        <th>Skill Level</th>
+        <th>Record</th>
+        <th>Ranking</th>
+        <th/>
+      </tr>
+    </thead>
+    <tbody>
+      <% 
+        var matchIndex = 0;
+        foreach (var match in Model.IncompleteMatches) {
+            var firstResult = true;
+            matchIndex++;
+            foreach (var player in match.Players) { %>
+            <tr>
+              <td>
+              <% if (firstResult) { %>
+              <%= matchIndex.ToString() %>
+              <% } %>
+              </td>
+              <td><%= player.TeamName%></td>
+              <td><%= player.Name%></td>
+              <td><%= player.SkillLevel.ToString()%></td>
+              <td><%= player.Wins.ToString() %> - <%= player.Losses.ToString() %> (<%= player.WinPercentage.ToString(".00") %>)</td>
+              <td><%= player.Ranking.ToString() %></td>
+              <td>
+              <% if (firstResult) { %>
+              commands
+              <% } %>
+              </td>
+            </tr>
+        <%    firstResult = false;
+            }
+      } %>
+    </tbody>
+  </table>
+  <%  }  %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
