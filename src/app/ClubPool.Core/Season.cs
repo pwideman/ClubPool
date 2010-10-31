@@ -18,16 +18,18 @@ namespace ClubPool.Core
     public virtual bool IsActive { get; set; }
     public virtual int Version { get; protected set; }
     public virtual IEnumerable<Division> Divisions { get { return divisions; } }
+    public virtual GameType GameType { get; set; }
 
     protected Season() {
       InitMembers();
     }
 
-    public Season(string name)
+    public Season(string name, GameType gameType)
       : this() {
       Check.Require(!string.IsNullOrEmpty(name), "name cannot be null or empty");
 
       Name = name;
+      GameType = gameType;
     }
 
     protected virtual void InitMembers() {

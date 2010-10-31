@@ -50,7 +50,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     Establish context = () => {
       var seasons = new List<Season>();
       for (var i = 0; i < pages * pageSize; i++) {
-        seasons.Add(new Season("season" + i.ToString()));
+        seasons.Add(new Season("season" + i.ToString(), GameType.EightBall));
       }
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
     };
@@ -129,7 +129,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static KeyValuePair<string, object> pageRouteValue;
 
     Establish context = () => {
-      var season = new Season("Test");
+      var season = new Season("Test", GameType.EightBall);
       seasonsRepository.Stub(r => r.Get(id)).Return(season);
       seasonsRepository.Expect(r => r.Delete(season));
       pageRouteValue = new KeyValuePair<string, object>("page", page);
@@ -176,7 +176,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static KeyValuePair<string, object> pageRouteValue;
 
     Establish context = () => {
-      var season = new Season("name");
+      var season = new Season("name", GameType.EightBall);
       season.IsActive = true; // will make CanDelete() return false
       seasonsRepository.Stub(r => r.Get(id)).Return(season);
       pageRouteValue = new KeyValuePair<string, object>("page", page);
@@ -204,13 +204,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
 
     Establish context = () => {
       seasons = new List<Season>();
-  
-      var season = new Season(name);
+
+      var season = new Season(name, GameType.EightBall);
       season.IsActive = true;
       seasons.Add(season);
 
       for (int i = 1; i <= inactiveCount; i++) {
-        season = new Season("other" + i.ToString());
+        season = new Season("other" + i.ToString(), GameType.EightBall);
         seasons.Add(season);
       }
       seasonsRepository.Stub(r => r.GetAll()).Return(seasons.AsQueryable());
@@ -239,16 +239,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     Establish context = () => {
       seasons = new List<Season>();
 
-      activeSeason = new Season(name);
+      activeSeason = new Season(name, GameType.EightBall);
       activeSeason.IsActive = true;
       seasons.Add(activeSeason);
 
       for (int i = 1; i <= inactiveCount; i++) {
-        var season = new Season("other" + i.ToString());
+        var season = new Season("other" + i.ToString(), GameType.EightBall);
         seasons.Add(season);
       }
 
-      newActiveSeason = new Season("newactive");
+      newActiveSeason = new Season("newactive", GameType.EightBall);
       newActiveSeason.SetIdTo(newActiveSeasonId);
       seasons.Add(newActiveSeason);
 
@@ -284,7 +284,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static HttpNotFoundResultHelper resultHelper;
 
     Establish context = () => {
-      activeSeason = new Season("name");
+      activeSeason = new Season("name", GameType.EightBall);
       activeSeason.IsActive = true;
       seasons = new List<Season>();
       seasons.Add(activeSeason);
@@ -312,7 +312,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static string name = "name";
 
     Establish context = () => {
-      var season = new Season(name);
+      var season = new Season(name, GameType.EightBall);
 
       seasonsRepository.Stub(r => r.Get(id)).Return(season);
     };
@@ -334,7 +334,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static EditSeasonViewModel viewModel;
 
     Establish context = () => {
-      season = new Season("temp");
+      season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       season.SetVersionTo(version);
 
@@ -415,7 +415,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static Season season;
 
     Establish context = () => {
-      season = new Season("temp");
+      season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       season.SetVersionTo(version);
 
@@ -446,7 +446,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     Establish context = () => {
       var seasons = new List<Season>();
       for (int i = 1; i < 4; i++) {
-        var season = new Season("season" + i.ToString());
+        var season = new Season("season" + i.ToString(), GameType.EightBall);
         season.SetIdTo(i);
         season.SetVersionTo(version);
         seasons.Add(season);
@@ -475,7 +475,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons
     static Season season;
 
     Establish context = () => {
-      season = new Season("test");
+      season = new Season("test", GameType.EightBall);
       season.SetIdTo(id);
 
       seasonsRepository.Stub(r => r.Get(id)).Return(season);

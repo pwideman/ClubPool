@@ -89,10 +89,34 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public PlayerViewModel(User player, Team team) {
       Name = player.FullName;
       TeamName = team.Name;
-      SkillLevel = 5;
-      Wins = 8;
-      Losses = 3;
-      WinPercentage = (double)Wins/(double)(Wins+Losses);
+
+      var gameType = team.Division.Season.GameType;
+      var slQuery = player.SkillLevels.Where(sl => sl.GameType == gameType);
+      if (slQuery.Any()) {
+        SkillLevel = slQuery.First().Value;
+      }
+      else {
+        SkillLevel = 0;
+      }
+
+      //var playerMatches = team.Division.Schedule.Where(m => m.Teams.Contains(team)).Select(;
+      var completedMatches = from meet in team.Division.Schedule
+                             where meet.Teams.Contains(team)
+                             from match in meet.Matches
+                             where match.Players.Contains(player) && match.IsComplete
+                             select match;
+
+      foreach (var match in completedMatches) {
+        if (match.Winner == player) {
+          Wins++;
+        }
+        else {
+          Losses++;
+        }
+      }
+      if (Wins + Losses > 0) {
+        WinPercentage = (double)Wins / (double)(Wins + Losses);
+      }
       Ranking = 1;
     }
   }

@@ -10,6 +10,7 @@ namespace ClubPool.Core
   {
     // fields
     protected IList<Role> roles;
+    protected IList<SkillLevel> skillLevels;
 
     // mapped properties
     [DomainSignature]
@@ -23,6 +24,7 @@ namespace ClubPool.Core
     public virtual bool IsLocked { get; set; }
     public virtual int Version { get; protected set; }
     public virtual IEnumerable<Role> Roles { get { return roles; } }
+    public virtual IEnumerable<SkillLevel> SkillLevels { get { return skillLevels; } }
 
     // generated properties
     public virtual string FullName {
@@ -85,6 +87,22 @@ namespace ClubPool.Core
 
     public virtual bool CanDelete() {
       return true;
+    }
+
+    public virtual void AddSkillLevel(SkillLevel skillLevel) {
+      Check.Require(null != skillLevel, "skillLevel cannot be null");
+
+      if (!skillLevels.Contains(skillLevel)) {
+        skillLevels.Add(skillLevel);
+      }
+    }
+
+    public virtual void RemoveSkillLevel(SkillLevel skillLevel) {
+      Check.Require(null != skillLevel, "skillLevel cannot be null");
+
+      if (skillLevels.Contains(skillLevel)) {
+        skillLevels.Remove(skillLevel);
+      }
     }
 
   }

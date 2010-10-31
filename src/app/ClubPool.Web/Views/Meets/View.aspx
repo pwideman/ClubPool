@@ -14,90 +14,47 @@
       <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.Scoresheet(Model.Id), "Print a scoresheet") %>
     </div>
   </div>
-  <% if (Model.CompletedMatches.Any()) { %>
-  <h4>Completed Matches</h4>
-  <table class="match-details" cellpadding="0" cellspacing="0">
-    <thead>
-      <tr>
-        <th>Match</th>
-        <th>Team</th>
-        <th>Player</th>
-        <th>Innings</th>
-        <th>Defensive Shots</th>
-        <th>Wins</th>
-        <th>Winner</th>
-        <th>Date and Time Played</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% 
-        var matchIndex = 0;
-        foreach (var match in Model.CompletedMatches) {
-            var firstResult = true;
-            matchIndex++;
-            foreach (var result in match.Results) { %>
-            <tr>
-              <td>
-              <% if (firstResult) { %>
-              <%= matchIndex.ToString() %>
-              <% } %>
-              </td>
-              <td><%= result.TeamName%></td>
-              <td><%= result.PlayerName%></td>
-              <td><%= result.Innings.ToString()%></td>
-              <td><%= result.DefensiveShots.ToString() %></td>
-              <td><%= result.Wins.ToString() %></td>
-              <td><%= result.Winner.ToString() %></td>
-              <td>
-              <% if (firstResult) { %>
-                <%= match.DatePlayed%>
-              <% } %>
-              </td>
-              <td>
-              <% if (firstResult) { %>
-              commands
-              <% } %>
-              </td>
-            </tr>
-        <%    firstResult = false;
-            }
-      } %>
-    </tbody>
-  </table>
-  <% }
-    if (Model.IncompleteMatches.Any()) { %>
-  <h4>Incomplete Matches</h4>
-  <table class="match-details">
-    <thead>
-      <tr>
-        <th>Match</th>
-        <th>Team</th>
-        <th>Player</th>
-        <th>Skill Level</th>
-        <th>Record</th>
-        <th>Ranking</th>
-        <th/>
-      </tr>
-    </thead>
-    <tbody>
-      <% 
+  <div id="matches_tabs">
+    <ul>
+      <% if (Model.IncompleteMatches.Any()) { %>
+      <li><a href="#incomplete_matches">Incomplete Matches</a></li>
+      <% }
+        if (Model.CompletedMatches.Any()) { %>
+      <li><a href="#complete_matches">Complete Matches</a></li>
+      <% } %>
+    </ul>
+    <% if (Model.IncompleteMatches.Any()) { %>
+    <div id="#incomplete_matches">
+      <table class="incomplete-match-details">
+        <thead>
+          <tr>
+            <th>Match</th>
+            <th>Team</th>
+            <th>Player</th>
+            <th>Skill Level</th>
+            <th>Record</th>
+            <th>Ranking</th>
+            <th/>
+          </tr>
+        </thead>
+        <tbody>
+          <% 
         var matchIndex = 0;
         foreach (var match in Model.IncompleteMatches) {
-            var firstResult = true;
-            matchIndex++;
-            foreach (var player in match.Players) { %>
+          var firstResult = true;
+          matchIndex++;
+          foreach (var player in match.Players) { %>
             <tr>
               <td>
               <% if (firstResult) { %>
-              <%= matchIndex.ToString() %>
+              <%= matchIndex.ToString()%>
               <% } %>
               </td>
               <td><%= player.TeamName%></td>
               <td><%= player.Name%></td>
-              <td><%= player.SkillLevel.ToString()%></td>
-              <td><%= player.Wins.ToString() %> - <%= player.Losses.ToString() %> (<%= player.WinPercentage.ToString(".00") %>)</td>
-              <td><%= player.Ranking.ToString() %></td>
+              <td><%= player.SkillLevel > 0 ? player.SkillLevel.ToString() : "None" %></td>
+              <td><%= player.Wins.ToString()%> - <%= player.Losses.ToString()%> (<%= player.WinPercentage.ToString(".00")%>)</td>
+              <td><%= player.Ranking.ToString()%></td>
               <td>
               <% if (firstResult) { %>
               commands
@@ -105,11 +62,71 @@
               </td>
             </tr>
         <%    firstResult = false;
-            }
-      } %>
-    </tbody>
-  </table>
-  <%  }  %>
+          }
+        } %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+  <% if (Model.CompletedMatches.Any()) { %>
+    <div id="#complete_matches">
+      <table class="match-details" cellpadding="0" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Match</th>
+            <th>Team</th>
+            <th>Player</th>
+            <th>Innings</th>
+            <th>Defensive Shots</th>
+            <th>Wins</th>
+            <th>Winner</th>
+            <th>Date and Time Played</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% 
+            var matchIndex = 0;
+            foreach (var match in Model.CompletedMatches) {
+                var firstResult = true;
+                matchIndex++;
+                foreach (var result in match.Results) { %>
+                <tr>
+                  <td>
+                  <% if (firstResult) { %>
+                  <%= matchIndex.ToString() %>
+                  <% } %>
+                  </td>
+                  <td><%= result.TeamName%></td>
+                  <td><%= result.PlayerName%></td>
+                  <td><%= result.Innings.ToString()%></td>
+                  <td><%= result.DefensiveShots.ToString() %></td>
+                  <td><%= result.Wins.ToString() %></td>
+                  <td><%= result.Winner.ToString() %></td>
+                  <td>
+                  <% if (firstResult) { %>
+                    <%= match.DatePlayed%>
+                  <% } %>
+                  </td>
+                  <td>
+                  <% if (firstResult) { %>
+                  commands
+                  <% } %>
+                  </td>
+                </tr>
+            <%    firstResult = false;
+                }
+          } %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </div>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("#matches_tabs").tabs();
+    });
+  </script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">

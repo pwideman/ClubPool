@@ -114,7 +114,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static int id = 1;
 
     Establish context = () => {
-      var season = new Season("Test");
+      var season = new Season("Test", GameType.EightBall);
       season.SetIdTo(id);
       var seasons = new List<Season>();
       seasons.Add(season);

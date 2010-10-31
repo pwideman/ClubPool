@@ -60,7 +60,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams.ViewModels
     static List<User> users;
 
     Establish context = () => {
-      division = new Division("temp", DateTime.Now, new Season("temp"));
+      division = new Division("temp", DateTime.Now, new Season("temp", GameType.EightBall));
       division.SetIdTo(1);
 
       users = GetUsers(5);

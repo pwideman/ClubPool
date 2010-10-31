@@ -49,7 +49,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static List<User> users;
 
     Establish context = () => {
-      var division = new Division(divisionName, DateTime.Now, new Season("temp"));
+      var division = new Division(divisionName, DateTime.Now, new Season("temp", GameType.EightBall));
       division.SetIdTo(divisionId);
       divisionRepository.Stub(r => r.Get(divisionId)).Return(division);
 
@@ -98,7 +98,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       viewModel.Name = name;
       viewModel.DivisionId = divisionId;
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(1);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(divisionId);
@@ -143,7 +143,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       viewModel = new CreateTeamViewModel();
       viewModel.DivisionId = divisionId;
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(1);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(1);
@@ -188,7 +188,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       viewModel.Name = name;
       viewModel.DivisionId = divisionId;
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(1);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(1);
@@ -271,7 +271,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static Team team;
 
     Establish context = () => {
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
@@ -312,7 +312,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     static int playerId = 10;
 
     Establish context = () => {
-      var division = new Division("temp", DateTime.Now, new Season("temp"));
+      var division = new Division("temp", DateTime.Now, new Season("temp", GameType.EightBall));
       division.SetIdTo(id);
 
       users = DomainHelpers.GetUsers(5);
@@ -357,7 +357,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
@@ -426,7 +426,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
@@ -462,7 +462,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);
@@ -501,7 +501,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       season.SetVersionTo(version);
 
@@ -567,7 +567,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
     Establish context = () => {
 
-      var season = new Season("temp");
+      var season = new Season("temp", GameType.EightBall);
       season.SetIdTo(id);
       var division = new Division("temp", DateTime.Now, season);
       division.SetIdTo(id);

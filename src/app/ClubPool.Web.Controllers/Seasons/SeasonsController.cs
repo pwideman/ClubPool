@@ -61,7 +61,7 @@ namespace ClubPool.Web.Controllers.Seasons
         return View(viewModel);
       }
 
-      var season = new Season(viewModel.Name);
+      var season = new Season(viewModel.Name, GameType.EightBall);
       seasonRepository.SaveOrUpdate(season);
       
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was created successfully";

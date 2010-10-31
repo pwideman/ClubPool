@@ -761,9 +761,10 @@ form.inline {
 
 /* End Season View */
 
-table.match-details {
+table.incomplete-match-details {
   border: 0;
-  margin-top: 30px;
+  margin: 20px 10px;
+  font-size: 85%;
   thead {
     th {
       color: @dark_blue;
@@ -786,6 +787,11 @@ table.match-details {
     tr:nth-child(even) {
       td {
         border-bottom: 2px solid @standard_blue;
+      }
+    }
+    tr:last-child {
+      td {
+        border-bottom: none;
       }
     }
   }

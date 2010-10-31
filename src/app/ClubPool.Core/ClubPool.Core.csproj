@@ -73,6 +73,7 @@
     <Compile Include="Contracts\IUserRepository.cs" />
     <Compile Include="CreateScheduleException.cs" />
     <Compile Include="Division.cs" />
+    <Compile Include="GameType.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="MatchResult.cs" />
     <Compile Include="Meet.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Role.cs" />
     <Compile Include="Roles.cs" />
     <Compile Include="Season.cs" />
+    <Compile Include="SkillLevel.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="User.cs" />
     <Compile Include="IEntityWithVersion.cs" />

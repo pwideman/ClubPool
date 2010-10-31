@@ -71,7 +71,6 @@ namespace ClubPool.SchemaGen
         }
 
         output("Creating dummy data");
-        var seasonRepo = new SeasonRepository();
         int userIndex = 1;
         var users = new List<User>();
         using (userRepo.DbContext.BeginTransaction()) {
@@ -83,10 +82,11 @@ namespace ClubPool.SchemaGen
           userRepo.DbContext.CommitTransaction();
         }
 
+        var seasonRepo = new SeasonRepository();
         using (seasonRepo.DbContext.BeginTransaction()) {
           for (int seasonIndex = 1; seasonIndex <= 5; seasonIndex++) {
             output("Creating season " + seasonIndex.ToString());
-            var season = new Season("Season " + seasonIndex.ToString());
+            var season = new Season("Season " + seasonIndex.ToString(), GameType.EightBall);
             season.IsActive = false;
             userIndex = 0;
             for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
