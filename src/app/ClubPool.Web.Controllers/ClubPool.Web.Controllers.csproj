@@ -98,6 +98,8 @@
     <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="HttpNotFoundResult.cs" />
+    <Compile Include="Matches\MatchesController.cs" />
+    <Compile Include="Matches\ViewModels\EditMatchViewModel.cs" />
     <Compile Include="Meets\MeetsController.cs" />
     <Compile Include="Meets\ViewModels\MeetViewModel.cs" />
     <Compile Include="PagedListViewModelBase.cs" />

@@ -185,6 +185,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\clubpool.js" />
+    <Content Include="Scripts\jquery.alphanumeric.js" />
     <Content Include="Scripts\jquery.bgiframe.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.corner.js" />
