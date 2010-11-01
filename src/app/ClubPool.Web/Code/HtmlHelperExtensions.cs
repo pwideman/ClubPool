@@ -16,5 +16,9 @@ namespace ClubPool.Web.Code
     public static MvcHtmlString ContentImage(this HtmlHelper helper, string image, string alt) {
       return helper.Image("~/content/images/" + image, alt);
     }
+
+    public static MvcHtmlString ContentImage(this HtmlHelper helper, string image, string alt, object htmlAttributes) {
+      return helper.Image("~/content/images/" + image, alt, htmlAttributes);
+    }
   }
 }

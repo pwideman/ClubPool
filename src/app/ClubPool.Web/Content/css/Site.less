@@ -761,6 +761,8 @@ form.inline {
 
 /* End Season View */
 
+/* Meets/view */
+
 table.incomplete-match-details {
   border: 0;
   margin: 20px 10px;
@@ -777,21 +779,20 @@ table.incomplete-match-details {
     td {
       padding: 8px 16px;
       text-align: center;
+      img.enter-results-link {
+        cursor: pointer;
+      }
     }
-    tr:nth-child(odd) {
+    tr.spacer-row {
       td {
-        padding-top: 20px;
+        font-size: 1px;
+        border-top: 2px solid @standard_blue;
+      }
+    }
+    tr.first {
+      td {
+        padding-top: 10px;
         border-bottom: 1px solid lightgray;
-      }
-    }
-    tr:nth-child(even) {
-      td {
-        border-bottom: 2px solid @standard_blue;
-      }
-    }
-    tr:last-child {
-      td {
-        border-bottom: none;
       }
     }
   }
@@ -804,3 +805,39 @@ table.incomplete-match-details {
     }
   }
 }
+
+div#enter_results_form {
+  display: none;
+
+  table {
+    thead {
+      tr {
+        th {
+          padding: 4px 8px;
+          border-bottom: 1px solid @dark_blue;
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          text-align: center;
+          padding: 6px;
+          input[type="text"] {
+            width: 30px;
+          }
+        }
+        td.name {
+          min-width: 120px;
+        }
+      }
+      tr#player1 {
+        td {
+          border-bottom: 1px solid lightgray;
+        }
+      }
+    }
+  }
+}
+
+/* end meets/view */

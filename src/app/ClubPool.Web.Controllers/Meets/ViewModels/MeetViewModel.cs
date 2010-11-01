@@ -48,8 +48,11 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
   {
     public PlayerViewModel Player1;
     public PlayerViewModel Player2;
+    public int Id;
 
     public IncompleteMatchViewModel(Match match) {
+      Id = match.Id;
+
       var team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player1)).First();
       Player1 = new PlayerViewModel(match.Player1, team);
 
