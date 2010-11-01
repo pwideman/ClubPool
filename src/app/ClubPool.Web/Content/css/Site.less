@@ -806,7 +806,7 @@ table.incomplete-match-details {
   }
 }
 
-div#enter_results_form {
+div#enter_results_window {
   display: none;
 
   table {
@@ -831,12 +831,20 @@ div#enter_results_form {
           min-width: 120px;
         }
       }
-      tr#player1 {
+      tr.first {
         td {
           border-bottom: 1px solid lightgray;
         }
       }
     }
+  }
+}
+
+div#enter_results_waiting_indicator {
+  display: none;
+  margin-left: 180px;
+  img {
+    vertical-align: middle;
   }
 }
 

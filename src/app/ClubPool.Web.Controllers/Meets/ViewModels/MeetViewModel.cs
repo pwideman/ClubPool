@@ -112,6 +112,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
 
   public class PlayerViewModel
   {
+    public int Id { get; set; }
     public string Name { get; set; }
     public int SkillLevel { get; set; }
     public string TeamName { get; set; }
@@ -124,6 +125,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     }
 
     public PlayerViewModel(User player, Team team) {
+      Id = player.Id;
       Name = player.FullName;
       TeamName = team.Name;
 

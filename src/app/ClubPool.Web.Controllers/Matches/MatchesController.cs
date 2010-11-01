@@ -25,7 +25,7 @@ namespace ClubPool.Web.Controllers.Matches
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditMatchViewModel viewModel) {
-      return View();
+      return new EmptyResult();
     }
   }
 }
