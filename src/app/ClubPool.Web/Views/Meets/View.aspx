@@ -42,9 +42,9 @@
       </div>
       <% } %>
     </div>
-  <% } %>
-  <% if (Model.CompletedMatches.Any()) { %>
-    <div id="#complete_matches">
+  <% }
+     if (Model.CompletedMatches.Any()) { %>
+    <div id="complete_matches">
       <table class="match-details" cellpadding="0" cellspacing="0">
         <thead>
           <tr>
@@ -131,10 +131,6 @@
       </tbody>
     </table>
     <% } %>
-  </div>
-  <div id="enter_results_waiting_indicator">
-    <%= Html.ContentImage("loading.gif", "Loading") %>
-    Please wait...
   </div>
   <script type="text/javascript">
     // initialize some variables needed to enter match results

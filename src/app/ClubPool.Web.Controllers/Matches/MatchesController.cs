@@ -20,12 +20,45 @@ namespace ClubPool.Web.Controllers.Matches
 {
   public class MatchesController : BaseController
   {
+    protected IMatchRepository matchRepository;
+    protected IUserRepository userRepository;
+
+    public MatchesController(IMatchRepository matchRepository, IUserRepository userRepository) {
+      Check.Require(null != matchRepository, "matchRepository cannot be null");
+      Check.Require(null != userRepository, "userRepository cannot be null");
+
+      this.matchRepository = matchRepository;
+      this.userRepository = userRepository;
+    }
+
     [HttpPost]
     [Transaction]
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditMatchViewModel viewModel) {
-      return new EmptyResult();
+      var match = matchRepository.Get(viewModel.Id);
+      if (match.IsComplete) {
+        return new EmptyResult();
+      }
+      else {
+        var player1 = userRepository.Get(viewModel.Player1.Id);
+        var matchResult = new MatchResult(player1, 
+          viewModel.Player1.Innings, 
+          viewModel.Player1.DefensiveShots, 
+          viewModel.Player1.Wins);
+        match.AddResult(matchResult);
+
+        var player2 = userRepository.Get(viewModel.Player2.Id);
+        matchResult = new MatchResult(player2,
+          viewModel.Player2.Innings,
+          viewModel.Player2.DefensiveShots,
+          viewModel.Player2.Wins);
+        match.AddResult(matchResult);
+
+        match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
+        match.IsComplete = true;
+        return new EmptyResult();
+      }
     }
   }
 }
