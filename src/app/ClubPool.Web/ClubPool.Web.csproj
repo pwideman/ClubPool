@@ -205,6 +205,7 @@
     <Content Include="Views\Home\StaleObjectStateError.aspx" />
     <Content Include="Views\Meets\Scoresheet.aspx" />
     <Content Include="Views\Meets\View.aspx" />
+    <Content Include="Views\Meets\PlayerCard.ascx" />
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Divisions\Create.aspx" />
     <Content Include="Views\Teams\PlayerListView.ascx" />

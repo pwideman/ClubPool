@@ -25,49 +25,22 @@
       <% } %>
     </ul>
     <% if (Model.IncompleteMatches.Any()) { %>
-    <div id="#incomplete_matches">
-      <table class="incomplete-match-details">
-        <thead>
-          <tr>
-            <th>Match</th>
-            <th>Team</th>
-            <th>Player</th>
-            <th>Skill Level</th>
-            <th>Record</th>
-            <th/>
-          </tr>
-        </thead>
-        <tbody>
-          <% 
-        var matchIndex = 1;
-        var previousMatchId = 0;
-        foreach (var match in Model.IncompleteMatches) { %>
-          <% if (matchIndex > 1) { %>
-            <tr class="spacer-row" id="<%= (previousMatchId.ToString() + ".row3") %>"><td colspan="99">&nbsp;</td></tr>
-          <% } %>
-            <tr class="first" id="<%= (match.Id.ToString() + ".row1") %>">
-              <td><%= matchIndex.ToString()%></td>
-              <td><%= match.Player1.TeamName%></td>
-              <td><%= match.Player1.Name%></td>
-              <td><%= match.Player1.SkillLevel > 0 ? match.Player1.SkillLevel.ToString() : "None" %></td>
-              <td><%= match.Player1.Wins.ToString()%> - <%= match.Player1.Losses.ToString()%> (<%= match.Player1.WinPercentage.ToString(".00")%>)</td>
-              <td>
-                <%= Html.ContentImage("enterresults-medium.png", "Enter results", new { @class = "enter-results-link", id = match.Id })%>
-              </td>
-            </tr>
-            <tr id="<%= (match.Id.ToString() + ".row2") %>">
-              <td></td>
-              <td><%= match.Player2.TeamName%></td>
-              <td><%= match.Player2.Name%></td>
-              <td><%= match.Player2.SkillLevel > 0 ? match.Player2.SkillLevel.ToString() : "None" %></td>
-              <td><%= match.Player2.Wins.ToString()%> - <%= match.Player2.Losses.ToString()%> (<%= match.Player2.WinPercentage.ToString(".00")%>)</td>
-              <td></td>
-            </tr>
-        <%  matchIndex++;
-            previousMatchId = match.Id;
-           } %>
-        </tbody>
-      </table>
+    <div id="incomplete_matches">
+      <% foreach (var match in Model.IncompleteMatches) { %>
+      <div id="incompletematch<%= match.Id.ToString() %>" class="incomplete-match">
+        <% Html.RenderPartial("PlayerCard", match.Player1); %>
+        vs.
+        <% Html.RenderPartial("PlayerCard", match.Player2); %>
+        <div class="action-button-column">
+          <div class="action-button enter-results-link" id="<%= match.Id %>">
+            <%= Html.ContentImage("enterresults-medium.png", "Enter results") %>
+            Enter Results
+          </div>
+        </div>
+        <div class="status" id="incompletematch<%= match.Id.ToString() %>_status">
+        </div>
+      </div>
+      <% } %>
     </div>
   <% } %>
   <% if (Model.CompletedMatches.Any()) { %>
@@ -175,25 +148,29 @@
       player2Id: <%= match.Player2.Id.ToString() %>
     };
     <% } %>
-    var $current_match = null;
+    var $current_match_id = null;
+    var $current_match_status = null;
+    var $current_match_row = null;
 
     $(document).ready(function () {
       // create tabs
       $("#matches_tabs").tabs();
       // create ajax form
       $("#enter_results_form").ajaxForm(function(response, status, xhr, form) {
+        $current_match_status.html("");
         $log("response: ", response);
         $log("status: ", status);
         $log("xhr: ", xhr);
         $log("form: ", form);
         if (xhr.status === 200) {
-          // TODO: display success
-          // remove match from table
+          // update was successful, remove match from table
           var id = form.find("input[name='Id']").val();
-          $("tr[id^='" + id + ".row']").fadeOut(1000);
+          $current_match_row.effect("highlight", "slow", function() {
+            $(this).slideUp(500);
+          });
         }
         else {
-          // TODO: what to do?
+          // TODO: error, what to do?
         }
       });
 
@@ -204,7 +181,7 @@
         buttons: {
           "OK": function () {
             $(this).dialog("close");
-            // TODO: display waiting indicator
+            $current_match_status.html('<%= Html.ContentImage("loading.gif", "Loading") %>&nbsp;Please wait...');
             $("#enter_results_form").submit();
           },
           "Cancel": function () {
@@ -219,7 +196,9 @@
       // add click event handler to enter results image links
       $(".enter-results-link").click(function () {
         var match = $matches[this.id];
-        $current_match = this.id;
+        $current_match_id = this.id;
+        $current_match_row = $("#incompletematch" + $current_match_id);
+        $current_match_status = $("#incompletematch" + $current_match_id + "_status");
         $("#match_id").val(this.id);
         $("#player1name").text(match.player1Name);
         $("#player2name").text(match.player2Name);

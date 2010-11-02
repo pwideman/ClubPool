@@ -848,4 +848,72 @@ div#enter_results_waiting_indicator {
   }
 }
 
+div.action-button-column {
+  div.action-button {
+    cursor: pointer;
+    padding: 4px;
+    border: 2px solid @light_blue;
+    background-color: @extralight_blue;
+    .corner(4px);
+    color: black;
+  }
+  div.action-button:hover {
+    color: @standard_blue;
+  }
+}
+
+div.incomplete-match {
+  padding: 12px 4px;
+  border-bottom: 1px dotted gray;
+
+  div.action-button-column {
+    display: inline-block;
+  }
+
+  div.status {
+    display: inline-block;
+    margin-left: 12px;
+    vertical-align: top;
+    img {
+      vertical-align: middle;
+    }
+  }
+
+  div.player-card {
+    border: 1px solid @light_blue;
+    .corner(6px);
+    display: inline-block;
+
+    div.header {
+      background-color: @light_blue;
+      .topcorner(6px);
+      color: black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    div.details {
+      padding: 8px;
+      min-width: 200px;
+      max-width: 300px;
+      overflow: hidden;
+      padding-bottom: 12px;
+
+      div.details-row {
+        clear: both;
+        div.label {
+          display: inline;
+          float: left;
+          margin-right: 6px;
+        }
+        div.data {
+          margin-left: 6px;
+          display: inline;
+          float: right;
+        }
+      }
+    }
+  }
+}
+
 /* end meets/view */
