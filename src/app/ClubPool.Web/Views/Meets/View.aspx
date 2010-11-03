@@ -93,7 +93,7 @@
             <td></td>
             <% } %>
             <td></td>
-            <td></td>
+            <td><div id="<%= match.Id%>_status" class="status"></div></td>
           </tr>
         <% } %>
     </tbody>
@@ -175,13 +175,14 @@
     <% } %>
     var $current_match_id = null;
     var $current_match_status = null;
-    var $current_match_row = null;
+    var $current_match_rows = null;
 
     $(document).ready(function () {
       // create tabs
       //$("#matches_tabs").tabs();
       // create ajax form
       $("#enter_results_form").ajaxForm(function(response, status, xhr, form) {
+        $current_match_status.html("");
         $log("response: ", response);
         $log("status: ", status);
         $log("xhr: ", xhr);
@@ -203,7 +204,7 @@
         buttons: {
           "OK": function () {
             $(this).dialog("close");
-            //$current_match_status.html('<%= Html.ContentImage("loading.gif", "Loading") %>&nbsp;Please wait...');
+            $current_match_status.html('<%= Html.ContentImage("loading.gif", "Loading") %>&nbsp;Please wait...');
             $("#enter_results_form").submit();
           },
           "Cancel": function () {
@@ -220,6 +221,7 @@
         var match = $matches[this.id];
         $current_match_id = this.id;
         $current_match_rows = $("tr[id^='" + $current_match_id + "_']");
+        $current_match_status = $("#" + match.id + "_status");
         var form = $("#enter_results_form");
         populateResultsForm(form, match);
         $enter_results_dialog.dialog("open");
