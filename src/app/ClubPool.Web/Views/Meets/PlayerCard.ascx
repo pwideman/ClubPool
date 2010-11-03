@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Meets.ViewModels.PlayerViewModel>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Meets.ViewModels.MeetViewPlayerViewModel>" %>
 
 <div class="player-card">
   <div class="header"><%= Model.Name %></div>

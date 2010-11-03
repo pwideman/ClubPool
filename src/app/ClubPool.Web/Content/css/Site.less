@@ -7,6 +7,7 @@
 @menu_background: #8EB1DF;
 @menu_highlight_background: #7795BD;
 @light_green: #D9FFB3;
+@yellow_highlight: #FFFFD8;
 
 @import "base";
 @import "menu";
@@ -763,10 +764,11 @@ form.inline {
 
 /* Meets/view */
 
-table.incomplete-match-details {
+table.match-details {
   border: 0;
   margin: 20px 10px;
-  font-size: 85%;
+  font-size: 90%;
+
   thead {
     th {
       color: @dark_blue;
@@ -777,6 +779,7 @@ table.incomplete-match-details {
 
   tbody {
     td {
+      height: 30px;
       padding: 8px 16px;
       text-align: center;
       img.enter-results-link {
@@ -790,18 +793,13 @@ table.incomplete-match-details {
       }
     }
     tr.first {
+      border-bottom: 1px solid lightgray;
       td {
         padding-top: 10px;
-        border-bottom: 1px solid lightgray;
       }
     }
-  }
-
-  tfoot 
-  {
-    td 
-    {
-      padding: 12px;
+    tr.second {
+      border-bottom: 2px solid @standard_blue;
     }
   }
 }
@@ -860,6 +858,10 @@ div.action-button-column {
   div.action-button:hover {
     color: @standard_blue;
   }
+}
+
+div.incomplete-match:last-child {
+  border-bottom: none;
 }
 
 div.incomplete-match {

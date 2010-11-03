@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Meets.ViewModels.MeetViewModel>" %>
+﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Meets.ViewModels.ScoresheetViewModel>" %>
 <%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@
         <tbody>
           <% 
             var matchIndex = 0;
-            foreach (var match in Model.IncompleteMatches) {
+            foreach (var match in Model.Matches) {
               if (matchIndex > 0) { %>
                 <tr class="spacer-row"><td colspan="99">&nbsp;</td></tr>
            <% }

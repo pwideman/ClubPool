@@ -38,27 +38,25 @@ namespace ClubPool.Web.Controllers.Matches
     public ActionResult Edit(EditMatchViewModel viewModel) {
       var match = matchRepository.Get(viewModel.Id);
       if (match.IsComplete) {
-        return new EmptyResult();
+        match.RemoveAllResults();
       }
-      else {
-        var player1 = userRepository.Get(viewModel.Player1.Id);
-        var matchResult = new MatchResult(player1, 
-          viewModel.Player1.Innings, 
-          viewModel.Player1.DefensiveShots, 
-          viewModel.Player1.Wins);
-        match.AddResult(matchResult);
+      var player1 = userRepository.Get(viewModel.Player1.Id);
+      var matchResult = new MatchResult(player1, 
+        viewModel.Player1.Innings, 
+        viewModel.Player1.DefensiveShots, 
+        viewModel.Player1.Wins);
+      match.AddResult(matchResult);
 
-        var player2 = userRepository.Get(viewModel.Player2.Id);
-        matchResult = new MatchResult(player2,
-          viewModel.Player2.Innings,
-          viewModel.Player2.DefensiveShots,
-          viewModel.Player2.Wins);
-        match.AddResult(matchResult);
+      var player2 = userRepository.Get(viewModel.Player2.Id);
+      matchResult = new MatchResult(player2,
+        viewModel.Player2.Innings,
+        viewModel.Player2.DefensiveShots,
+        viewModel.Player2.Wins);
+      match.AddResult(matchResult);
 
-        match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
-        match.IsComplete = true;
-        return new EmptyResult();
-      }
+      match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
+      match.IsComplete = true;
+      return new EmptyResult();
     }
   }
 }

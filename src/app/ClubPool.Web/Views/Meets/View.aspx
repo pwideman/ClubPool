@@ -15,88 +15,83 @@
       <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.Scoresheet(Model.Id), "Print a scoresheet") %>
     </div>
   </div>
-  <div id="matches_tabs">
-    <ul>
-      <% if (Model.IncompleteMatches.Any()) { %>
-      <li><a href="#incomplete_matches">Incomplete Matches</a></li>
-      <% }
-        if (Model.CompletedMatches.Any()) { %>
-      <li><a href="#complete_matches">Complete Matches</a></li>
-      <% } %>
-    </ul>
-    <% if (Model.IncompleteMatches.Any()) { %>
-    <div id="incomplete_matches">
-      <% foreach (var match in Model.IncompleteMatches) { %>
-      <div id="incompletematch<%= match.Id.ToString() %>" class="incomplete-match">
-        <% Html.RenderPartial("PlayerCard", match.Player1); %>
-        vs.
-        <% Html.RenderPartial("PlayerCard", match.Player2); %>
-        <div class="action-button-column">
+         <%-- <div class="action-button-column">
           <div class="action-button enter-results-link" id="<%= match.Id %>">
             <%= Html.ContentImage("enterresults-medium.png", "Enter results") %>
             Enter Results
           </div>
         </div>
         <div class="status" id="incompletematch<%= match.Id.ToString() %>_status">
-        </div>
-      </div>
-      <% } %>
-    </div>
-  <% }
-     if (Model.CompletedMatches.Any()) { %>
-    <div id="complete_matches">
-      <table class="match-details" cellpadding="0" cellspacing="0">
-        <thead>
-          <tr>
-            <th>Match</th>
-            <th>Team</th>
-            <th>Player</th>
-            <th>Innings</th>
-            <th>Defensive Shots</th>
-            <th>Wins</th>
-            <th>Winner</th>
-            <th>Date and Time Played</th>
-            <th></th>
+        </div>--%>
+
+  <table id="match_details" class="match-details" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Match</th>
+        <th>Player</th>
+        <th>Innings</th>
+        <th>Defensive Shots</th>
+        <th>Wins</th>
+        <th>Winner</th>
+        <th>Date and Time Played</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% 
+        var matchIndex = 0;
+        foreach (var match in Model.Matches) {
+          matchIndex++;
+          var firstWinnerClass = "";
+          var secondWinnerClass = "";
+          if (match.IsComplete) {
+            if (match.Player1.Result.Winner) {
+              firstWinnerClass = " winner";
+            }
+            else {
+              secondWinnerClass = " winner";
+            }
+          }
+           %>
+          <tr class="first">
+            <td><%= matchIndex.ToString() %></td>
+            <td><%= match.Player1.Name%></td>
+            <% if (match.IsComplete) { %>
+            <td><%= match.Player1.Result.Innings.ToString()%></td>
+            <td><%= match.Player1.Result.DefensiveShots.ToString()%></td>
+            <td><%= match.Player1.Result.Wins.ToString()%></td>
+            <td><%= match.Player1.Result.Winner ? Html.ContentImage("check-medium.png", "Winner") : MvcHtmlString.Empty%></td>
+            <td><%= match.DatePlayed%></td>
+            <% } else { %>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>incomplete</td>
+            <% } %>
+            <td>commands</td>
           </tr>
-        </thead>
-        <tbody>
-          <% 
-            var matchIndex = 0;
-            foreach (var match in Model.CompletedMatches) {
-                var firstResult = true;
-                matchIndex++;
-                foreach (var result in match.Results) { %>
-                <tr>
-                  <td>
-                  <% if (firstResult) { %>
-                  <%= matchIndex.ToString() %>
-                  <% } %>
-                  </td>
-                  <td><%= result.TeamName%></td>
-                  <td><%= result.PlayerName%></td>
-                  <td><%= result.Innings.ToString()%></td>
-                  <td><%= result.DefensiveShots.ToString() %></td>
-                  <td><%= result.Wins.ToString() %></td>
-                  <td><%= result.Winner.ToString() %></td>
-                  <td>
-                  <% if (firstResult) { %>
-                    <%= match.DatePlayed%>
-                  <% } %>
-                  </td>
-                  <td>
-                  <% if (firstResult) { %>
-                  commands
-                  <% } %>
-                  </td>
-                </tr>
-            <%    firstResult = false;
-                }
-          } %>
-        </tbody>
-      </table>
-    </div>
-    <% } %>
-  </div>
+          <tr class="second">
+            <td></td>
+            <td><%= match.Player2.Name%></td>
+            <% if (match.IsComplete) { %>
+            <td><%= match.Player2.Result.Innings.ToString()%></td>
+            <td><%= match.Player2.Result.DefensiveShots.ToString()%></td>
+            <td><%= match.Player2.Result.Wins.ToString()%></td>
+            <td><%= match.Player2.Result.Winner ? Html.ContentImage("check-medium.png", "Winner") : MvcHtmlString.Empty%></td>
+            <% } else { %>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <% } %>
+            <td></td>
+            <td></td>
+          </tr>
+        <% } %>
+    </tbody>
+  </table>
+
   <div id="enter_results_window">
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Matches.MatchesController>(c => c.Edit(null), FormMethod.Post, new { id = "enter_results_form" })) { %>
     <%= Html.AntiForgeryToken() %>
@@ -135,7 +130,7 @@
   <script type="text/javascript">
     // initialize some variables needed to enter match results
     var $matches = {};
-    <% foreach(var match in Model.IncompleteMatches) { %>
+    <% foreach(var match in Model.Matches) { %>
     $matches["<%= match.Id %>"] = {
       id: <%= match.Id %>,
       player1Name: "<%= match.Player1.Name %>",
@@ -150,7 +145,7 @@
 
     $(document).ready(function () {
       // create tabs
-      $("#matches_tabs").tabs();
+      //$("#matches_tabs").tabs();
       // create ajax form
       $("#enter_results_form").ajaxForm(function(response, status, xhr, form) {
         $current_match_status.html("");
@@ -161,7 +156,7 @@
         if (xhr.status === 200) {
           // update was successful, remove match from table
           var id = form.find("input[name='Id']").val();
-          $current_match_row.effect("highlight", "slow", function() {
+          $current_match_row.effect("highlight", { color: "#D0FFD0" }, "slow", function() {
             $(this).slideUp(500);
           });
         }

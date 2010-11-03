@@ -40,7 +40,7 @@ namespace ClubPool.Web.Controllers.Meets
     [Transaction]
     public ActionResult Scoresheet(int id) {
       var meet = meetRepository.Get(id);
-      var viewModel = new MeetViewModel(meet);
+      var viewModel = new ScoresheetViewModel(meet);
       return View(viewModel);
     }
   }

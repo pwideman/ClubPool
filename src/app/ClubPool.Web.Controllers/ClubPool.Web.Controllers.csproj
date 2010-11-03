@@ -102,6 +102,8 @@
     <Compile Include="Matches\ViewModels\EditMatchViewModel.cs" />
     <Compile Include="Meets\MeetsController.cs" />
     <Compile Include="Meets\ViewModels\MeetViewModel.cs" />
+    <Compile Include="Meets\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Meets\ViewModels\ScoresheetViewModel.cs" />
     <Compile Include="PagedListViewModelBase.cs" />
     <Compile Include="Seasons\SeasonsController.cs" />
     <Compile Include="Seasons\ViewModels\CreateSeasonViewModel.cs" />
