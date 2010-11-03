@@ -40,7 +40,7 @@
                   <td><%= match.Player1.GamesToWin.ToString() %></td>
                   <td class="innings-column"><hr/></td>
                   <td class="defshots-column"><hr/></td>
-                  <td class="wins-column"></td>
+                  <td class="wins-column"><hr/></td>
                 </tr>
                 <tr>
                   <td></td>
@@ -49,7 +49,7 @@
                   <td><%= match.Player2.GamesToWin.ToString() %></td>
                   <td class="innings-column"><hr/></td>
                   <td class="defshots-column"><hr/></td>
-                  <td class="wins-column"></td>
+                  <td class="wins-column"><hr/></td>
                 </tr>
           <% } %>
         </tbody>
