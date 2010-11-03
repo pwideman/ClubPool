@@ -1,4 +1,5 @@
 ﻿@standard_blue: #648ABD;
+@medium_blue: #90B1DE;
 @error_background_color: #FFFFD5;
 @error_foreground: red;
 @light_blue: #E0ECF8;
@@ -846,7 +847,7 @@ div#enter_results_waiting_indicator {
   }
 }
 
-div.action-button-column {
+div.action-button-row-small {
   div.action-button {
     cursor: pointer;
     padding: 4px;
@@ -854,9 +855,13 @@ div.action-button-column {
     background-color: @extralight_blue;
     .corner(4px);
     color: black;
+    img {
+      vertical-align: middle;
+    }
   }
   div.action-button:hover {
-    color: @standard_blue;
+    color: @dark_blue;
+    //background-color: @extralight_blue;
   }
 }
 

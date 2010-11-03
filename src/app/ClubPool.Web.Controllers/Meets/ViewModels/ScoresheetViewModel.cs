@@ -23,7 +23,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       Team1Name = meet.Team1.Name;
       Team2Name = meet.Team2.Name;
       var matches = new List<ScoresheetMatchViewModel>();
-      foreach (var match in meet.Matches.Where(m => !m.IsComplete)) {
+      foreach (var match in meet.Matches) {
         matches.Add(new ScoresheetMatchViewModel(match));
       }
       Matches = matches;
@@ -39,11 +39,9 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public ScoresheetMatchViewModel(Match match) {
       Id = match.Id;
 
-      var team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player1)).First();
-      Player1 = new PlayerViewModel(match.Player1, team);
-
-      team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player2)).First();
-      Player2 = new PlayerViewModel(match.Player2, team);
+      var gameType = match.Meet.Division.Season.GameType;
+      Player1 = new PlayerViewModel(match.Player1, gameType);
+      Player2 = new PlayerViewModel(match.Player2, gameType);
 
       Player1.GamesToWin = CalculateGamesToWin(Player1.SkillLevel, Player2.SkillLevel);
       Player2.GamesToWin = CalculateGamesToWin(Player2.SkillLevel, Player1.SkillLevel);

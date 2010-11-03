@@ -33,7 +33,7 @@
         <th>Defensive Shots</th>
         <th>Wins</th>
         <th>Winner</th>
-        <th>Date and Time Played</th>
+        <th>Date Played</th>
         <th></th>
       </tr>
     </thead>
@@ -53,7 +53,7 @@
             }
           }
            %>
-          <tr class="first">
+          <tr class="first" id="<%= match.Id%>_1">
             <td><%= matchIndex.ToString() %></td>
             <td><%= match.Player1.Name%></td>
             <% if (match.IsComplete) { %>
@@ -69,9 +69,16 @@
             <td></td>
             <td>incomplete</td>
             <% } %>
-            <td>commands</td>
+            <td>
+              <div class="action-button-row-small">
+                <div class="action-button enter-results-link" id="<%= match.Id %>">
+                  <%= Html.ContentImage("enterresults-medium.png", "Enter results") %>
+                  Enter Results
+                </div>
+              </div>
+            </td>
           </tr>
-          <tr class="second">
+          <tr class="second" id="<%= match.Id%>_2">
             <td></td>
             <td><%= match.Player2.Name%></td>
             <% if (match.IsComplete) { %>
@@ -133,10 +140,37 @@
     <% foreach(var match in Model.Matches) { %>
     $matches["<%= match.Id %>"] = {
       id: <%= match.Id %>,
-      player1Name: "<%= match.Player1.Name %>",
-      player1Id: <%= match.Player1.Id.ToString() %>,
-      player2Name: "<%= match.Player2.Name %>",
-      player2Id: <%= match.Player2.Id.ToString() %>
+      isComplete: <%= match.IsComplete.ToString().ToLower() %>,
+      player1: {
+        name: "<%= match.Player1.Name %>",
+        id: <%= match.Player1.Id%>,
+        <% if (match.IsComplete) { %>
+        innings: <%= match.Player1.Result.Innings%>,
+        defensiveShots: <%= match.Player1.Result.DefensiveShots%>,
+        wins: <%= match.Player1.Result.Wins%>,
+        winner: <%= match.Player1.Result.Winner.ToString().ToLower()%>
+        <% } else { %>
+        innings: "",
+        defensiveShots: "",
+        wins: "",
+        winner: false
+        <% } %>
+      },
+      player2: {
+        name: "<%= match.Player2.Name %>",
+        id: <%= match.Player2.Id%>,
+        <% if (match.IsComplete) { %>
+        innings: <%= match.Player2.Result.Innings%>,
+        defensiveShots: <%= match.Player2.Result.DefensiveShots%>,
+        wins: <%= match.Player2.Result.Wins%>,
+        winner: <%= match.Player2.Result.Winner.ToString().ToLower()%>
+        <% } else { %>
+        innings: "",
+        defensiveShots: "",
+        wins: "",
+        winner: false
+        <% } %>
+      }
     };
     <% } %>
     var $current_match_id = null;
@@ -148,7 +182,6 @@
       //$("#matches_tabs").tabs();
       // create ajax form
       $("#enter_results_form").ajaxForm(function(response, status, xhr, form) {
-        $current_match_status.html("");
         $log("response: ", response);
         $log("status: ", status);
         $log("xhr: ", xhr);
@@ -156,9 +189,7 @@
         if (xhr.status === 200) {
           // update was successful, remove match from table
           var id = form.find("input[name='Id']").val();
-          $current_match_row.effect("highlight", { color: "#D0FFD0" }, "slow", function() {
-            $(this).slideUp(500);
-          });
+          $current_match_rows.effect("highlight", 2000);
         }
         else {
           // TODO: error, what to do?
@@ -172,7 +203,7 @@
         buttons: {
           "OK": function () {
             $(this).dialog("close");
-            $current_match_status.html('<%= Html.ContentImage("loading.gif", "Loading") %>&nbsp;Please wait...');
+            //$current_match_status.html('<%= Html.ContentImage("loading.gif", "Loading") %>&nbsp;Please wait...');
             $("#enter_results_form").submit();
           },
           "Cancel": function () {
@@ -188,20 +219,43 @@
       $(".enter-results-link").click(function () {
         var match = $matches[this.id];
         $current_match_id = this.id;
-        $current_match_row = $("#incompletematch" + $current_match_id);
-        $current_match_status = $("#incompletematch" + $current_match_id + "_status");
-        $("#match_id").val(this.id);
-        $("#player1name").text(match.player1Name);
-        $("#player2name").text(match.player2Name);
-        $("#player1Winner, #player1_id").val(match.player1Id);
-        $("#player2Winner, #player2_id").val(match.player2Id);
-        $("#enter_results_form").clearForm();
+        $current_match_rows = $("tr[id^='" + $current_match_id + "_']");
+        var form = $("#enter_results_form");
+        populateResultsForm(form, match);
         $enter_results_dialog.dialog("open");
       });
 
       // set input.integer-input text boxes to accept numeric input only
       $(".integer-input").numeric();
     });
+
+    function populateResultsForm(form, match) {
+      function populateFormPlayer(form, playerIndex, player) {
+        form.find("[name='Player" + playerIndex + ".Innings']").val(player.innings);
+        form.find("[name='Player" + playerIndex + ".DefensiveShots']").val(player.defensiveShots);
+        form.find("[name='Player" + playerIndex + ".Wins']").val(player.wins);
+      }
+
+      form.find("[name='Id']").val(match.id);
+      form.find("#player1name").text(match.player1.name);
+      form.find("#player2name").text(match.player2.name);
+      form.find("#player1Winner, #player1_id").val(match.player1.id);
+      form.find("#player2Winner, #player2_id").val(match.player2.id);
+      if (match.isComplete) {
+        populateFormPlayer(form, 1, match.player1);
+        populateFormPlayer(form, 2, match.player2);
+        if (match.player1.winner) {
+          form.find("#player1Winner").attr("checked", "checked");
+        }
+        else {
+          form.find("#player2Winner").attr("checked", "checked");
+        }
+      }
+      else {
+        form.clearForm();
+      }
+    }
+
   </script>
 </asp:Content>
 

@@ -17,7 +17,6 @@
         <thead>
           <tr>
             <th>Match</th>
-            <th>Team</th>
             <th>Player</th>
             <th>SL</th>
             <th>GTW</th>
@@ -36,7 +35,6 @@
                 matchIndex++; %>
                 <tr>
                   <td><%= matchIndex.ToString() %></td>
-                  <td class="name-column"><%= match.Player1.TeamName%></td>
                   <td class="name-column"><%= match.Player1.Name%></td>
                   <td><%= match.Player1.SkillLevel > 0 ? match.Player1.SkillLevel.ToString() : "N/A" %></td>
                   <td><%= match.Player1.GamesToWin.ToString() %></td>
@@ -46,7 +44,6 @@
                 </tr>
                 <tr>
                   <td></td>
-                  <td class="name-column"><%= match.Player2.TeamName%></td>
                   <td class="name-column"><%= match.Player2.Name%></td>
                   <td><%= match.Player2.SkillLevel > 0 ? match.Player2.SkillLevel.ToString() : "N/A" %></td>
                   <td><%= match.Player2.GamesToWin.ToString() %></td>

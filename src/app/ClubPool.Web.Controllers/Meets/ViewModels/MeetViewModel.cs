@@ -109,7 +109,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public MatchResultViewModel Result { get; set; }
 
     public MatchPlayerViewModel(User player, Team team)
-      : base(player, team) {
+      : base(player, team.Division.Season.GameType) {
 
       var completedMatches = from meet in team.Division.Schedule
                              where meet.Teams.Contains(team)
