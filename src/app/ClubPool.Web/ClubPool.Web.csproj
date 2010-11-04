@@ -182,6 +182,7 @@
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
     <None Include="Content\css\menu.less" />
     <None Include="Content\css\jquery-ui-1.8.5.redmond.less" />
+    <Content Include="Content\css\jquery.timeentry.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\clubpool.js" />
@@ -192,6 +193,7 @@
     <Content Include="Scripts\jquery.event.hover-1.0.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.hoverIntent.minified.js" />
+    <Content Include="Scripts\jquery.timeentry.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\superfish.js" />
