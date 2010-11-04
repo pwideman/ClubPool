@@ -55,6 +55,7 @@ namespace ClubPool.Web.Controllers.Matches
       match.AddResult(matchResult);
 
       match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
+      match.DatePlayed = DateTime.Parse(viewModel.Date + " " + viewModel.Time);
       match.IsComplete = true;
       return new EmptyResult();
     }

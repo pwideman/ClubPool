@@ -12,6 +12,8 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
   public class EditMatchViewModel
   {
     public int Id { get; set; }
+    public string Date { get; set; }
+    public string Time { get; set; }
     public PlayerViewModel Player1 { get; set; }
     public PlayerViewModel Player2 { get; set; }
     public int Winner { get; set; }

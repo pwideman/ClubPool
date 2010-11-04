@@ -1,6 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Meets.ViewModels.MeetViewModel>" %>
 <%@ Import Namespace="MvcContrib.UI.Html" %>
 
+<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
+Match Details
+</asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+  <%= Html.ScriptInclude("jquery.alphanumeric.js") %>
+  <%= Html.ScriptInclude("jquery.form.js") %>
+  <%= Html.ScriptInclude("jquery.timeentry.min.js") %>
+  <%= Html.Stylesheet("jquery.timeentry.css") %>
+</asp:Content>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
     <span>Match Details</span>
@@ -32,7 +43,6 @@
         <th>Innings</th>
         <th>Defensive Shots</th>
         <th>Wins</th>
-        <th>Winner</th>
         <th>Date Played</th>
         <th></th>
       </tr>
@@ -53,17 +63,15 @@
             }
           }
            %>
-          <tr class="first" id="<%= match.Id%>_1">
+          <tr class="first<%= firstWinnerClass%>" id="<%= match.Id%>_1">
             <td><%= matchIndex.ToString() %></td>
             <td><%= match.Player1.Name%></td>
             <% if (match.IsComplete) { %>
             <td><%= match.Player1.Result.Innings.ToString()%></td>
             <td><%= match.Player1.Result.DefensiveShots.ToString()%></td>
             <td><%= match.Player1.Result.Wins.ToString()%></td>
-            <td><%= match.Player1.Result.Winner ? Html.ContentImage("check-medium.png", "Winner") : MvcHtmlString.Empty%></td>
-            <td><%= match.DatePlayed%></td>
+            <td><%= match.Date%></td>
             <% } else { %>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -78,21 +86,20 @@
               </div>
             </td>
           </tr>
-          <tr class="second" id="<%= match.Id%>_2">
+          <tr class="second<%= secondWinnerClass%>" id="<%= match.Id%>_2">
             <td></td>
             <td><%= match.Player2.Name%></td>
             <% if (match.IsComplete) { %>
             <td><%= match.Player2.Result.Innings.ToString()%></td>
             <td><%= match.Player2.Result.DefensiveShots.ToString()%></td>
             <td><%= match.Player2.Result.Wins.ToString()%></td>
-            <td><%= match.Player2.Result.Winner ? Html.ContentImage("check-medium.png", "Winner") : MvcHtmlString.Empty%></td>
+            <td><%= match.Time%></td>
             <% } else { %>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <% } %>
-            <td></td>
             <td><div id="<%= match.Id%>_status" class="status"></div></td>
           </tr>
         <% } %>
@@ -113,6 +120,7 @@
           <th>Defensive Shots</th>
           <th>Wins</th>
           <th>Winner</th>
+          <th>Date and Time Played</th>
         </tr>
       </thead>
       <tbody>
@@ -122,6 +130,7 @@
           <td><input type="text" name="Player1.DefensiveShots" class="integer-input"/></td>
           <td><input type="text" name="Player1.Wins" class="integer-input"/></td>
           <td><input type="radio" name="Winner" id="player1Winner" /></td>
+          <td class="date-time"><%= Html.TextBox("Date", "", new { @class = "datepicker" }) %></td>
         </tr>
         <tr>
           <td class="name" id="player2name"></td>
@@ -129,6 +138,7 @@
           <td><input type="text" name="Player2.DefensiveShots" class="integer-input"/></td>
           <td><input type="text" name="Player2.Wins" class="integer-input"/></td>
           <td><input type="radio" name="Winner" id="player2Winner" /></td>
+          <td class="date-time"><%= Html.TextBox("Time", "", new { @class = "timeentry" }) %></td>
         </tr>
       </tbody>
     </table>
@@ -141,6 +151,8 @@
     $matches["<%= match.Id %>"] = {
       id: <%= match.Id %>,
       isComplete: <%= match.IsComplete.ToString().ToLower() %>,
+      date: "<%= match.Date%>",
+      time: "<%= match.Time%>",
       player1: {
         name: "<%= match.Player1.Name %>",
         id: <%= match.Player1.Id%>,
@@ -180,6 +192,9 @@
     $(document).ready(function () {
       // create tabs
       //$("#matches_tabs").tabs();
+      // set up date & time controls
+      $("input.datepicker").datepicker({ showOn: 'button', buttonImage: '<%= Url.ContentImageUrl("calendar.gif") %>', buttonImageOnly: true });
+      $("input.timeentry").timeEntry({ ampmPrefix: " ", spinnerImage: '<%= Url.ContentImageUrl("spinnerDefault.png") %>' });
       // create ajax form
       $("#enter_results_form").ajaxForm(function(response, status, xhr, form) {
         $current_match_status.html("");
@@ -204,7 +219,7 @@
         buttons: {
           "OK": function () {
             $(this).dialog("close");
-            $current_match_status.html('<%= Html.ContentImage("loading.gif", "Loading") %>&nbsp;Please wait...');
+            $current_match_status.html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
             $("#enter_results_form").submit();
           },
           "Cancel": function () {
@@ -212,7 +227,7 @@
           }
         },
         resizable: false,
-        width: 500,
+        width: 600,
         modal: true
       });
 
@@ -239,6 +254,8 @@
       }
 
       form.find("[name='Id']").val(match.id);
+      form.find("[name='Date']").val(match.date);
+      form.find("[name='Time']").val(match.time);
       form.find("#player1name").text(match.player1.name);
       form.find("#player2name").text(match.player2.name);
       form.find("#player1Winner, #player1_id").val(match.player1.id);
@@ -259,13 +276,4 @@
     }
 
   </script>
-</asp:Content>
-
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Match Details
-</asp:Content>
-
-<asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
-  <%= Html.ScriptInclude("jquery.alphanumeric.js") %>
-  <%= Html.ScriptInclude("jquery.form.js") %>
 </asp:Content>

@@ -133,7 +133,8 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
 
   public class MatchViewModel
   {
-    public string DatePlayed { get; set; }
+    public string Date { get; set; }
+    public string Time { get; set; }
     public MatchPlayerViewModel Player1 { get; protected set; }
     public MatchPlayerViewModel Player2 { get; protected set; }
     public bool IsComplete { get; set; }
@@ -145,15 +146,19 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public MatchViewModel(Match match) {
       Id = match.Id;
       IsComplete = match.IsComplete;
-      DatePlayed = match.DatePlayed.ToShortDateString();
       var team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player1)).First();
       Player1 = new MatchPlayerViewModel(match.Player1, team);
       team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player2)).First();
       Player2 = new MatchPlayerViewModel(match.Player2, team);
 
       if (match.IsComplete) {
+        Date = match.DatePlayed.ToShortDateString();
+        Time = match.DatePlayed.ToShortTimeString();
         Player1.Result = new MatchResultViewModel(match.Results.Where(r => r.Player == match.Player1).First());
         Player2.Result = new MatchResultViewModel(match.Results.Where(r => r.Player == match.Player2).First());
+      }
+      else {
+        // TODO: set date & time based on schedule
       }
     }
   }

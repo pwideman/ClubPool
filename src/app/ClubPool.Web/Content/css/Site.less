@@ -9,6 +9,7 @@
 @menu_highlight_background: #7795BD;
 @light_green: #D9FFB3;
 @yellow_highlight: #FFFFD8;
+@green_highlight: #f4fff4;
 
 @import "base";
 @import "menu";
@@ -768,7 +769,7 @@ form.inline {
 table.match-details {
   border: 0;
   margin: 20px 10px;
-  font-size: 90%;
+  //font-size: 90%;
 
   thead {
     th {
@@ -796,12 +797,6 @@ table.match-details {
       }
 
     }
-    tr.spacer-row {
-      td {
-        font-size: 1px;
-        border-top: 2px solid @standard_blue;
-      }
-    }
     tr.first {
       border-bottom: 1px solid lightgray;
       td {
@@ -810,6 +805,10 @@ table.match-details {
     }
     tr.second {
       border-bottom: 2px solid @standard_blue;
+    }
+    tr.winner {
+      //background-color: @green_highlight;
+      background-color: @yellow_highlight;
     }
   }
 }
@@ -831,12 +830,21 @@ div#enter_results_window {
         td {
           text-align: center;
           padding: 6px;
-          input[type="text"] {
+          input.integer-input {
             width: 30px;
           }
         }
         td.name {
           min-width: 120px;
+        }
+        td.date-time {
+          padding-left: 10px;
+          min-width: 120px;
+          text-align: left;
+          input {
+            width: 80px;
+            margin-right: 6px;
+          }
         }
       }
       tr.first {
