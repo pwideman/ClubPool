@@ -138,24 +138,30 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public MatchPlayerViewModel Player1 { get; protected set; }
     public MatchPlayerViewModel Player2 { get; protected set; }
     public bool IsComplete { get; set; }
+    public bool IsForfeit { get; set; }
     public int Id { get; set; }
+    public MatchPlayerViewModel Winner { get; set; }
 
     public MatchViewModel() {
     }
 
+
     public MatchViewModel(Match match) {
       Id = match.Id;
       IsComplete = match.IsComplete;
+      IsForfeit = match.IsForfeit;
       var team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player1)).First();
       Player1 = new MatchPlayerViewModel(match.Player1, team);
       team = match.Meet.Teams.Where(t => t.Players.Contains(match.Player2)).First();
       Player2 = new MatchPlayerViewModel(match.Player2, team);
-
       if (match.IsComplete) {
-        Date = match.DatePlayed.ToShortDateString();
-        Time = match.DatePlayed.ToShortTimeString();
-        Player1.Result = new MatchResultViewModel(match.Results.Where(r => r.Player == match.Player1).First());
-        Player2.Result = new MatchResultViewModel(match.Results.Where(r => r.Player == match.Player2).First());
+        Winner = match.Winner == match.Player1 ? Player1 : Player2;
+        if (!match.IsForfeit) {
+          Date = match.DatePlayed.ToShortDateString();
+          Time = match.DatePlayed.ToShortTimeString();
+          Player1.Result = new MatchResultViewModel(match.Results.Where(r => r.Player == match.Player1).First());
+          Player2.Result = new MatchResultViewModel(match.Results.Where(r => r.Player == match.Player2).First());
+        }
       }
       else {
         // TODO: set date & time based on schedule

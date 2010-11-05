@@ -13,6 +13,7 @@ namespace ClubPool.Core
 
     public virtual Meet Meet { get; set; }
     public virtual bool IsComplete { get; set; }
+    public virtual bool IsForfeit { get; set; }
     public virtual User Player1 { get; set; }
     public virtual User Player2 { get; set; }
     public virtual IEnumerable<User> Players { get { return new User[2] { Player1, Player2 }; } }

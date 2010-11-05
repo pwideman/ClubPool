@@ -105,5 +105,11 @@ namespace ClubPool.Core
       }
     }
 
+    public virtual int UpdateSkillLevel(GameType gameType) {
+      //select TOP 10 * from Matches Where  (Player1Wins <> 0 OR PLayer2Wins <> 0 OR Player1Innings <> 0 OR Player2Innings <> 0) And 
+      //(Player1 = ? Or Player2 = ?) And IsCompleted=TRUE And IsVerifiedByP1=TRUE And IsVerifiedByP2=TRUE And DatePlayed <> null Order By DatePlayed DESC
+      return 0;
+    }
+
   }
 }

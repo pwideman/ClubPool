@@ -41,22 +41,26 @@ namespace ClubPool.Web.Controllers.Matches
         match.RemoveAllResults();
       }
       var player1 = userRepository.Get(viewModel.Player1.Id);
-      var matchResult = new MatchResult(player1, 
-        viewModel.Player1.Innings, 
-        viewModel.Player1.DefensiveShots, 
-        viewModel.Player1.Wins);
-      match.AddResult(matchResult);
-
       var player2 = userRepository.Get(viewModel.Player2.Id);
-      matchResult = new MatchResult(player2,
-        viewModel.Player2.Innings,
-        viewModel.Player2.DefensiveShots,
-        viewModel.Player2.Wins);
-      match.AddResult(matchResult);
-
       match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
-      match.DatePlayed = DateTime.Parse(viewModel.Date + " " + viewModel.Time);
       match.IsComplete = true;
+      match.IsForfeit = viewModel.IsForfeit;
+
+      if (!match.IsForfeit) {
+        match.DatePlayed = DateTime.Parse(viewModel.Date + " " + viewModel.Time);
+        var matchResult = new MatchResult(player1,
+          viewModel.Player1.Innings,
+          viewModel.Player1.DefensiveShots,
+          viewModel.Player1.Wins);
+        match.AddResult(matchResult);
+
+        matchResult = new MatchResult(player2,
+          viewModel.Player2.Innings,
+          viewModel.Player2.DefensiveShots,
+          viewModel.Player2.Wins);
+        match.AddResult(matchResult);
+      }
+      // TODO: update skill levels
       return new EmptyResult();
     }
   }

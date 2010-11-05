@@ -17,6 +17,7 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
     public PlayerViewModel Player1 { get; set; }
     public PlayerViewModel Player2 { get; set; }
     public int Winner { get; set; }
+    public bool IsForfeit { get; set; }
   }
 
   public class PlayerViewModel
