@@ -807,7 +807,6 @@ table.match-details {
       border-bottom: 2px solid @standard_blue;
     }
     tr.winner {
-      //background-color: @green_highlight;
       background-color: @yellow_highlight;
     }
   }
@@ -879,64 +878,6 @@ div.action-button-row-small {
   div.action-button:hover {
     color: @dark_blue;
     //background-color: @extralight_blue;
-  }
-}
-
-div.incomplete-match:last-child {
-  border-bottom: none;
-}
-
-div.incomplete-match {
-  padding: 12px 4px;
-  border-bottom: 1px dotted gray;
-
-  div.action-button-column {
-    display: inline-block;
-  }
-
-  div.status {
-    display: inline-block;
-    margin-left: 12px;
-    vertical-align: top;
-    img {
-      vertical-align: middle;
-    }
-  }
-
-  div.player-card {
-    border: 1px solid @light_blue;
-    .corner(6px);
-    display: inline-block;
-
-    div.header {
-      background-color: @light_blue;
-      .topcorner(6px);
-      color: black;
-      padding: 8px;
-      text-align: center;
-    }
-
-    div.details {
-      padding: 8px;
-      min-width: 200px;
-      max-width: 300px;
-      overflow: hidden;
-      padding-bottom: 12px;
-
-      div.details-row {
-        clear: both;
-        div.label {
-          display: inline;
-          float: left;
-          margin-right: 6px;
-        }
-        div.data {
-          margin-left: 6px;
-          display: inline;
-          float: right;
-        }
-      }
-    }
   }
 }
 

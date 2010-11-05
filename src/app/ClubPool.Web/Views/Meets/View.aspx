@@ -26,15 +26,6 @@ Match Details
       <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.Scoresheet(Model.Id), "Print a scoresheet") %>
     </div>
   </div>
-         <%-- <div class="action-button-column">
-          <div class="action-button enter-results-link" id="<%= match.Id %>">
-            <%= Html.ContentImage("enterresults-medium.png", "Enter results") %>
-            Enter Results
-          </div>
-        </div>
-        <div class="status" id="incompletematch<%= match.Id.ToString() %>_status">
-        </div>--%>
-
   <table id="match_details" class="match-details" cellpadding="0" cellspacing="0">
     <thead>
       <tr>
@@ -67,15 +58,15 @@ Match Details
             <td><%= matchIndex.ToString() %></td>
             <td><%= match.Player1.Name%></td>
             <% if (match.IsComplete) { %>
-            <td><%= match.Player1.Result.Innings.ToString()%></td>
-            <td><%= match.Player1.Result.DefensiveShots.ToString()%></td>
-            <td><%= match.Player1.Result.Wins.ToString()%></td>
-            <td><%= match.Date%></td>
+            <td id="<%=match.Id%>_p1innings"><%= match.Player1.Result.Innings.ToString()%></td>
+            <td id="<%=match.Id%>_p1defshots"><%= match.Player1.Result.DefensiveShots.ToString()%></td>
+            <td id="<%=match.Id%>_p1wins"><%= match.Player1.Result.Wins.ToString()%></td>
+            <td id="<%=match.Id%>_date"><%= match.Date%></td>
             <% } else { %>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>incomplete</td>
+            <td id="<%=match.Id%>_p1innings"></td>
+            <td id="<%=match.Id%>_p1defshots"></td>
+            <td id="<%=match.Id%>_p1wins"></td>
+            <td id="<%=match.Id%>_date">incomplete</td>
             <% } %>
             <td>
               <div class="action-button-row-small">
@@ -90,15 +81,15 @@ Match Details
             <td></td>
             <td><%= match.Player2.Name%></td>
             <% if (match.IsComplete) { %>
-            <td><%= match.Player2.Result.Innings.ToString()%></td>
-            <td><%= match.Player2.Result.DefensiveShots.ToString()%></td>
-            <td><%= match.Player2.Result.Wins.ToString()%></td>
-            <td><%= match.Time%></td>
+            <td id="<%=match.Id%>_p2innings"><%= match.Player2.Result.Innings.ToString()%></td>
+            <td id="<%=match.Id%>_p2defshots"><%= match.Player2.Result.DefensiveShots.ToString()%></td>
+            <td id="<%=match.Id%>_p2wins"><%= match.Player2.Result.Wins.ToString()%></td>
+            <td id="<%=match.Id%>_time"><%= match.Time%></td>
             <% } else { %>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td id="<%=match.Id%>_p2innings"></td>
+            <td id="<%=match.Id%>_p2defshots"></td>
+            <td id="<%=match.Id%>_p2wins"></td>
+            <td id="<%=match.Id%>_time"></td>
             <% } %>
             <td><div id="<%= match.Id%>_status" class="status"></div></td>
           </tr>
@@ -203,8 +194,9 @@ Match Details
         $log("xhr: ", xhr);
         $log("form: ", form);
         if (xhr.status === 200) {
-          // update was successful, remove match from table
-          var id = form.find("input[name='Id']").val();
+          // update was successful, update match object
+          var match = updateMatchFromForm($current_match_id);
+          updateTableForMatch(match);
           $current_match_rows.effect("highlight", 2000);
         }
         else {
@@ -245,6 +237,55 @@ Match Details
       // set input.integer-input text boxes to accept numeric input only
       $(".integer-input").numeric();
     });
+
+    function updateTableForMatch(match) {
+      var prefix = "#" + match.id + "_";
+      function updatePlayerRow(index, player) {
+        var playerPrefix = prefix + "p" + index;
+        $(playerPrefix + "innings").html(player.innings);
+        $(playerPrefix + "defshots").html(player.defensiveShots);
+        $(playerPrefix + "wins").html(player.wins);
+      }
+
+      $(prefix + "date").html(match.date);
+      $(prefix + "time").html(match.time);
+      updatePlayerRow(1, match.player1);
+      updatePlayerRow(2, match.player2);
+      var winnerRow = loserRow = "#" + match.id + "_";
+      if (match.player1.winner) {
+        winnerRow += "1";
+        loserRow += "2";
+      }
+      else {
+        winnerRow += "2";
+        loserRow += "1";
+      }
+      $(winnerRow).addClass("winner");
+      $(loserRow).removeClass("winner");
+    }
+
+    function updateMatchFromForm(id) {
+      function updatePlayerFromForm(form, playerIndex, player) {
+        player.innings = form.find("[name='Player" + playerIndex + ".Innings']").val();
+        player.defensiveShots = form.find("[name='Player" + playerIndex + ".DefensiveShots']").val();
+        player.wins = form.find("[name='Player" + playerIndex + ".Wins']").val();
+      }
+      var form = $("#enter_results_form");
+      var match = $matches[id];
+      match.date = form.find("[name='Date']").val();
+      match.time = form.find("[name='Time']").val();
+      updatePlayerFromForm(form, 1, match.player1);
+      updatePlayerFromForm(form, 2, match.player2);
+      if (form.find("#player1Winner").attr("checked")) {
+        match.player1.winner = true;
+        match.player2.winner = false;
+      }
+      else {
+        match.player1.winner = false;
+        match.player2.winner = true;
+      }
+      return match;
+    }
 
     function populateResultsForm(form, match) {
       function populateFormPlayer(form, playerIndex, player) {
