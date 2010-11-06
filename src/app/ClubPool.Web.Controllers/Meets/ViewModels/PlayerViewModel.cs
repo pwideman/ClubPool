@@ -18,6 +18,10 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     }
 
     public PlayerViewModel(User player, GameType gameType) {
+      Initialize(player, gameType);
+    }
+
+    protected void Initialize(User player, GameType gameType) {
       Id = player.Id;
       Name = player.FullName;
 

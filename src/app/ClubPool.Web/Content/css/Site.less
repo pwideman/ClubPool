@@ -804,7 +804,16 @@ table.match-details {
       }
     }
     tr.second {
+      border-bottom: 1px solid black;
+    }
+    tr.status {
       border-bottom: 2px solid @standard_blue;
+      td {
+        padding-bottom: 20px;
+      }
+      td.status {
+        text-align: left;
+      }
     }
     tr.winner {
       background-color: @yellow_highlight;
@@ -856,6 +865,7 @@ div#enter_results_window {
           text-align: left;
         }
       }
+
     }
   }
 }
@@ -882,7 +892,8 @@ div.action-button-row-small {
   }
   div.action-button:hover {
     color: @dark_blue;
-    //background-color: @extralight_blue;
+    background-color: @light_blue;
+    border-color: @medium_blue;
   }
 }
 

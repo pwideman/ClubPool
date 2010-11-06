@@ -18,7 +18,7 @@ Match Details
   </div>
   <p>
     <strong><%= Model.Team1Name %></strong> vs. <strong><%= Model.Team2Name %></strong>, 
-    scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate.ToShortDateString() %>)
+    scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate%>)
   </p>
   <div class="action-button-row">
     <div class="action-button">
@@ -34,7 +34,6 @@ Match Details
         <th>Innings</th>
         <th>Defensive Shots</th>
         <th>Wins</th>
-        <th>Date Played</th>
         <th></th>
       </tr>
     </thead>
@@ -46,7 +45,7 @@ Match Details
           var firstWinnerClass = "";
           var secondWinnerClass = "";
           if (match.IsComplete) {
-            if (match.Winner == match.Player1) {
+            if (match.Player1.Winner) {
               firstWinnerClass = " winner";
             }
             else {
@@ -57,20 +56,24 @@ Match Details
           <tr class="first<%= firstWinnerClass%>" id="<%= match.Id%>_1">
             <td><%= matchIndex.ToString() %></td>
             <td><%= match.Player1.Name%></td>
-            <% if (match.IsComplete && !match.IsForfeit) { %>
-            <td id="<%=match.Id%>_p1innings"><%= match.Player1.Result.Innings.ToString()%></td>
-            <td id="<%=match.Id%>_p1defshots"><%= match.Player1.Result.DefensiveShots.ToString()%></td>
-            <td id="<%=match.Id%>_p1wins"><%= match.Player1.Result.Wins.ToString()%></td>
-            <td id="<%=match.Id%>_date"><%= match.Date%></td>
-            <% } else { %>
-            <td id="<%=match.Id%>_p1innings"></td>
-            <td id="<%=match.Id%>_p1defshots"></td>
-            <td id="<%=match.Id%>_p1wins"></td>
-            <% if (match.IsForfeit) { %>
-            <td id="<%=match.Id%>_date">forfeit</td>
-            <% } else { %>
-            <td id="<%=match.Id%>_date">incomplete</td>
-            <% } } %>
+            <td id="<%=match.Id%>_p1innings"><%= match.Player1.Innings%></td>
+            <td id="<%=match.Id%>_p1defshots"><%= match.Player1.DefensiveShots%></td>
+            <td id="<%=match.Id%>_p1wins"><%= match.Player1.Wins%></td>
+            <td/>
+          </tr>
+          <tr class="second<%= secondWinnerClass%>" id="<%= match.Id%>_2">
+            <td></td>
+            <td><%= match.Player2.Name%></td>
+            <td id="<%=match.Id%>_p2innings"><%= match.Player2.Innings%></td>
+            <td id="<%=match.Id%>_p2defshots"><%= match.Player2.DefensiveShots%></td>
+            <td id="<%=match.Id%>_p2wins"><%= match.Player2.Wins%></td>
+            <td/>
+          </tr>
+          <tr class="status" id="<%= match.Id%>_3">
+            <td>Status:</td>
+            <td colspan="4" class="status" id="<%= match.Id%>_status">
+              <%= match.Status%>
+            </td>
             <td>
               <div class="action-button-row-small">
                 <div class="action-button enter-results-link" id="<%= match.Id %>">
@@ -79,22 +82,6 @@ Match Details
                 </div>
               </div>
             </td>
-          </tr>
-          <tr class="second<%= secondWinnerClass%>" id="<%= match.Id%>_2">
-            <td></td>
-            <td><%= match.Player2.Name%></td>
-            <% if (match.IsComplete && !match.IsForfeit) { %>
-            <td id="<%=match.Id%>_p2innings"><%= match.Player2.Result.Innings.ToString()%></td>
-            <td id="<%=match.Id%>_p2defshots"><%= match.Player2.Result.DefensiveShots.ToString()%></td>
-            <td id="<%=match.Id%>_p2wins"><%= match.Player2.Result.Wins.ToString()%></td>
-            <td id="<%=match.Id%>_time"><%= match.Time%></td>
-            <% } else { %>
-            <td id="<%=match.Id%>_p2innings"></td>
-            <td id="<%=match.Id%>_p2defshots"></td>
-            <td id="<%=match.Id%>_p2wins"></td>
-            <td id="<%=match.Id%>_time"></td>
-            <% } %>
-            <td><div id="<%= match.Id%>_status" class="status"></div></td>
           </tr>
         <% } %>
     </tbody>
@@ -149,44 +136,26 @@ Match Details
     $matches["<%= match.Id %>"] = {
       id: <%= match.Id %>,
       isComplete: <%= match.IsComplete.ToString().ToLower() %>,
-      date: "<%= match.Date%>",
-      time: "<%= match.Time%>",
+      datePlayed: "<%= match.DatePlayed%>",
+      timePlayed: "<%= match.TimePlayed%>",
+      dateScheduled: "<%= Model.ScheduledDate%>",
+      timeScheduled: "<%= match.TimeScheduled%>",
       isForfeit: <%= match.IsForfeit.ToString().ToLower()%>,
       player1: {
         name: "<%= match.Player1.Name %>",
         id: <%= match.Player1.Id%>,
-        <% if (match.IsComplete && !match.IsForfeit) { %>
-        innings: <%= match.Player1.Result.Innings%>,
-        defensiveShots: <%= match.Player1.Result.DefensiveShots%>,
-        wins: <%= match.Player1.Result.Wins%>,
-        winner: <%= match.Player1.Result.Winner.ToString().ToLower()%>
-        <% } else { %>
-        innings: "",
-        defensiveShots: "",
-        wins: "",
-        <% if (match.IsForfeit) { %>
-        winner: <%= (match.Winner == match.Player1).ToString().ToLower()  %>
-        <% } else { %>
-        winner: false
-        <% } } %>
+        innings: "<%= match.Player1.Innings%>",
+        defensiveShots: "<%= match.Player1.DefensiveShots%>",
+        wins: "<%= match.Player1.Wins%>",
+        winner: <%= match.Player1.Winner.ToString().ToLower()%>
       },
       player2: {
         name: "<%= match.Player2.Name %>",
         id: <%= match.Player2.Id%>,
-        <% if (match.IsComplete && !match.IsForfeit) { %>
-        innings: <%= match.Player2.Result.Innings%>,
-        defensiveShots: <%= match.Player2.Result.DefensiveShots%>,
-        wins: <%= match.Player2.Result.Wins%>,
-        winner: <%= match.Player2.Result.Winner.ToString().ToLower()%>
-        <% } else { %>
-        innings: "",
-        defensiveShots: "",
-        wins: "",
-        <% if (match.IsForfeit) { %>
-        winner: <%= (match.Winner == match.Player2).ToString().ToLower()  %>
-        <% } else { %>
-        winner: false
-        <% } } %>
+        innings: "<%= match.Player2.Innings%>",
+        defensiveShots: "<%= match.Player2.DefensiveShots%>",
+        wins: "<%= match.Player2.Wins%>",
+        winner: <%= match.Player2.Winner.ToString().ToLower()%>
       }
     };
     <% } %>
@@ -195,18 +164,18 @@ Match Details
     var $current_match_rows = null;
 
     $(document).ready(function () {
-      // create tabs
-      //$("#matches_tabs").tabs();
       // set up date & time controls
       $("input.datepicker").datepicker({ showOn: 'button', buttonImage: '<%= Url.ContentImageUrl("calendar.gif") %>', buttonImageOnly: true });
       $("input.timeentry").timeEntry({ ampmPrefix: " ", spinnerImage: '<%= Url.ContentImageUrl("spinnerDefault.png") %>' });
       // create ajax form
       $("#enter_results_form").ajaxForm(function(response, status, xhr, form) {
         $current_match_status.html("");
+        /*
         $log("response: ", response);
         $log("status: ", status);
         $log("xhr: ", xhr);
         $log("form: ", form);
+        */
         if (xhr.status === 200) {
           // update was successful, update match object
           var match = updateMatchFromForm($current_match_id);
@@ -262,12 +231,10 @@ Match Details
       }
 
       if (match.isForfeit) {
-        $(prefix + "date").html("forfeit");
-        $(prefix + "time").html("");
+        $(prefix + "status").html("Forfeited");
       }
       else {
-        $(prefix + "date").html(match.date);
-        $(prefix + "time").html(match.time);
+        $(prefix + "status").html("Played on {0} {1}".format(match.datePlayed, match.timePlayed));
       }
       updatePlayerRow(1, match.player1);
       updatePlayerRow(2, match.player2);
@@ -295,14 +262,14 @@ Match Details
       match.isComplete = true;
       match.isForfeit = form.find("[name='IsForfeit']").attr("checked");
       if (match.isForfeit) {
-        match.date = "";
-        match.time = "";
+        match.datePlayed = "";
+        match.timePlayed = "";
         match.player1 = { id: match.player1.id, innings: "", defensiveShots: "", wins: "" };
         match.player2 = { id: match.player2.id, innings: "", defensiveShots: "", wins: "" };
       }
       else {
-        match.date = form.find("[name='Date']").val();
-        match.time = form.find("[name='Time']").val();
+        match.datePlayed = form.find("[name='Date']").val();
+        match.timePlayed = form.find("[name='Time']").val();
         updatePlayerFromForm(form, 1, match.player1);
         updatePlayerFromForm(form, 2, match.player2);
       }
@@ -348,23 +315,12 @@ Match Details
       var date = null;
       var time = null;
       if (!match.isComplete || match.isForfeit) {
-        var d = new Date();
-        date = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
-        time = d.getHours();
-        var suffix = " AM";
-        if (time > 12) {
-          time -= 12;
-          suffix = " PM";
-        }
-        var minutes = d.getMinutes() + "";
-        if (minutes.length == 1) {
-          minutes = "0" + minutes;
-        }
-        time += ":" + minutes + suffix;
+        date = match.dateScheduled;
+        time = match.timeScheduled;
       }
       else {
-        date = match.date;
-        time = match.time;
+        date = match.datePlayed;
+        time = match.timePlayed;
       }
       form.find("[name='Date']").val(date);
       form.find("[name='Time']").val(time);
