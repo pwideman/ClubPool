@@ -125,6 +125,10 @@ Match Details
           <td colspan="99">
             <input type="checkbox" name="IsForfeit" id="IsForfeit" value="true"/><label for="IsForfeit">Match was forfeited (you still must select a winner)</label>
           </td>
+        </tr>
+        <tr class="status">
+          <td colspan="99" id="enter_results_form_status">&nbsp;</td>
+        </tr>
       </tbody>
     </table>
     <% } %>
@@ -168,22 +172,22 @@ Match Details
       $("input.datepicker").datepicker({ showOn: 'button', buttonImage: '<%= Url.ContentImageUrl("calendar.gif") %>', buttonImageOnly: true });
       $("input.timeentry").timeEntry({ ampmPrefix: " ", spinnerImage: '<%= Url.ContentImageUrl("spinnerDefault.png") %>' });
       // create ajax form
-      $("#enter_results_form").ajaxForm(function(response, status, xhr, form) {
-        $current_match_status.html("");
-        /*
-        $log("response: ", response);
-        $log("status: ", status);
-        $log("xhr: ", xhr);
-        $log("form: ", form);
-        */
-        if (xhr.status === 200) {
-          // update was successful, update match object
-          var match = updateMatchFromForm($current_match_id);
-          updateTableForMatch(match);
-          $current_match_rows.effect("highlight", 2000);
-        }
-        else {
-          // TODO: error, what to do?
+      $("#enter_results_form").ajaxForm({
+        success: function(response, status, xhr, form) {
+          $("#enter_results_form_status").html("");
+          $log("response: ", response);
+          $log("status: ", status);
+          $log("xhr: ", xhr);
+          if (xhr.status === 200) {
+            // update was successful, update match object
+            $("#enter_results_window").dialog("close");
+            var match = updateMatchFromForm($current_match_id);
+            updateTableForMatch(match);
+            $current_match_rows.effect("highlight", 2000);
+          }
+        },
+        error: function(xhr, status, error) {
+          $("#enter_results_form_status").html(xhr.responseText).addClass("error");
         }
       });
 
@@ -193,8 +197,7 @@ Match Details
         title: "Enter Match Results",
         buttons: {
           "OK": function () {
-            $(this).dialog("close");
-            $current_match_status.html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
+            $("#enter_results_form_status").removeClass("error").html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
             $("#enter_results_form").submit();
           },
           "Cancel": function () {
@@ -213,6 +216,7 @@ Match Details
         $current_match_rows = $("tr[id^='" + $current_match_id + "_']");
         $current_match_status = $("#" + match.id + "_status");
         var form = $("#enter_results_form");
+        $("#enter_results_form_status").html("&nbsp;").removeClass("error");
         populateResultsForm(form, match);
         $enter_results_dialog.dialog("open");
       });
@@ -231,10 +235,10 @@ Match Details
       }
 
       if (match.isForfeit) {
-        $(prefix + "status").html("Forfeited");
+        $current_match_status.html("Forfeited");
       }
       else {
-        $(prefix + "status").html("Played on {0} {1}".format(match.datePlayed, match.timePlayed));
+        $current_match_status.html("Played on {0} {1}".format(match.datePlayed, match.timePlayed));
       }
       updatePlayerRow(1, match.player1);
       updatePlayerRow(2, match.player2);
@@ -253,9 +257,9 @@ Match Details
 
     function updateMatchFromForm(id) {
       function updatePlayerFromForm(form, playerIndex, player) {
-        player.innings = form.find("[name='Player" + playerIndex + ".Innings']").val();
-        player.defensiveShots = form.find("[name='Player" + playerIndex + ".DefensiveShots']").val();
-        player.wins = form.find("[name='Player" + playerIndex + ".Wins']").val();
+        player.innings = form.find("[name='Player" + playerIndex + ".Innings']").val() || 0;
+        player.defensiveShots = form.find("[name='Player" + playerIndex + ".DefensiveShots']").val() || 0;
+        player.wins = form.find("[name='Player" + playerIndex + ".Wins']").val() || 0;
       }
       var form = $("#enter_results_form");
       var match = $matches[id];
@@ -303,6 +307,9 @@ Match Details
         if (!match.isForfeit) {
           populateFormPlayer(form, 1, match.player1);
           populateFormPlayer(form, 2, match.player2);
+        }
+        else {
+          form.find("[name='IsForfeit']").attr("checked", "checked");
         }
         if (match.player1.winner) {
           form.find("#player1Winner").attr("checked", "checked");

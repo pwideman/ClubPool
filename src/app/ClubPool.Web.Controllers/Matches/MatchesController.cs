@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
@@ -36,6 +37,24 @@ namespace ClubPool.Web.Controllers.Matches
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditMatchViewModel viewModel) {
+      if (!ValidateViewModel(viewModel)) {
+        string message = "";
+        var validationResult = viewModel.ValidationResults().FirstOrDefault();
+        if (null != validationResult) {
+          message = validationResult.Message;
+        }
+        return new HttpInternalServerErrorResult(message);
+      }
+      else {
+        // we must perform some manual validation as well
+        if (!viewModel.IsForfeit) {
+          if (viewModel.Player1.DefensiveShots > viewModel.Player1.Innings ||
+              viewModel.Player2.DefensiveShots > viewModel.Player2.Innings) {
+                return new HttpInternalServerErrorResult("Defensive shots cannot be greater than innings");
+          }
+        }
+      }
+
       var match = matchRepository.Get(viewModel.Id);
       if (match.IsComplete) {
         match.RemoveAllResults();

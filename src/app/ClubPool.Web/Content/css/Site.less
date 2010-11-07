@@ -781,7 +781,7 @@ table.match-details {
 
   tbody {
     td {
-      height: 30px;
+      height: 20px;
       padding: 8px 16px;
       text-align: center;
 
@@ -810,9 +810,13 @@ table.match-details {
       border-bottom: 2px solid @standard_blue;
       td {
         padding-bottom: 20px;
+        height: 30px;
       }
       td.status {
         text-align: left;
+      }
+      td.error {
+        color: red;
       }
     }
     tr.winner {
@@ -861,11 +865,20 @@ div#enter_results_window {
         }
       }
       tr.forfeit {
+        border-bottom: 1px solid black;
         td {
+          padding-left: 20px;
           text-align: left;
         }
       }
-
+      tr.status {
+        td {
+          text-align: center;
+        }
+        td.error {
+          color: red;
+        }
+      }
     }
   }
 }
