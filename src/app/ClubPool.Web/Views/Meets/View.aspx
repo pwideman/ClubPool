@@ -10,6 +10,11 @@ Match Details
   <%= Html.ScriptInclude("jquery.form.js") %>
   <%= Html.ScriptInclude("jquery.timeentry.min.js") %>
   <%= Html.Stylesheet("jquery.timeentry.css") %>
+  <script type="text/javascript">
+    // preload loading image
+    var img = new Image(16, 16);
+    img.src = "<%= Url.ContentImageUrl("loading-small.gif")%>";
+  </script>
 </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
@@ -123,7 +128,7 @@ Match Details
         </tr>
         <tr class="forfeit">
           <td colspan="99">
-            <input type="checkbox" name="IsForfeit" id="IsForfeit" value="true"/><label for="IsForfeit">Match was forfeited (you still must select a winner)</label>
+            <input type="checkbox" name="IsForfeit" id="IsForfeit" value="true"/><label for="IsForfeit">Match was forfeited (you must still select a winner)</label>
           </td>
         </tr>
         <tr class="status">
@@ -169,8 +174,15 @@ Match Details
 
     $(document).ready(function () {
       // set up date & time controls
-      $("input.datepicker").datepicker({ showOn: 'button', buttonImage: '<%= Url.ContentImageUrl("calendar.gif") %>', buttonImageOnly: true });
-      $("input.timeentry").timeEntry({ ampmPrefix: " ", spinnerImage: '<%= Url.ContentImageUrl("spinnerDefault.png") %>' });
+      $("input.datepicker").datepicker({
+        showOn: 'button',
+        buttonImage: '<%= Url.ContentImageUrl("calendar.gif") %>',
+        buttonImageOnly: true
+      });
+      $("input.timeentry").timeEntry({
+        ampmPrefix: " ",
+        spinnerImage: '<%= Url.ContentImageUrl("spinnerDefault.png") %>'
+      });
       // create ajax form
       $("#enter_results_form").ajaxForm({
         success: function(response, status, xhr, form) {
@@ -188,6 +200,13 @@ Match Details
         },
         error: function(xhr, status, error) {
           $("#enter_results_form_status").html(xhr.responseText).addClass("error");
+        },
+        beforeSubmit: function() {
+          var valid = $("#enter_results_form").validate().form();
+          if (valid) {
+            $("#enter_results_form_status").removeClass("error").html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
+          }
+          return valid;
         }
       });
 
@@ -197,7 +216,6 @@ Match Details
         title: "Enter Match Results",
         buttons: {
           "OK": function () {
-            $("#enter_results_form_status").removeClass("error").html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
             $("#enter_results_form").submit();
           },
           "Cancel": function () {
@@ -207,6 +225,18 @@ Match Details
         resizable: false,
         width: 600,
         modal: true
+      });
+
+      // when user checks forfeit checkbox, disable all text inputs
+      $("#IsForfeit").change(function() {
+        var forfeit = $(this).attr("checked");
+        forfeitChanged(forfeit);
+      });
+
+      // set up validation
+      $("#enter_results_form").validate({
+        debug: true,
+        errorPlacement: function() { }
       });
 
       // add click event handler to enter results image links
@@ -302,7 +332,7 @@ Match Details
       form.find("#player2Winner, #player2_id").val(match.player2.id);
   
       form.clearForm();
-
+      forfeitChanged(false);
       if (match.isComplete) {
         if (!match.isForfeit) {
           populateFormPlayer(form, 1, match.player1);
@@ -310,6 +340,7 @@ Match Details
         }
         else {
           form.find("[name='IsForfeit']").attr("checked", "checked");
+          forfeitChanged(true);
         }
         if (match.player1.winner) {
           form.find("#player1Winner").attr("checked", "checked");
@@ -331,7 +362,20 @@ Match Details
       }
       form.find("[name='Date']").val(date);
       form.find("[name='Time']").val(time);
-   }
+    }
+
+    function forfeitChanged(forfeit) {
+      $("#enter_results_form").find("input[type='text']").each(function() {
+        if (forfeit) {
+          $(this).attr("disabled", "disabled");
+          $(this).removeClass("required");
+        }
+        else {
+          $(this).removeAttr("disabled");
+          $(this).addClass("required");
+        }
+      });
+    }
 
   </script>
 </asp:Content>
