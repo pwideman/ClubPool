@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="Contracts\IDivisionRepository.cs" />
     <Compile Include="Contracts\IMatchRepository.cs" />
+    <Compile Include="Contracts\IMatchResultRepository.cs" />
     <Compile Include="Contracts\IMeetRepository.cs" />
     <Compile Include="Contracts\IRoleRepository.cs" />
     <Compile Include="Contracts\ISeasonRepository.cs" />

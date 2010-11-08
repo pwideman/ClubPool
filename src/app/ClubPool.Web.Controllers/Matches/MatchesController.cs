@@ -23,13 +23,16 @@ namespace ClubPool.Web.Controllers.Matches
   {
     protected IMatchRepository matchRepository;
     protected IUserRepository userRepository;
+    protected IMatchResultRepository matchResultRepository;
 
-    public MatchesController(IMatchRepository matchRepository, IUserRepository userRepository) {
+    public MatchesController(IMatchRepository matchRepository, IUserRepository userRepository, IMatchResultRepository matchResultRepository) {
       Check.Require(null != matchRepository, "matchRepository cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
+      Check.Require(null != matchResultRepository, "matchResultRepository cannot be null");
 
       this.matchRepository = matchRepository;
       this.userRepository = userRepository;
+      this.matchResultRepository = matchResultRepository;
     }
 
     [HttpPost]
@@ -91,7 +94,9 @@ namespace ClubPool.Web.Controllers.Matches
           viewModel.Player2.Wins);
         match.AddResult(matchResult);
       }
-      // TODO: update skill levels
+      var gameType = match.Meet.Division.Season.GameType;
+      player1.UpdateSkillLevel(gameType, matchResultRepository);
+      player2.UpdateSkillLevel(gameType, matchResultRepository);
       return new EmptyResult();
     }
   }
