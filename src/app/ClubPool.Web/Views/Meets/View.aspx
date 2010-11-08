@@ -171,6 +171,7 @@ Match Details
     var $current_match_id = null;
     var $current_match_status = null;
     var $current_match_rows = null;
+    var $waiting_on_submit = false;
 
     $(document).ready(function () {
       // set up date & time controls
@@ -186,10 +187,8 @@ Match Details
       // create ajax form
       $("#enter_results_form").ajaxForm({
         success: function(response, status, xhr, form) {
+          $waiting_on_submit = false;
           $("#enter_results_form_status").html("");
-          $log("response: ", response);
-          $log("status: ", status);
-          $log("xhr: ", xhr);
           if (xhr.status === 200) {
             // update was successful, update match object
             $("#enter_results_window").dialog("close");
@@ -199,12 +198,14 @@ Match Details
           }
         },
         error: function(xhr, status, error) {
+          $waiting_on_submit = false;
           $("#enter_results_form_status").html(xhr.responseText).addClass("error");
         },
         beforeSubmit: function() {
           var valid = $("#enter_results_form").validate().form();
           if (valid) {
             $("#enter_results_form_status").removeClass("error").html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
+            $waiting_on_submit = true;
           }
           return valid;
         }
@@ -216,9 +217,15 @@ Match Details
         title: "Enter Match Results",
         buttons: {
           "OK": function () {
+            if ($waiting_on_submit) {
+              return;
+            }
             $("#enter_results_form").submit();
           },
           "Cancel": function () {
+            if ($waiting_on_submit) {
+              return;
+            }
             $(this).dialog("close");
           }
         },
@@ -235,7 +242,6 @@ Match Details
 
       // set up validation
       $("#enter_results_form").validate({
-        debug: true,
         errorPlacement: function() { }
       });
 
@@ -367,12 +373,10 @@ Match Details
     function forfeitChanged(forfeit) {
       $("#enter_results_form").find("input[type='text']").each(function() {
         if (forfeit) {
-          $(this).attr("disabled", "disabled");
-          $(this).removeClass("required");
+          $(this).attr("disabled", "disabled").removeClass("required").removeClass("error");
         }
         else {
-          $(this).removeAttr("disabled");
-          $(this).addClass("required");
+          $(this).removeAttr("disabled").addClass("required");
         }
       });
     }

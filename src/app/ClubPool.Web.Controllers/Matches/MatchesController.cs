@@ -48,9 +48,21 @@ namespace ClubPool.Web.Controllers.Matches
       else {
         // we must perform some manual validation as well
         if (!viewModel.IsForfeit) {
+          // verify that neither player's defensive shots are > innings
           if (viewModel.Player1.DefensiveShots > viewModel.Player1.Innings ||
               viewModel.Player2.DefensiveShots > viewModel.Player2.Innings) {
                 return new HttpInternalServerErrorResult("Defensive shots cannot be greater than innings");
+          }
+          // verify that the winner has >= 2 wins
+          PlayerViewModel winner = null;
+          if (viewModel.Winner == viewModel.Player1.Id) {
+            winner = viewModel.Player1;
+          }
+          else {
+            winner = viewModel.Player2;
+          }
+          if (winner.Wins < 2) {
+            return new HttpInternalServerErrorResult("Winner must have at least 2 wins");
           }
         }
       }
