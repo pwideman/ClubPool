@@ -37,7 +37,7 @@ namespace ClubPool.MSpecTests.ClubPool.Core
 
     Because of = () => player.UpdateSkillLevel(GameType.EightBall, matchResultRepository);
 
-    protected static MatchResult CreateResult(int innings, int defensiveShots, int wins, Match match) {
+    protected static MatchResult CreateResult(int innings, int defensiveShots, int wins, Match match = null) {
       if (null == match) {
         match = new Match(meet, player, opponent);
       }
@@ -67,7 +67,7 @@ namespace ClubPool.MSpecTests.ClubPool.Core
   public class when_asked_to_update_skill_level_with_one_result_and_no_existing_value : specification_for_User
   {
     Establish context = () => {
-      results.Add(CreateResult(20, 0, 2, null));
+      results.Add(CreateResult(20, 0, 2));
     };
 
     It should_add_a_new_value = () =>
@@ -83,7 +83,7 @@ namespace ClubPool.MSpecTests.ClubPool.Core
     static SkillLevel sl;
 
     Establish context = () => {
-      results.Add(CreateResult(20, 0, 2, null));
+      results.Add(CreateResult(20, 0, 2));
 
       sl = new SkillLevel(player, GameType.EightBall, 2);
       player.AddSkillLevel(sl);
@@ -99,15 +99,224 @@ namespace ClubPool.MSpecTests.ClubPool.Core
   }
 
   [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_one_result_that_has_defensive_shots : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 4, 2));
+    };
+
+    It should_add_a_new_value = () =>
+      player.SkillLevels.Count().ShouldEqual(1);
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(5);
+  }
+
+  [Subject(typeof(User))]
   public class when_asked_to_update_skill_level_with_two_results : specification_for_User
   {
     Establish context = () => {
-      results.Add(CreateResult(20, 0, 2, null));
-      results.Add(CreateResult(20, 0, 3, null));
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
     };
 
     It should_calculate_the_value_correctly = () =>
       player.SkillLevels.First().Value.ShouldEqual(5);
   }
 
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_three_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_four_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+      results.Add(CreateResult(20, 0, 1));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_five_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+      results.Add(CreateResult(20, 0, 1));
+      results.Add(CreateResult(20, 0, 5));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_six_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+      results.Add(CreateResult(20, 0, 1));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(21, 0, 3));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(5);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_seven_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+      results.Add(CreateResult(20, 0, 1));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(20, 0, 5));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_eight_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+      results.Add(CreateResult(20, 0, 1));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(20, 0, 5));
+      results.Add(CreateResult(20, 0, 2));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_nine_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+      results.Add(CreateResult(20, 0, 1));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(20, 0, 5));
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 7));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_ten_results : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 3));
+      results.Add(CreateResult(20, 0, 4));
+      results.Add(CreateResult(20, 0, 1));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(21, 0, 3));
+      results.Add(CreateResult(20, 0, 5));
+      results.Add(CreateResult(20, 0, 2));
+      results.Add(CreateResult(20, 0, 7));
+      results.Add(CreateResult(20, 0, 8));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(7);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_with_more_than_ten_results : specification_for_User
+  {
+    Establish context = () => {
+      var match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/1/2011") };
+      results.Add(CreateResult(20, 0, 7, match));
+      results.Add(CreateResult(20, 0, 8, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/2/2011") };
+      results.Add(CreateResult(20, 0, 4, match));
+      results.Add(CreateResult(20, 0, 1, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/3/2011") };
+      results.Add(CreateResult(21, 0, 3, match));
+      results.Add(CreateResult(21, 0, 3, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/4/2011") };
+      results.Add(CreateResult(20, 0, 5, match));
+      results.Add(CreateResult(20, 0, 2, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/5/2011") };
+      results.Add(CreateResult(20, 0, 2, match));
+      results.Add(CreateResult(20, 0, 3, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/6/2011") };
+      results.Add(CreateResult(20, 0, 2, match));
+      results.Add(CreateResult(20, 0, 3, match));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_and_order_by_date_includes_more_than_10_results : specification_for_User
+  {
+    Establish context = () => {
+      var match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/1/2011") };
+      results.Add(CreateResult(20, 0, 4, match));
+      results.Add(CreateResult(20, 0, 1, match));
+      results.Add(CreateResult(20, 0, 7, match));
+      results.Add(CreateResult(20, 0, 8, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/3/2011") };
+      results.Add(CreateResult(21, 0, 3, match));
+      results.Add(CreateResult(21, 0, 3, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/4/2011") };
+      results.Add(CreateResult(20, 0, 5, match));
+      results.Add(CreateResult(20, 0, 2, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/5/2011") };
+      results.Add(CreateResult(20, 0, 2, match));
+      results.Add(CreateResult(20, 0, 3, match));
+
+      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/6/2011") };
+      results.Add(CreateResult(20, 0, 2, match));
+      results.Add(CreateResult(20, 0, 3, match));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(7);
+  }
 }
