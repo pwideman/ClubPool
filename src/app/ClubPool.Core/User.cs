@@ -59,6 +59,7 @@ namespace ClubPool.Core
       roles = new List<Role>();
       IsApproved = false;
       IsLocked = false;
+      skillLevels = new List<SkillLevel>();
     }
 
     public virtual void RemoveAllRoles() {

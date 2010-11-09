@@ -104,6 +104,7 @@
     <Compile Include="ActionResultHelpers.cs" />
     <Compile Include="ClubPool.ApplicationServices\Membership\SharpArchMembershipServiceSpecs.cs" />
     <None Include="ClubPool.ApplicationServices\Membership\SharpArchRoleServiceSpecs.cs" />
+    <Compile Include="ClubPool.Core\UserSpecs.cs" />
     <Compile Include="ClubPool.Data\TestDoubles\EntityDuplicateCheckerStub.cs" />
     <Compile Include="ClubPool.Web\Controllers\ControllerHelper.cs" />
     <Compile Include="ClubPool.Web\Controllers\DashboardControllerSpecs.cs" />
