@@ -114,6 +114,8 @@ namespace ClubPool.Core
         case GameType.EightBall:
           // get the last 10 matches for this player & game type
           var matchResults = (from result in matchResultRepository.GetMatchResultsForPlayerAndGameType(this, gameType)
+                              orderby result.Innings ascending
+                              orderby (result.Innings - result.DefensiveShots) / result.Wins ascending
                               orderby result.Match.DatePlayed descending
                               select result).Take(10).ToList();
 
