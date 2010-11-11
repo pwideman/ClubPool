@@ -96,8 +96,8 @@ Match Details
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Matches.MatchesController>(c => c.Edit(null), FormMethod.Post, new { id = "enter_results_form" })) { %>
     <%= Html.AntiForgeryToken() %>
     <input type="hidden" name="Id" id="match_id" />
-    <input type="hidden" name="Player1.Id" id="player1_id" />
-    <input type="hidden" name="Player2.Id" id="player2_id" />
+    <input type="hidden" name="Player1Id" id="Player1Id" />
+    <input type="hidden" name="Player2Id" id="Player2Id" />
     <table>
       <thead>
         <tr>
@@ -112,17 +112,17 @@ Match Details
       <tbody>
         <tr class="results">
           <td class="name" id="player1name"></td>
-          <td><input type="text" name="Player1.Innings" class="integer-input"/></td>
-          <td><input type="text" name="Player1.DefensiveShots" class="integer-input"/></td>
-          <td><input type="text" name="Player1.Wins" class="integer-input"/></td>
+          <td><input type="text" name="Player1Innings" class="integer-input"/></td>
+          <td><input type="text" name="Player1DefensiveShots" class="integer-input"/></td>
+          <td><input type="text" name="Player1Wins" class="integer-input"/></td>
           <td><input type="radio" name="Winner" id="player1Winner" /></td>
           <td class="date-time"><%= Html.TextBox("Date", "", new { @class = "datepicker" }) %></td>
         </tr>
         <tr class="results">
           <td class="name" id="player2name"></td>
-          <td><input type="text" name="Player2.Innings" class="integer-input"/></td>
-          <td><input type="text" name="Player2.DefensiveShots" class="integer-input"/></td>
-          <td><input type="text" name="Player2.Wins" class="integer-input"/></td>
+          <td><input type="text" name="Player2Innings" class="integer-input"/></td>
+          <td><input type="text" name="Player2DefensiveShots" class="integer-input"/></td>
+          <td><input type="text" name="Player2Wins" class="integer-input"/></td>
           <td><input type="radio" name="Winner" id="player2Winner" /></td>
           <td class="date-time"><%= Html.TextBox("Time", "", new { @class = "timeentry" }) %></td>
         </tr>
@@ -187,22 +187,56 @@ Match Details
       // create ajax form
       $("#enter_results_form").ajaxForm({
         success: function(response, status, xhr, form) {
+          $log("ajax form submit success:");
+          $log("response: ", response);
+          $log("status: ", status);
+          $log("xhr: ", xhr);
+          $log("form: ", form);
           $waiting_on_submit = false;
           $("#enter_results_form_status").html("");
           if (xhr.status === 200) {
-            // update was successful, update match object
-            $("#enter_results_window").dialog("close");
-            var match = updateMatchFromForm($current_match_id);
-            updateTableForMatch(match);
-            $current_match_rows.effect("highlight", 2000);
+            if (response.Success) {
+              // update was successful, update match object
+              $("#enter_results_window").dialog("close");
+              var match = updateMatchFromForm($current_match_id);
+              updateTableForMatch(match);
+              $current_match_rows.effect("highlight", 2000);
+            }
+            else {
+              var status = "<div>";
+              if (response.ValidationResults && response.ValidationResults.length > 0) {
+                if (response.ValidationResults.length > 1) {
+                  // we have multiple validation errors, display them in a list
+                  status += "Validation errors: <ul>";
+                  for(var i=0;i < response.ValidationResults.length;i++) {
+                    var result = response.ValidationResults[i];
+                    status += "<li>" + result.Message + "</li>";
+                  }
+                  status += "</ul>"
+                }
+                else {
+                  status += "Validation error: " + response.ValidationResults[0].Message;
+                }
+              }
+              else {
+                // just display the message
+                status += response.Message;
+              }
+              status += "</div>";
+              $("#enter_results_form_status").html(status).addClass("error");
+            }
           }
         },
         error: function(xhr, status, error) {
+          $log("ajax form submit error:");
+          $log("error: ", error);
+          $log("status: ", status);
+          $log("xhr: ", xhr);
           $waiting_on_submit = false;
-          $("#enter_results_form_status").html(xhr.responseText).addClass("error");
+          $("#enter_results_form_status").html("The server encountered an error processing your request, try again").addClass("error");
         },
         beforeSubmit: function() {
-          var valid = $("#enter_results_form").validate().form();
+          var valid = true;//$("#enter_results_form").validate().form();
           if (valid) {
             $("#enter_results_form_status").removeClass("error").html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
             $waiting_on_submit = true;
@@ -293,9 +327,9 @@ Match Details
 
     function updateMatchFromForm(id) {
       function updatePlayerFromForm(form, playerIndex, player) {
-        player.innings = form.find("[name='Player" + playerIndex + ".Innings']").val() || 0;
-        player.defensiveShots = form.find("[name='Player" + playerIndex + ".DefensiveShots']").val() || 0;
-        player.wins = form.find("[name='Player" + playerIndex + ".Wins']").val() || 0;
+        player.innings = form.find("[name='Player" + playerIndex + "Innings']").val() || 0;
+        player.defensiveShots = form.find("[name='Player" + playerIndex + "DefensiveShots']").val() || 0;
+        player.wins = form.find("[name='Player" + playerIndex + "Wins']").val() || 0;
       }
       var form = $("#enter_results_form");
       var match = $matches[id];
@@ -326,16 +360,16 @@ Match Details
 
     function populateResultsForm(form, match) {
       function populateFormPlayer(form, playerIndex, player) {
-        form.find("[name='Player" + playerIndex + ".Innings']").val(player.innings);
-        form.find("[name='Player" + playerIndex + ".DefensiveShots']").val(player.defensiveShots);
-        form.find("[name='Player" + playerIndex + ".Wins']").val(player.wins);
+        form.find("[name='Player" + playerIndex + "Innings']").val(player.innings);
+        form.find("[name='Player" + playerIndex + "DefensiveShots']").val(player.defensiveShots);
+        form.find("[name='Player" + playerIndex + "Wins']").val(player.wins);
       }
 
       form.find("[name='Id']").val(match.id);
       form.find("#player1name").text(match.player1.name);
       form.find("#player2name").text(match.player2.name);
-      form.find("#player1Winner, #player1_id").val(match.player1.id);
-      form.find("#player2Winner, #player2_id").val(match.player2.id);
+      form.find("#player1Winner, #Player1Id").val(match.player1.id);
+      form.find("#player2Winner, #Player2Id").val(match.player2.id);
   
       form.clearForm();
       forfeitChanged(false);

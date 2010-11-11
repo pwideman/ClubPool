@@ -40,32 +40,28 @@ namespace ClubPool.Web.Controllers.Matches
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditMatchViewModel viewModel) {
+      // TODO: Authorize only admins, officers, and a player involved in this meet
       if (!ValidateViewModel(viewModel)) {
-        string message = "";
-        var validationResult = viewModel.ValidationResults().FirstOrDefault();
-        if (null != validationResult) {
-          message = validationResult.Message;
-        }
-        return new HttpInternalServerErrorResult(message);
+        return Json(new EditMatchResponseViewModel(false, "Validation errors", viewModel.ValidationResults()));
       }
       else {
         // we must perform some manual validation as well
         if (!viewModel.IsForfeit) {
           // verify that neither player's defensive shots are > innings
-          if (viewModel.Player1.DefensiveShots > viewModel.Player1.Innings ||
-              viewModel.Player2.DefensiveShots > viewModel.Player2.Innings) {
-                return new HttpInternalServerErrorResult("Defensive shots cannot be greater than innings");
+          if (viewModel.Player1DefensiveShots > viewModel.Player1Innings ||
+              viewModel.Player2DefensiveShots > viewModel.Player2Innings) {
+                return Json(new EditMatchResponseViewModel(false, "Defensive shots cannot be greater than innings"));
           }
           // verify that the winner has >= 2 wins
-          PlayerViewModel winner = null;
-          if (viewModel.Winner == viewModel.Player1.Id) {
-            winner = viewModel.Player1;
+          int winnerWins = 0;
+          if (viewModel.Winner == viewModel.Player1Id) {
+            winnerWins = viewModel.Player1Wins;
           }
           else {
-            winner = viewModel.Player2;
+            winnerWins = viewModel.Player2Wins;
           }
-          if (winner.Wins < 2) {
-            return new HttpInternalServerErrorResult("Winner must have at least 2 wins");
+          if (winnerWins < 2) {
+            return Json(new EditMatchResponseViewModel(false, "Winner must have at least 2 wins"));
           }
         }
       }
@@ -74,8 +70,8 @@ namespace ClubPool.Web.Controllers.Matches
       if (match.IsComplete) {
         match.RemoveAllResults();
       }
-      var player1 = userRepository.Get(viewModel.Player1.Id);
-      var player2 = userRepository.Get(viewModel.Player2.Id);
+      var player1 = userRepository.Get(viewModel.Player1Id);
+      var player2 = userRepository.Get(viewModel.Player2Id);
       match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
       match.IsComplete = true;
       match.IsForfeit = viewModel.IsForfeit;
@@ -83,21 +79,21 @@ namespace ClubPool.Web.Controllers.Matches
       if (!match.IsForfeit) {
         match.DatePlayed = DateTime.Parse(viewModel.Date + " " + viewModel.Time);
         var matchResult = new MatchResult(player1,
-          viewModel.Player1.Innings,
-          viewModel.Player1.DefensiveShots,
-          viewModel.Player1.Wins);
+          viewModel.Player1Innings,
+          viewModel.Player1DefensiveShots,
+          viewModel.Player1Wins);
         match.AddResult(matchResult);
 
         matchResult = new MatchResult(player2,
-          viewModel.Player2.Innings,
-          viewModel.Player2.DefensiveShots,
-          viewModel.Player2.Wins);
+          viewModel.Player2Innings,
+          viewModel.Player2DefensiveShots,
+          viewModel.Player2Wins);
         match.AddResult(matchResult);
       }
       var gameType = match.Meet.Division.Season.GameType;
       player1.UpdateSkillLevel(gameType, matchResultRepository);
       player2.UpdateSkillLevel(gameType, matchResultRepository);
-      return new EmptyResult();
+      return Json(new EditMatchResponseViewModel(true));
     }
   }
 }

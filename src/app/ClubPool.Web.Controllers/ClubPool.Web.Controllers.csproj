@@ -100,6 +100,7 @@
     <Compile Include="HttpInternalServerErrorResult.cs" />
     <Compile Include="HttpNotFoundResult.cs" />
     <Compile Include="Matches\MatchesController.cs" />
+    <Compile Include="Matches\ViewModels\EditMatchResponseViewModel.cs" />
     <Compile Include="Matches\ViewModels\EditMatchViewModel.cs" />
     <Compile Include="Meets\MeetsController.cs" />
     <Compile Include="Meets\ViewModels\MeetViewModel.cs" />
