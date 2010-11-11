@@ -91,4 +91,17 @@ namespace ClubPool.MSpecTests
       : base(result) {
     }
   }
+
+  public class JsonResultHelper<T> : ActionResultHelper<JsonResult> where T:class
+  {
+    public JsonResultHelper(ActionResult result)
+      : base(result) {
+    }
+
+    public T Data {
+      get {
+        return Result.Data as T;
+      }
+    }
+  }
 }
