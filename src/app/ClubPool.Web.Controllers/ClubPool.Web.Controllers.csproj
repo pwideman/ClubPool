@@ -97,7 +97,6 @@
     <Compile Include="Divisions\ViewModels\EditDivisionViewModel.cs" />
     <Compile Include="Error\ErrorController.cs" />
     <Compile Include="Extensions\ModelStateDictionaryExtensions.cs" />
-    <Compile Include="HttpInternalServerErrorResult.cs" />
     <Compile Include="HttpNotFoundResult.cs" />
     <Compile Include="Matches\MatchesController.cs" />
     <Compile Include="Matches\ViewModels\EditMatchResponseViewModel.cs" />
