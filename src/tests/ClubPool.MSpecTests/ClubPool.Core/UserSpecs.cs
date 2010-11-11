@@ -319,4 +319,18 @@ namespace ClubPool.MSpecTests.ClubPool.Core
     It should_calculate_the_value_correctly = () =>
       player.SkillLevels.First().Value.ShouldEqual(7);
   }
+
+  [Subject(typeof(User))]
+  public class when_asked_to_update_skill_level_and_match_with_zero_wins_results_in_higher_skill_level : specification_for_User
+  {
+    Establish context = () => {
+      results.Add(CreateResult(20, 0, 5));
+      results.Add(CreateResult(10, 0, 0));
+      results.Add(CreateResult(20, 0, 0));
+      results.Add(CreateResult(200, 0, 1));
+    };
+
+    It should_calculate_the_value_correctly = () =>
+      player.SkillLevels.First().Value.ShouldEqual(6);
+  }
 }
