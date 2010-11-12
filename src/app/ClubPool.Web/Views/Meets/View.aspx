@@ -236,7 +236,7 @@ Match Details
           $("#enter_results_form_status").html("The server encountered an error processing your request, try again").addClass("error");
         },
         beforeSubmit: function() {
-          var valid = true;//$("#enter_results_form").validate().form();
+          var valid = $("#enter_results_form").validate().form();
           if (valid) {
             $("#enter_results_form_status").removeClass("error").html('<%= Html.ContentImage("loading-small.gif", "Loading") %>&nbsp;Please wait...');
             $waiting_on_submit = true;
@@ -373,6 +373,11 @@ Match Details
   
       form.clearForm();
       forfeitChanged(false);
+      
+      $("#enter_results_form").find("input[type='text']").each(function() {
+        $(this).removeClass("error");
+      });     
+      
       if (match.isComplete) {
         if (!match.isForfeit) {
           populateFormPlayer(form, 1, match.player1);

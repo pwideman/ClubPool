@@ -25,7 +25,7 @@ namespace ClubPool.Core
       InitMembers();
     }
 
-    public Match(Meet meet, User player1, User player2) {
+    public Match(Meet meet, User player1, User player2) : this() {
       Check.Require(null != meet, "meet cannot be null");
       Check.Require(null != player1, "player1 cannot be null");
       Check.Require(null != player2, "player2 cannot be null");

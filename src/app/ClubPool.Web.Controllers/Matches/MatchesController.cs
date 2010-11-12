@@ -47,6 +47,14 @@ namespace ClubPool.Web.Controllers.Matches
       else {
         // we must perform some manual validation as well
         if (!viewModel.IsForfeit) {
+          // verify that a valid date & time were entered
+          DateTime tempDate;
+          if (!DateTime.TryParse(viewModel.Date, out tempDate)) {
+            return Json(new EditMatchResponseViewModel(false, "Enter a valid date"));
+          }
+          if (!DateTime.TryParse(viewModel.Time, out tempDate)) {
+            return Json(new EditMatchResponseViewModel(false, "Enter a valid time"));
+          }
           // verify that neither player's defensive shots are > innings
           if (viewModel.Player1DefensiveShots > viewModel.Player1Innings ||
               viewModel.Player2DefensiveShots > viewModel.Player2Innings) {
@@ -67,11 +75,22 @@ namespace ClubPool.Web.Controllers.Matches
       }
 
       var match = matchRepository.Get(viewModel.Id);
+      if (null == match) {
+        return HttpNotFound();
+      }
+
+      var player1 = userRepository.Get(viewModel.Player1Id);
+      if (null == player1 || !match.Players.Contains(player1)) {
+        return Json(new EditMatchResponseViewModel(false, "Player 1 is not a valid player for this match"));
+      }
+      var player2 = userRepository.Get(viewModel.Player2Id);
+      if (null == player2 || !match.Players.Contains(player2)) {
+        return Json(new EditMatchResponseViewModel(false, "Player 2 is not a valid player for this match"));
+      }
+
       if (match.IsComplete) {
         match.RemoveAllResults();
       }
-      var player1 = userRepository.Get(viewModel.Player1Id);
-      var player2 = userRepository.Get(viewModel.Player2Id);
       match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
       match.IsComplete = true;
       match.IsForfeit = viewModel.IsForfeit;
