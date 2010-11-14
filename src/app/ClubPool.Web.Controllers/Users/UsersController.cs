@@ -324,5 +324,18 @@ namespace ClubPool.Web.Controllers.Users
         viewModel.LastName, viewModel.Email, approved, locked);
       return user;
     }
+
+    [HttpGet]
+    [Authorize]
+    [Transaction]
+    public ActionResult View(int id) {
+      var user = userRepository.Get(id);
+      if (null == user) {
+        return HttpNotFound();
+      }
+
+      var viewModel = new ViewViewModel(user);
+      return View(viewModel);
+    }
   }
 }

@@ -243,6 +243,7 @@
     <Content Include="Views\Users\SignUp.aspx" />
     <Content Include="Views\Users\SignUpComplete.aspx" />
     <Content Include="Views\Users\Unapproved.aspx" />
+    <Content Include="Views\Users\View.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

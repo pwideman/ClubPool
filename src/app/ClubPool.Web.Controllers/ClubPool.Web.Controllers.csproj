@@ -130,6 +130,7 @@
     <Compile Include="Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="Users\ViewModels\UserSummaryViewModel.cs" />
     <Compile Include="Users\ViewModels\UserViewModelBase.cs" />
+    <Compile Include="Users\ViewModels\ViewViewModel.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="Dashboard\DashboardController.cs" />
     <Compile Include="Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
