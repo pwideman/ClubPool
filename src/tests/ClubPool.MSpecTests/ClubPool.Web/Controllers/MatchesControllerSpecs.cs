@@ -55,11 +55,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
         Player1Id = player1Id,
         Player1Innings = 20,
         Player1DefensiveShots = 1,
-        Player1Wins = 3,
+        Player1Wins = 4,
         Player2Id = player2Id,
         Player2Innings = 20,
         Player2DefensiveShots = 1,
-        Player2Wins = 2,
+        Player2Wins = 4,
         Winner = player1Id,
         Date = "1/1/2011",
         Time = "06:00 PM"
@@ -92,10 +92,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
         var tempMatch = new Match(meet, player1, player2);
         tempMatch.DatePlayed = DateTime.Parse("8/1/2010").AddDays(i);
         tempMatch.IsComplete = true;
-        var matchResult = new MatchResult(player1, 30, 0, 4);
+        var matchResult = new MatchResult(player1, 30, 0, 3);
         player1Results.Add(matchResult);
         tempMatch.AddResult(matchResult);
-        matchResult = new MatchResult(player2, 30, 0, 4);
+        matchResult = new MatchResult(player2, 30, 0, 3);
         player2Results.Add(matchResult);
         tempMatch.AddResult(matchResult);
       }
@@ -359,6 +359,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_set_the_match_date = () =>
       match.DatePlayed.ShouldEqual(DateTime.Parse(viewModel.Date + " " + viewModel.Time));
+
+    // TODO: Maybe figure out some way to test skill level updates, can't do that now because
+    // we've stubbed matchResultRepository.GetResultsForPlayerAndGameType, so the new results
+    // aren't included
   }
 
 }
