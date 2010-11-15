@@ -1,0 +1,18 @@
+<mockup version="1.0" skin="sketch" measuredW="408" measuredH="260" mockupW="349" mockupH="216">
+  <controls>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::List" x="80" y="80" w="268" h="155" measuredW="100" measuredH="147" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <text>Username%3A%20pwideman%0AName%3A%20Paul%20Wideman%0AEmail%3A%20paul.wideman@gmail.com%0AUser%20%5Bis%7Cis%20not%5D%20approved%0AUser%20%5Bis%7Cis%20not%5D%20locked%0ARoles%3A%20Administrators%2C%20Officers%2C%20Users%0AEight%20ball%20skill%20level%3A%205</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::TabBar" x="49" y="34" w="349" h="216" measuredW="343" measuredH="100" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>square</borderStyle>
+        <selectedIndex>0</selectedIndex>
+        <tabHPosition>left</tabHPosition>
+        <text>Details%2C%20Team%20History%2C%20Match%20History</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
