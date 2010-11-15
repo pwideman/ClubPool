@@ -44,7 +44,7 @@ namespace ClubPool.Core
       : this() {
       Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
-      Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
+      //Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(firstName), "firstName cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(lastName), "lastName cannot be null or empty");
 

@@ -20,11 +20,21 @@ namespace ClubPool.ApplicationServices.Membership
   {
     protected IUserRepository userRepository;
     protected const int SALT_SIZE = 16; // same size as the SqlMembershipProvider
+    protected bool allowDuplicateEmail;
+    protected bool allowEmptyEmail;
 
     public SharpArchMembershipService(IUserRepository userRepo) {
       Check.Require(null != userRepo, "The user repository cannot be null");
 
       userRepository = userRepo;
+      allowDuplicateEmail = false;
+      allowEmptyEmail = false;
+    }
+
+    public SharpArchMembershipService(IUserRepository userRepo, bool allowDuplicateEmail, bool allowEmptyEmail)
+      : this(userRepo) {
+      this.allowDuplicateEmail = allowDuplicateEmail;
+      this.allowEmptyEmail = allowEmptyEmail;
     }
 
     public bool UsernameIsInUse(string username) {
@@ -70,7 +80,9 @@ namespace ClubPool.ApplicationServices.Membership
 
       Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
-      Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
+      if (!allowEmptyEmail) {
+        Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
+      }
       Check.Require(!string.IsNullOrEmpty(firstName), "firstName cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(lastName), "lastName cannot be null or empty");
 
@@ -82,7 +94,7 @@ namespace ClubPool.ApplicationServices.Membership
       }
 
       // see if a user with this email already exists
-      if (EmailIsInUse(email)) {
+      if (!allowDuplicateEmail && EmailIsInUse(email)) {
         throw new ArgumentException(string.Format("The email address '{0}' is already in use", email));
       }
 
