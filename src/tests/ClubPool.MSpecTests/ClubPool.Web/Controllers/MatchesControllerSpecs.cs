@@ -242,7 +242,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   [Subject(typeof(MatchesController))]
   public class when_asked_to_edit_a_nonexistent_match : specification_for_Matches_controller
   {
-    static HttpNotFoundResultHelper resultHelper;
+    new static HttpNotFoundResultHelper resultHelper;
     Establish context = () => {
       viewModel.Id = 10;
     };
