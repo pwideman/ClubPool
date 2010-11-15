@@ -36,7 +36,7 @@
     <% foreach (var item in Model.Items) { %>
         <tr>
           <td><%= Html.Encode(item.Id) %></td>
-          <td><%= Html.Encode(item.Username) %></td>
+          <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(item.Id), item.Username) %></td>
           <td><%= Html.Encode(item.Name) %></td>
           <td><%= Html.Encode(item.Email) %></td>
           <td>
