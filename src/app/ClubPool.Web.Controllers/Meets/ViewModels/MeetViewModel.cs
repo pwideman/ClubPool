@@ -68,7 +68,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
 
       // calculate my season record & win percentage
       var team = match.Meet.Teams.Where(t => t.Players.Contains(player)).First();
-      var completedMatches = from meet in team.Division.Schedule
+      var completedMatches = from meet in team.Division.Meets
                              where meet.Teams.Contains(team)
                              from completedMatch in meet.Matches
                              where completedMatch.Players.Contains(player) && completedMatch.IsComplete

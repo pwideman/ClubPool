@@ -56,7 +56,7 @@ namespace ClubPool.Core
       if (players.Contains(player)) {
         players.Remove(player);
         // remove the player from any incomplete matches
-        var meets = Division.Schedule.Where(m => m.Teams.Contains(this));
+        var meets = Division.Meets.Where(m => m.Teams.Contains(this));
         foreach (var meet in meets) {
           var matches = meet.Matches.ToList();
           foreach (var match in matches) {
@@ -75,7 +75,7 @@ namespace ClubPool.Core
       if (!players.Contains(player)) {
         players.Add(player);
         // add this player to meets
-        var meets = Division.Schedule.Where(m => m.Teams.Contains(this));
+        var meets = Division.Meets.Where(m => m.Teams.Contains(this));
         foreach (var meet in meets) {
           var opposingTeam = meet.Teams.Where(t => t != this).First();
           foreach (var opponent in opposingTeam.Players) {

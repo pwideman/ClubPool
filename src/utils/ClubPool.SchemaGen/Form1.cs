@@ -22,12 +22,18 @@ namespace ClubPool.SchemaGen
 {
   public partial class SchemaGen : Form
   {
+    protected long beginTicks = 0;
+    protected StringWriter outputStream;
+
     public SchemaGen() {
       InitializeComponent();
+      outputStream = new StringWriter(new StringBuilder(OutputTextBox.Text));
     }
 
     private void button1_Click(object sender, EventArgs e) {
       try {
+        beginTicks = DateTime.Now.Ticks;
+
         initializeNH();
         
         var userRepo = new UserRepository();
@@ -89,12 +95,18 @@ namespace ClubPool.SchemaGen
     }
 
     private void output(string text) {
-      OutputTextBox.Text += Environment.NewLine + text;
-      OutputTextBox.Update();
+      var elapsedTime = new TimeSpan(DateTime.Now.Ticks - beginTicks);
+      outputStream.WriteLine(string.Format("{0}:{1}.{2} - {3}", 
+        elapsedTime.Minutes.ToString("00"),
+        elapsedTime.Seconds.ToString("00"),
+        elapsedTime.Milliseconds, text));
+      //OutputTextBox.Update();
     }
 
     private void button2_Click(object sender, EventArgs e) {
       try {
+        beginTicks = DateTime.Now.Ticks;
+
         initializeNH();
 
         var userRepo = new UserRepository();
@@ -149,7 +161,7 @@ namespace ClubPool.SchemaGen
                   output("Creating schedule");
                   newDivision.CreateSchedule(divisionRepo);
                   output("Migrating matches");
-                  foreach (var meet in newDivision.Schedule) {
+                  foreach (var meet in newDivision.Meets) {
                     var team1Id = oldTeamIds[meet.Team1];
                     var team2Id = oldTeamIds[meet.Team2];
                     var matches = division.Matches.Where(m => (m.Team1Id == team1Id && m.Team2Id == team2Id) || (m.Team1Id == team2Id && m.Team2Id == team1Id));

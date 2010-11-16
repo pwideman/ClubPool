@@ -403,10 +403,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       team.Players.Select(p => p.Id).ToArray().ShouldEqual(viewModel.Players.Select(p => p.Id).ToArray());
 
     It should_remove_the_previous_player_from_the_teams_matches = () =>
-      division.Schedule.First().Matches.Where(match => match.Players.Contains(users[1])).Count().ShouldEqual(0);
+      division.Meets.First().Matches.Where(match => match.Players.Contains(users[1])).Count().ShouldEqual(0);
 
     It should_add_the_new_player_to_the_teams_matches = () =>
-      division.Schedule.First().Matches.Where(match => match.Players.Contains(users[4])).Count().ShouldEqual(2);
+      division.Meets.First().Matches.Where(match => match.Players.Contains(users[4])).Count().ShouldEqual(2);
 
     It should_return_a_notification_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();

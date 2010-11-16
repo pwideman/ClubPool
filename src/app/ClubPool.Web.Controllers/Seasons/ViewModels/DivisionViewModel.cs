@@ -18,8 +18,8 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
       Name = division.Name;
       StartingDate = division.StartingDate;
       CanDelete = division.CanDelete();
-      if (division.Schedule.Any()) {
-        Schedule = new ScheduleViewModel(division.Schedule, division.StartingDate);
+      if (division.Meets.Any()) {
+        Schedule = new ScheduleViewModel(division.Meets, division.StartingDate);
         HasSchedule = true;
       }
       Teams = division.Teams.Select(t => new TeamViewModel(t)).ToList();

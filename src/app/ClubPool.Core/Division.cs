@@ -13,7 +13,7 @@ namespace ClubPool.Core
   public class Division : Entity, IEntityWithVersion
   {
     private static readonly object scheduleLock = new object();
-    protected IList<Meet> schedule;
+    protected IList<Meet> meets;
     protected IList<Team> teams;
 
     public virtual DateTime StartingDate { get; set; }
@@ -26,7 +26,7 @@ namespace ClubPool.Core
 
     public virtual int Version { get; protected set; }
 
-    public virtual IEnumerable<Meet> Schedule { get { return schedule; } }
+    public virtual IEnumerable<Meet> Meets { get { return meets; } }
 
     public virtual IEnumerable<Team> Teams { get { return teams; } }
 
@@ -46,7 +46,7 @@ namespace ClubPool.Core
 
     protected virtual void InitMembers() {
       teams = new List<Team>();
-      schedule = new List<Meet>();
+      meets = new List<Meet>();
     }
 
     public virtual bool CanDelete() {
@@ -79,23 +79,37 @@ namespace ClubPool.Core
       teams.Clear();
     }
 
+    public virtual void AddMeet(Meet meet) {
+      Check.Require(null != meet, "meet cannot be null");
+
+      if (!meets.Contains(meet)) {
+        meets.Add(meet);
+      }
+    }
+
+    public virtual void RemoveMeet(Meet meet) {
+      if (null != meet && meets.Contains(meet)) {
+        meets.Remove(meet);
+      }
+    }
+
     public virtual bool TeamNameIsInUse(string name) {
       return Teams.Where(t => t.Name.Equals(name)).Any();
     }
 
     public virtual void ClearSchedule() {
-      schedule.Clear();
+      meets.Clear();
     }
 
     public virtual void CreateSchedule(IDivisionRepository divisionRepository) {
       Check.Require(null != divisionRepository, "divisionRepository cannot be null");
       divisionRepository.Refresh(this);
-      if (schedule.Any()) {
+      if (meets.Any()) {
         throw new CreateScheduleException("A schedule for this division already exists");
       }
       lock (scheduleLock) {
         divisionRepository.Refresh(this);
-        if (schedule.Any()) {
+        if (meets.Any()) {
           throw new CreateScheduleException("A schedule for this division already exists");
         }
 
@@ -133,9 +147,9 @@ namespace ClubPool.Core
               }
             }
             if (opponent != j) {
-              if (!schedule.Where(m => m.Teams.Contains(teams[j]) && m.Teams.Contains(teams[opponent])).Any()) {
+              if (!meets.Where(m => m.Teams.Contains(teams[j]) && m.Teams.Contains(teams[opponent])).Any()) {
                 Meet m = new Meet(teams[j], teams[opponent], i);
-                schedule.Add(m);
+                meets.Add(m);
               }
             }
           }
