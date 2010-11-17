@@ -8,9 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
+using System.Configuration;
 
 using SharpArch.Data.NHibernate;
 using NHibernate.Tool.hbm2ddl;
+using MySql.Data.MySqlClient;
 
 using Core=ClubPool.Core;
 using ClubPool.Data;
@@ -23,11 +25,9 @@ namespace ClubPool.SchemaGen
   public partial class SchemaGen : Form
   {
     protected long beginTicks = 0;
-    protected StringWriter outputStream;
 
     public SchemaGen() {
       InitializeComponent();
-      outputStream = new StringWriter(new StringBuilder(OutputTextBox.Text));
     }
 
     private void button1_Click(object sender, EventArgs e) {
@@ -35,7 +35,8 @@ namespace ClubPool.SchemaGen
         beginTicks = DateTime.Now.Ticks;
 
         initializeNH();
-        
+        CreateSpecialUsersAndRoles();
+
         var userRepo = new UserRepository();
         var membershipService = new SharpArchMembershipService(userRepo);
 
@@ -96,11 +97,148 @@ namespace ClubPool.SchemaGen
 
     private void output(string text) {
       var elapsedTime = new TimeSpan(DateTime.Now.Ticks - beginTicks);
-      outputStream.WriteLine(string.Format("{0}:{1}.{2} - {3}", 
+      OutputTextBox.Text += Environment.NewLine + string.Format("{0}:{1}.{2} - {3}", 
         elapsedTime.Minutes.ToString("00"),
         elapsedTime.Seconds.ToString("00"),
-        elapsedTime.Milliseconds, text));
-      //OutputTextBox.Update();
+        elapsedTime.Milliseconds.ToString("000"), text);
+      OutputTextBox.Update();
+      OutputTextBox.ScrollToCaret();
+    }
+
+    private void button3_Click(object sender, EventArgs e) {
+      try {
+        beginTicks = DateTime.Now.Ticks;
+
+        initializeNH();
+
+        var id = 1;
+
+        using (var conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["cp"].ConnectionString)) {
+          output("opening mysql connection");
+          conn.Open();
+          using (var tx = conn.BeginTransaction())
+          using (var context = new ipoolEntities()) {
+            var oldUserIdsToNewUserIds = new Dictionary<int, int>();
+            var newUserIdsToOldUserIds = new Dictionary<int, int>();
+
+            int nextId = 1;
+
+            MigrateUsers(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, ref nextId);
+
+            MigrateSeasons(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, ref nextId);
+
+            UpdateNextHi(nextId, conn, tx);
+
+            output("committing transaction");
+            tx.Commit();
+          }
+          output("closing mysql connection");
+          conn.Close();
+        }
+
+        CreateSpecialUsersAndRoles();
+      }
+      catch (Exception ex) {
+        output("Exception:");
+        output(getExceptionText(ex));
+      }
+    }
+
+    private void MigrateSeasons(MySqlConnection conn,
+      MySqlTransaction tx,
+      Dictionary<int, int> oldIds,
+      Dictionary<int, int> newIds,
+      ipoolEntities context,
+      ref int nextId) {
+
+      output("Migrating seasons");
+
+      var commandText = @"insert into seasons(id, version, name, isactive, gametype) 
+                          values (@id, 1, @name, false, @gametype);";
+      var seasonCmd = new MySqlCommand(commandText, conn, tx);
+      seasonCmd.Prepare();
+      seasonCmd.Parameters.AddWithValue("@id", 1);
+      seasonCmd.Parameters.AddWithValue("@name", "name");
+      seasonCmd.Parameters.AddWithValue("@gametype", Core.GameType.EightBall.ToString());
+      foreach (var season in context.Seasons) {
+        seasonCmd.Parameters["@id"].Value = nextId++;
+        var name = "8-ball " + season.Year.ToString();
+        seasonCmd.Parameters["@name"].Value = name;
+        output(string.Format("inserting season '{0}'", name));
+        seasonCmd.ExecuteNonQuery();
+      }
+    }
+
+    private void MigrateUsers(MySqlConnection conn, 
+      MySqlTransaction tx,
+      Dictionary<int, int> oldIds, 
+      Dictionary<int, int> newIds, 
+      ipoolEntities context,
+      ref int nextId) {
+
+      output("Migrating users");
+
+      var commandText = @"insert into users(id, version, username, firstname, lastname, email, isapproved, islocked) 
+                          values (@id, 1, @username, @firstname, @lastname, @email, true, true);";
+      var command = new MySqlCommand(commandText, conn, tx);
+      command.Prepare();
+      command.Parameters.AddWithValue("@id", 1);
+      command.Parameters.AddWithValue("@username", "username");
+      command.Parameters.AddWithValue("@firstname", "firstname");
+      command.Parameters.AddWithValue("@lastname", "lastname");
+      command.Parameters.AddWithValue("@email", "email");
+
+      commandText = @"insert into previoususeraccountinfos(id, password, salt, previoususerid, userid)
+                      values (@id, @password, @salt, @previoususerid, @userid);";
+      var infoCommand = new MySqlCommand(commandText, conn, tx);
+      infoCommand.Prepare();
+      infoCommand.Parameters.AddWithValue("@id", 1);
+      infoCommand.Parameters.AddWithValue("@password", "password");
+      infoCommand.Parameters.AddWithValue("@salt", "salt");
+      infoCommand.Parameters.AddWithValue("@previoususerid", "previd");
+      infoCommand.Parameters.AddWithValue("@userid", "userid");
+
+      foreach (var user in context.Users) {
+        var names = user.UserName.Split('_');
+        var firstName = names[0].Substring(0, 1).ToUpper() + names[0].Substring(1);
+        var lastName = "";
+        if (names.Length > 1) {
+          lastName = names[1].Substring(0, 1).ToUpper() + names[1].Substring(1);
+        }
+        var newUserId = nextId++;
+        command.Parameters["@id"].Value = newUserId;
+        command.Parameters["@username"].Value = user.UserName;
+        command.Parameters["@firstname"].Value = firstName;
+        command.Parameters["@lastname"].Value = lastName;
+        command.Parameters["@email"].Value = user.Email;
+        output("inserting user " + user.UserName);
+        command.ExecuteNonQuery();
+
+        infoCommand.Parameters["@id"].Value = nextId++;
+        infoCommand.Parameters["@password"].Value = user.Password;
+        infoCommand.Parameters["@salt"].Value = user.PasswordSalt;
+        infoCommand.Parameters["@previoususerid"].Value = user.UserId;
+        infoCommand.Parameters["@userid"].Value = newUserId;
+        output("inserting previousaccountinfo");
+        infoCommand.ExecuteNonQuery();
+
+        oldIds.Add(user.UserId, newUserId);
+        newIds.Add(newUserId, user.UserId);
+      }
+    }
+
+    private void UpdateNextHi(int id, MySqlConnection conn, MySqlTransaction tx) {
+      output("updating next hi");
+
+      var command = new MySqlCommand("select next_hi from hibernate_unique_key", conn, tx);
+      int? next_hi = command.ExecuteScalar() as int?;
+      var nextHi = next_hi.HasValue ? next_hi.Value : 1;
+
+      var newNextHi = id / 1000 + 1;
+      if (newNextHi > nextHi) {
+        command = new MySqlCommand("update hibernate_unique_key set next_hi = " + newNextHi.ToString(), conn, tx);
+        command.ExecuteNonQuery();
+      }
     }
 
     private void button2_Click(object sender, EventArgs e) {
@@ -108,6 +246,8 @@ namespace ClubPool.SchemaGen
         beginTicks = DateTime.Now.Ticks;
 
         initializeNH();
+
+        CreateSpecialUsersAndRoles();
 
         var userRepo = new UserRepository();
         var previousInfoRepo = new LinqRepository<Core.PreviousUserAccountInfo>();
@@ -240,7 +380,9 @@ namespace ClubPool.SchemaGen
       sw.Flush();
       output("SchemaExport output:");
       output(sb.Replace("\n", Environment.NewLine).ToString());
+    }
 
+    private void CreateSpecialUsersAndRoles() {
       output("Creating roles");
       var roleRepo = new RoleRepository();
       Core.Role admin = null;
@@ -267,7 +409,7 @@ namespace ClubPool.SchemaGen
         userRepo.SaveOrUpdate(user);
         userRepo.DbContext.CommitTransaction();
       }
-
     }
+
   }
 }
