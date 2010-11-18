@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Objects.DataClasses;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -161,11 +162,39 @@ namespace ClubPool.SchemaGen
       seasonCmd.Parameters.AddWithValue("@name", "name");
       seasonCmd.Parameters.AddWithValue("@gametype", Core.GameType.EightBall.ToString());
       foreach (var season in context.Seasons) {
-        seasonCmd.Parameters["@id"].Value = nextId++;
+        var seasonId = nextId++;
+        seasonCmd.Parameters["@id"].Value = seasonId;
         var name = "8-ball " + season.Year.ToString();
         seasonCmd.Parameters["@name"].Value = name;
         output(string.Format("inserting season '{0}'", name));
         seasonCmd.ExecuteNonQuery();
+        MigrateDivisions(season, seasonId, conn, tx, ref nextId);
+      }
+    }
+
+    private void MigrateDivisions(Season season, 
+      int seasonId, 
+      MySqlConnection conn, 
+      MySqlTransaction tx, 
+      ref int nextId) {
+
+      output(string.Format("Migrating divisions for season '{0}'", season.Year.ToString()));
+
+      var commandText = @"insert into divisions (id, version, startingdate, name, seasonid)
+                          values (@id, 1, @date, @name, @seasonid);";
+      var cmd = new MySqlCommand(commandText, conn, tx);
+      cmd.Prepare();
+      cmd.Parameters.AddWithValue("@id", 1);
+      cmd.Parameters.AddWithValue("@name", "name");
+      cmd.Parameters.AddWithValue("@date", DateTime.Now);
+      cmd.Parameters.AddWithValue("@seasonid", seasonId);
+      foreach (var division in season.Divisions) {
+        var divisionId = nextId++;
+        cmd.Parameters["@id"].Value = divisionId;
+        cmd.Parameters["@name"].Value = division.Description;
+        cmd.Parameters["@date"].Value = season.StartDate.Value.AddDays(division.DateOffset);
+        output(string.Format("inserting division '{0}'", division.Description));
+        cmd.ExecuteNonQuery();
       }
     }
 
