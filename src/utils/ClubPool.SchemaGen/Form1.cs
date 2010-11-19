@@ -168,7 +168,7 @@ namespace ClubPool.SchemaGen
         seasonCmd.Parameters["@name"].Value = name;
         output(string.Format("inserting season '{0}'", name));
         seasonCmd.ExecuteNonQuery();
-        MigrateDivisions(season, seasonId, conn, tx, ref nextId);
+        MigrateDivisions(season, seasonId, conn, tx, ref nextId, oldIds, newIds);
       }
     }
 
@@ -176,7 +176,9 @@ namespace ClubPool.SchemaGen
       int seasonId, 
       MySqlConnection conn, 
       MySqlTransaction tx, 
-      ref int nextId) {
+      ref int nextId,
+      Dictionary<int,int> oldIds,
+      Dictionary<int,int> newIds) {
 
       output(string.Format("Migrating divisions for season '{0}'", season.Year.ToString()));
 
@@ -195,6 +197,65 @@ namespace ClubPool.SchemaGen
         cmd.Parameters["@date"].Value = season.StartDate.Value.AddDays(division.DateOffset);
         output(string.Format("inserting division '{0}'", division.Description));
         cmd.ExecuteNonQuery();
+        MigrateTeams(division, divisionId, conn, tx, ref nextId, oldIds, newIds);
+        MigrateMatches(division, divisionId, conn, tx, ref nextId, oldIds, newIds);
+      }
+    }
+
+    private void MigrateMatches(Division division,
+      int divisionId,
+      MySqlConnection conn,
+      MySqlTransaction tx,
+      ref int nextId,
+      Dictionary<int, int> oldIds,
+      Dictionary<int, int> newIds) {
+
+      var meetText = @"insert into meets (id, week, iscomplete, divisionid, team1id, team2id)
+                       values (@id, @week, true, @divisionid, @team1id, @team2id);";
+
+      foreach (var match in division.Matches.OrderBy(m => m.Team1Id).ThenBy(m => m.Team2Id)) {
+      }
+    }
+
+    private void MigrateTeams(Division division,
+      int divisionId,
+      MySqlConnection conn,
+      MySqlTransaction tx,
+      ref int nextId,
+      Dictionary<int, int> oldIds,
+      Dictionary<int, int> newIds) {
+
+      output(string.Format("Migrating teams for division {0}", division.Description));
+
+      var commandText = @"insert into teams (id, version, name, divisionid) values (@id, 1, @name, @divisionid);";
+      var cmd = new MySqlCommand(commandText, conn, tx);
+      cmd.Prepare();
+      cmd.Parameters.AddWithValue("@id", 1);
+      cmd.Parameters.AddWithValue("@name", "name");
+      cmd.Parameters.AddWithValue("@divisionid", divisionId);
+
+      commandText = @"insert into teamsplayers (teamid, userid) values (@teamid, @userid);";
+      var playerCmd = new MySqlCommand(commandText, conn, tx);
+      playerCmd.Prepare();
+      playerCmd.Parameters.AddWithValue("@teamid", 1);
+      playerCmd.Parameters.AddWithValue("@userid", 1);
+      foreach (var team in division.Teams) {
+        var teamId = nextId++;
+        cmd.Parameters["@id"].Value = teamId;
+        cmd.Parameters["@name"].Value = team.Name;
+        output(string.Format("inserting team '{0}'", team.Name));
+        cmd.ExecuteNonQuery();
+        
+        playerCmd.Parameters["@teamid"].Value = teamId;
+        playerCmd.Parameters["@userid"].Value = oldIds[team.Player1ID];
+        output(string.Format("adding player1 {0}", team.Player1.UserName));
+        playerCmd.ExecuteNonQuery();
+
+        if (team.Player2ID != team.Player1ID) {
+          playerCmd.Parameters["@userid"].Value = oldIds[team.Player2ID];
+          output(string.Format("adding player2 {0}", team.Player2.UserName));
+          playerCmd.ExecuteNonQuery();
+        }
       }
     }
 
