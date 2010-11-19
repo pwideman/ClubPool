@@ -23,6 +23,36 @@ using ClubPool.Framework.NHibernate;
 
 namespace ClubPool.SchemaGen
 {
+  public class CursorKeeper : IDisposable
+  {
+    private Cursor _originalCursor;
+    private bool _isDisposed = false;
+
+    public CursorKeeper(Cursor newCursor) {
+      _originalCursor = Cursor.Current;
+      Cursor.Current = newCursor;
+    }
+
+    #region " IDisposable Support "
+    protected virtual void Dispose(bool disposing) {
+      if (!_isDisposed) {
+        if (disposing) {
+          Cursor.Current = _originalCursor;
+        }
+      }
+      _isDisposed = true;
+
+    }
+
+    public void Dispose() {
+      // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+
+    #endregion
+  }
+
   public partial class SchemaGen : Form
   {
     protected long beginTicks = 0;
@@ -33,53 +63,55 @@ namespace ClubPool.SchemaGen
 
     private void button1_Click(object sender, EventArgs e) {
       try {
-        beginTicks = DateTime.Now.Ticks;
+        using (new CursorKeeper(Cursors.WaitCursor)) {
+          beginTicks = DateTime.Now.Ticks;
 
-        initializeNH();
-        CreateSpecialUsersAndRoles();
+          initializeNH();
+          CreateSpecialUsersAndRoles();
 
-        var userRepo = new UserRepository();
-        var membershipService = new SharpArchMembershipService(userRepo);
+          var userRepo = new UserRepository();
+          var membershipService = new SharpArchMembershipService(userRepo);
 
-        output("Creating dummy data");
-        int userIndex = 1;
-        var users = new List<Core.User>();
-        using (userRepo.DbContext.BeginTransaction()) {
-          for (userIndex = 1; userIndex <= 60; userIndex++) {
-            var username = "user " + userIndex.ToString();
-            users.Add(membershipService.CreateUser(username, "user", "user", userIndex.ToString(), 
-              "user" + userIndex.ToString() + "@email.com", true, false));
-          }
-          userRepo.DbContext.CommitTransaction();
-        }
-
-        var seasonRepo = new SeasonRepository();
-        using (seasonRepo.DbContext.BeginTransaction()) {
-          for (int seasonIndex = 1; seasonIndex <= 5; seasonIndex++) {
-            output("Creating season " + seasonIndex.ToString());
-            var season = new Core.Season("Season " + seasonIndex.ToString(), Core.GameType.EightBall);
-            season.IsActive = false;
-            userIndex = 0;
-            for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
-              output("Creating division " + divisionIndex.ToString());
-              var division = new Core.Division("Division " + divisionIndex.ToString(), DateTime.Parse("1/" + divisionIndex.ToString() + "/200" + seasonIndex.ToString()), season);
-              season.AddDivision(division);
-              for (int teamIndex = 1; teamIndex <= 12; teamIndex++) {
-                output("Creating team " + teamIndex.ToString());
-                var team = new Core.Team("Team " + teamIndex.ToString(), division);
-                division.AddTeam(team);
-                team.AddPlayer(users[userIndex++]);
-                team.AddPlayer(users[userIndex++]);
-              }
+          output("Creating dummy data");
+          int userIndex = 1;
+          var users = new List<Core.User>();
+          using (userRepo.DbContext.BeginTransaction()) {
+            for (userIndex = 1; userIndex <= 60; userIndex++) {
+              var username = "user " + userIndex.ToString();
+              users.Add(membershipService.CreateUser(username, "user", "user", userIndex.ToString(),
+                "user" + userIndex.ToString() + "@email.com", true, false));
             }
-            seasonRepo.SaveOrUpdate(season);
+            userRepo.DbContext.CommitTransaction();
           }
-          var firstSeason = seasonRepo.GetAll().First();
-          firstSeason.IsActive = true;
-          seasonRepo.SaveOrUpdate(firstSeason);
-          seasonRepo.DbContext.CommitTransaction();
+
+          var seasonRepo = new SeasonRepository();
+          using (seasonRepo.DbContext.BeginTransaction()) {
+            for (int seasonIndex = 1; seasonIndex <= 5; seasonIndex++) {
+              output("Creating season " + seasonIndex.ToString());
+              var season = new Core.Season("Season " + seasonIndex.ToString(), Core.GameType.EightBall);
+              season.IsActive = false;
+              userIndex = 0;
+              for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
+                output("Creating division " + divisionIndex.ToString());
+                var division = new Core.Division("Division " + divisionIndex.ToString(), DateTime.Parse("1/" + divisionIndex.ToString() + "/200" + seasonIndex.ToString()), season);
+                season.AddDivision(division);
+                for (int teamIndex = 1; teamIndex <= 12; teamIndex++) {
+                  output("Creating team " + teamIndex.ToString());
+                  var team = new Core.Team("Team " + teamIndex.ToString(), division);
+                  division.AddTeam(team);
+                  team.AddPlayer(users[userIndex++]);
+                  team.AddPlayer(users[userIndex++]);
+                }
+              }
+              seasonRepo.SaveOrUpdate(season);
+            }
+            var firstSeason = seasonRepo.GetAll().First();
+            firstSeason.IsActive = true;
+            seasonRepo.SaveOrUpdate(firstSeason);
+            seasonRepo.DbContext.CommitTransaction();
+          }
+          output("Finished");
         }
-        output("Finished");
       }
       catch (Exception ex) {
         output("Exception:");
@@ -108,36 +140,45 @@ namespace ClubPool.SchemaGen
 
     private void button3_Click(object sender, EventArgs e) {
       try {
-        beginTicks = DateTime.Now.Ticks;
+        using (new CursorKeeper(Cursors.WaitCursor)) {
+          beginTicks = DateTime.Now.Ticks;
 
-        initializeNH();
+          initializeNH();
 
-        var id = 1;
+          var id = 1;
 
-        using (var conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["cp"].ConnectionString)) {
-          output("opening mysql connection");
-          conn.Open();
-          using (var tx = conn.BeginTransaction())
-          using (var context = new ipoolEntities()) {
-            var oldUserIdsToNewUserIds = new Dictionary<int, int>();
-            var newUserIdsToOldUserIds = new Dictionary<int, int>();
+          using (var conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["cp"].ConnectionString)) {
+            output("opening mysql connection");
+            conn.Open();
+            using (var tx = conn.BeginTransaction())
+            using (var context = new ipoolEntities()) {
+              var oldUserIdsToNewUserIds = new Dictionary<int, int>();
+              var newUserIdsToOldUserIds = new Dictionary<int, int>();
+              var oldUsers = new Dictionary<int, User>();
 
-            int nextId = 1;
+              int nextId = 1;
 
-            MigrateUsers(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, ref nextId);
+              MigrateUsers(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, oldUsers, ref nextId);
 
-            MigrateSeasons(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, ref nextId);
+              MigrateSeasons(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, ref nextId);
 
-            UpdateNextHi(nextId, conn, tx);
+              UpdateNextHi(nextId, conn, tx);
 
-            output("committing transaction");
-            tx.Commit();
+              var userRepo = new UserRepository();
+              using (userRepo.DbContext.BeginTransaction()) {
+                UpdateSKillLevels(userRepo, oldUsers);
+                userRepo.DbContext.CommitTransaction();
+              }
+
+              output("committing transaction");
+              tx.Commit();
+            }
+            output("closing mysql connection");
+            conn.Close();
           }
-          output("closing mysql connection");
-          conn.Close();
-        }
 
-        CreateSpecialUsersAndRoles();
+          CreateSpecialUsersAndRoles();
+        }
       }
       catch (Exception ex) {
         output("Exception:");
@@ -190,6 +231,9 @@ namespace ClubPool.SchemaGen
       cmd.Parameters.AddWithValue("@name", "name");
       cmd.Parameters.AddWithValue("@date", DateTime.Now);
       cmd.Parameters.AddWithValue("@seasonid", seasonId);
+
+      var oldTeamIds = new Dictionary<int, int>();
+
       foreach (var division in season.Divisions) {
         var divisionId = nextId++;
         cmd.Parameters["@id"].Value = divisionId;
@@ -197,8 +241,8 @@ namespace ClubPool.SchemaGen
         cmd.Parameters["@date"].Value = season.StartDate.Value.AddDays(division.DateOffset);
         output(string.Format("inserting division '{0}'", division.Description));
         cmd.ExecuteNonQuery();
-        MigrateTeams(division, divisionId, conn, tx, ref nextId, oldIds, newIds);
-        MigrateMatches(division, divisionId, conn, tx, ref nextId, oldIds, newIds);
+        MigrateTeams(division, divisionId, conn, tx, ref nextId, oldIds, newIds, oldTeamIds);
+        MigrateMatches(division, divisionId, conn, tx, ref nextId, oldIds, newIds, oldTeamIds);
       }
     }
 
@@ -208,12 +252,99 @@ namespace ClubPool.SchemaGen
       MySqlTransaction tx,
       ref int nextId,
       Dictionary<int, int> oldIds,
-      Dictionary<int, int> newIds) {
+      Dictionary<int, int> newIds,
+      Dictionary<int, int> oldTeamIds) {
 
       var meetText = @"insert into meets (id, week, iscomplete, divisionid, team1id, team2id)
                        values (@id, @week, true, @divisionid, @team1id, @team2id);";
+      var meetCmd = new MySqlCommand(meetText, conn, tx);
+      meetCmd.Prepare();
+      meetCmd.Parameters.AddWithValue("@id", 1);
+      meetCmd.Parameters.AddWithValue("@week", 1);
+      meetCmd.Parameters.AddWithValue("@divisionid", divisionId);
+      meetCmd.Parameters.AddWithValue("@team1id", 1);
+      meetCmd.Parameters.AddWithValue("@team2id", 1);
 
-      foreach (var match in division.Matches.OrderBy(m => m.Team1Id).ThenBy(m => m.Team2Id)) {
+      var matchText = @"insert into matches (id, iscomplete, isforfeit, dateplayed, meetid, player1id, player2id, winnerid)
+                        values (@id, true, @isforfeit, @dateplayed, @meetid, @player1id, @player2id, @winnerid);";
+      var matchCmd = new MySqlCommand(matchText, conn, tx);
+      matchCmd.Prepare();
+      matchCmd.Parameters.AddWithValue("@id", 1);
+      matchCmd.Parameters.AddWithValue("@isforfeit", false);
+      matchCmd.Parameters.AddWithValue("@dateplayed", DateTime.Now);
+      matchCmd.Parameters.AddWithValue("@meetid", 1);
+      matchCmd.Parameters.AddWithValue("@player1id", 1);
+      matchCmd.Parameters.AddWithValue("@player2id", 2);
+      matchCmd.Parameters.AddWithValue("@winnerid", 1);
+
+      var matchResultText = @"insert into matchresults (id, version, innings, defensiveshots, wins, matchid, playerid)
+                              values (@id, 1, @innings, 0, @wins, @matchid, @playerid);";
+      var resultCmd = new MySqlCommand(matchResultText, conn, tx);
+      resultCmd.Prepare();
+      resultCmd.Parameters.AddWithValue("@id", 1);
+      resultCmd.Parameters.AddWithValue("@innings", 0);
+      resultCmd.Parameters.AddWithValue("@wins", 0);
+      resultCmd.Parameters.AddWithValue("@matchid", 0);
+      resultCmd.Parameters.AddWithValue("@playerid", 0);
+
+      var teamMeetsQuery = from m in division.Matches
+                           group m by m.Team1 into team1Group
+                           select new {
+                             Team = team1Group.Key,
+                             Meets =
+                               from m in team1Group
+                               group m by m.Team2 into team2Group
+                               select new {
+                                 Opponent = team2Group.Key,
+                                 Matches = team2Group
+                               }
+                           };
+
+      foreach (var team in teamMeetsQuery) {
+        foreach (var meet in team.Meets) {
+          var meetId = nextId++;
+          meetCmd.Parameters["@id"].Value = meetId;
+          meetCmd.Parameters["@week"].Value = meet.Matches.First().Week;
+          meetCmd.Parameters["@team1id"].Value = oldTeamIds[team.Team.ID];
+          meetCmd.Parameters["@team2id"].Value = oldTeamIds[meet.Opponent.ID];
+          output(string.Format("inserting meet for team1 {0} and team2 {1}", team.Team.Name, meet.Opponent.Name));
+          meetCmd.ExecuteNonQuery();
+
+          matchCmd.Parameters["@meetid"].Value = meetId;
+          foreach (var match in meet.Matches) {
+            var matchId = nextId++;
+            matchCmd.Parameters["@id"].Value = matchId;
+            matchCmd.Parameters["@isforfeit"].Value =
+              (match.IsCompleted && match.Player1Innings == 0 && match.Player2Innings == 0 && match.Player1Wins == 0 && match.Player2Wins == 0);
+            matchCmd.Parameters["@dateplayed"].Value = match.DatePlayed.Value;
+            matchCmd.Parameters["@player1id"].Value = oldIds[match.Player1Id];
+            matchCmd.Parameters["@player2id"].Value = oldIds[match.Player2Id];
+            if (match.IsCompleted && match.WinnerId.HasValue && match.WinnerId.Value > 0) {
+              matchCmd.Parameters["@winnerid"].Value = oldIds[match.WinnerId.Value];
+            }
+            else {
+              matchCmd.Parameters["@winnerid"].Value = null;
+            }
+            output(string.Format("inserting match for player1 {0} and player2 {1}", match.Player1.UserName, match.Player2.UserName));
+            matchCmd.ExecuteNonQuery();
+
+            resultCmd.Parameters["@matchid"].Value = matchId;
+
+            resultCmd.Parameters["@id"].Value = nextId++;
+            resultCmd.Parameters["@innings"].Value = match.Player1Innings;
+            resultCmd.Parameters["@wins"].Value = match.Player1Wins;
+            resultCmd.Parameters["@playerid"].Value = oldIds[match.Player1Id];
+            output(string.Format("inserting match results for player1 {0}", match.Player1.UserName));
+            resultCmd.ExecuteNonQuery();
+
+            resultCmd.Parameters["@id"].Value = nextId++;
+            resultCmd.Parameters["@innings"].Value = match.Player2Innings;
+            resultCmd.Parameters["@wins"].Value = match.Player2Wins;
+            resultCmd.Parameters["@playerid"].Value = oldIds[match.Player2Id];
+            output(string.Format("inserting match results for player2 {0}", match.Player2.UserName));
+            resultCmd.ExecuteNonQuery();
+          }
+        }
       }
     }
 
@@ -223,7 +354,8 @@ namespace ClubPool.SchemaGen
       MySqlTransaction tx,
       ref int nextId,
       Dictionary<int, int> oldIds,
-      Dictionary<int, int> newIds) {
+      Dictionary<int, int> newIds,
+      Dictionary<int, int> oldTeamIds) {
 
       output(string.Format("Migrating teams for division {0}", division.Description));
 
@@ -245,7 +377,8 @@ namespace ClubPool.SchemaGen
         cmd.Parameters["@name"].Value = team.Name;
         output(string.Format("inserting team '{0}'", team.Name));
         cmd.ExecuteNonQuery();
-        
+        oldTeamIds.Add(team.ID, teamId);
+
         playerCmd.Parameters["@teamid"].Value = teamId;
         playerCmd.Parameters["@userid"].Value = oldIds[team.Player1ID];
         output(string.Format("adding player1 {0}", team.Player1.UserName));
@@ -264,6 +397,7 @@ namespace ClubPool.SchemaGen
       Dictionary<int, int> oldIds, 
       Dictionary<int, int> newIds, 
       ipoolEntities context,
+      Dictionary<int, User> oldUsers,
       ref int nextId) {
 
       output("Migrating users");
@@ -314,6 +448,7 @@ namespace ClubPool.SchemaGen
 
         oldIds.Add(user.UserId, newUserId);
         newIds.Add(newUserId, user.UserId);
+        oldUsers.Add(newUserId, user);
       }
     }
 
@@ -333,118 +468,103 @@ namespace ClubPool.SchemaGen
 
     private void button2_Click(object sender, EventArgs e) {
       try {
-        beginTicks = DateTime.Now.Ticks;
+        using (new CursorKeeper(Cursors.WaitCursor)) {
+          beginTicks = DateTime.Now.Ticks;
 
-        initializeNH();
+          initializeNH();
 
-        CreateSpecialUsersAndRoles();
+          CreateSpecialUsersAndRoles();
 
-        var userRepo = new UserRepository();
-        var previousInfoRepo = new LinqRepository<Core.PreviousUserAccountInfo>();
-        var membershipService = new SharpArchMembershipService(userRepo, true, true);
-        var divisionRepo = new DivisionRepository();
+          var userRepo = new UserRepository();
+          var previousInfoRepo = new LinqRepository<Core.PreviousUserAccountInfo>();
+          var membershipService = new SharpArchMembershipService(userRepo, true, true);
+          var divisionRepo = new DivisionRepository();
 
-        using (var context = new ipoolEntities()) {
-          var oldUserIds = new Dictionary<int, Core.User>();
-          var oldUsers = new Dictionary<int, User>();
-          using (userRepo.DbContext.BeginTransaction()) {
-            foreach (var user in context.Users) {
-              var names = user.UserName.Split('_');
-              var firstName = names[0].Substring(0, 1).ToUpper() + names[0].Substring(1);
-              var lastName = "";
-              if (names.Length > 1) {
-                lastName = names[1].Substring(0, 1).ToUpper() + names[1].Substring(1);
+          using (var context = new ipoolEntities()) {
+            var oldUserIds = new Dictionary<int, Core.User>();
+            var oldUsers = new Dictionary<int, User>();
+            using (userRepo.DbContext.BeginTransaction()) {
+              foreach (var user in context.Users) {
+                var names = user.UserName.Split('_');
+                var firstName = names[0].Substring(0, 1).ToUpper() + names[0].Substring(1);
+                var lastName = "";
+                if (names.Length > 1) {
+                  lastName = names[1].Substring(0, 1).ToUpper() + names[1].Substring(1);
+                }
+                var newUser = membershipService.CreateUser(user.UserName, user.PasswordSalt, firstName, lastName, user.Email, true, true);
+                var previousInfo = new Core.PreviousUserAccountInfo(newUser, user.Password, user.PasswordSalt, user.UserId);
+                previousInfoRepo.SaveOrUpdate(previousInfo);
+                output(string.Format("Migrated user '{0}'", newUser.Username));
+                oldUserIds.Add(user.UserId, newUser);
+                oldUsers.Add(newUser.Id, user);
               }
-              var newUser = membershipService.CreateUser(user.UserName, user.PasswordSalt, firstName, lastName, user.Email, true, true);
-              var previousInfo = new Core.PreviousUserAccountInfo(newUser, user.Password, user.PasswordSalt, user.UserId);
-              previousInfoRepo.SaveOrUpdate(previousInfo);
-              output(string.Format("Migrated user '{0}'", newUser.Username));
-              oldUserIds.Add(user.UserId, newUser);
-              oldUsers.Add(newUser.Id, user);
-            }
 
-            var seasonRepo = new SeasonRepository();
-            foreach (var season in context.Seasons) {
-              output(string.Format("Beginning migration for season '{0}'", season.Year.ToString()));
+              var seasonRepo = new SeasonRepository();
+              foreach (var season in context.Seasons) {
+                output(string.Format("Beginning migration for season '{0}'", season.Year.ToString()));
 
-              var seasonName = "8-ball " + season.Year.ToString();
-              var newSeason = new Core.Season(seasonName, Core.GameType.EightBall);
-              seasonRepo.SaveOrUpdate(newSeason);
-              output("Season created, migrating divisions");
+                var seasonName = "8-ball " + season.Year.ToString();
+                var newSeason = new Core.Season(seasonName, Core.GameType.EightBall);
+                seasonRepo.SaveOrUpdate(newSeason);
+                output("Season created, migrating divisions");
 
-              foreach (var division in season.Divisions) {
-                if (division.Description != "HistoricalDummyDivision") {
-                  var newDivision = new Core.Division(division.Description, season.StartDate.Value.AddDays(division.DateOffset), newSeason);
-                  newSeason.AddDivision(newDivision);
-                  output(string.Format("Added division '{0}', migrating teams", newDivision.Name));
+                foreach (var division in season.Divisions) {
+                  if (division.Description != "HistoricalDummyDivision") {
+                    var newDivision = new Core.Division(division.Description, season.StartDate.Value.AddDays(division.DateOffset), newSeason);
+                    newSeason.AddDivision(newDivision);
+                    output(string.Format("Added division '{0}', migrating teams", newDivision.Name));
 
-                  var oldTeamIds = new Dictionary<Core.Team, int>();
-                  foreach (var team in division.Teams) {
-                    var newTeam = new Core.Team(team.Name, newDivision);
-                    newTeam.AddPlayer(oldUserIds[team.Player1ID]);
-                    newTeam.AddPlayer(oldUserIds[team.Player2ID]);
-                    newDivision.AddTeam(newTeam);
-                    oldTeamIds.Add(newTeam, team.ID);
-                    output(string.Format("Added team '{0}'", newTeam.Name));
-                  }
-
-                  output("Creating schedule");
-                  newDivision.CreateSchedule(divisionRepo);
-                  output("Migrating matches");
-                  foreach (var meet in newDivision.Meets) {
-                    var team1Id = oldTeamIds[meet.Team1];
-                    var team2Id = oldTeamIds[meet.Team2];
-                    var matches = division.Matches.Where(m => (m.Team1Id == team1Id && m.Team2Id == team2Id) || (m.Team1Id == team2Id && m.Team2Id == team1Id));
-                    int i = 0;
-                    foreach (var match in matches) {
-                      output(string.Format("Migrating old match '{0}'", match.ID.ToString()));
-                      var player1 = oldUserIds[match.Player1Id];
-                      var player2 = oldUserIds[match.Player2Id];
-                      var newMatch = meet.Matches.ElementAt(i++);
-                      newMatch.Player1 = player1;
-                      newMatch.Player2 = player2;
-                      if (match.Player1Wins == 0 && match.Player2Wins == 0) {
-                        // forfeit
-                        newMatch.IsForfeit = true;
-                        output("Match is a forfeit");
-                      }
-                      else {
-                        output("Adding results");
-                        newMatch.AddResult(new Core.MatchResult(player1, match.Player1Innings, 0, match.Player1Wins));
-                        newMatch.AddResult(new Core.MatchResult(player2, match.Player2Innings, 0, match.Player2Wins));
-                        newMatch.DatePlayed = match.DatePlayed.Value;
-                      }
-                      newMatch.Winner = oldUserIds[match.WinnerId.Value];
-                      newMatch.IsComplete = true;
-                      output(string.Format("Finished match '{0}'", match.ID));
+                    var oldTeamIds = new Dictionary<Core.Team, int>();
+                    foreach (var team in division.Teams) {
+                      var newTeam = new Core.Team(team.Name, newDivision);
+                      newTeam.AddPlayer(oldUserIds[team.Player1ID]);
+                      newTeam.AddPlayer(oldUserIds[team.Player2ID]);
+                      newDivision.AddTeam(newTeam);
+                      oldTeamIds.Add(newTeam, team.ID);
+                      output(string.Format("Added team '{0}'", newTeam.Name));
                     }
+
+                    output("Creating schedule");
+                    newDivision.CreateSchedule(divisionRepo);
+                    output("Migrating matches");
+                    foreach (var meet in newDivision.Meets) {
+                      var team1Id = oldTeamIds[meet.Team1];
+                      var team2Id = oldTeamIds[meet.Team2];
+                      var matches = division.Matches.Where(m => (m.Team1Id == team1Id && m.Team2Id == team2Id) || (m.Team1Id == team2Id && m.Team2Id == team1Id));
+                      int i = 0;
+                      foreach (var match in matches) {
+                        output(string.Format("Migrating old match '{0}'", match.ID.ToString()));
+                        var player1 = oldUserIds[match.Player1Id];
+                        var player2 = oldUserIds[match.Player2Id];
+                        var newMatch = meet.Matches.ElementAt(i++);
+                        newMatch.Player1 = player1;
+                        newMatch.Player2 = player2;
+                        if (match.Player1Wins == 0 && match.Player2Wins == 0) {
+                          // forfeit
+                          newMatch.IsForfeit = true;
+                          output("Match is a forfeit");
+                        }
+                        else {
+                          output("Adding results");
+                          newMatch.AddResult(new Core.MatchResult(player1, match.Player1Innings, 0, match.Player1Wins));
+                          newMatch.AddResult(new Core.MatchResult(player2, match.Player2Innings, 0, match.Player2Wins));
+                          newMatch.DatePlayed = match.DatePlayed.Value;
+                        }
+                        newMatch.Winner = oldUserIds[match.WinnerId.Value];
+                        newMatch.IsComplete = true;
+                        output(string.Format("Finished match '{0}'", match.ID));
+                      }
+                    }
+                    output(string.Format("Completed migration for division '{0}'", division.Description));
                   }
-                  output(string.Format("Completed migration for division '{0}'", division.Description));
                 }
+                output(string.Format("Completed migration for season '{0}'", newSeason.Name));
               }
-              output(string.Format("Completed migration for season '{0}'", newSeason.Name));
+              UpdateSKillLevels(userRepo, oldUsers);
+              output("Committing transaction");
+              userRepo.DbContext.CommitTransaction();
+              output("Finished");
             }
-            var matchResultRepo = new MatchResultRepository();
-            output("Updating skill levels");
-            foreach (var user in userRepo.GetAll()) {
-              user.UpdateSkillLevel(Core.GameType.EightBall, matchResultRepo);
-              var oldSL = 0;
-              if (oldUsers.ContainsKey(user.Id)) {
-                if (oldUsers[user.Id].Handicap.HasValue) {
-                  oldSL = oldUsers[user.Id].Handicap.Value;
-                }
-              }
-              var newSL = 0;
-              if (user.SkillLevels.Any()) {
-                newSL = user.SkillLevels.First().Value;
-              }
-              if (newSL != oldSL) {
-                output(string.Format("Different skill level for user '{0}', old: {1} new {2}", user.FullName, oldSL, newSL));
-              }
-            }
-            output("Committing transaction");
-            userRepo.DbContext.CommitTransaction();
-            output("Finished");
           }
         }
 
@@ -452,6 +572,27 @@ namespace ClubPool.SchemaGen
       catch (Exception ex) {
         output("Exception:");
         output(getExceptionText(ex));
+      }
+    }
+
+    private void UpdateSKillLevels(UserRepository userRepo, Dictionary<int, User> oldUsers) {
+      var matchResultRepo = new MatchResultRepository();
+      output("Updating skill levels");
+      foreach (var user in userRepo.GetAll()) {
+        user.UpdateSkillLevel(Core.GameType.EightBall, matchResultRepo);
+        var oldSL = 0;
+        if (oldUsers.ContainsKey(user.Id)) {
+          if (oldUsers[user.Id].Handicap.HasValue) {
+            oldSL = oldUsers[user.Id].Handicap.Value;
+          }
+        }
+        var newSL = 0;
+        if (user.SkillLevels.Any()) {
+          newSL = user.SkillLevels.First().Value;
+        }
+        if (newSL != oldSL) {
+          output(string.Format("Different skill level for user '{0}', old: {1} new {2}", user.FullName, oldSL, newSL));
+        }
       }
     }
 
