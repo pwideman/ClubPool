@@ -77,7 +77,7 @@ namespace ClubPool.SchemaGen
           var users = new List<Core.User>();
           using (userRepo.DbContext.BeginTransaction()) {
             for (userIndex = 1; userIndex <= 60; userIndex++) {
-              var username = "user " + userIndex.ToString();
+              var username = "user" + userIndex.ToString();
               users.Add(membershipService.CreateUser(username, "user", "user", userIndex.ToString(),
                 "user" + userIndex.ToString() + "@email.com", true, false));
             }
