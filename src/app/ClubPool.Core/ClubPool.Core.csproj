@@ -79,7 +79,6 @@
     <Compile Include="Match.cs" />
     <Compile Include="MatchResult.cs" />
     <Compile Include="Meet.cs" />
-    <Compile Include="PreviousPasswordInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\RoleQueries.cs" />
     <Compile Include="Queries\SeasonQueries.cs" />

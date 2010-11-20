@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Configuration;
+using System.Security.Cryptography;
 
 using SharpArch.Data.NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -50,9 +51,17 @@ namespace ClubPool.SchemaGen
       startBackgroundWorker(() => ImportIPDataSQL());
     }
 
+    private void testButton_Click(object sender, EventArgs e) {
+      startBackgroundWorker(() => TestProcess());
+    }
+
     private void startBackgroundWorker(Action action) {
       EnableButtons(false);
       backgroundWorker1.RunWorkerAsync(action);
+    }
+
+    private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+      EnableButtons(true);
     }
 
     private void EnableButtons(bool enable) {
@@ -60,6 +69,7 @@ namespace ClubPool.SchemaGen
       createSpecialUsersButton.Enabled = enable;
       createDummyDataButton.Enabled = enable;
       importIPDataSQLButton.Enabled = enable;
+      testButton.Enabled = enable;
     }
 
     private void ProcessDBAction(Action action) {
@@ -109,6 +119,8 @@ namespace ClubPool.SchemaGen
       }
     }
 
+    private void TestProcess() {
+    }
 
     private void ImportIPDataSQL() {
       using (var conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["cp"].ConnectionString)) {
@@ -360,25 +372,17 @@ namespace ClubPool.SchemaGen
 
       output("Migrating users");
 
-      var commandText = @"insert into users(id, version, username, firstname, lastname, email, isapproved, islocked) 
-                          values (@id, 1, @username, @firstname, @lastname, @email, true, true);";
+      var commandText = @"insert into users(id, version, username, firstname, lastname, email, password, passwordsalt, isapproved, islocked) 
+                          values (@id, 1, @username, @firstname, @lastname, @email, @password, @passwordsalt, true, false);";
       var command = new MySqlCommand(commandText, conn, tx);
       command.Prepare();
       command.Parameters.AddWithValue("@id", 1);
-      command.Parameters.AddWithValue("@username", "username");
-      command.Parameters.AddWithValue("@firstname", "firstname");
-      command.Parameters.AddWithValue("@lastname", "lastname");
-      command.Parameters.AddWithValue("@email", "email");
-
-      commandText = @"insert into previoususeraccountinfos(id, password, salt, previoususerid, userid)
-                      values (@id, @password, @salt, @previoususerid, @userid);";
-      var infoCommand = new MySqlCommand(commandText, conn, tx);
-      infoCommand.Prepare();
-      infoCommand.Parameters.AddWithValue("@id", 1);
-      infoCommand.Parameters.AddWithValue("@password", "password");
-      infoCommand.Parameters.AddWithValue("@salt", "salt");
-      infoCommand.Parameters.AddWithValue("@previoususerid", "previd");
-      infoCommand.Parameters.AddWithValue("@userid", "userid");
+      command.Parameters.AddWithValue("@username", null);
+      command.Parameters.AddWithValue("@firstname", null);
+      command.Parameters.AddWithValue("@lastname", null);
+      command.Parameters.AddWithValue("@email", null);
+      command.Parameters.AddWithValue("@password", null);
+      command.Parameters.AddWithValue("@passwordsalt", null);
 
       foreach (var user in context.Users) {
         var names = user.UserName.Split('_');
@@ -393,16 +397,10 @@ namespace ClubPool.SchemaGen
         command.Parameters["@firstname"].Value = firstName;
         command.Parameters["@lastname"].Value = lastName;
         command.Parameters["@email"].Value = user.Email;
+        command.Parameters["@password"].Value = user.Password;
+        command.Parameters["@passwordsalt"].Value = user.PasswordSalt;
         output("inserting user " + user.UserName);
         command.ExecuteNonQuery();
-
-        infoCommand.Parameters["@id"].Value = nextId++;
-        infoCommand.Parameters["@password"].Value = user.Password;
-        infoCommand.Parameters["@salt"].Value = user.PasswordSalt;
-        infoCommand.Parameters["@previoususerid"].Value = user.UserId;
-        infoCommand.Parameters["@userid"].Value = newUserId;
-        output("inserting previousaccountinfo");
-        infoCommand.ExecuteNonQuery();
 
         oldIds.Add(user.UserId, newUserId);
         newIds.Add(newUserId, user.UserId);
@@ -558,10 +556,6 @@ namespace ClubPool.SchemaGen
         seasonRepo.DbContext.CommitTransaction();
       }
       output("Finished");
-    }
-
-    private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-      EnableButtons(true);
     }
 
     //private void ImportIPDataNH() {
