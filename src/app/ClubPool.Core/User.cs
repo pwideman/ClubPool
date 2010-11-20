@@ -78,6 +78,10 @@ namespace ClubPool.Core
       return roles.Contains(role);
     }
 
+    public virtual bool IsInRole(string roleName) {
+      return roles.Where(r => r.Name.Equals(roleName)).Any();
+    }
+
     public virtual void RemoveRole(Role role) {
       Check.Require(null != role, "role cannot be null");
 
