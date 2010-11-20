@@ -920,4 +920,59 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_redirect_to_the_default_users_view = () =>
       resultHelper.ShouldRedirectTo("users");
   }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_for_the_user_view_for_an_invalid_user : specification_for_users_controller
+  {
+    static HttpNotFoundResultHelper resultHelper;
+
+    Because of = () => resultHelper = new HttpNotFoundResultHelper(controller.View(0));
+
+    It should_return_http_not_found = () =>
+      resultHelper.Result.ShouldNotBeNull();
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_a_nonadmin_user_asks_for_the_user_view : specification_for_users_controller
+  {
+    static ViewResultHelper<ViewViewModel> resultHelper;
+    static int id = 1;
+    static string username = "test";
+
+    Establish context = () => {
+      authenticationService.MockPrincipal.MockIdentity.IsAuthenticated = true;
+      userRepository.Stub(r => r.Get(id)).Return(new User(username, "test", "first", "last", "email"));
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<ViewViewModel>(controller.View(id));
+
+    It should_return_the_correct_user = () =>
+      resultHelper.Model.Username.ShouldEqual(username);
+
+    It should_not_show_admin_properties = () =>
+      resultHelper.Model.ShowAdminProperties.ShouldBeFalse();
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_an_admin_user_asks_for_the_user_view : specification_for_users_controller
+  {
+    static ViewResultHelper<ViewViewModel> resultHelper;
+    static int id = 1;
+    static string username = "test";
+
+    Establish context = () => {
+      authenticationService.MockPrincipal.MockIdentity.IsAuthenticated = true;
+      authenticationService.MockPrincipal.Roles = new string[] { Roles.Administrators };
+      userRepository.Stub(r => r.Get(id)).Return(new User(username, "test", "first", "last", "email"));
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<ViewViewModel>(controller.View(id));
+
+    It should_return_the_correct_user = () =>
+      resultHelper.Model.Username.ShouldEqual(username);
+
+    It should_show_admin_properties = () =>
+      resultHelper.Model.ShowAdminProperties.ShouldBeTrue();
+  }
+
 }
