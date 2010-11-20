@@ -73,5 +73,23 @@ namespace ClubPool.Core
       }
       matches.Clear();
     }
+
+    public virtual bool UserCanEnterMatchResults(User user) {
+      if (null == user) {
+        return false;
+      }
+      // first check to see if this user is a member of the teams in the meet
+      if (Teams.Where(t => t.Players.Contains(user)).Any()) {
+        return true;
+      }
+      // next, check for role access
+      if (user.IsInRole(Roles.Administrators) ||
+          user.IsInRole(Roles.Officers)) {
+        return true;
+      }
+      // if we haven't met any of these criteria, return false
+      return false;
+    }
+
   }
 }
