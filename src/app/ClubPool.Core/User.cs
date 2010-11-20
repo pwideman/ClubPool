@@ -44,7 +44,7 @@ namespace ClubPool.Core
       : this() {
       Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
-      //Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
+      Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(firstName), "firstName cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(lastName), "lastName cannot be null or empty");
 
@@ -114,6 +114,7 @@ namespace ClubPool.Core
         case GameType.EightBall:
           // get the last 10 matches for this player & game type
           var matchResults = (from result in matchResultRepository.GetMatchResultsForPlayerAndGameType(this, gameType)
+                              where !result.Match.IsForfeit
                               orderby result.Match.DatePlayed descending,
                               result.Wins > 0 ? (result.Innings - result.DefensiveShots) / result.Wins : 0 ascending,
                               result.Innings ascending
