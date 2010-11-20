@@ -20,6 +20,7 @@ using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
 using ClubPool.Testing;
 using ClubPool.Testing.Core;
+using ClubPool.Testing.ApplicationServices.Authentication;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {
@@ -29,6 +30,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static IMatchRepository matchRepository;
     protected static IUserRepository userRepository;
     protected static IMatchResultRepository matchResultRepository;
+    protected static MockAuthenticationService authService;
     protected static JsonResultHelper<EditMatchResponseViewModel> resultHelper;
     protected static EditMatchViewModel viewModel;
     protected static Match match;
@@ -39,13 +41,22 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static int player2Id = 2;
     protected static int player1SkillLevel;
     protected static int player2SkillLevel;
+    protected static string username = "adminuser";
+    protected static User loggedInUser;
 
     Establish context = () => {
       matchRepository = MockRepository.GenerateStub<IMatchRepository>();
       userRepository = MockRepository.GenerateStub<IUserRepository>();
       matchResultRepository = MockRepository.GenerateStub<IMatchResultRepository>();
-      controller = new MatchesController(matchRepository, userRepository, matchResultRepository);
-      
+      authService = AuthHelper.CreateMockAuthenticationService();
+      controller = new MatchesController(matchRepository, userRepository, matchResultRepository, authService);
+
+      authService.MockPrincipal.MockIdentity.IsAuthenticated = true;
+      authService.MockPrincipal.MockIdentity.Name = username;
+      loggedInUser = new User(username, "pass", "first", "last", "email");
+      loggedInUser.AddRole(new Role(Roles.Administrators));
+      userRepository.Stub(r => r.FindOne(null)).IgnoreArguments().WhenCalled(m => m.ReturnValue = loggedInUser);
+
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
 
@@ -365,4 +376,30 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     // aren't included
   }
 
+  [Subject(typeof(MatchesController))]
+  public class when_asked_to_edit_a_match_and_the_logged_in_user_does_not_have_permission : specification_for_Matches_controller
+  {
+    Establish context = () =>
+      loggedInUser.RemoveAllRoles();
+
+    Because of = () => resultHelper = new JsonResultHelper<EditMatchResponseViewModel>(controller.Edit(viewModel));
+
+    It should_return_success_false = () =>
+      resultHelper.Data.Success.ShouldBeFalse();
+
+    It should_return_an_error_message = () =>
+      resultHelper.Data.Message.ShouldEqual("You do not have permission to enter results for this match");
+  }
+
+  [Subject(typeof(MatchesController))]
+  public class when_asked_to_edit_a_match_by_a_match_player : specification_for_Matches_controller
+  {
+    Establish context = () =>
+      loggedInUser = player1;
+
+    Because of = () => resultHelper = new JsonResultHelper<EditMatchResponseViewModel>(controller.Edit(viewModel));
+
+    It should_return_success_true = () =>
+      resultHelper.Data.Success.ShouldBeTrue();
+  }
 }

@@ -15,6 +15,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public string Team1Name { get; set; }
     public string Team2Name { get; set; }
     public IEnumerable<MatchViewModel> Matches { get; protected set; }
+    public bool AllowUserToEnterResults { get; set; }
 
     public MeetViewModel() {
       Matches = new MatchViewModel[0];

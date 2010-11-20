@@ -112,6 +112,7 @@
     <Compile Include="ClubPool.Web\Controllers\DivisionsControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\HomeControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\MatchesControllerSpecs.cs" />
+    <Compile Include="ClubPool.Web\Controllers\MeetsControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\NavigationControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\PagedListViewModelBaseSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\SeasonsControllerSpecs.cs" />

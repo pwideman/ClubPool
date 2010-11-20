@@ -16,6 +16,7 @@ using ClubPool.Framework.Validation;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
+using ClubPool.ApplicationServices.Authentication.Contracts;
 
 namespace ClubPool.Web.Controllers.Matches
 {
@@ -24,15 +25,22 @@ namespace ClubPool.Web.Controllers.Matches
     protected IMatchRepository matchRepository;
     protected IUserRepository userRepository;
     protected IMatchResultRepository matchResultRepository;
+    protected IAuthenticationService authService;
 
-    public MatchesController(IMatchRepository matchRepository, IUserRepository userRepository, IMatchResultRepository matchResultRepository) {
+    public MatchesController(IMatchRepository matchRepository,
+      IUserRepository userRepository,
+      IMatchResultRepository matchResultRepository,
+      IAuthenticationService authService) {
+
       Check.Require(null != matchRepository, "matchRepository cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
       Check.Require(null != matchResultRepository, "matchResultRepository cannot be null");
+      Check.Require(null != authService, "authService cannot be null");
 
       this.matchRepository = matchRepository;
       this.userRepository = userRepository;
       this.matchResultRepository = matchResultRepository;
+      this.authService = authService;
     }
 
     [HttpPost]
@@ -40,7 +48,6 @@ namespace ClubPool.Web.Controllers.Matches
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditMatchViewModel viewModel) {
-      // TODO: Authorize only admins, officers, and a player involved in this meet
       if (!ValidateViewModel(viewModel)) {
         return Json(new EditMatchResponseViewModel(false, "Validation errors", viewModel.ValidationResults()));
       }
@@ -77,6 +84,13 @@ namespace ClubPool.Web.Controllers.Matches
       var match = matchRepository.Get(viewModel.Id);
       if (null == match) {
         return HttpNotFound();
+      }
+
+      // authorize only admins, officers, and players involved in this meet
+      var currentPrincipal = authService.GetCurrentPrincipal();
+      var loggedInUser = userRepository.FindOne(u => u.Username.Equals(currentPrincipal.Identity.Name));
+      if (!match.Meet.UserCanEnterMatchResults(loggedInUser)) {
+        return Json(new EditMatchResponseViewModel(false, "You do not have permission to enter results for this match"));
       }
 
       var player1 = userRepository.Get(viewModel.Player1Id);

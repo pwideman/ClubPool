@@ -80,12 +80,14 @@ Match Details
               <%= match.Status%>
             </td>
             <td>
+              <% if (Model.AllowUserToEnterResults) { %>
               <div class="action-button-row-small">
                 <div class="action-button enter-results-link" id="<%= match.Id %>">
-                  <%= Html.ContentImage("enterresults-medium.png", "Enter results") %>
+                  <%= Html.ContentImage("enterresults-medium.png", "Enter results")%>
                   Enter Results
                 </div>
               </div>
+              <% } %>
             </td>
           </tr>
         <% } %>
