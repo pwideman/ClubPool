@@ -14,6 +14,7 @@ using System.Configuration;
 using SharpArch.Data.NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using MySql.Data.MySqlClient;
+using nhconfig=NHibernate.Cfg;
 
 using Core=ClubPool.Core;
 using ClubPool.Data;
@@ -23,94 +24,51 @@ using ClubPool.Framework.NHibernate;
 
 namespace ClubPool.SchemaGen
 {
-  public class CursorKeeper : IDisposable
-  {
-    private Cursor _originalCursor;
-    private bool _isDisposed = false;
-
-    public CursorKeeper(Cursor newCursor) {
-      _originalCursor = Cursor.Current;
-      Cursor.Current = newCursor;
-    }
-
-    #region " IDisposable Support "
-    protected virtual void Dispose(bool disposing) {
-      if (!_isDisposed) {
-        if (disposing) {
-          Cursor.Current = _originalCursor;
-        }
-      }
-      _isDisposed = true;
-
-    }
-
-    public void Dispose() {
-      // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
-      Dispose(true);
-      GC.SuppressFinalize(this);
-    }
-
-    #endregion
-  }
-
   public partial class SchemaGen : Form
   {
     protected long beginTicks = 0;
+    protected nhconfig.Configuration nhConfig;
+    protected Action workerAction = null;
 
     public SchemaGen() {
       InitializeComponent();
     }
 
-    private void button1_Click(object sender, EventArgs e) {
+    private void createSchemaButton_Click(object sender, EventArgs e) {
+      startBackgroundWorker(() => CreateSchema());
+    }
+
+    private void createSpecialUsersButton_Click(object sender, EventArgs e) {
+      startBackgroundWorker(() => CreateSpecialUsersAndRoles());
+    }
+
+    private void createDummyDataButton_Click(object sender, EventArgs e) {
+      startBackgroundWorker(() => CreateDummyData());
+    }
+
+    private void importIPDataSQLButton_Click(object sender, EventArgs e) {
+      startBackgroundWorker(() => ImportIPDataSQL());
+    }
+
+    private void startBackgroundWorker(Action action) {
+      EnableButtons(false);
+      backgroundWorker1.RunWorkerAsync(action);
+    }
+
+    private void EnableButtons(bool enable) {
+      createSchemaButton.Enabled = enable;
+      createSpecialUsersButton.Enabled = enable;
+      createDummyDataButton.Enabled = enable;
+      importIPDataSQLButton.Enabled = enable;
+    }
+
+    private void ProcessDBAction(Action action) {
       try {
+        beginTicks = DateTime.Now.Ticks;
+        EnsureNHConfig();
+
         using (new CursorKeeper(Cursors.WaitCursor)) {
-          beginTicks = DateTime.Now.Ticks;
-
-          initializeNH();
-          CreateSpecialUsersAndRoles();
-
-          var userRepo = new UserRepository();
-          var membershipService = new SharpArchMembershipService(userRepo);
-
-          output("Creating dummy data");
-          int userIndex = 1;
-          var users = new List<Core.User>();
-          using (userRepo.DbContext.BeginTransaction()) {
-            for (userIndex = 1; userIndex <= 60; userIndex++) {
-              var username = "user" + userIndex.ToString();
-              users.Add(membershipService.CreateUser(username, "user", "user", userIndex.ToString(),
-                "user" + userIndex.ToString() + "@email.com", true, false));
-            }
-            userRepo.DbContext.CommitTransaction();
-          }
-
-          var seasonRepo = new SeasonRepository();
-          using (seasonRepo.DbContext.BeginTransaction()) {
-            for (int seasonIndex = 1; seasonIndex <= 5; seasonIndex++) {
-              output("Creating season " + seasonIndex.ToString());
-              var season = new Core.Season("Season " + seasonIndex.ToString(), Core.GameType.EightBall);
-              season.IsActive = false;
-              userIndex = 0;
-              for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
-                output("Creating division " + divisionIndex.ToString());
-                var division = new Core.Division("Division " + divisionIndex.ToString(), DateTime.Parse("1/" + divisionIndex.ToString() + "/200" + seasonIndex.ToString()), season);
-                season.AddDivision(division);
-                for (int teamIndex = 1; teamIndex <= 12; teamIndex++) {
-                  output("Creating team " + teamIndex.ToString());
-                  var team = new Core.Team("Team " + teamIndex.ToString(), division);
-                  division.AddTeam(team);
-                  team.AddPlayer(users[userIndex++]);
-                  team.AddPlayer(users[userIndex++]);
-                }
-              }
-              seasonRepo.SaveOrUpdate(season);
-            }
-            var firstSeason = seasonRepo.GetAll().First();
-            firstSeason.IsActive = true;
-            seasonRepo.SaveOrUpdate(firstSeason);
-            seasonRepo.DbContext.CommitTransaction();
-          }
-          output("Finished");
+          action();
         }
       }
       catch (Exception ex) {
@@ -118,6 +76,13 @@ namespace ClubPool.SchemaGen
         output(getExceptionText(ex));
       }
     }
+
+    private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
+      var action = e.Argument as Action;
+      ProcessDBAction(action);
+    }
+
+
 
     private string getExceptionText(Exception e) {
       var text = new StringBuilder();
@@ -129,59 +94,53 @@ namespace ClubPool.SchemaGen
     }
 
     private void output(string text) {
-      var elapsedTime = new TimeSpan(DateTime.Now.Ticks - beginTicks);
-      OutputTextBox.Text += Environment.NewLine + string.Format("{0}:{1}.{2} - {3}", 
-        elapsedTime.Minutes.ToString("00"),
-        elapsedTime.Seconds.ToString("00"),
-        elapsedTime.Milliseconds.ToString("000"), text);
-      OutputTextBox.Update();
-      OutputTextBox.ScrollToCaret();
+      if (InvokeRequired) {
+        Invoke(new Action(() => output(text)));
+      }
+      else {
+        var elapsedTime = new TimeSpan(DateTime.Now.Ticks - beginTicks);
+        OutputTextBox.AppendText(Environment.NewLine + string.Format("{0}:{1}.{2} - {3}",
+          elapsedTime.Minutes.ToString("00"),
+          elapsedTime.Seconds.ToString("00"),
+          elapsedTime.Milliseconds.ToString("000"), text));
+        OutputTextBox.SelectionStart = OutputTextBox.Text.Length;
+        OutputTextBox.ScrollToCaret();
+        OutputTextBox.Update();
+      }
     }
 
-    private void button3_Click(object sender, EventArgs e) {
-      try {
-        using (new CursorKeeper(Cursors.WaitCursor)) {
-          beginTicks = DateTime.Now.Ticks;
 
-          initializeNH();
+    private void ImportIPDataSQL() {
+      using (var conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["cp"].ConnectionString)) {
+        output("opening mysql connection");
+        conn.Open();
+        using (var tx = conn.BeginTransaction())
+        using (var context = new ipoolEntities()) {
+          var oldUserIdsToNewUserIds = new Dictionary<int, int>();
+          var newUserIdsToOldUserIds = new Dictionary<int, int>();
+          var oldUsers = new Dictionary<int, User>();
 
-          using (var conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["cp"].ConnectionString)) {
-            output("opening mysql connection");
-            conn.Open();
-            using (var tx = conn.BeginTransaction())
-            using (var context = new ipoolEntities()) {
-              var oldUserIdsToNewUserIds = new Dictionary<int, int>();
-              var newUserIdsToOldUserIds = new Dictionary<int, int>();
-              var oldUsers = new Dictionary<int, User>();
+          var nextId = GetNextHi(conn, tx) * 1000 + 1;
 
-              int nextId = 1;
+          MigrateUsers(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, oldUsers, ref nextId);
 
-              MigrateUsers(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, oldUsers, ref nextId);
+          MigrateSeasons(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, ref nextId);
 
-              MigrateSeasons(conn, tx, oldUserIdsToNewUserIds, newUserIdsToOldUserIds, context, ref nextId);
+          UpdateNextHi(nextId, conn, tx);
 
-              UpdateNextHi(nextId, conn, tx);
+          output("committing transaction");
+          tx.Commit();
 
-              output("committing transaction");
-              tx.Commit();
-
-              var userRepo = new UserRepository();
-              using (userRepo.DbContext.BeginTransaction()) {
-                UpdateSKillLevels(userRepo, oldUsers);
-                userRepo.DbContext.CommitTransaction();
-              }
-
-            }
-            output("closing mysql connection");
-            conn.Close();
+          var userRepo = new UserRepository();
+          using (userRepo.DbContext.BeginTransaction()) {
+            UpdateSKillLevels(userRepo, oldUsers);
+            userRepo.DbContext.CommitTransaction();
           }
 
-          CreateSpecialUsersAndRoles();
         }
-      }
-      catch (Exception ex) {
-        output("Exception:");
-        output(getExceptionText(ex));
+        output("closing mysql connection");
+        conn.Close();
+        output("Finished");
       }
     }
 
@@ -451,126 +410,21 @@ namespace ClubPool.SchemaGen
       }
     }
 
+    private int GetNextHi(MySqlConnection conn, MySqlTransaction tx) {
+      var command = new MySqlCommand("select next_hi from hibernate_unique_key", conn, tx);
+      int? next_hi = command.ExecuteScalar() as int?;
+      return next_hi.HasValue ? next_hi.Value : 1;
+    }
+
     private void UpdateNextHi(int id, MySqlConnection conn, MySqlTransaction tx) {
       output("updating next hi");
 
-      var command = new MySqlCommand("select next_hi from hibernate_unique_key", conn, tx);
-      int? next_hi = command.ExecuteScalar() as int?;
-      var nextHi = next_hi.HasValue ? next_hi.Value : 1;
+      var nextHi = GetNextHi(conn, tx);
 
       var newNextHi = id / 1000 + 1;
       if (newNextHi > nextHi) {
-        command = new MySqlCommand("update hibernate_unique_key set next_hi = " + newNextHi.ToString(), conn, tx);
+        var command = new MySqlCommand("update hibernate_unique_key set next_hi = " + newNextHi.ToString(), conn, tx);
         command.ExecuteNonQuery();
-      }
-    }
-
-    private void button2_Click(object sender, EventArgs e) {
-      try {
-        using (new CursorKeeper(Cursors.WaitCursor)) {
-          beginTicks = DateTime.Now.Ticks;
-
-          initializeNH();
-
-          CreateSpecialUsersAndRoles();
-
-          var userRepo = new UserRepository();
-          var previousInfoRepo = new LinqRepository<Core.PreviousUserAccountInfo>();
-          var membershipService = new SharpArchMembershipService(userRepo, true, true);
-          var divisionRepo = new DivisionRepository();
-
-          using (var context = new ipoolEntities()) {
-            var oldUserIds = new Dictionary<int, Core.User>();
-            var oldUsers = new Dictionary<int, User>();
-            using (userRepo.DbContext.BeginTransaction()) {
-              foreach (var user in context.Users) {
-                var names = user.UserName.Split('_');
-                var firstName = names[0].Substring(0, 1).ToUpper() + names[0].Substring(1);
-                var lastName = "";
-                if (names.Length > 1) {
-                  lastName = names[1].Substring(0, 1).ToUpper() + names[1].Substring(1);
-                }
-                var newUser = membershipService.CreateUser(user.UserName, user.PasswordSalt, firstName, lastName, user.Email, true, true);
-                var previousInfo = new Core.PreviousUserAccountInfo(newUser, user.Password, user.PasswordSalt, user.UserId);
-                previousInfoRepo.SaveOrUpdate(previousInfo);
-                output(string.Format("Migrated user '{0}'", newUser.Username));
-                oldUserIds.Add(user.UserId, newUser);
-                oldUsers.Add(newUser.Id, user);
-              }
-
-              var seasonRepo = new SeasonRepository();
-              foreach (var season in context.Seasons) {
-                output(string.Format("Beginning migration for season '{0}'", season.Year.ToString()));
-
-                var seasonName = "8-ball " + season.Year.ToString();
-                var newSeason = new Core.Season(seasonName, Core.GameType.EightBall);
-                seasonRepo.SaveOrUpdate(newSeason);
-                output("Season created, migrating divisions");
-
-                foreach (var division in season.Divisions) {
-                  if (division.Description != "HistoricalDummyDivision") {
-                    var newDivision = new Core.Division(division.Description, season.StartDate.Value.AddDays(division.DateOffset), newSeason);
-                    newSeason.AddDivision(newDivision);
-                    output(string.Format("Added division '{0}', migrating teams", newDivision.Name));
-
-                    var oldTeamIds = new Dictionary<Core.Team, int>();
-                    foreach (var team in division.Teams) {
-                      var newTeam = new Core.Team(team.Name, newDivision);
-                      newTeam.AddPlayer(oldUserIds[team.Player1ID]);
-                      newTeam.AddPlayer(oldUserIds[team.Player2ID]);
-                      newDivision.AddTeam(newTeam);
-                      oldTeamIds.Add(newTeam, team.ID);
-                      output(string.Format("Added team '{0}'", newTeam.Name));
-                    }
-
-                    output("Creating schedule");
-                    newDivision.CreateSchedule(divisionRepo);
-                    output("Migrating matches");
-                    foreach (var meet in newDivision.Meets) {
-                      var team1Id = oldTeamIds[meet.Team1];
-                      var team2Id = oldTeamIds[meet.Team2];
-                      var matches = division.Matches.Where(m => (m.Team1Id == team1Id && m.Team2Id == team2Id) || (m.Team1Id == team2Id && m.Team2Id == team1Id));
-                      int i = 0;
-                      foreach (var match in matches) {
-                        output(string.Format("Migrating old match '{0}'", match.ID.ToString()));
-                        var player1 = oldUserIds[match.Player1Id];
-                        var player2 = oldUserIds[match.Player2Id];
-                        var newMatch = meet.Matches.ElementAt(i++);
-                        newMatch.Player1 = player1;
-                        newMatch.Player2 = player2;
-                        if (match.Player1Wins == 0 && match.Player2Wins == 0) {
-                          // forfeit
-                          newMatch.IsForfeit = true;
-                          output("Match is a forfeit");
-                        }
-                        else {
-                          output("Adding results");
-                          newMatch.AddResult(new Core.MatchResult(player1, match.Player1Innings, 0, match.Player1Wins));
-                          newMatch.AddResult(new Core.MatchResult(player2, match.Player2Innings, 0, match.Player2Wins));
-                          newMatch.DatePlayed = match.DatePlayed.Value;
-                        }
-                        newMatch.Winner = oldUserIds[match.WinnerId.Value];
-                        newMatch.IsComplete = true;
-                        output(string.Format("Finished match '{0}'", match.ID));
-                      }
-                    }
-                    output(string.Format("Completed migration for division '{0}'", division.Description));
-                  }
-                }
-                output(string.Format("Completed migration for season '{0}'", newSeason.Name));
-              }
-              UpdateSKillLevels(userRepo, oldUsers);
-              output("Committing transaction");
-              userRepo.DbContext.CommitTransaction();
-              output("Finished");
-            }
-          }
-        }
-
-      }
-      catch (Exception ex) {
-        output("Exception:");
-        output(getExceptionText(ex));
       }
     }
 
@@ -578,6 +432,7 @@ namespace ClubPool.SchemaGen
       var matchResultRepo = new MatchResultRepository();
       output("Updating skill levels");
       foreach (var user in userRepo.GetAll()) {
+        output(string.Format("Calculating skill level for user '{0}'", user.Username));
         user.UpdateSkillLevel(Core.GameType.EightBall, matchResultRepo);
         var oldSL = 0;
         if (oldUsers.ContainsKey(user.Id)) {
@@ -590,7 +445,7 @@ namespace ClubPool.SchemaGen
           newSL = user.SkillLevels.First().Value;
         }
         if (newSL != oldSL) {
-          output(string.Format("Different skill level for user '{0}', old: {1} new {2}", user.FullName, oldSL, newSL));
+          output(string.Format("***** WARNING: Different skill level for user '{0}', old: {1} new {2}", user.FullName, oldSL, newSL));
         }
       }
     }
@@ -598,18 +453,22 @@ namespace ClubPool.SchemaGen
     private void initializeNH() {
       var mappingAssemblies = new string[] { "ClubPool.Data.dll" };
       output("Creating NH configuration...");
-      var configuration = NHibernateSession.Init(new SimpleSessionStorage(), mappingAssemblies,
-                             new AutoPersistenceModelGenerator().Generate(),
-                             "NHibernate.config");
+      nhConfig = NHibernateSession.Init(new SimpleSessionStorage(), mappingAssemblies,
+                    new AutoPersistenceModelGenerator().Generate(),
+                    "NHibernate.config");
+    }
+
+    private void CreateSchema() {
       var sb = new StringBuilder();
       var sw = new StringWriter(sb);
       var session = NHibernateSession.GetDefaultSessionFactory().OpenSession();
       output("Exporting schema...");
-      new SchemaExport(configuration).Execute(true, true, false, session.Connection, sw);
+      new SchemaExport(nhConfig).Execute(true, true, false, session.Connection, sw);
 
       sw.Flush();
       output("SchemaExport output:");
       output(sb.Replace("\n", Environment.NewLine).ToString());
+      output("Finished");
     }
 
     private void CreateSpecialUsersAndRoles() {
@@ -637,9 +496,210 @@ namespace ClubPool.SchemaGen
         user = membershipService.CreateUser("officer", "officer", "officer", "user", "officer@email.com", true, false);
         user.AddRole(officer);
         userRepo.SaveOrUpdate(user);
+        // create normal user
+        user = membershipService.CreateUser("normal", "normal", "normal", "user", "normal@email.com", true, false);
+        userRepo.SaveOrUpdate(user);
+
         userRepo.DbContext.CommitTransaction();
+      }
+      output("Finished");
+    }
+
+    protected void EnsureNHConfig() {
+      if (null == nhConfig) {
+        initializeNH();
       }
     }
 
+    private void CreateDummyData() {
+      var userRepo = new UserRepository();
+      var membershipService = new SharpArchMembershipService(userRepo);
+
+      output("Creating dummy data");
+      int userIndex = 1;
+      var users = new List<Core.User>();
+      using (userRepo.DbContext.BeginTransaction()) {
+        for (userIndex = 1; userIndex <= 60; userIndex++) {
+          var username = "user" + userIndex.ToString();
+          users.Add(membershipService.CreateUser(username, "user", "user", userIndex.ToString(),
+            "user" + userIndex.ToString() + "@email.com", true, false));
+        }
+        userRepo.DbContext.CommitTransaction();
+      }
+
+      var seasonRepo = new SeasonRepository();
+      var divisionRepo = new DivisionRepository();
+      using (seasonRepo.DbContext.BeginTransaction()) {
+        for (int seasonIndex = 1; seasonIndex <= 5; seasonIndex++) {
+          output("Creating season " + seasonIndex.ToString());
+          var season = new Core.Season("Season " + seasonIndex.ToString(), Core.GameType.EightBall);
+          season.IsActive = false;
+          userIndex = 0;
+          for (int divisionIndex = 1; divisionIndex <= 2; divisionIndex++) {
+            output("Creating division " + divisionIndex.ToString());
+            var division = new Core.Division("Division " + divisionIndex.ToString(), DateTime.Parse("1/" + divisionIndex.ToString() + "/200" + seasonIndex.ToString()), season);
+            season.AddDivision(division);
+            for (int teamIndex = 1; teamIndex <= 12; teamIndex++) {
+              output("Creating team " + teamIndex.ToString());
+              var team = new Core.Team("Team " + teamIndex.ToString(), division);
+              division.AddTeam(team);
+              team.AddPlayer(users[userIndex++]);
+              team.AddPlayer(users[userIndex++]);
+            }
+            division.CreateSchedule(divisionRepo);
+          }
+          seasonRepo.SaveOrUpdate(season);
+        }
+        output("Setting first season as active");
+        var firstSeason = seasonRepo.GetAll().First();
+        firstSeason.IsActive = true;
+        seasonRepo.SaveOrUpdate(firstSeason);
+        output("Committing transaction");
+        seasonRepo.DbContext.CommitTransaction();
+      }
+      output("Finished");
+    }
+
+    private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+      EnableButtons(true);
+    }
+
+    //private void ImportIPDataNH() {
+    //  try {
+    //    EnsureNHConfig();
+
+    //    using (new CursorKeeper(Cursors.WaitCursor)) {
+    //      beginTicks = DateTime.Now.Ticks;
+
+    //      var userRepo = new UserRepository();
+    //      var previousInfoRepo = new LinqRepository<Core.PreviousUserAccountInfo>();
+    //      var membershipService = new SharpArchMembershipService(userRepo, true, true);
+    //      var divisionRepo = new DivisionRepository();
+
+    //      using (var context = new ipoolEntities()) {
+    //        var oldUserIds = new Dictionary<int, Core.User>();
+    //        var oldUsers = new Dictionary<int, User>();
+    //        using (userRepo.DbContext.BeginTransaction()) {
+    //          foreach (var user in context.Users) {
+    //            var names = user.UserName.Split('_');
+    //            var firstName = names[0].Substring(0, 1).ToUpper() + names[0].Substring(1);
+    //            var lastName = "";
+    //            if (names.Length > 1) {
+    //              lastName = names[1].Substring(0, 1).ToUpper() + names[1].Substring(1);
+    //            }
+    //            var newUser = membershipService.CreateUser(user.UserName, user.PasswordSalt, firstName, lastName, user.Email, true, true);
+    //            var previousInfo = new Core.PreviousUserAccountInfo(newUser, user.Password, user.PasswordSalt, user.UserId);
+    //            previousInfoRepo.SaveOrUpdate(previousInfo);
+    //            output(string.Format("Migrated user '{0}'", newUser.Username));
+    //            oldUserIds.Add(user.UserId, newUser);
+    //            oldUsers.Add(newUser.Id, user);
+    //          }
+
+    //          var seasonRepo = new SeasonRepository();
+    //          foreach (var season in context.Seasons) {
+    //            output(string.Format("Beginning migration for season '{0}'", season.Year.ToString()));
+
+    //            var seasonName = "8-ball " + season.Year.ToString();
+    //            var newSeason = new Core.Season(seasonName, Core.GameType.EightBall);
+    //            seasonRepo.SaveOrUpdate(newSeason);
+    //            output("Season created, migrating divisions");
+
+    //            foreach (var division in season.Divisions) {
+    //              if (division.Description != "HistoricalDummyDivision") {
+    //                var newDivision = new Core.Division(division.Description, season.StartDate.Value.AddDays(division.DateOffset), newSeason);
+    //                newSeason.AddDivision(newDivision);
+    //                output(string.Format("Added division '{0}', migrating teams", newDivision.Name));
+
+    //                var oldTeamIds = new Dictionary<Core.Team, int>();
+    //                foreach (var team in division.Teams) {
+    //                  var newTeam = new Core.Team(team.Name, newDivision);
+    //                  newTeam.AddPlayer(oldUserIds[team.Player1ID]);
+    //                  newTeam.AddPlayer(oldUserIds[team.Player2ID]);
+    //                  newDivision.AddTeam(newTeam);
+    //                  oldTeamIds.Add(newTeam, team.ID);
+    //                  output(string.Format("Added team '{0}'", newTeam.Name));
+    //                }
+
+    //                output("Creating schedule");
+    //                newDivision.CreateSchedule(divisionRepo);
+    //                output("Migrating matches");
+    //                foreach (var meet in newDivision.Meets) {
+    //                  var team1Id = oldTeamIds[meet.Team1];
+    //                  var team2Id = oldTeamIds[meet.Team2];
+    //                  var matches = division.Matches.Where(m => (m.Team1Id == team1Id && m.Team2Id == team2Id) || (m.Team1Id == team2Id && m.Team2Id == team1Id));
+    //                  int i = 0;
+    //                  foreach (var match in matches) {
+    //                    output(string.Format("Migrating old match '{0}'", match.ID.ToString()));
+    //                    var player1 = oldUserIds[match.Player1Id];
+    //                    var player2 = oldUserIds[match.Player2Id];
+    //                    var newMatch = meet.Matches.ElementAt(i++);
+    //                    newMatch.Player1 = player1;
+    //                    newMatch.Player2 = player2;
+    //                    if (match.Player1Wins == 0 && match.Player2Wins == 0) {
+    //                      // forfeit
+    //                      newMatch.IsForfeit = true;
+    //                      output("Match is a forfeit");
+    //                    }
+    //                    else {
+    //                      output("Adding results");
+    //                      newMatch.AddResult(new Core.MatchResult(player1, match.Player1Innings, 0, match.Player1Wins));
+    //                      newMatch.AddResult(new Core.MatchResult(player2, match.Player2Innings, 0, match.Player2Wins));
+    //                      newMatch.DatePlayed = match.DatePlayed.Value;
+    //                    }
+    //                    newMatch.Winner = oldUserIds[match.WinnerId.Value];
+    //                    newMatch.IsComplete = true;
+    //                    output(string.Format("Finished match '{0}'", match.ID));
+    //                  }
+    //                }
+    //                output(string.Format("Completed migration for division '{0}'", division.Description));
+    //              }
+    //            }
+    //            output(string.Format("Completed migration for season '{0}'", newSeason.Name));
+    //          }
+    //          UpdateSKillLevels(userRepo, oldUsers);
+    //          output("Committing transaction");
+    //          userRepo.DbContext.CommitTransaction();
+    //          output("Finished");
+    //        }
+    //      }
+    //    }
+
+    //  }
+    //  catch (Exception ex) {
+    //    output("Exception:");
+    //    output(getExceptionText(ex));
+    //  }
+    //}
   }
+
+  public class CursorKeeper : IDisposable
+  {
+    private Cursor _originalCursor;
+    private bool _isDisposed = false;
+
+    public CursorKeeper(Cursor newCursor) {
+      _originalCursor = Cursor.Current;
+      Cursor.Current = newCursor;
+    }
+
+    #region " IDisposable Support "
+    protected virtual void Dispose(bool disposing) {
+      if (!_isDisposed) {
+        if (disposing) {
+          Cursor.Current = _originalCursor;
+        }
+      }
+      _isDisposed = true;
+
+    }
+
+    public void Dispose() {
+      // Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+
+    #endregion
+  }
+
 }

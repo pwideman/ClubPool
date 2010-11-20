@@ -25,21 +25,23 @@
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      this.button1 = new System.Windows.Forms.Button();
+      this.createDummyDataButton = new System.Windows.Forms.Button();
       this.OutputTextBox = new System.Windows.Forms.TextBox();
-      this.button2 = new System.Windows.Forms.Button();
-      this.button3 = new System.Windows.Forms.Button();
+      this.importIPDataSQLButton = new System.Windows.Forms.Button();
+      this.createSchemaButton = new System.Windows.Forms.Button();
+      this.createSpecialUsersButton = new System.Windows.Forms.Button();
+      this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
       this.SuspendLayout();
       // 
-      // button1
+      // createDummyDataButton
       // 
-      this.button1.Location = new System.Drawing.Point(12, 12);
-      this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(152, 23);
-      this.button1.TabIndex = 0;
-      this.button1.Text = "Create Dummy Data";
-      this.button1.UseVisualStyleBackColor = true;
-      this.button1.Click += new System.EventHandler(this.button1_Click);
+      this.createDummyDataButton.Location = new System.Drawing.Point(318, 12);
+      this.createDummyDataButton.Name = "createDummyDataButton";
+      this.createDummyDataButton.Size = new System.Drawing.Size(122, 23);
+      this.createDummyDataButton.TabIndex = 0;
+      this.createDummyDataButton.Text = "Create Dummy Data";
+      this.createDummyDataButton.UseVisualStyleBackColor = true;
+      this.createDummyDataButton.Click += new System.EventHandler(this.createDummyDataButton_Click);
       // 
       // OutputTextBox
       // 
@@ -50,35 +52,51 @@
       this.OutputTextBox.Size = new System.Drawing.Size(624, 247);
       this.OutputTextBox.TabIndex = 1;
       // 
-      // button2
+      // importIPDataSQLButton
       // 
-      this.button2.Location = new System.Drawing.Point(170, 12);
-      this.button2.Name = "button2";
-      this.button2.Size = new System.Drawing.Size(131, 23);
-      this.button2.TabIndex = 2;
-      this.button2.Text = "Import IP Data NH";
-      this.button2.UseVisualStyleBackColor = true;
-      this.button2.Click += new System.EventHandler(this.button2_Click);
+      this.importIPDataSQLButton.Location = new System.Drawing.Point(446, 12);
+      this.importIPDataSQLButton.Name = "importIPDataSQLButton";
+      this.importIPDataSQLButton.Size = new System.Drawing.Size(146, 23);
+      this.importIPDataSQLButton.TabIndex = 3;
+      this.importIPDataSQLButton.Text = "Import IP Data SQL";
+      this.importIPDataSQLButton.UseVisualStyleBackColor = true;
+      this.importIPDataSQLButton.Click += new System.EventHandler(this.importIPDataSQLButton_Click);
       // 
-      // button3
+      // createSchemaButton
       // 
-      this.button3.Location = new System.Drawing.Point(308, 13);
-      this.button3.Name = "button3";
-      this.button3.Size = new System.Drawing.Size(146, 23);
-      this.button3.TabIndex = 3;
-      this.button3.Text = "Import IP Data SQL";
-      this.button3.UseVisualStyleBackColor = true;
-      this.button3.Click += new System.EventHandler(this.button3_Click);
+      this.createSchemaButton.Location = new System.Drawing.Point(12, 12);
+      this.createSchemaButton.Name = "createSchemaButton";
+      this.createSchemaButton.Size = new System.Drawing.Size(110, 23);
+      this.createSchemaButton.TabIndex = 4;
+      this.createSchemaButton.Text = "Create Schema";
+      this.createSchemaButton.UseVisualStyleBackColor = true;
+      this.createSchemaButton.Click += new System.EventHandler(this.createSchemaButton_Click);
+      // 
+      // createSpecialUsersButton
+      // 
+      this.createSpecialUsersButton.Location = new System.Drawing.Point(128, 12);
+      this.createSpecialUsersButton.Name = "createSpecialUsersButton";
+      this.createSpecialUsersButton.Size = new System.Drawing.Size(184, 23);
+      this.createSpecialUsersButton.TabIndex = 5;
+      this.createSpecialUsersButton.Text = "Create Special Users and Roles";
+      this.createSpecialUsersButton.UseVisualStyleBackColor = true;
+      this.createSpecialUsersButton.Click += new System.EventHandler(this.createSpecialUsersButton_Click);
+      // 
+      // backgroundWorker1
+      // 
+      this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+      this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
       // 
       // SchemaGen
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(648, 300);
-      this.Controls.Add(this.button3);
-      this.Controls.Add(this.button2);
+      this.Controls.Add(this.createSpecialUsersButton);
+      this.Controls.Add(this.createSchemaButton);
+      this.Controls.Add(this.importIPDataSQLButton);
       this.Controls.Add(this.OutputTextBox);
-      this.Controls.Add(this.button1);
+      this.Controls.Add(this.createDummyDataButton);
       this.Name = "SchemaGen";
       this.Text = "SchemaGen";
       this.ResumeLayout(false);
@@ -88,10 +106,12 @@
 
     #endregion
 
-    private System.Windows.Forms.Button button1;
+    private System.Windows.Forms.Button createDummyDataButton;
     private System.Windows.Forms.TextBox OutputTextBox;
-    private System.Windows.Forms.Button button2;
-    private System.Windows.Forms.Button button3;
+    private System.Windows.Forms.Button importIPDataSQLButton;
+    private System.Windows.Forms.Button createSchemaButton;
+    private System.Windows.Forms.Button createSpecialUsersButton;
+    private System.ComponentModel.BackgroundWorker backgroundWorker1;
   }
 }
 
