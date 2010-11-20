@@ -60,7 +60,7 @@ Match Details
            %>
           <tr class="first<%= firstWinnerClass%>" id="<%= match.Id%>_1">
             <td><%= matchIndex.ToString() %></td>
-            <td><%= match.Player1.Name%></td>
+            <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(match.Player1.Id), match.Player1.Name)%></td>
             <td id="<%=match.Id%>_p1innings"><%= match.Player1.Innings%></td>
             <td id="<%=match.Id%>_p1defshots"><%= match.Player1.DefensiveShots%></td>
             <td id="<%=match.Id%>_p1wins"><%= match.Player1.Wins%></td>
@@ -68,7 +68,7 @@ Match Details
           </tr>
           <tr class="second<%= secondWinnerClass%>" id="<%= match.Id%>_2">
             <td></td>
-            <td><%= match.Player2.Name%></td>
+            <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(match.Player2.Id), match.Player2.Name)%></td>
             <td id="<%=match.Id%>_p2innings"><%= match.Player2.Innings%></td>
             <td id="<%=match.Id%>_p2defshots"><%= match.Player2.DefensiveShots%></td>
             <td id="<%=match.Id%>_p2wins"><%= match.Player2.Wins%></td>
