@@ -62,8 +62,10 @@ namespace ClubPool.Web.Controllers.Users
     [Transaction]
     public ActionResult Index(int? page) {
       int pageSize = 10;
-      var viewModel = new IndexViewModel(userRepository.GetAll().Select(u => new UserSummaryViewModel(u)),
-        page.GetValueOrDefault(1), pageSize);
+      var query = from u in userRepository.GetAll()
+                  orderby u.LastName, u.FirstName
+                  select new UserSummaryViewModel(u);
+      var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
       return View(viewModel);
     }
 
