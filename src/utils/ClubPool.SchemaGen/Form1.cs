@@ -145,8 +145,6 @@ namespace ClubPool.SchemaGen
 
           initializeNH();
 
-          var id = 1;
-
           using (var conn = new MySqlConnection(ConfigurationManager.ConnectionStrings["cp"].ConnectionString)) {
             output("opening mysql connection");
             conn.Open();
@@ -164,14 +162,15 @@ namespace ClubPool.SchemaGen
 
               UpdateNextHi(nextId, conn, tx);
 
+              output("committing transaction");
+              tx.Commit();
+
               var userRepo = new UserRepository();
               using (userRepo.DbContext.BeginTransaction()) {
                 UpdateSKillLevels(userRepo, oldUsers);
                 userRepo.DbContext.CommitTransaction();
               }
 
-              output("committing transaction");
-              tx.Commit();
             }
             output("closing mysql connection");
             conn.Close();
