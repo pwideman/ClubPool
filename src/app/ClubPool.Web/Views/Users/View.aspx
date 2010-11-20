@@ -24,21 +24,17 @@
       <div class="details-data"><%= Model.Email %></div>
     </div>
     <div class="details-row">
-      <div class="details-label"></div>
-      <div class="details-data">User is <%= Model.IsApproved ? "approved" : "unapproved" %></div>
-    </div>
-    <div class="details-row">
-      <div class="details-label"></div>
-      <div class="details-data">User is <%= Model.IsLocked ? "locked" : "unlocked" %></div>
-    </div>
-    <div class="details-row">
-      <div class="details-label">Roles:</div>
-      <div class="details-data"><%= string.Join(", ", Model.Roles) %></div>
-    </div>
-    <div class="details-row">
       <div class="details-label">8-ball skill level:</div>
       <div class="details-data"><%= Model.SkillLevel > 0 ? Model.SkillLevel.ToString() : "None" %></div>
     </div>
+    <% if (Model.ShowAdminProperties) { %>
+    <fieldset>
+      <legend>Admin</legend>
+      <div>Roles: <%= Model.Roles.Length > 0 ? string.Join(", ", Model.Roles) : "None"%></div>
+      <div>User is <%= Model.IsApproved ? "approved" : "unapproved"%></div>
+      <div>User is <%= Model.IsLocked ? "locked" : "unlocked"%></div>
+    </fieldset>
+    <% } %>
   </div>
 
   <div id="history-tab" class="userinfo-tab">

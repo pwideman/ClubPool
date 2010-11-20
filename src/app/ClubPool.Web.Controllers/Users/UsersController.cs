@@ -335,6 +335,8 @@ namespace ClubPool.Web.Controllers.Users
       }
 
       var viewModel = new ViewViewModel(user);
+      var principal = authenticationService.GetCurrentPrincipal();
+      viewModel.ShowAdminProperties = principal.IsInRole(Roles.Administrators);
       return View(viewModel);
     }
   }

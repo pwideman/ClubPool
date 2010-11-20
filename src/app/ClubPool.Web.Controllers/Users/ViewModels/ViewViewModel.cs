@@ -16,6 +16,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public bool IsApproved { get; set; }
     public bool IsLocked { get; set; }
     public int SkillLevel { get; set; }
+    public bool ShowAdminProperties { get; set; }
 
     public ViewViewModel() {
       Roles = new string[0];
