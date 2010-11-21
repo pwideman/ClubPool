@@ -239,6 +239,8 @@
     <Content Include="Views\Users\Login.aspx" />
     <Content Include="Views\Users\LoginGadget.aspx" />
     <Content Include="Views\Users\LoginStatus.ascx" />
+    <Content Include="Views\Users\RecoverUsername.aspx" />
+    <Content Include="Views\Users\RecoverUsernameComplete.aspx" />
     <Content Include="Views\Users\ResetPassword.aspx" />
     <Content Include="Views\Users\ResetPasswordComplete.aspx" />
     <Content Include="Views\Users\SignUp.aspx" />

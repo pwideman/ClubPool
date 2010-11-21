@@ -126,6 +126,7 @@
     <Compile Include="Users\ViewModels\CreateViewModel.cs" />
     <Compile Include="Users\ViewModels\EditViewModel.cs" />
     <Compile Include="Users\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Users\ViewModels\RecoverUsernameViewModel.cs" />
     <Compile Include="Users\ViewModels\RoleViewModel.cs" />
     <Compile Include="Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="Users\ViewModels\UserSummaryViewModel.cs" />

@@ -1035,4 +1035,98 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       resultHelper.Result.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
   }
 
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_reset_a_password_with_an_invalid_view_model : specification_for_users_controller
+  {
+    static ResetPasswordViewModel viewModel;
+    static ViewResultHelper<ResetPasswordViewModel> resultHelper;
+
+    Establish context = () => {
+      viewModel = new ResetPasswordViewModel();
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<ResetPasswordViewModel>(controller.ResetPassword(viewModel));
+
+    It should_return_the_default_view = () =>
+      resultHelper.Result.ViewName.ShouldBeEmpty();
+
+    It should_add_a_model_state_error_for_username = () =>
+      resultHelper.Result.ViewData.ModelState.Keys.ShouldContain("Username");
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_recover_username : specification_for_users_controller
+  {
+    static ViewResultHelper resultHelper;
+    static RecoverUsernameViewModel viewModel;
+    static string email = "test@email.com";
+    static string username = "testusername";
+    static User user;
+    static string emailTo;
+    static string emailSubject;
+    static string emailBody;
+
+    Establish context = () => {
+      viewModel = new RecoverUsernameViewModel() { Email = email };
+      user = new User(username, "test", "test", "user", email);
+      userRepository.Stub(r => r.GetAll()).Return(new List<User>() { user }.AsQueryable());
+      emailService.Stub(s => s.SendSystemEmail("", null, null)).IgnoreArguments()
+        .WhenCalled(m => {
+          emailTo = m.Arguments[0] as string;
+          emailSubject = m.Arguments[1] as string;
+          emailBody = m.Arguments[2] as string;
+        });
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel));
+
+    It should_return_the_recover_username_complete_view = () =>
+      resultHelper.Result.ViewName.ShouldEqual("RecoverUsernameComplete");
+
+    It should_send_the_user_an_email = () =>
+      emailTo.ShouldEqual(user.Email);
+
+    It should_send_the_usernames_in_the_email = () =>
+      emailBody.ShouldContain(username);
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_recover_username_for_a_nonexistent_email : specification_for_users_controller
+  {
+    static RecoverUsernameViewModel viewModel;
+    static ViewResultHelper<RecoverUsernameViewModel> resultHelper;
+
+    Establish context = () => {
+      viewModel = new RecoverUsernameViewModel() { Email = "bad@email.com" };
+      var user = new User("test", "test", "test", "user", "test");
+      userRepository.Stub(r => r.GetAll()).Return(new List<User>() { user }.AsQueryable());
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<RecoverUsernameViewModel>(controller.RecoverUsername(viewModel));
+
+    It should_return_the_default_view = () =>
+      resultHelper.Result.ViewName.ShouldBeEmpty();
+
+    It should_add_a_page_error_message = () =>
+      resultHelper.Result.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_recover_a_username_with_an_invalid_view_model : specification_for_users_controller
+  {
+    static RecoverUsernameViewModel viewModel;
+    static ViewResultHelper<RecoverUsernameViewModel> resultHelper;
+
+    Establish context = () => {
+      viewModel = new RecoverUsernameViewModel();
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<RecoverUsernameViewModel>(controller.RecoverUsername(viewModel));
+
+    It should_return_the_default_view = () =>
+      resultHelper.Result.ViewName.ShouldBeEmpty();
+
+    It should_add_a_model_state_error_for_email = () =>
+      resultHelper.Result.ViewData.ModelState.Keys.ShouldContain("Email");
+  }
 }

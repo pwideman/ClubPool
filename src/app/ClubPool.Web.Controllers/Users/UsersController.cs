@@ -134,7 +134,7 @@ namespace ClubPool.Web.Controllers.Users
       }
       var user = userRepository.FindOne(u => u.Username.Equals(viewModel.Username));
       if (null == user) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "There is no user by that username.";
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "There is no user by that username";
         return View(viewModel);
       }
 
@@ -354,6 +354,31 @@ namespace ClubPool.Web.Controllers.Users
       var principal = authenticationService.GetCurrentPrincipal();
       viewModel.ShowAdminProperties = principal.IsInRole(Roles.Administrators);
       return View(viewModel);
+    }
+
+    [HttpGet]
+    public ActionResult RecoverUsername() {
+      return View();
+    }
+
+    [HttpPost]
+    [Transaction]
+    public ActionResult RecoverUsername(RecoverUsernameViewModel viewModel) {
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
+      }
+      var usernames = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Email)).Select(u => u.Username).ToList();
+      if (!usernames.Any()) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "There are no usernames associated with that email address";
+        return View(viewModel);
+      }
+      
+      var body = new StringBuilder(string.Format("The following usernames are registered for the email address '{0}':", viewModel.Email) + Environment.NewLine);
+      foreach (var username in usernames) {
+        body.Append(Environment.NewLine + username);
+      }
+      emailService.SendSystemEmail(viewModel.Email, "ClubPool Username Assistance", body.ToString());
+      return View("RecoverUsernameComplete");
     }
   }
 }
