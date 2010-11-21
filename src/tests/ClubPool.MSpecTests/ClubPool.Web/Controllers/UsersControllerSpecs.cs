@@ -327,7 +327,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
 
     It should_indicate_that_the_error_was_related_to_the_ConfirmPassword_field = () =>
-      resultHelper.Result.ViewData.ModelState.Keys.Contains("ConfirmPassword").ShouldBeTrue();
+      resultHelper.Result.ViewData.ModelState.Keys.ShouldContain("ConfirmPassword");
   }
 
   [Subject(typeof(UsersController))]
@@ -973,6 +973,66 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_show_admin_properties = () =>
       resultHelper.Model.ShowAdminProperties.ShouldBeTrue();
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_reset_a_password : specification_for_users_controller
+  {
+    static ViewResultHelper resultHelper;
+    static ResetPasswordViewModel viewModel;
+    static string username = "test";
+    static string newPassword = "newpassword";
+    static string newHashedPassword = "hashedPassword";
+    static User user;
+    static string emailTo;
+    static string emailSubject;
+    static string emailBody;
+
+    Establish context = () => {
+      viewModel = new ResetPasswordViewModel() { Username = username };
+      membershipService.Stub(s => s.GenerateTempHashedPassword(null)).IgnoreArguments().Return(new string[2] { newPassword, newHashedPassword });
+      user = new User(username, "test", "test", "user", "test") { Password = "before", PasswordSalt = "salt" };
+      userRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(user);
+      emailService.Stub(s => s.SendSystemEmail("", null, null)).IgnoreArguments()
+        .WhenCalled(m => { 
+          emailTo = m.Arguments[0] as string;
+          emailSubject = m.Arguments[1] as string;
+          emailBody = m.Arguments[2] as string;
+        });
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel));
+
+    It should_reset_the_user_password = () =>
+      user.Password.ShouldEqual(newHashedPassword);
+
+    It should_return_the_reset_password_complete_view = () =>
+      resultHelper.Result.ViewName.ShouldEqual("ResetPasswordComplete");
+
+    It should_send_the_user_an_email = () =>
+      emailTo.ShouldEqual(user.Email);
+
+    It should_send_the_new_password_in_the_email = () =>
+      emailBody.ShouldContain(newPassword);
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_reset_a_password_for_a_nonexistent_username : specification_for_users_controller
+  {
+    static ResetPasswordViewModel viewModel;
+    static ViewResultHelper<ResetPasswordViewModel> resultHelper;
+
+    Establish context = () => {
+      viewModel = new ResetPasswordViewModel() { Username = "bad" };
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<ResetPasswordViewModel>(controller.ResetPassword(viewModel));
+
+    It should_return_the_default_view = () =>
+      resultHelper.Result.ViewName.ShouldBeEmpty();
+
+    It should_add_a_page_error_message = () =>
+      resultHelper.Result.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
   }
 
 }

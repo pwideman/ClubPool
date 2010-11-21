@@ -127,8 +127,22 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpPost]
+    [Transaction]
     public ActionResult ResetPassword(ResetPasswordViewModel viewModel) {
-      return View();
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
+      }
+      var user = userRepository.FindOne(u => u.Username.Equals(viewModel.Username));
+      if (null == user) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "There is no user by that username.";
+        return View(viewModel);
+      }
+
+      var newPasswords = membershipService.GenerateTempHashedPassword(user.PasswordSalt);
+      user.Password = newPasswords[1];
+      var body = string.Format("Your ClubPool password has been reset to: {0}", newPasswords[0]);
+      emailService.SendSystemEmail(user.Email, "ClubPool password reset", body);
+      return View("ResetPasswordComplete");
     }
 
     public ActionResult Logout() {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
+using System.Web.Security;
 
 using SharpArch.Core;
 using SharpArch.Core.DomainModel;
@@ -130,5 +131,11 @@ namespace ClubPool.ApplicationServices.Membership
       new RNGCryptoServiceProvider().GetBytes(buf);
       return Convert.ToBase64String(buf);
     }
+
+    public string[] GenerateTempHashedPassword(string salt) {
+      var pass = System.Web.Security.Membership.GeneratePassword(14, 7);
+      return new string[2] { pass, EncodePassword(pass, salt) };
+    }
+
   }
 }

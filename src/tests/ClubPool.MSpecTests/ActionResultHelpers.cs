@@ -43,6 +43,13 @@ namespace ClubPool.MSpecTests
     }
   }
 
+  public class ViewResultHelper : ViewResultHelper<object>
+  {
+    public ViewResultHelper(ActionResult result)
+      : base(result) {
+    }
+  }
+
   public class PartialViewResultHelper<T> : ViewResultBaseHelper<PartialViewResult, T> where T : class
   {
     public PartialViewResultHelper(ActionResult result)

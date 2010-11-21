@@ -45,18 +45,16 @@ namespace ClubPool.ApplicationServices.Messaging
       Check.Require(!string.IsNullOrEmpty(from), "from cannot be null or empty");
       Check.Require(null != to && to.Count > 0, "to cannot be null or zero length");
 
-      MailMessage mm = new MailMessage();
-      
-      mm.From = new MailAddress(from);
-      AddAddressesToCollection(to, mm.To);
-      AddAddressesToCollection(cc, mm.CC);
-      AddAddressesToCollection(bcc, mm.Bcc);
+      using(var mm = new MailMessage()) {
+        mm.From = new MailAddress(from);
+        AddAddressesToCollection(to, mm.To);
+        AddAddressesToCollection(cc, mm.CC);
+        AddAddressesToCollection(bcc, mm.Bcc);
 
-      mm.Subject = subject;
-      mm.Body = body;
+        mm.Subject = subject;
+        mm.Body = body;
 
-      var client = SmtpClient;
-      if (!string.IsNullOrEmpty(smtpHost)) {
+        var client = GetSmtpClient();
         client.Send(mm);
       }
     }
@@ -71,13 +69,12 @@ namespace ClubPool.ApplicationServices.Messaging
       }
     }
 
-    protected virtual SmtpClient SmtpClient {
-      get {
-        var client = new SmtpClient(smtpHost);
-        client.EnableSsl = false;
-        client.UseDefaultCredentials = false;
-        return client;
-      }
+    protected virtual SmtpClient GetSmtpClient() {
+      var client = new SmtpClient(smtpHost);
+      client.EnableSsl = false;
+      client.UseDefaultCredentials = false;
+      client.ServicePoint.MaxIdleTime = 1;
+      return client;
     }
 
     protected virtual string SystemEmailAddress {

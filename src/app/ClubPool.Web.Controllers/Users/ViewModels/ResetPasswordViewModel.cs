@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NHibernate.Validator.Constraints;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class ResetPasswordViewModel
+  public class ResetPasswordViewModel : ValidatableViewModel
   {
+    [NotNullNotEmpty]
+    public string Username { get; set; }
   }
 }

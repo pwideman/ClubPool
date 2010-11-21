@@ -240,6 +240,7 @@
     <Content Include="Views\Users\LoginGadget.aspx" />
     <Content Include="Views\Users\LoginStatus.ascx" />
     <Content Include="Views\Users\ResetPassword.aspx" />
+    <Content Include="Views\Users\ResetPasswordComplete.aspx" />
     <Content Include="Views\Users\SignUp.aspx" />
     <Content Include="Views\Users\SignUpComplete.aspx" />
     <Content Include="Views\Users\Unapproved.aspx" />
