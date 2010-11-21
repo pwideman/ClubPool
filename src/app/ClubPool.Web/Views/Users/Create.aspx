@@ -16,7 +16,6 @@
     %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>
-      <%= Html.HiddenFor(m => m.PreviousUsername)%>
       <% Html.RenderPartial("CreateUserControl"); %>
       <div class="spacer">&nbsp;</div>
       <div class="form-row-span">

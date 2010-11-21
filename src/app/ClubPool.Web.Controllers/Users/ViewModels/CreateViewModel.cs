@@ -23,7 +23,5 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     [DisplayName("Confirm password:")]
     [NotNullNotEmpty(Message = "Required")]
     public string ConfirmPassword { get; set; }
-
-    public string PreviousUsername { get; set; }
   }
 }
