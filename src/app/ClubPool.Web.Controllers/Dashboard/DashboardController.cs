@@ -42,8 +42,10 @@ namespace ClubPool.Web.Controllers.Dashboard
 
     protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
-      var alertsGadget = new AlertsSidebarGadget();
-      sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
+      if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
+        var alertsGadget = new AlertsSidebarGadget();
+        sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
+      }
       return sidebarGadgetCollection;
     }
 
@@ -57,6 +59,7 @@ namespace ClubPool.Web.Controllers.Dashboard
     }
 
     [Authorize]
+    [Transaction]
     public ActionResult AlertsGadget() {
       return PartialView(GetAlertsViewModel());
     }
