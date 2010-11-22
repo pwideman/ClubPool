@@ -7,8 +7,9 @@ namespace ClubPool.Web.Controllers.Shared.SidebarGadgets
 {
   public class LoginSidebarGadget : SidebarGadgetBase
   {
+    public static string Name = "Login";
+
     public LoginSidebarGadget() {
-      Name = "Login";
       var request = new PartialRequest();
       request.SetAction<ClubPool.Web.Controllers.Users.UsersController>(c => c.LoginGadget());
       Action = request;

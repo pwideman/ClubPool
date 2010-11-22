@@ -39,7 +39,7 @@ namespace ClubPool.Web.Controllers.Home
       var sidebarGadgetCollection = new SidebarGadgetCollection();
       if (!authenticationService.IsLoggedIn()) {
         var loginGadget = new LoginSidebarGadget();
-        sidebarGadgetCollection.Add(loginGadget.Name, loginGadget);
+        sidebarGadgetCollection.Add(LoginSidebarGadget.Name, loginGadget);
       }
       return sidebarGadgetCollection;
     }

@@ -7,7 +7,6 @@ namespace ClubPool.Web.Controllers
 {
   public abstract class SidebarGadgetBase
   {
-    public string Name { get; set; }
     public PartialRequest Action { get; set; }
   }
 }

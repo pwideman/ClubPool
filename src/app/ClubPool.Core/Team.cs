@@ -43,6 +43,44 @@ namespace ClubPool.Core
       return true;// players.Count == 0;
     }
 
+    public virtual int[] GetWinsAndLosses() {
+      var matches = from meet in Division.Meets
+                    where meet.Teams.Contains(this)
+                    from match in meet.Matches
+                    where match.IsComplete
+                    select match;
+      int wins = 0;
+      int losses = 0;
+      foreach (var match in matches) {
+        if (players.Contains(match.Winner)) {
+          wins++;
+        }
+        else {
+          losses++;
+        }
+      }
+      return new int[2] { wins, losses };
+    }
+
+    public virtual int[] GetWinsAndLossesForPlayer(User player) {
+      var matches = from meet in Division.Meets
+                    where meet.Teams.Contains(this)
+                    from match in meet.Matches
+                    where match.IsComplete && match.Players.Contains(player)
+                    select match;
+      int wins = 0;
+      int losses = 0;
+      foreach (var match in matches) {
+        if (match.Winner == player) {
+          wins++;
+        }
+        else {
+          losses++;
+        }
+      }
+      return new int[2] { wins, losses };
+    }
+
     public virtual void RemoveAllPlayers() {
       var tempPlayers = players.ToArray();
       foreach (var player in tempPlayers) {

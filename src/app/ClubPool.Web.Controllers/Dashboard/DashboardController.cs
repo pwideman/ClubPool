@@ -21,30 +21,68 @@ namespace ClubPool.Web.Controllers.Dashboard
   {
     protected IAuthenticationService authenticationService;
     protected IUserRepository userRepository;
+    protected ISeasonRepository seasonRepository;
 
-    public DashboardController(IAuthenticationService authSvc, IUserRepository userRepository) {
+    public DashboardController(IAuthenticationService authSvc, IUserRepository userRepository, ISeasonRepository seasonRepository) {
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
+      Check.Require(null != seasonRepository, "seasonRepository cannot be null");
 
       authenticationService = authSvc;
       this.userRepository = userRepository;
+      this.seasonRepository = seasonRepository;
     }
 
     [Authorize]
     [Transaction]
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
-      viewModel.UserIsAdmin = authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators);
+      var principal = authenticationService.GetCurrentPrincipal();
+      var user = userRepository.FindOne(u => u.Username.Equals(principal.Identity.Name));
+      viewModel.UserIsAdmin = principal.IsInRole(Roles.Administrators);
+      viewModel.UserFullName = user.FullName;
+      viewModel.CurrentSeasonStats = GetCurrentSeasonStatsViewModel(user);
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
+    }
+
+    protected StatsViewModel GetCurrentSeasonStatsViewModel(User user) {
+      StatsViewModel vm = null;
+      // first see if there's a current season
+      var currentSeason = seasonRepository.GetAll().Where(s => s.IsActive).FirstOrDefault();
+      if (null != currentSeason) {
+        // now see if this user is on a team in this season
+        var teamQuery = from d in currentSeason.Divisions
+                        from t in d.Teams
+                        where t.Players.Contains(user)
+                        select t;
+        var team = teamQuery.FirstOrDefault();
+        if (null != team) {
+          // if so, compile stats
+          vm = new StatsViewModel();
+          var skillLevel = user.SkillLevels.Where(sl => sl.GameType == currentSeason.GameType).FirstOrDefault();
+          if (null != skillLevel) {
+            vm.SkillLevel = skillLevel.Value;
+          }
+          vm.TeamName = team.Name;
+          vm.Teammate = team.Players.Where(p => p != user).Single().FullName;
+          var winsAndLosses = team.GetWinsAndLossesForPlayer(user);
+          var pct = (double)winsAndLosses[0] / (double)(winsAndLosses[0] + winsAndLosses[1]);
+          vm.PersonalRecord = string.Format("{0} - {1} ({2})", winsAndLosses[0], winsAndLosses[1], pct.ToString(".00"));
+          winsAndLosses = team.GetWinsAndLosses();
+          pct = (double)winsAndLosses[0] / (double)(winsAndLosses[0] + winsAndLosses[1]);
+          vm.TeamRecord = string.Format("{0} - {1} ({2})", winsAndLosses[0], winsAndLosses[1], pct.ToString(".00"));
+        }
+      }
+      return vm;
     }
 
     protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
         var alertsGadget = new AlertsSidebarGadget();
-        sidebarGadgetCollection.Add(alertsGadget.Name, alertsGadget);
+        sidebarGadgetCollection.Add(AlertsSidebarGadget.Name, alertsGadget);
       }
       return sidebarGadgetCollection;
     }
