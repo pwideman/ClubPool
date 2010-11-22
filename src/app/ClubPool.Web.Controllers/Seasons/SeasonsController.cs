@@ -41,7 +41,7 @@ namespace ClubPool.Web.Controllers.Seasons
     public ActionResult Index(int? page) {
       int pageSize = 10;
       var query = from s in seasonRepository.GetAll()
-                  orderby s.IsActive descending, s.Name
+                  orderby s.IsActive descending, s.Name descending
                   select new SeasonSummaryViewModel(s);
       var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
       return View(viewModel);
