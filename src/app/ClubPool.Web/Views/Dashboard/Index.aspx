@@ -10,10 +10,10 @@
     <div>Current Season Stats & Info</div>
     <ul>
       <li>Skill Level: <%= Model.CurrentSeasonStats.SkillLevel %></li>
+      <li>My Record: <%= Model.CurrentSeasonStats.PersonalRecord %></li>
       <li>Team Name: <%= Model.CurrentSeasonStats.TeamName %></li>
       <li>Teammate: <%= Model.CurrentSeasonStats.Teammate %></li>
       <li>Team Record: <%= Model.CurrentSeasonStats.TeamRecord %></li>
-      <li>My Record: <%= Model.CurrentSeasonStats.PersonalRecord %></li>
     </ul>
   </div>
   <% } %>
