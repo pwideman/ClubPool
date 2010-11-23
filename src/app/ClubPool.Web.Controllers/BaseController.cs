@@ -55,5 +55,10 @@ namespace ClubPool.Web.Controllers
     protected HttpNotFoundResult HttpNotFound() {
       return HttpNotFound(string.Empty);
     }
+
+    protected ActionResult ErrorView(string message) {
+      TempData[GlobalViewDataProperty.PageErrorMessage] = message;
+      return View("Error");
+    }
   }
 }
