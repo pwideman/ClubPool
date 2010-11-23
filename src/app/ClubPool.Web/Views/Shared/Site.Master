@@ -10,9 +10,14 @@
 
     <%= Html.Stylesheet("site.less") %>
 
+    <!--
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/jquery.validate.min.js"></script>
+    -->
+    <%= Html.ScriptInclude("jquery-1.4.4.js") %>
+    <%= Html.ScriptInclude("jquery-ui.min.js") %>
+    <%= Html.ScriptInclude("jquery.validate.js") %>
     <%= Html.ScriptInclude("jquery.bgiframe.min.js") %>
     <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
     <%= Html.ScriptInclude("supersubs.js") %>
