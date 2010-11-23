@@ -13,6 +13,6 @@ namespace ClubPool.ApplicationServices.Authentication.Contracts
     bool IsLoggedIn();
     void LogIn(string userName, bool createPersistentCookie);
     void LogOut();
-    IPrincipal GetCurrentPrincipal();
+    ClubPoolPrincipal GetCurrentPrincipal();
   }
 }

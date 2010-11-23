@@ -118,6 +118,7 @@ namespace ClubPool.Web
 
       if (null == authCookie) {
         // There is no authentication cookie.
+        SetUnauthorizedPrincipal();
         return;
       }
 
@@ -127,24 +128,29 @@ namespace ClubPool.Web
       }
       catch (Exception ex) {
         logger.Error("Forms authentication ticket could not be decrypted", ex);
+        SetUnauthorizedPrincipal();
         return;
       }
 
       if (null == authTicket) {
         // Cookie failed to decrypt.
+        SetUnauthorizedPrincipal();
         return;
       }
 
       // Create an Identity object
-      FormsIdentity id = new FormsIdentity(authTicket);
+      FormsIdentity identity = new FormsIdentity(authTicket);
 
       var userRepository = SafeServiceLocator<IUserRepository>.GetService();
-      var roles = userRepository.FindOne(UserQueries.UserByUsername(id.Name))
-                                .Roles.Select(RoleQueries.SelectName).ToArray();
+      var user = userRepository.FindOne(u => u.Username.Equals(identity.Name));
       // This principal will flow throughout the request.
-      ClubPoolPrincipal principal = new ClubPoolPrincipal(id, roles);
+      ClubPoolPrincipal principal = new ClubPoolPrincipal(user, identity);
       // Attach the new principal object to the current HttpContext object
       Context.User = principal;
+    }
+
+    private void SetUnauthorizedPrincipal() {
+      Context.User = ClubPoolPrincipal.CreateUnauthorizedPrincipal();
     }
 
     /// <summary>

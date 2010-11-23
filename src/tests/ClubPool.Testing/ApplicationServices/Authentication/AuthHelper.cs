@@ -5,14 +5,16 @@ using Rhino.Mocks;
 
 using ClubPool.ApplicationServices.Authentication;
 using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.Core;
 
 namespace ClubPool.Testing.ApplicationServices.Authentication
 {
   public static class AuthHelper
   {
     public static MockAuthenticationService CreateMockAuthenticationService() {
-      var identity = new MockIdentity("user", true, null);
-      var principal = new MockClubPoolPrincipal(identity, null);
+      var user = new User("user", "user", "user", "name", "user@email.com");
+      var identity = new MockIdentity(user.Username, true, null);
+      var principal = new MockClubPoolPrincipal(user, identity);
       return new MockAuthenticationService(principal);
     }
   }
@@ -39,7 +41,7 @@ namespace ClubPool.Testing.ApplicationServices.Authentication
       MockPrincipal.Roles = null;
     }
 
-    public IPrincipal GetCurrentPrincipal() {
+    public ClubPoolPrincipal GetCurrentPrincipal() {
       return MockPrincipal;
     }
 
@@ -48,12 +50,27 @@ namespace ClubPool.Testing.ApplicationServices.Authentication
 
   public class MockClubPoolPrincipal : ClubPoolPrincipal
   {
-    public MockClubPoolPrincipal(MockIdentity identity, string[] roles)
-      : base(identity, roles) {
-        MockIdentity = identity;
+    protected User user;
+
+    public MockClubPoolPrincipal(User user, MockIdentity identity)
+      : base(user, identity) {
+
+      MockIdentity = identity;
+      User = user;
     }
 
     public MockIdentity MockIdentity { get; set; }
+    public User User {
+      get {
+        return user;
+      }
+
+      set {
+        user = value;
+        UserId = value.Id;
+        Username = value.Username;
+      }
+    }
 
     public string[] Roles {
       get {

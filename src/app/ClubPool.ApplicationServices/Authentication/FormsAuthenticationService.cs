@@ -9,7 +9,7 @@ using System.Security.Principal;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Core;
 
-namespace ClubPool.Web.Security
+namespace ClubPool.ApplicationServices.Authentication
 {
   public class FormsAuthenticationService : IAuthenticationService
   {
@@ -25,8 +25,8 @@ namespace ClubPool.Web.Security
       FormsAuthentication.SignOut();
     }
 
-    public IPrincipal GetCurrentPrincipal() {
-      return HttpContext.Current.User;
+    public ClubPoolPrincipal GetCurrentPrincipal() {
+      return HttpContext.Current.User as ClubPoolPrincipal;
     }
   }
 }
