@@ -14,7 +14,28 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
 {
   public class EditViewModel : UserViewModelBase
   {
-    public EditViewModel() : base() {
+    [Min(1)]
+    public int Id { get; set; }
+
+    [DisplayName("Approved")]
+    public bool IsApproved { get; set; }
+
+    [DisplayName("Locked")]
+    public bool IsLocked { get; set; }
+
+    [Min(1)]
+    public int Version { get; set; }
+
+    public int[] Roles { get; set; }
+
+    [DisplayName("Roles:")]
+    public IEnumerable<RoleViewModel> AvailableRoles { get; set; }
+
+    public bool ShowStatus { get; set; }
+    public bool ShowRoles { get; set; }
+
+    public EditViewModel()
+      : base() {
       InitMembers();
     }
 
@@ -39,21 +60,5 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public void LoadAvailableRoles(IRoleRepository roleRepository) {
       AvailableRoles = roleRepository.GetAll().Select(r => new RoleViewModel(r)).ToList();
     }
-
-    [Min(1)]
-    public int Id { get; set; }
-
-    [DisplayName("Approved")]
-    public bool IsApproved { get; set; }
-
-    [DisplayName("Locked")]
-    public bool IsLocked { get; set; }
-
-    public int Version { get; set; }
-
-    public int[] Roles { get; set; }
-
-    [DisplayName("Roles:")]
-    public IEnumerable<RoleViewModel> AvailableRoles { get; set; }
   }
 }

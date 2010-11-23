@@ -10,6 +10,7 @@ using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.ApplicationServices.Authentication;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
 
 namespace ClubPool.Web.Controllers.Navigation
@@ -32,6 +33,7 @@ namespace ClubPool.Web.Controllers.Navigation
       if (authenticationService.IsLoggedIn()) {
         var principal = authenticationService.GetCurrentPrincipal();
         viewModel.DisplayAdminMenu = principal.IsInRole(Roles.Administrators);
+        viewModel.UserId = principal.UserId;
         viewModel.UserIsLoggedIn = true;
       }
       else {

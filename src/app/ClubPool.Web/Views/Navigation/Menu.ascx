@@ -22,7 +22,7 @@
       <li><a href="/dashboard/team">Team</a></li>
       <li><a href="/dashboard/stats">Stats</a></li>
       <li><a href="/dashboard/history">Match History</a></li>
-      <li><a href="/user/info">Member Info</a></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(Model.UserId), "Member Info") %></li>
     </ul>
   </li>
   <% } 

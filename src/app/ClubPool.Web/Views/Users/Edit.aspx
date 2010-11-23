@@ -6,8 +6,8 @@
     <span>Edit User</span>
   </div>
   <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-        Html.RenderPartial("ErrorMessage");
-      } %>
+       Html.RenderPartial("ErrorMessage");
+     } %>
   <div class="form-content edit-user-form">
     <div class="form-header">
       All fields are required
@@ -44,6 +44,7 @@
             <%= Html.ValidationMessageFor(m => m.LastName)%>
           </div>
         </div>
+        <% if (Model.ShowStatus) { %>
         <div class="form-row form-row-short">
           <span class="form-label-left">Status:</span>
           <div class="form-checkbox-list">
@@ -59,8 +60,10 @@
             </ul>
           </div>
         </div>
+        <% }
+          if (Model.ShowRoles) { %>
         <div class="form-row">
-          <span class="form-label-left"><%= Html.LabelFor(m => m.AvailableRoles) %></span>
+          <span class="form-label-left"><%= Html.LabelFor(m => m.AvailableRoles)%></span>
           <div class="form-checkbox-list">
             <ul>
               <% foreach (var role in Model.AvailableRoles) { %>
@@ -75,6 +78,7 @@
             </ul>
           </div>
         </div>
+        <% } %>
         <div class="spacer">&nbsp;</div>
         <div class="form-row-span">
           <input class="submit-button" type="submit" value="Save" />
@@ -84,6 +88,11 @@
     <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.EditViewModel>() %>
   </div>
 
+  <% if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) { %>
+  <div>
+    <% Html.RenderPartial("NotificationMessage"); %>
+  </div>
+  <% } %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">

@@ -4,7 +4,9 @@ using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
 
-using MvcContrib;
+using Microsoft.Web.Mvc;
+//using MvcContrib;
+using MvcContrib.ActionResults;
 using MvcContrib.Pagination;
 using SharpArch.Web.NHibernate;
 using SharpArch.Core;
@@ -233,27 +235,63 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpGet]
-    [Authorize(Roles=Roles.Administrators)]
+    [Authorize]
     public ActionResult Edit(int id) {
       var user = userRepository.Get(id);
       var viewModel = new EditViewModel(user);
-      viewModel.LoadAvailableRoles(roleRepository);
+      var currentPrincipal = authenticationService.GetCurrentPrincipal();
+
+      if (currentPrincipal.IsInRole(Roles.Administrators)) {
+        // allow admins to edit everything
+        viewModel.ShowRoles = true;
+        viewModel.ShowStatus = true;
+        viewModel.LoadAvailableRoles(roleRepository);
+      }
+      else if (currentPrincipal.IsInRole(Roles.Officers)) {
+        // allow officers to edit status, not roles
+        // TODO: Should an officer be able to change their own status
+        // or edit an administrator user? Probably not.
+        viewModel.ShowStatus = true;
+      }
+      else {
+        // normal user - first check to see if the logged in user is the same
+        // as the user being edited, if not, do not allow editing. Otherwise,
+        // allow editing basic properties
+        if (!currentPrincipal.Identity.Name.Equals(user.Username)) {
+          return ErrorView("You are not authorized to edit this user's information");
+        }
+        else {
+          viewModel.ShowRoles = false;
+          viewModel.ShowStatus = false;
+        }
+      }
       return View(viewModel);
     }
 
     [HttpPost]
     [Transaction]
-    [Authorize(Roles=Roles.Administrators)]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
+      var currentPrincipal = authenticationService.GetCurrentPrincipal();
+      var userIsAdmin = currentPrincipal.IsInRole(Roles.Administrators);
+      var userIsOfficer = currentPrincipal.IsInRole(Roles.Officers);
+      // must reset these in case we redisplay the form
+      viewModel.ShowStatus = userIsOfficer || userIsAdmin;
+      viewModel.ShowRoles = userIsAdmin;
+
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
 
       var user = userRepository.Get(viewModel.Id);
       if (null == user) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "The user you were editing was deleted by another user";
-        return this.RedirectToAction(c => c.Index(null));
+        return ErrorView("The user you were editing was deleted by another user");
+      }
+
+      var editingSelf = user.Id == currentPrincipal.UserId;
+      if (!editingSelf && !userIsAdmin && !userIsOfficer) {
+        return ErrorView("You are not authorized to perform that action");
       }
 
       if (viewModel.Version != user.Version) {
@@ -284,16 +322,20 @@ namespace ClubPool.Web.Controllers.Users
       }
       user.FirstName = viewModel.FirstName;
       user.LastName = viewModel.LastName;
-      user.IsApproved = viewModel.IsApproved;
-      user.IsLocked = viewModel.IsLocked;
-      user.RemoveAllRoles();
-      if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
-        foreach (int roleId in viewModel.Roles) {
-          user.AddRole(roleRepository.Get(roleId));
+      if (userIsOfficer || userIsAdmin) {
+        user.IsApproved = viewModel.IsApproved;
+        user.IsLocked = viewModel.IsLocked;
+      }
+      if (userIsAdmin) {
+        user.RemoveAllRoles();
+        if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
+          foreach (int roleId in viewModel.Roles) {
+            user.AddRole(roleRepository.Get(roleId));
+          }
         }
       }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
-      return this.RedirectToAction(c => c.Index(null));
+      return this.RedirectToAction(c => c.Edit(viewModel.Id));
     }
 
     [HttpGet]
