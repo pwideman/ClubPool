@@ -210,6 +210,7 @@
     <Content Include="Views\Meets\PlayerCard.ascx" />
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Divisions\Create.aspx" />
+    <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Teams\PlayerListView.ascx" />
     <Content Include="Views\Seasons\TeamView.ascx" />
     <Content Include="Views\Teams\Create.aspx" />
