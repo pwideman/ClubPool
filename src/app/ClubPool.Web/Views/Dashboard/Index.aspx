@@ -5,6 +5,7 @@
     <%= Html.ContentImage("home.png", "Home") %>
     <span><%= Model.UserFullName %>'s Dashboard</span>
   </div>
+  <% if (Model.HasCurrentSeasonStats) { %>
   <div>
     <div>Current Season Stats & Info</div>
     <ul>
@@ -15,6 +16,7 @@
       <li>My Record: <%= Model.CurrentSeasonStats.PersonalRecord %></li>
     </ul>
   </div>
+  <% } %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">

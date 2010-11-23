@@ -133,7 +133,9 @@
     <Content Include="NHibernate.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="IPool.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>IPool.Designer.cs</LastGenOutput>

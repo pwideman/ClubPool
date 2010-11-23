@@ -48,8 +48,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
       teams = new List<Team>();
       users = new List<User>();
-      // set up a user that is not in a team
-      users.Add(new User("noteam", "test", "noteam", "user", "test"));
+      // set up an admin user that is not in a team
+      users.Add(new User("admin", "test", "admin", "user", "test"));
       // set up the test season
       season = new Season("test season", GameType.EightBall);
       season.IsActive = true;
@@ -118,7 +118,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(DashboardController))]
-  public class when_asked_for_the_default_view_for_nonadmin_user : specification_for_dashboard_controller
+  public class when_asked_for_the_default_view_for_nonadmin_user_with_current_season_stats : specification_for_dashboard_controller
   {
     static ViewResultHelper<IndexViewModel> resultHelper;
     static User user;
@@ -149,6 +149,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     It should_return_the_users_full_name = () =>
       resultHelper.Model.UserFullName.ShouldEqual(user.FullName);
 
+    It should_indicate_that_there_are_current_season_stats = () =>
+      resultHelper.Model.HasCurrentSeasonStats.ShouldBeTrue();
+
     It should_return_the_current_season_stats = () =>
       resultHelper.Model.CurrentSeasonStats.ShouldNotBeNull();
 
@@ -169,14 +172,14 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   }
 
   [Subject(typeof(DashboardController))]
-  public class when_asked_for_the_default_view_for_admin_user : specification_for_dashboard_controller
+  public class when_asked_for_the_default_view_for_admin_user_who_is_not_in_current_season : specification_for_dashboard_controller
   {
     static ViewResultHelper<IndexViewModel> resultHelper;
 
     Establish context = () => {
       var principal = authenticationService.MockPrincipal;
       principal.Roles = new string[] { Roles.Administrators };
-      principal.MockIdentity.Name = "1";
+      principal.MockIdentity.Name = "admin";
     };
 
     Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
@@ -186,6 +189,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_include_the_alerts_gadget = () =>
       resultHelper.SidebarGadgets.Keys.ShouldContain(AlertsSidebarGadget.Name);
+
+    It should_not_return_current_season_stats = () =>
+      resultHelper.Model.HasCurrentSeasonStats.ShouldBeFalse();
   }
 
   //[Subject(typeof(DashboardController))]

@@ -42,6 +42,7 @@ namespace ClubPool.Web.Controllers.Dashboard
       viewModel.UserIsAdmin = principal.IsInRole(Roles.Administrators);
       viewModel.UserFullName = user.FullName;
       viewModel.CurrentSeasonStats = GetCurrentSeasonStatsViewModel(user);
+      viewModel.HasCurrentSeasonStats = viewModel.CurrentSeasonStats != null;
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);

@@ -10,6 +10,7 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
   {
     public bool UserIsAdmin { get; set; }
     public string UserFullName { get; set; }
+    public bool HasCurrentSeasonStats { get; set; }
     public StatsViewModel CurrentSeasonStats { get; set; }
   }
 
