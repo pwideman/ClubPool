@@ -14,6 +14,7 @@ using xVal.ServerSide;
 
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.ApplicationServices.Authentication;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
@@ -238,60 +239,82 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize]
     public ActionResult Edit(int id) {
       var user = userRepository.Get(id);
-      var viewModel = new EditViewModel(user);
       var currentPrincipal = authenticationService.GetCurrentPrincipal();
-
-      if (currentPrincipal.IsInRole(Roles.Administrators)) {
-        // allow admins to edit everything
-        viewModel.ShowRoles = true;
-        viewModel.ShowStatus = true;
+      var canEditUser = CanEditUser(currentPrincipal, user);
+      if (!canEditUser) {
+        return ErrorView("You are not authorized to edit this user");
+      }
+      var canEditStatus = CanEditUserStatus(currentPrincipal, user);
+      var canEditRoles = CanEditUserRoles(currentPrincipal, user);
+      var viewModel = new EditViewModel(user);
+      viewModel.ShowStatus = canEditStatus;
+      viewModel.ShowRoles = canEditRoles;
+      if (canEditRoles) {
         viewModel.LoadAvailableRoles(roleRepository);
-      }
-      else if (currentPrincipal.IsInRole(Roles.Officers)) {
-        // allow officers to edit status, not roles
-        // TODO: Should an officer be able to change their own status
-        // or edit an administrator user? Probably not.
-        viewModel.ShowStatus = true;
-      }
-      else {
-        // normal user - first check to see if the logged in user is the same
-        // as the user being edited, if not, do not allow editing. Otherwise,
-        // allow editing basic properties
-        if (!currentPrincipal.Identity.Name.Equals(user.Username)) {
-          return ErrorView("You are not authorized to edit this user's information");
-        }
-        else {
-          viewModel.ShowRoles = false;
-          viewModel.ShowStatus = false;
-        }
       }
       return View(viewModel);
     }
+
+
+    // TODO: These 3 CanEdit* methods should really be in some type of service,
+    // maybe the AuthenticationService?
+    protected bool CanEditUser(ClubPoolPrincipal principal, User user) {
+      // admins & officers can edit the basic properties of all users,
+      // normal users can edit their own basic properties
+      var editorIsAdmin = principal.IsInRole(Roles.Administrators);
+      var editorIsOfficer = principal.IsInRole(Roles.Officers);
+      var editingSelf = user.Id == principal.UserId;
+      return editingSelf || editorIsOfficer || editorIsAdmin;
+    }
+
+    protected bool CanEditUserStatus(ClubPoolPrincipal principal, User user) {
+      // admins can edit the status of all users, officers can edit the status of
+      // all other non admins but not themselves, normal users can not edit status
+      var editorIsAdmin = principal.IsInRole(Roles.Administrators);
+      if (editorIsAdmin) {
+        // admins can edit the status of all other users
+        return true;
+      }
+      var editorIsOfficer = principal.IsInRole(Roles.Officers);
+      if (!editorIsOfficer) {
+        // if the user is neither admin nor officer, can't edit any status
+        return false;
+      }
+      // if we get here, editor is officer, can edit status of other non-admin
+      // users but not self
+      var editingSelf = user.Id == principal.UserId;
+      var userIsAdmin = user.Roles.Where(r => r.Name.Equals(Roles.Administrators)).Any();
+      return (!(editingSelf || userIsAdmin));
+    }
+
+    protected bool CanEditUserRoles(ClubPoolPrincipal principal, User user) {
+      // only admins can edit roles
+      return principal.IsInRole(Roles.Administrators);
+    }
+
 
     [HttpPost]
     [Transaction]
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
-      var currentPrincipal = authenticationService.GetCurrentPrincipal();
-      var userIsAdmin = currentPrincipal.IsInRole(Roles.Administrators);
-      var userIsOfficer = currentPrincipal.IsInRole(Roles.Officers);
-      // must reset these in case we redisplay the form
-      viewModel.ShowStatus = userIsOfficer || userIsAdmin;
-      viewModel.ShowRoles = userIsAdmin;
-
-      if (!ValidateViewModel(viewModel)) {
-        return View(viewModel);
-      }
-
       var user = userRepository.Get(viewModel.Id);
       if (null == user) {
         return ErrorView("The user you were editing was deleted by another user");
       }
+      var currentPrincipal = authenticationService.GetCurrentPrincipal();
+      var canEditUser = CanEditUser(currentPrincipal, user);
+      if (!canEditUser) {
+        return ErrorView("You are not authorized to edit this user");
+      }
+      var canEditStatus = CanEditUserStatus(currentPrincipal, user);
+      var canEditRoles = CanEditUserRoles(currentPrincipal, user);
+      // must reset these in case we redisplay the form
+      viewModel.ShowStatus = canEditStatus;
+      viewModel.ShowRoles = canEditRoles;
 
-      var editingSelf = user.Id == currentPrincipal.UserId;
-      if (!editingSelf && !userIsAdmin && !userIsOfficer) {
-        return ErrorView("You are not authorized to perform that action");
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
       }
 
       if (viewModel.Version != user.Version) {
@@ -322,11 +345,11 @@ namespace ClubPool.Web.Controllers.Users
       }
       user.FirstName = viewModel.FirstName;
       user.LastName = viewModel.LastName;
-      if (userIsOfficer || userIsAdmin) {
+      if (canEditStatus) {
         user.IsApproved = viewModel.IsApproved;
         user.IsLocked = viewModel.IsLocked;
       }
-      if (userIsAdmin) {
+      if (canEditRoles) {
         user.RemoveAllRoles();
         if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
           foreach (int roleId in viewModel.Roles) {

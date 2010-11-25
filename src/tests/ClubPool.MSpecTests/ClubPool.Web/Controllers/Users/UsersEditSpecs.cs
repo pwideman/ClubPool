@@ -27,31 +27,60 @@ using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 {
-  public abstract class specification_for_users_edit_get : specification_for_users_controller
+  public abstract class specification_for_users_edit : specification_for_users_controller
   {
     protected static int userId = 1;
     protected static User user;
     protected static List<Role> roles;
+    protected static Role adminRole;
+    protected static Role officerRole;
 
     Establish context = () => {
       roles = new List<Role>();
-      for (var i = 0; i < 5; i++) {
-        var role = new Role("role" + i.ToString());
-        role.SetIdTo(i);
-        roles.Add(role);
-      }
+      adminRole = new Role(Roles.Administrators);
+      adminRole.SetIdTo(1);
+      roles.Add(adminRole);
+      officerRole = new Role(Roles.Officers);
+      officerRole.SetIdTo(2);
+      roles.Add(officerRole);
       user = new User("user", "pass", "user", "one", "user@user.com");
-      user.AddRole(roles[0]);
-      user.AddRole(roles[1]);
       user.SetIdTo(userId);
+      user.SetVersionTo(1);
       userRepository.Stub(r => r.Get(userId)).Return(user);
       roleRepository.Stub(r => r.GetAll()).Return(roles.AsQueryable());
+      foreach (var role in roles) {
+        roleRepository.Stub(r => r.Get(role.Id)).Return(role);
+      }
     };
-
   }
 
+  public class specification_for_users_edit_post : specification_for_users_edit
+  {
+    protected static EditViewModel viewModel;
+    protected static bool isApproved = true;
+    protected static bool isLocked = false;
+
+    Establish context = () => {
+      viewModel = new EditViewModel() {
+        FirstName = "first",
+        LastName = "last",
+        Username = "newusername",
+        Email = "newemail@email.com",
+        IsLocked = !isLocked,
+        IsApproved = !isApproved,
+        Id = userId,
+        Roles = new int[] { adminRole.Id, officerRole.Id },
+        Version = 1
+      };
+
+      user.IsLocked = isLocked;
+      user.IsApproved = isApproved;
+    };
+  }
+
+
   [Subject(typeof(UsersController))]
-  public class when_asked_to_edit_a_user_by_an_admin_user : specification_for_users_edit_get
+  public class when_asked_to_edit_a_user_by_an_admin_user : specification_for_users_edit
   {
     static ViewResultHelper<EditViewModel> resultHelper;
 
@@ -93,7 +122,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
-  public class when_asked_to_edit_a_user_by_an_officer : specification_for_users_edit_get
+  public class when_asked_to_edit_a_normal_user_by_an_officer : specification_for_users_edit
   {
     static ViewResultHelper<EditViewModel> resultHelper;
 
@@ -129,13 +158,51 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
-  public class when_asked_to_edit_a_user_by_a_normal_user : specification_for_users_edit_get
+  public class when_asked_to_edit_an_officer_by_a_different_officer : specification_for_users_edit
   {
     static ViewResultHelper<EditViewModel> resultHelper;
 
     Establish context = () => {
-      authenticationService.MockPrincipal.Roles = new string[0];
-      authenticationService.MockPrincipal.MockIdentity.Name = user.Username;
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Officers };
+      user.AddRole(officerRole);
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(userId));
+
+    It should_initialize_the_Username_field = () =>
+      resultHelper.Model.Username.ShouldEqual(user.Username);
+
+    It should_initialize_the_FirstName_field = () =>
+      resultHelper.Model.FirstName.ShouldEqual(user.FirstName);
+
+    It should_initialize_the_LastName_field = () =>
+      resultHelper.Model.LastName.ShouldEqual(user.LastName);
+
+    It should_show_the_status_fields = () =>
+      resultHelper.Model.ShowStatus.ShouldBeTrue();
+
+    It should_initialize_the_Approved_field = () =>
+      resultHelper.Model.IsApproved.ShouldEqual(user.IsApproved);
+
+    It should_initialize_the_Locked_field = () =>
+      resultHelper.Model.IsLocked.ShouldEqual(user.IsLocked);
+
+    It should_initialize_the_Email_field = () =>
+      resultHelper.Model.Email.ShouldEqual(user.Email);
+
+    It should_not_show_the_roles_fields = () =>
+      resultHelper.Model.ShowRoles.ShouldBeFalse();
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_an_officer_asks_to_edit_himself : specification_for_users_edit
+  {
+    static ViewResultHelper<EditViewModel> resultHelper;
+
+    Establish context = () => {
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Officers };
+      authenticationService.MockPrincipal.User = user;
+      user.AddRole(officerRole);
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(userId));
@@ -160,7 +227,69 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
-  public class when_asked_to_edit_a_user_by_a_different_normal_user : specification_for_users_edit_get
+  public class when_a_normal_user_asks_to_edit_himself : specification_for_users_edit
+  {
+    static ViewResultHelper<EditViewModel> resultHelper;
+
+    Establish context = () => {
+      authenticationService.MockPrincipal.Roles = new string[0];
+      authenticationService.MockPrincipal.User = user;
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(userId));
+
+    It should_initialize_the_Username_field = () =>
+      resultHelper.Model.Username.ShouldEqual(user.Username);
+
+    It should_initialize_the_FirstName_field = () =>
+      resultHelper.Model.FirstName.ShouldEqual(user.FirstName);
+
+    It should_initialize_the_LastName_field = () =>
+      resultHelper.Model.LastName.ShouldEqual(user.LastName);
+
+    It should_initialize_the_Email_field = () =>
+      resultHelper.Model.Email.ShouldEqual(user.Email);
+
+    It should_not_show_the_status_fields = () =>
+      resultHelper.Model.ShowStatus.ShouldBeFalse();
+
+    It should_not_show_the_roles_fields = () =>
+      resultHelper.Model.ShowRoles.ShouldBeFalse();
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_edit_an_admin_user_by_an_officer : specification_for_users_edit
+  {
+    static ViewResultHelper<EditViewModel> resultHelper;
+
+    Establish context = () => {
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Officers };
+      user.AddRole(adminRole);
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(userId));
+
+    It should_initialize_the_Username_field = () =>
+      resultHelper.Model.Username.ShouldEqual(user.Username);
+
+    It should_initialize_the_FirstName_field = () =>
+      resultHelper.Model.FirstName.ShouldEqual(user.FirstName);
+
+    It should_initialize_the_LastName_field = () =>
+      resultHelper.Model.LastName.ShouldEqual(user.LastName);
+
+    It should_initialize_the_Email_field = () =>
+      resultHelper.Model.Email.ShouldEqual(user.Email);
+
+    It should_not_show_the_status_fields = () =>
+      resultHelper.Model.ShowStatus.ShouldBeFalse();
+
+    It should_not_show_the_roles_fields = () =>
+      resultHelper.Model.ShowRoles.ShouldBeFalse();
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_edit_a_user_by_a_different_normal_user : specification_for_users_edit
   {
     static ViewResultHelper resultHelper;
 
@@ -178,56 +307,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     controller.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
   }
 
-  public class specification_for_users_edit_post : specification_for_users_controller
-  {
-    protected static EditViewModel viewModel;
-    protected static User user;
-    protected static int userId;
-    protected static List<Role> roles;
-    protected static bool isApproved = true;
-    protected static bool isLocked = false;
-
-    Establish context = () => {
-      userId = 1;
-
-      roles = new List<Role>();
-      for (var i = 0; i < 5; i++) {
-        var role = new Role("role" + i.ToString());
-        role.SetIdTo(i);
-        roles.Add(role);
-        roleRepository.Stub(r => r.Get(i)).Return(role);
-      }
-
-      viewModel = new EditViewModel() {
-        FirstName = "user",
-        LastName = "test",
-        Username = "testuser",
-        Email = "user@user.com",
-        IsLocked = !isLocked,
-        IsApproved = !isApproved,
-        Id = userId,
-        Roles = new int[] { 0, 1 },
-        Version = 1
-      };
-
-      user = new User("temp", "pass", "temp", "temp", "temp@temp.com") {
-        IsLocked = isLocked,
-        IsApproved = isApproved,
-      };
-      user.SetIdTo(userId);
-      user.SetVersionTo(1);
-
-      roleRepository.Stub(r => r.GetAll()).Return(roles.AsQueryable());
-      userRepository.Stub(r => r.Get(userId)).Return(user);
-
-      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
-    };
-  }
-
   [Subject(typeof(UsersController))]
-  public class when_the_edit_form_is_posted_with_valid_data_by_admin_user : specification_for_users_edit_post
+  public class when_the_edit_form_is_posted_by_admin_user : specification_for_users_edit_post
   {
     static RedirectToRouteResultHelper resultHelper;
+
+    Establish context = () =>
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
 
     Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
 
@@ -263,7 +349,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
-  public class when_the_edit_form_is_posted_with_valid_data_by_officer_user : specification_for_users_edit_post
+  public class when_the_edit_form_is_posted_for_a_normal_user_by_an_officer_user : specification_for_users_edit_post
   {
     static RedirectToRouteResultHelper resultHelper;
 
@@ -291,10 +377,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_update_the_email = () =>
       user.Email.ShouldEqual(viewModel.Email);
 
-    It should_update_the_users_approved_status = () =>
+    It should_update_the_approved_status = () =>
       user.IsApproved.ShouldEqual(viewModel.IsApproved);
 
-    It should_update_the_users_locked_status = () =>
+    It should_update_the_locked_status = () =>
       user.IsLocked.ShouldEqual(viewModel.IsLocked);
 
     It should_not_update_the_roles = () =>
@@ -305,7 +391,98 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
-  public class when_the_edit_form_is_posted_with_valid_data_by_normal_user : specification_for_users_edit_post
+  public class when_the_edit_form_is_posted_for_an_officer_user_by_a_different_officer_user : specification_for_users_edit_post
+  {
+    static RedirectToRouteResultHelper resultHelper;
+
+    Establish context = () => {
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Officers };
+      var officer = new User("officer", "test", "test", "test", "test");
+      officer.SetIdTo(22);
+      officer.AddRole(officerRole);
+      authenticationService.MockPrincipal.User = officer;
+      user.AddRole(officerRole);
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_users_edit_view = () =>
+      resultHelper.ShouldRedirectTo("users", "edit");
+
+    It should_return_a_notification_message = () =>
+      controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
+
+    It should_update_the_username = () =>
+      user.Username.ShouldEqual(viewModel.Username);
+
+    It should_update_the_first_name = () =>
+      user.FirstName.ShouldEqual(viewModel.FirstName);
+
+    It should_update_the_last_name = () =>
+      user.LastName.ShouldEqual(viewModel.LastName);
+
+    It should_update_the_email = () =>
+      user.Email.ShouldEqual(viewModel.Email);
+
+    It should_update_the_approved_status = () =>
+      user.IsApproved.ShouldEqual(viewModel.IsApproved);
+
+    It should_update_the_locked_status = () =>
+      user.IsLocked.ShouldEqual(viewModel.IsLocked);
+
+    It should_not_update_the_roles = () =>
+      user.Roles.Count().ShouldEqual(1);
+
+    It should_not_update_the_id = () =>
+      user.Id.ShouldEqual(viewModel.Id);
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_for_an_officer_user_by_himself : specification_for_users_edit_post
+  {
+    static RedirectToRouteResultHelper resultHelper;
+
+    Establish context = () => {
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Officers };
+      authenticationService.MockPrincipal.User = user;
+      user.AddRole(officerRole);
+    };
+
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
+
+    It should_redirect_to_the_users_edit_view = () =>
+      resultHelper.ShouldRedirectTo("users", "edit");
+
+    It should_return_a_notification_message = () =>
+      controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
+
+    It should_update_the_username = () =>
+      user.Username.ShouldEqual(viewModel.Username);
+
+    It should_update_the_first_name = () =>
+      user.FirstName.ShouldEqual(viewModel.FirstName);
+
+    It should_update_the_last_name = () =>
+      user.LastName.ShouldEqual(viewModel.LastName);
+
+    It should_update_the_email = () =>
+      user.Email.ShouldEqual(viewModel.Email);
+
+    It should_not_update_the_approved_status = () =>
+      user.IsApproved.ShouldEqual(isApproved);
+
+    It should_not_update_the_locked_status = () =>
+      user.IsLocked.ShouldEqual(isLocked);
+
+    It should_not_update_the_roles = () =>
+      user.Roles.Count().ShouldEqual(1);
+
+    It should_not_update_the_id = () =>
+      user.Id.ShouldEqual(viewModel.Id);
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_the_edit_form_is_posted_for_a_normal_user_by_the_user : specification_for_users_edit_post
   {
     static RedirectToRouteResultHelper resultHelper;
 
@@ -376,6 +553,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     Establish context = () => {
       user.SetVersionTo(version);
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
     };
 
     Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Edit(viewModel));
@@ -394,6 +572,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     Establish context = () => {
       viewModel.Id = 2;
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
     };
 
     Because of = () => resultHelper = new ViewResultHelper(controller.Edit(viewModel));
@@ -412,6 +591,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     Establish context = () => {
       viewModel.Username = null;
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(viewModel));
@@ -435,6 +615,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Stub(r => r.DbContext).Return(MockRepository.GenerateStub<SharpArch.Core.PersistenceSupport.IDbContext>());
       membershipService.Stub(s => s.UsernameIsInUse(null)).IgnoreArguments().Return(true);
       roleRepository.Stub(s => s.GetAll()).Return(new List<Role>().AsQueryable());
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(viewModel));
@@ -458,6 +639,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Stub(r => r.DbContext).Return(MockRepository.GenerateStub<SharpArch.Core.PersistenceSupport.IDbContext>());
       membershipService.Stub(s => s.EmailIsInUse(null)).IgnoreArguments().Return(true);
       roleRepository.Stub(s => s.GetAll()).Return(new List<Role>().AsQueryable());
+      authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
     };
 
     Because of = () => resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(viewModel));
