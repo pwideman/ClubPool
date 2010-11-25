@@ -108,8 +108,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       // set up the repositories
       seasonRepository.Stub(r => r.GetAll()).Return(new List<Season>() { season }.AsQueryable());
       seasonRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(season);
-      //userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
-      //matchResultRepository.Stub(r => r.GetAll()).Return(matchResults.AsQueryable());
       matchResultRepository.Stub(r => r.GetMatchResultsForPlayerAndGameType(null, GameType.EightBall)).IgnoreArguments().Return(null).WhenCalled(m => {
         var user = m.Arguments[0] as User;
         var gameType = (GameType)m.Arguments[1];
@@ -117,12 +115,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       });
       foreach (var user in users) {
         user.UpdateSkillLevel(season.GameType, matchResultRepository);
-        //userRepository.Stub(r => r.Get(user.Id)).Return(user);
       }
-      //userRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
-      //  var criteria = m.Arguments[0] as Expression<Func<User, bool>>;
-      //  m.ReturnValue = users.AsQueryable().Where(criteria).SingleOrDefault();
-      //});
       SetUpRepository(matchResultRepository, matchResults);
       SetUpRepository(userRepository, users);
       SetUpRepository(teamRepository, teams);
@@ -152,6 +145,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static string teammate;
     static Meet lastMeet;
     static Team team;
+    static int seasonResultsCount;
 
     Establish context = () => {
       authenticationService.MockPrincipal.MockIdentity.Name = username;
@@ -161,6 +155,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       teamName = team.Name;
       teammate = team.Players.Where(p => p != user).Single().FullName;
       lastMeet = meets.Where(m => m.Teams.Contains(team) && m.IsComplete).OrderByDescending(m => m.Week).First();
+      seasonResultsCount = (from m in meets
+                            where m.Teams.Contains(team) && m.IsComplete
+                            from match in m.Matches
+                            where match.Players.Contains(user)
+                            select match).Count();
     };
 
     Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
@@ -200,6 +199,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_return_the_last_meet = () =>
       resultHelper.Model.LastMeetStats.OpponentTeam.ShouldEqual(lastMeet.Teams.Where(t => t != team).First().Name);
+
+    It should_return_season_results = () =>
+      resultHelper.Model.HasSeasonResults.ShouldBeTrue();
+
+    It should_return_the_season_results = () =>
+      resultHelper.Model.SeasonResults.Count().ShouldEqual(seasonResultsCount);
   }
 
   [Subject(typeof(DashboardController))]

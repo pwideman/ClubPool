@@ -955,29 +955,36 @@ div.userinfo-tab {
 
 // dashboard/index
 
-div.dashboard-items {
+div.dashboard-item-container {
+  width: 49%;
+  display: inline-block;
+  vertical-align: top;
   div.dashboard-item {
-    border: 2px solid @standard_blue;
+    border: 2px solid @medium_blue;
     .corner(8px);
-    display: inline-block;
     vertical-align: top;
     margin: 6px;
+    text-align: center;
     div.dashboard-item-header {
       .topcorner(4px);
-      background-color: @standard_blue;
+      background-color: @medium_blue;
       text-align: center;
-      color: white;
+      color: black;
       padding: 6px 24px;
+      font-weight: bold;
+      font-size: 110%;
     }
     div.dashboard-item-content {
       padding: 8px 24px;
       text-align: center;
+      margin: auto;
       ul {
         text-align: left;
         list-style-type: none;
         padding: 0;
       }
-      table.lastmeet {
+      table.results {
+        margin: auto;
         thead {
           tr {
             th {
@@ -996,14 +1003,25 @@ div.dashboard-items {
               min-width: 120px;
             }
           }
+          tr.winner {
+            background-color: @yellow_highlight;
+          }
+        }
+      }
+      table#lastmeet {
+        tbody {
           tr.match {
             border-bottom: 1px solid @standard_blue;
           }
           tr.player {
             border-bottom: 1px dashed #CCCCCC;
           }
-          tr.winner {
-            background-color: @yellow_highlight;
+        }
+      }
+      table#season_results {
+        tbody {
+          tr {
+            border-bottom: 1px dashed #CCCCCC;
           }
         }
       }

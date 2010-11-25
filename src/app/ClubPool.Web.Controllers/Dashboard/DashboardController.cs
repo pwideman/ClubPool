@@ -56,14 +56,44 @@ namespace ClubPool.Web.Controllers.Dashboard
       viewModel.HasCurrentSeasonStats = viewModel.CurrentSeasonStats != null;
       viewModel.LastMeetStats = GetLastMeetStats(user);
       viewModel.HasLastMeetStats = viewModel.LastMeetStats != null;
+      viewModel.SeasonResults = GetSeasonResults(user);
+      viewModel.HasSeasonResults = viewModel.SeasonResults != null;
 
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
     }
 
-    protected MeetViewModel GetLastMeetStats(User user) {
-      MeetViewModel viewModel = null;
+    protected IEnumerable<SeasonResultViewModel> GetSeasonResults(User user) {
+      List<SeasonResultViewModel> results = null;
+      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
+      if (null != currentSeason) {
+        var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
+        if (null != team) {
+          var matches = from m in team.Division.Meets
+                           where m.Teams.Contains(team) && m.IsComplete
+                           orderby m.Week descending
+                           from match in m.Matches
+                           where match.Players.Contains(user)
+                           select match;
+          if (matches.Any()) {
+            results = new List<SeasonResultViewModel>();
+            foreach (var match in matches) {
+              var result = new SeasonResultViewModel() {
+                Player = match.Players.Where(p => p != user).First().FullName,
+                Team = match.Meet.Teams.Where(t => t != team).First().Name,
+                Win = match.Winner == user
+              };
+              results.Add(result);
+            }
+          }
+        }
+      }
+      return results;
+    }
+
+    protected LastMeetViewModel GetLastMeetStats(User user) {
+      LastMeetViewModel viewModel = null;
       var currentSeason = seasonRepository.FindOne(s => s.IsActive);
       if (null != currentSeason) {
         var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
@@ -73,7 +103,7 @@ namespace ClubPool.Web.Controllers.Dashboard
                       orderby m.Week descending
                       select m).FirstOrDefault();
           if (null != meet) {
-            viewModel = new MeetViewModel(meet, team);
+            viewModel = new LastMeetViewModel(meet, team);
           }
         }
       }
