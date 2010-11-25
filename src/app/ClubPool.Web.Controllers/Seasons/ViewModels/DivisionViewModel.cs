@@ -49,6 +49,7 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
 
     public ScheduleViewModel(IEnumerable<Meet> meets, DateTime startingDate) {
       Weeks = meets.GroupBy(meet => meet.Week)
+        .OrderBy(g => g.Key)
         .Select(g => new ScheduleWeekViewModel() {
           Week = g.Key + 1,
           Date = startingDate.AddDays(g.Key * 7),
