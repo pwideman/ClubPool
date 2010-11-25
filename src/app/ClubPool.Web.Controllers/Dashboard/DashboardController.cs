@@ -22,15 +22,26 @@ namespace ClubPool.Web.Controllers.Dashboard
     protected IAuthenticationService authenticationService;
     protected IUserRepository userRepository;
     protected ISeasonRepository seasonRepository;
+    protected IMeetRepository meetRepository;
+    protected ITeamRepository teamRepository;
 
-    public DashboardController(IAuthenticationService authSvc, IUserRepository userRepository, ISeasonRepository seasonRepository) {
+    public DashboardController(IAuthenticationService authSvc,
+      IUserRepository userRepository,
+      ISeasonRepository seasonRepository,
+      IMeetRepository meetRepository,
+      ITeamRepository teamRepository) {
+
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
       Check.Require(null != seasonRepository, "seasonRepository cannot be null");
+      Check.Require(null != meetRepository, "meetRepository cannot be null");
+      Check.Require(null != teamRepository, "teamRepository cannot be null");
 
       authenticationService = authSvc;
       this.userRepository = userRepository;
       this.seasonRepository = seasonRepository;
+      this.meetRepository = meetRepository;
+      this.teamRepository = teamRepository;
     }
 
     [Authorize]
@@ -43,15 +54,36 @@ namespace ClubPool.Web.Controllers.Dashboard
       viewModel.UserFullName = user.FullName;
       viewModel.CurrentSeasonStats = GetCurrentSeasonStatsViewModel(user);
       viewModel.HasCurrentSeasonStats = viewModel.CurrentSeasonStats != null;
+      viewModel.LastMeetStats = GetLastMeetStats(user);
+      viewModel.HasLastMeetStats = viewModel.LastMeetStats != null;
+
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
     }
 
+    protected MeetViewModel GetLastMeetStats(User user) {
+      MeetViewModel viewModel = null;
+      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
+      if (null != currentSeason) {
+        var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
+        if (null != team) {
+          var meet = (from m in team.Division.Meets
+                      where m.Teams.Contains(team) && m.IsComplete
+                      orderby m.Week descending
+                      select m).FirstOrDefault();
+          if (null != meet) {
+            viewModel = new MeetViewModel(meet, team);
+          }
+        }
+      }
+      return viewModel;
+    }
+
     protected StatsViewModel GetCurrentSeasonStatsViewModel(User user) {
       StatsViewModel vm = null;
       // first see if there's a current season
-      var currentSeason = seasonRepository.GetAll().Where(s => s.IsActive).FirstOrDefault();
+      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
       if (null != currentSeason) {
         // now see if this user is on a team in this season
         var teamQuery = from d in currentSeason.Divisions

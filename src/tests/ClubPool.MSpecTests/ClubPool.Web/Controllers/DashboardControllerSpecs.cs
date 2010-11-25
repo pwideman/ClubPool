@@ -8,6 +8,7 @@ using System.Security.Principal;
 using Rhino.Mocks;
 using Machine.Specifications;
 using SharpArch.Testing;
+using SharpArch.Core.DomainModel;
 
 using ClubPool.Web.Controllers.Dashboard;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
@@ -30,20 +31,25 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static IUserRepository userRepository;
     protected static ISeasonRepository seasonRepository;
     protected static IMatchResultRepository matchResultRepository;
+    protected static IMeetRepository meetRepository;
+    protected static ITeamRepository teamRepository;
     protected static Season season;
     protected static int seasonId = 1;
     protected static IList<User> users;
     protected static IList<Team> teams;
     protected static IList<MatchResult> matchResults;
     protected static IList<Match> matches;
+    protected static IList<Meet> meets;
 
     Establish context = () => {
       authenticationService = AuthHelper.CreateMockAuthenticationService();
       userRepository = MockRepository.GenerateStub<IUserRepository>();
       seasonRepository = MockRepository.GenerateStub<ISeasonRepository>();
       matchResultRepository = MockRepository.GenerateStub<IMatchResultRepository>();
+      teamRepository = MockRepository.GenerateStub<ITeamRepository>();
+      meetRepository = MockRepository.GenerateStub<IMeetRepository>();
 
-      controller = new DashboardController(authenticationService, userRepository, seasonRepository);
+      controller = new DashboardController(authenticationService, userRepository, seasonRepository, meetRepository, teamRepository);
       ControllerHelper.CreateMockControllerContext(controller);
 
       teams = new List<Team>();
@@ -75,6 +81,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       int i = 0;
       matchResults = new List<MatchResult>();
       matches = new List<Match>();
+      meets = new List<Meet>();
       var meetQuery = from m in division.Meets
                       group m by m.Week into g
                       select new { Week = g.Key, Meets = g};
@@ -82,6 +89,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       foreach (var week in meetQuery) {
         var meetDate = division.StartingDate.AddDays(week.Week);
         foreach (var meet in week.Meets) {
+          meets.Add(meet);
           meet.IsComplete = true;
           foreach (var match in meet.Matches) {
             match.IsComplete = true;
@@ -99,8 +107,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       }
       // set up the repositories
       seasonRepository.Stub(r => r.GetAll()).Return(new List<Season>() { season }.AsQueryable());
-      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
-      matchResultRepository.Stub(r => r.GetAll()).Return(matchResults.AsQueryable());
+      seasonRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(season);
+      //userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
+      //matchResultRepository.Stub(r => r.GetAll()).Return(matchResults.AsQueryable());
       matchResultRepository.Stub(r => r.GetMatchResultsForPlayerAndGameType(null, GameType.EightBall)).IgnoreArguments().Return(null).WhenCalled(m => {
         var user = m.Arguments[0] as User;
         var gameType = (GameType)m.Arguments[1];
@@ -108,13 +117,28 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       });
       foreach (var user in users) {
         user.UpdateSkillLevel(season.GameType, matchResultRepository);
-        userRepository.Stub(r => r.Get(user.Id)).Return(user);
+        //userRepository.Stub(r => r.Get(user.Id)).Return(user);
       }
-      userRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
-        var criteria = m.Arguments[0] as Expression<Func<User, bool>>;
-        m.ReturnValue = users.AsQueryable().Where(criteria).SingleOrDefault();
-      });
+      //userRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
+      //  var criteria = m.Arguments[0] as Expression<Func<User, bool>>;
+      //  m.ReturnValue = users.AsQueryable().Where(criteria).SingleOrDefault();
+      //});
+      SetUpRepository(matchResultRepository, matchResults);
+      SetUpRepository(userRepository, users);
+      SetUpRepository(teamRepository, teams);
+      SetUpRepository(meetRepository, meets);
     };
+
+    protected static void SetUpRepository<T>(ILinqRepository<T> repository, IList<T> list) where T : Entity {
+      repository.Stub(r => r.GetAll()).Return(list.AsQueryable());
+      repository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
+        var criteria = m.Arguments[0] as Expression<Func<T, bool>>;
+        m.ReturnValue = list.AsQueryable().Where(criteria).SingleOrDefault();
+      });
+      foreach (var item in list) {
+        repository.Stub(r => r.Get(item.Id)).Return(item);
+      }
+    }
   }
 
   [Subject(typeof(DashboardController))]
@@ -126,16 +150,17 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static int skillLevel;
     static string teamName;
     static string teammate;
-    static string personalRecord;
-    static string teamRecord;
+    static Meet lastMeet;
+    static Team team;
 
     Establish context = () => {
       authenticationService.MockPrincipal.MockIdentity.Name = username;
       user = users.Where(u => u.Username.Equals(username)).Single();
       skillLevel = user.SkillLevels.Where(sl => sl.GameType == season.GameType).First().Value;
-      var team = teams.Where(t => t.Players.Contains(user)).Single();
+      team = teams.Where(t => t.Players.Contains(user)).Single();
       teamName = team.Name;
       teammate = team.Players.Where(p => p != user).Single().FullName;
+      lastMeet = meets.Where(m => m.Teams.Contains(team) && m.IsComplete).OrderByDescending(m => m.Week).First();
     };
 
     Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
@@ -169,6 +194,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_return_the_current_season_stats_team_record = () =>
       resultHelper.Model.CurrentSeasonStats.TeamRecord.ShouldNotBeEmpty();
+
+    It should_return_last_meet_stats = () =>
+      resultHelper.Model.HasLastMeetStats.ShouldBeTrue();
+
+    It should_return_the_last_meet = () =>
+      resultHelper.Model.LastMeetStats.OpponentTeam.ShouldEqual(lastMeet.Teams.Where(t => t != team).First().Name);
   }
 
   [Subject(typeof(DashboardController))]
@@ -192,6 +223,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
     It should_not_return_current_season_stats = () =>
       resultHelper.Model.HasCurrentSeasonStats.ShouldBeFalse();
+
+    It should_not_return_last_meet_stats = () =>
+      resultHelper.Model.HasLastMeetStats.ShouldBeFalse();
   }
 
   //[Subject(typeof(DashboardController))]

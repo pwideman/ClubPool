@@ -956,20 +956,57 @@ div.userinfo-tab {
 // dashboard/index
 
 div.dashboard-items {
-
   div.dashboard-item {
-    border: 1px solid @light_blue;
+    border: 2px solid @standard_blue;
     .corner(8px);
     display: inline-block;
+    vertical-align: top;
+    margin: 6px;
     div.dashboard-item-header {
-      .topcorner(6px);
-      background-color: @light_blue;
-      color: black;
+      .topcorner(4px);
+      background-color: @standard_blue;
       text-align: center;
-      padding: 6px;
+      color: white;
+      padding: 6px 24px;
     }
     div.dashboard-item-content {
-      padding: 8px;
+      padding: 8px 24px;
+      text-align: center;
+      ul {
+        text-align: left;
+        list-style-type: none;
+        padding: 0;
+      }
+      table.lastmeet {
+        thead {
+          tr {
+            th {
+              padding: 4px 8px;
+              border-bottom: 2px solid @dark_blue;
+            }
+          }
+        }
+        tbody {
+          tr {
+            td {
+              text-align: center;
+              padding: 6px;
+            }
+            td.player {
+              min-width: 120px;
+            }
+          }
+          tr.match {
+            border-bottom: 1px solid @standard_blue;
+          }
+          tr.player {
+            border-bottom: 1px dashed #CCCCCC;
+          }
+          tr.winner {
+            background-color: @yellow_highlight;
+          }
+        }
+      }
     }
   }
 }
