@@ -47,98 +47,15 @@ namespace ClubPool.Web.Controllers.Dashboard
     [Authorize]
     [Transaction]
     public ActionResult Index() {
-      var viewModel = new IndexViewModel();
       var principal = authenticationService.GetCurrentPrincipal();
       var user = userRepository.FindOne(u => u.Username.Equals(principal.Identity.Name));
-      viewModel.UserIsAdmin = principal.IsInRole(Roles.Administrators);
-      viewModel.UserFullName = user.FullName;
-      viewModel.CurrentSeasonStats = GetCurrentSeasonStatsViewModel(user);
-      viewModel.HasCurrentSeasonStats = viewModel.CurrentSeasonStats != null;
-      viewModel.LastMeetStats = GetLastMeetStats(user);
-      viewModel.HasLastMeetStats = viewModel.LastMeetStats != null;
-      viewModel.SeasonResults = GetSeasonResults(user);
-      viewModel.HasSeasonResults = viewModel.SeasonResults != null;
+      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
+      var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
+      var viewModel = new IndexViewModel(user, team);
 
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
-    }
-
-    protected IEnumerable<SeasonResultViewModel> GetSeasonResults(User user) {
-      List<SeasonResultViewModel> results = null;
-      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
-      if (null != currentSeason) {
-        var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
-        if (null != team) {
-          var matches = from m in team.Division.Meets
-                           where m.Teams.Contains(team) && m.IsComplete
-                           orderby m.Week descending
-                           from match in m.Matches
-                           where match.Players.Contains(user)
-                           select match;
-          if (matches.Any()) {
-            results = new List<SeasonResultViewModel>();
-            foreach (var match in matches) {
-              var result = new SeasonResultViewModel() {
-                Player = match.Players.Where(p => p != user).First().FullName,
-                Team = match.Meet.Teams.Where(t => t != team).First().Name,
-                Win = match.Winner == user
-              };
-              results.Add(result);
-            }
-          }
-        }
-      }
-      return results;
-    }
-
-    protected LastMeetViewModel GetLastMeetStats(User user) {
-      LastMeetViewModel viewModel = null;
-      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
-      if (null != currentSeason) {
-        var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
-        if (null != team) {
-          var meet = (from m in team.Division.Meets
-                      where m.Teams.Contains(team) && m.IsComplete
-                      orderby m.Week descending
-                      select m).FirstOrDefault();
-          if (null != meet) {
-            viewModel = new LastMeetViewModel(meet, team);
-          }
-        }
-      }
-      return viewModel;
-    }
-
-    protected StatsViewModel GetCurrentSeasonStatsViewModel(User user) {
-      StatsViewModel vm = null;
-      // first see if there's a current season
-      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
-      if (null != currentSeason) {
-        // now see if this user is on a team in this season
-        var teamQuery = from d in currentSeason.Divisions
-                        from t in d.Teams
-                        where t.Players.Contains(user)
-                        select t;
-        var team = teamQuery.FirstOrDefault();
-        if (null != team) {
-          // if so, compile stats
-          vm = new StatsViewModel();
-          var skillLevel = user.SkillLevels.Where(sl => sl.GameType == currentSeason.GameType).FirstOrDefault();
-          if (null != skillLevel) {
-            vm.SkillLevel = skillLevel.Value;
-          }
-          vm.TeamName = team.Name;
-          vm.Teammate = team.Players.Where(p => p != user).Single().FullName;
-          var winsAndLosses = team.GetWinsAndLossesForPlayer(user);
-          var pct = (double)winsAndLosses[0] / (double)(winsAndLosses[0] + winsAndLosses[1]);
-          vm.PersonalRecord = string.Format("{0} - {1} ({2})", winsAndLosses[0], winsAndLosses[1], pct.ToString(".00"));
-          winsAndLosses = team.GetWinsAndLosses();
-          pct = (double)winsAndLosses[0] / (double)(winsAndLosses[0] + winsAndLosses[1]);
-          vm.TeamRecord = string.Format("{0} - {1} ({2})", winsAndLosses[0], winsAndLosses[1], pct.ToString(".00"));
-        }
-      }
-      return vm;
     }
 
     protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {

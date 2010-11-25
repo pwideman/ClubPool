@@ -54,8 +54,6 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
       teams = new List<Team>();
       users = new List<User>();
-      // set up an admin user that is not in a team
-      users.Add(new User("admin", "test", "admin", "user", "test"));
       // set up the test season
       season = new Season("test season", GameType.EightBall);
       season.IsActive = true;
@@ -216,6 +214,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       var principal = authenticationService.MockPrincipal;
       principal.Roles = new string[] { Roles.Administrators };
       principal.MockIdentity.Name = "admin";
+      // set up an admin user that is not in a team
+      var adminUser = new User("admin", "test", "admin", "user", "test");
+      adminUser.SetIdTo(1000);
+      adminUser.AddRole(new Role(Roles.Administrators));
+      users.Add(adminUser);
     };
 
     Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
