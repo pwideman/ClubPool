@@ -5,18 +5,22 @@
     <%= Html.ContentImage("home.png", "Home") %>
     <span><%= Model.UserFullName %>'s Dashboard</span>
   </div>
-  <% if (Model.HasCurrentSeasonStats) { %>
-  <div>
-    <div>Current Season Stats & Info</div>
-    <ul>
-      <li>Skill Level: <%= Model.CurrentSeasonStats.SkillLevel %></li>
-      <li>My Record: <%= Model.CurrentSeasonStats.PersonalRecord %></li>
-      <li>Team Name: <%= Model.CurrentSeasonStats.TeamName %></li>
-      <li>Teammate: <%= Model.CurrentSeasonStats.Teammate %></li>
-      <li>Team Record: <%= Model.CurrentSeasonStats.TeamRecord %></li>
-    </ul>
+  <div class="dashboard-items">
+    <% if (Model.HasCurrentSeasonStats) { %>
+    <div class="dashboard-item">
+      <div class="dashboard-item-header">Current Season Stats & Info</div>
+      <div class="dashboard-item-content">
+        <ul>
+          <li>Skill Level: <%= Model.CurrentSeasonStats.SkillLevel %></li>
+          <li>My Record: <%= Model.CurrentSeasonStats.PersonalRecord %></li>
+          <li>Team Name: <%= Model.CurrentSeasonStats.TeamName %></li>
+          <li>Teammate: <%= Model.CurrentSeasonStats.Teammate %></li>
+          <li>Team Record: <%= Model.CurrentSeasonStats.TeamRecord %></li>
+        </ul>
+      </div>
+    </div>
+    <% } %>
   </div>
-  <% } %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
