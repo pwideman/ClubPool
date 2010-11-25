@@ -9,7 +9,7 @@
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
   <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Approve(null))) { %>
     <%= Html.AntiForgeryToken() %>
-    <table style="width: 600px;">
+    <table style="width: 600px;" class="domain-list">
       <thead>
         <tr>
           <th>Name</th>
