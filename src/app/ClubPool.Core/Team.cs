@@ -81,6 +81,19 @@ namespace ClubPool.Core
       return new int[2] { wins, losses };
     }
 
+    public virtual double GetWinPercentage() {
+      var winsAndLosses = GetWinsAndLosses();
+      var wins = winsAndLosses[0];
+      var losses = winsAndLosses[1];
+      var total = wins + losses;
+      if (total > 0) {
+        return (double)wins / (double)total;
+      }
+      else {
+        return 0;
+      }
+    }
+
     public virtual void RemoveAllPlayers() {
       var tempPlayers = players.ToArray();
       foreach (var player in tempPlayers) {

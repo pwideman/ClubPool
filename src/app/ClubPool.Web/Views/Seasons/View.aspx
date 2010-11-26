@@ -66,7 +66,7 @@
               <% foreach (var team in division.Teams) { %>
                 <tr>
                   <td><%= team.Id%></td>
-                  <td><%= team.Name%></td>
+                  <td><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(team.Id), team.Name) %></td>
                   <td>
                   <% if (team.Players.Any()) { %>
                     <div class="season-view-player-list">

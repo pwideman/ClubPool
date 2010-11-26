@@ -9,15 +9,17 @@ Details:
     Players:
     <ul>
       <% foreach (var player in Model.Players) { %>
-      <li><%= string.Format("{0} ({1})", Html.Encode(player.Name), Html.Encode(player.EightBallSkillLevel)) %></li>
+      <li><%= Html.Encode(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel)) %></li>
       <% } %>
     </ul>
   </li>
   <li>Record: <%= Html.Encode(Model.Record) %></li>
+  <li>Division Ranking: <%= Html.Encode(Model.Rank) %></li>
 </ul>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
+Team Details
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">

@@ -20,6 +20,23 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
         players.Add(new DetailsPlayerViewModel(player));
       }
       Players = players;
+      Rank = CalculateRank(team);
+    }
+
+    protected string CalculateRank(Team team) {
+      var division = team.Division;
+      var q = division.Teams.OrderByDescending(t => t.GetWinPercentage()).Select((o,i) => new { Rank = i, Team = o }).ToArray();
+      var rank = q.Where(o => o.Team == team).Select(o => o.Rank).Single();
+      var tied = false;
+      if (rank > 0) {
+        var myWinPct = team.GetWinPercentage();
+        while (rank > 0 && q[rank-1].Team.GetWinPercentage() == myWinPct) {
+          rank--;
+        }
+        tied = (q[rank + 1].Team.GetWinPercentage() == myWinPct);
+      }
+      return (tied ? "T" : "") + (rank+1).ToString();
+
     }
 
     protected string GetRecord(Team team) {
