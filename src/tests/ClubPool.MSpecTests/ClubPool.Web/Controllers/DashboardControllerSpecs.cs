@@ -21,6 +21,7 @@ using ClubPool.Core.Contracts;
 using ClubPool.Testing.ApplicationServices.Authentication;
 using ClubPool.Web.Controllers;
 using ClubPool.Testing;
+using ClubPool.Testing.Core;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {
@@ -40,6 +41,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static IList<MatchResult> matchResults;
     protected static IList<Match> matches;
     protected static IList<Meet> meets;
+    protected static IList<Division> divisions;
 
     Establish context = () => {
       authenticationService = AuthHelper.CreateMockAuthenticationService();
@@ -54,58 +56,17 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 
       teams = new List<Team>();
       users = new List<User>();
-      // set up the test season
-      season = new Season("test season", GameType.EightBall);
-      season.IsActive = true;
-      season.SetIdTo(seasonId);
-      var userId = 1;
-      var division = new Division("Test Division", DateTime.Parse("1/1/2011"), season);
-      division.SetIdTo(1);
-      season.AddDivision(division);
-      for (int j = 1; j < 13; j++) {
-        var team = new Team(j.ToString(), division);
-        teams.Add(team);
-        division.AddTeam(team);
-        for (int k = userId; k < userId + 2; k++) {
-          var user = new User(k.ToString(), "test", k.ToString(), "user", "test");
-          user.SetIdTo(k);
-          team.AddPlayer(user);
-          users.Add(user);
-        }
-        userId += 2;
-      }
-      IDivisionRepository divisionRepository = MockRepository.GenerateStub<IDivisionRepository>();
-      division.CreateSchedule(divisionRepository);
-      int i = 0;
       matchResults = new List<MatchResult>();
       matches = new List<Match>();
       meets = new List<Meet>();
-      var meetQuery = from m in division.Meets
-                      group m by m.Week into g
-                      select new { Week = g.Key, Meets = g};
-
-      foreach (var week in meetQuery) {
-        var meetDate = division.StartingDate.AddDays(week.Week);
-        foreach (var meet in week.Meets) {
-          meets.Add(meet);
-          meet.IsComplete = true;
-          foreach (var match in meet.Matches) {
-            match.IsComplete = true;
-            var mr = new MatchResult(match.Player1, 20, 0, 3);
-            match.AddResult(mr);
-            matchResults.Add(mr);
-            mr = new MatchResult(match.Player2, 20, 0, 2);
-            match.AddResult(mr);
-            matchResults.Add(mr);
-            match.Winner = match.Player1;
-            match.DatePlayed = meetDate;
-            matches.Add(match);
-          }
-        }
-      }
+      divisions = new List<Division>();
+      season = DomainModelHelper.CreateTestSeason(users, divisions, teams, meets, matches, matchResults);
       // set up the repositories
-      seasonRepository.Stub(r => r.GetAll()).Return(new List<Season>() { season }.AsQueryable());
-      seasonRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(season);
+      DomainModelHelper.SetUpTestRepository(seasonRepository, new List<Season>() { season });
+      DomainModelHelper.SetUpTestRepository(matchResultRepository, matchResults);
+      DomainModelHelper.SetUpTestRepository(userRepository, users);
+      DomainModelHelper.SetUpTestRepository(teamRepository, teams);
+      DomainModelHelper.SetUpTestRepository(meetRepository, meets);
       matchResultRepository.Stub(r => r.GetMatchResultsForPlayerAndGameType(null, GameType.EightBall)).IgnoreArguments().Return(null).WhenCalled(m => {
         var user = m.Arguments[0] as User;
         var gameType = (GameType)m.Arguments[1];
@@ -114,22 +75,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       foreach (var user in users) {
         user.UpdateSkillLevel(season.GameType, matchResultRepository);
       }
-      SetUpRepository(matchResultRepository, matchResults);
-      SetUpRepository(userRepository, users);
-      SetUpRepository(teamRepository, teams);
-      SetUpRepository(meetRepository, meets);
     };
-
-    protected static void SetUpRepository<T>(ILinqRepository<T> repository, IList<T> list) where T : Entity {
-      repository.Stub(r => r.GetAll()).Return(list.AsQueryable());
-      repository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
-        var criteria = m.Arguments[0] as Expression<Func<T, bool>>;
-        m.ReturnValue = list.AsQueryable().Where(criteria).SingleOrDefault();
-      });
-      foreach (var item in list) {
-        repository.Stub(r => r.Get(item.Id)).Return(item);
-      }
-    }
   }
 
   [Subject(typeof(DashboardController))]

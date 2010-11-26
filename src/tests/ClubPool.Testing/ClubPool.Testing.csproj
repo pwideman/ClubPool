@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ApplicationServices\Authentication\AuthHelper.cs" />
     <Compile Include="ApplicationServices\Membership\PasswordHelper.cs" />
+    <Compile Include="Core\DomainModelHelper.cs" />
     <Compile Include="Core\TestMeet.cs" />
     <Compile Include="EntityVersionSetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +75,10 @@
     <ProjectReference Include="..\..\app\ClubPool.Core\ClubPool.Core.csproj">
       <Project>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</Project>
       <Name>ClubPool.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\app\ClubPool.Framework\ClubPool.Framework.csproj">
+      <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
+      <Name>ClubPool.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
