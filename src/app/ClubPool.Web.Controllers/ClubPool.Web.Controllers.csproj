@@ -118,6 +118,7 @@
     <Compile Include="Seasons\ViewModels\SeasonViewModel.cs" />
     <Compile Include="Teams\TeamsController.cs" />
     <Compile Include="Teams\ViewModels\CreateTeamViewModel.cs" />
+    <Compile Include="Teams\ViewModels\DetailsViewModel.cs" />
     <Compile Include="Teams\ViewModels\EditTeamViewModel.cs" />
     <Compile Include="Teams\ViewModels\PlayerViewModel.cs" />
     <Compile Include="Teams\ViewModels\TeamViewModel.cs" />

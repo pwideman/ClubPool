@@ -19,13 +19,19 @@ namespace ClubPool.Web.Controllers.Navigation
   {
     protected IAuthenticationService authenticationService;
     protected ISeasonRepository seasonRepository;
+    protected ITeamRepository teamRepository;
 
-    public NavigationController(IAuthenticationService authSvc, ISeasonRepository seasonRepository) {
+    public NavigationController(IAuthenticationService authSvc,
+      ISeasonRepository seasonRepository,
+      ITeamRepository teamRepository) {
+
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != seasonRepository, "seasonRepository cannot be null");
+      Check.Require(null != teamRepository, "teamRepository cannot be null");
 
       authenticationService = authSvc;
       this.seasonRepository = seasonRepository;
+      this.teamRepository = teamRepository;
     }
 
     public ActionResult Menu() {
@@ -42,7 +48,15 @@ namespace ClubPool.Web.Controllers.Navigation
       }
       if (seasonRepository.FindAll(s => s.IsActive).Any()) {
         viewModel.HasActiveSeason = true;
-        viewModel.ActiveSeasonId = seasonRepository.FindOne(s => s.IsActive).Id;
+        var season = seasonRepository.FindOne(s => s.IsActive);
+        viewModel.ActiveSeasonId = season.Id;
+        if (viewModel.UserIsLoggedIn) {
+          var team = teamRepository.FindOne(t => t.Division.Season == season && t.Players.Where(p => p.Id == viewModel.UserId).Any());
+          if (null != team) {
+            viewModel.HasCurrentTeam = true;
+            viewModel.CurrentTeamId = team.Id;
+          }
+        }
       }
       else {
         viewModel.HasActiveSeason = false;

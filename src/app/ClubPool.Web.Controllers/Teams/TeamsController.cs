@@ -21,6 +21,7 @@ using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
+using ClubPool.ApplicationServices.Authentication.Contracts;
 
 namespace ClubPool.Web.Controllers.Teams
 {
@@ -29,18 +30,22 @@ namespace ClubPool.Web.Controllers.Teams
     protected ITeamRepository teamRepository;
     protected IDivisionRepository divisionRepository;
     protected IUserRepository userRepository;
+    protected IAuthenticationService authService;
 
     public TeamsController(ITeamRepository teamRepo,
       IDivisionRepository divisionRepo,
-      IUserRepository userRepo) {
+      IUserRepository userRepo,
+      IAuthenticationService authService) {
 
       Check.Require(null != teamRepo, "teamRepo cannot be null");
       Check.Require(null != divisionRepo, "divisionRepo cannot be null");
       Check.Require(null != userRepo, "userRepo cannot be null");
+      Check.Require(null != authService, "authService cannot be null");
 
       teamRepository = teamRepo;
       divisionRepository = divisionRepo;
       userRepository = userRepo;
+      this.authService = authService;
     }
 
     [HttpGet]
@@ -177,5 +182,19 @@ namespace ClubPool.Web.Controllers.Teams
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(team.Division.Season.Id));
     }
+
+    [Authorize]
+    [Transaction]
+    public ActionResult Details(int id) {
+      //var user = userRepository.FindOne(u => u.Username.Equals(authService.GetCurrentPrincipal().Username));
+      var team = teamRepository.Get(id);
+      if (null == team) {
+        return HttpNotFound();
+      }
+      var viewModel = new DetailsViewModel(team);
+      return View(viewModel);
+    }
+
+
   }
 }

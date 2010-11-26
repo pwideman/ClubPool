@@ -117,6 +117,7 @@
     <Compile Include="ClubPool.Web\Controllers\PagedListViewModelBaseSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\SeasonsControllerSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\Teams\TeamsControllerSpecs.cs" />
+    <Compile Include="ClubPool.Web\Controllers\Teams\TeamsDetailsSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\Teams\ViewModels\CreateTeamViewModelSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\Users\UsersEditSpecs.cs" />
     <Compile Include="ClubPool.Web\Controllers\Users\UsersControllerSpecs.cs" />

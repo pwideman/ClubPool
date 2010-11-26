@@ -24,11 +24,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static NavigationController controller;
     protected static MockAuthenticationService authService;
     protected static ISeasonRepository seasonRepository;
+    protected static ITeamRepository teamRepository;
 
     Establish context = () => {
       authService = AuthHelper.CreateMockAuthenticationService();
       seasonRepository = MockRepository.GenerateStub<ISeasonRepository>();
-      controller = new NavigationController(authService, seasonRepository);
+      teamRepository = MockRepository.GenerateStub<ITeamRepository>();
+      controller = new NavigationController(authService, seasonRepository, teamRepository);
       ControllerHelper.CreateMockControllerContext(controller);
     };
 
@@ -108,7 +110,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       resultHelper.Model.ActiveSeasonId.ShouldEqual(0);
   }
 
-  public class when_asked_for_the_menu_and_there_is_an_active_season : specification_for_navigation_controller
+  public class when_asked_for_the_menu_and_there_is_an_active_season_and_user_has_team : specification_for_navigation_controller
   {
     static PartialViewResultHelper<MenuViewModel> resultHelper;
     static int id = 1;
@@ -120,12 +122,25 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       seasons.Add(season);
       seasonRepository.Stub(r => r.FindAll(null)).IgnoreArguments().Return(seasons.AsQueryable());
       seasonRepository.Stub(r => r.FindOne(s => s.IsActive)).IgnoreArguments().Return(season);
+      var division = new Division("Test", DateTime.Now, season);
+      var team = new Team("Test", division);
+      team.SetIdTo(id);
+      teamRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(team);
     };
 
     Because of = () => resultHelper = new PartialViewResultHelper<MenuViewModel>(controller.Menu());
 
-    It should_indicate_that_the_active_season_is_available = () =>
+    It should_return_has_active_season = () =>
+      resultHelper.Model.HasActiveSeason.ShouldBeTrue();
+
+    It should_return_the_active_season_id = () =>
       resultHelper.Model.ActiveSeasonId.ShouldEqual(id);
+
+    It should_return_has_current_team = () =>
+      resultHelper.Model.HasCurrentTeam.ShouldBeTrue();
+
+    It should_return_the_current_team_id = () =>
+      resultHelper.Model.CurrentTeamId.ShouldEqual(id);
   }
 
 }

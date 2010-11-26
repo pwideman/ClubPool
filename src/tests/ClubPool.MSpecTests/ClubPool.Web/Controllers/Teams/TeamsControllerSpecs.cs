@@ -19,6 +19,8 @@ using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
 using ClubPool.Testing;
+using ClubPool.Testing.ApplicationServices.Authentication;
+using ClubPool.ApplicationServices.Authentication.Contracts;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 {
@@ -28,12 +30,15 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
     protected static IUserRepository userRepository;
     protected static IDivisionRepository divisionRepository;
     protected static ITeamRepository teamRepository;
+    protected static MockAuthenticationService authService;
 
     Establish context = () => {
       userRepository = MockRepository.GenerateStub<IUserRepository>();
       divisionRepository = MockRepository.GenerateStub<IDivisionRepository>();
       teamRepository = MockRepository.GenerateStub<ITeamRepository>();
-      controller = new TeamsController(teamRepository, divisionRepository, userRepository);
+      authService = AuthHelper.CreateMockAuthenticationService();
+
+      controller = new TeamsController(teamRepository, divisionRepository, userRepository, authService);
 
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
