@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
 
-<h4><%= Html.Encode(Model.Name) %></h4>
+<p><input type="text" id="name" name="name" class="team-name" value="<%= Html.Encode(Model.Name) %>"/></p>
 Details:
 <ul>
   <li>
