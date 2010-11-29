@@ -1,8 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Teams.ViewModels.DetailsViewModel>" %>
+<%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-
-<p><input type="text" id="name" name="name" class="team-name" value="<%= Html.Encode(Model.Name) %>"/></p>
+<% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.UpdateName(null), FormMethod.Post, new { id = "update_name_form" })) { %>
+<%= Html.AntiForgeryToken()%>
+<%= Html.HiddenFor(m => m.Id) %>
+<p><input type="text" id="name" name="name" class="team-name required" value="<%= Html.Encode(Model.Name) %>" title="Click to edit team name"/></p>
+<% } %>
 <div class="container">
   <div class="header">Details</div>
   <div class="content">
@@ -62,9 +66,55 @@ Team Details
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+<%= Html.ScriptInclude("jquery.form.js") %>
+
 <script type="text/javascript">
+  var currentTeamName = "";
   $(document).ready(function () {
+    // style table
     $("#season-results-table tbody:last").removeClass("meet").find("tr:last").addClass("last");
+
+    // set up team name text box event handlers
+    $("#name").blur(saveName).keypress(function (e) {
+      if (e.charCode == 13) {
+        saveName();
+      }
+    }).focus(function (e) {
+      currentTeamName = $(this).val();
+    });
+    
+    // create ajax form
+    $("#update_name_form").ajaxForm({
+      success: function (response, status, xhr, form) {
+        if (xhr.status === 200) {
+          if (response.Success) {
+            // update was successful, do nothing
+          }
+          else {
+            // some type of error, probably validation
+            // TODO: display error
+          }
+        }
+      },
+      error: function (xhr, status, error) {
+        // TODO: display server error?
+      },
+      beforeSubmit: function () {
+        return $("#update_name_form").validate().form();
+      }
+    });
+
+    // set up validation
+    $("#update_name_form").validate({
+      errorPlacement: function () { }
+    });
   });
+
+  function saveName() {
+    var newTeamName = $("#name").val();
+    if (newTeamName !== currentTeamName) {
+      $("#update_name_form").ajaxSubmit();
+    }
+  }
 </script>
 </asp:Content>

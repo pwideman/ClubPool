@@ -124,6 +124,7 @@
     <Compile Include="Teams\ViewModels\TeamViewModel.cs" />
     <Compile Include="Seasons\ViewModels\ChangeActiveViewModel.cs" />
     <Compile Include="Seasons\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Teams\ViewModels\UpdateNameViewModel.cs" />
     <Compile Include="Users\ViewModels\CreateViewModel.cs" />
     <Compile Include="Users\ViewModels\EditViewModel.cs" />
     <Compile Include="Users\ViewModels\IndexViewModel.cs" />

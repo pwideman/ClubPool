@@ -195,6 +195,28 @@ namespace ClubPool.Web.Controllers.Teams
       return View(viewModel);
     }
 
+    [Authorize]
+    [Transaction]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult UpdateName(UpdateNameViewModel viewModel) {
+      if (!ValidateViewModel(viewModel)) {
+        // TODO: return error
+      }
+      var team = teamRepository.Get(viewModel.Id);
+      if (null == team) {
+        return HttpNotFound();
+      }
+
+      if (team.Division.TeamNameIsInUse(viewModel.Name)) {
+        // TODO: return error
+      }
+      else {
+        team.Name = viewModel.Name;
+      }
+      return new JsonResult();
+    }
+
 
   }
 }

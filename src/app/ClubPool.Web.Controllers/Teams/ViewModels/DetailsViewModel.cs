@@ -7,6 +7,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
   public class DetailsViewModel
   {
+    public int Id { get; set; }
     public string Name { get; set; }
     public IEnumerable<DetailsPlayerViewModel> Players { get; set; }
     public string Record { get; set; }
@@ -15,6 +16,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public bool HasSeasonResults { get; set; }
 
     public DetailsViewModel(Team team) {
+      Id = team.Id;
       Name = team.Name;
       Record = GetRecord(team);
       var players = new List<DetailsPlayerViewModel>();
