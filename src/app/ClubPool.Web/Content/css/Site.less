@@ -1046,3 +1046,56 @@ input.team-name {
 input.team-name:hover {
   border: 1px inset;
 }
+
+div.season-results {
+  border: 2px solid @medium_blue;
+  .corner(8px);
+  margin: 6px;
+  text-align: center;
+  display: inline-block;
+  div.header {
+    .topcorner(4px);
+    background-color: @medium_blue;
+    text-align: center;
+    color: black;
+    padding: 6px 24px;
+    font-weight: bold;
+    font-size: 110%;
+  }
+  div.content {
+    padding: 8px 24px;
+    text-align: center;
+    margin: auto;
+    table {
+      margin: auto;
+      thead {
+        tr {
+          th {
+            padding: 4px 8px;
+            border-bottom: 2px solid @dark_blue;
+          }
+        }
+      }
+      tbody {
+        tr {
+          border-bottom: 1px dashed #CCCCCC;
+          td {
+            text-align: center;
+            padding: 6px;
+          }
+        }
+        tr.winner {
+          background-color: @yellow_highlight;
+        }
+        tr.last {
+          border-bottom: 0;
+        }
+      }
+      tbody.meet {
+        border-bottom: 3px double @standard_blue;
+      }
+    }
+  }
+}
+
+// end teams/details

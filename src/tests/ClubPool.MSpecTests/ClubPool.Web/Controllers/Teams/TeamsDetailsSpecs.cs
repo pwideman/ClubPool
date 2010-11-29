@@ -57,10 +57,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
   {
     static ViewResultHelper<DetailsViewModel> resultHelper;
     static Team team;
+    static int numberOfSeasonResults;
 
     Establish context = () => {
       authService.MockPrincipal.User = adminUser;
       team = teams[0];
+      numberOfSeasonResults = meets.Where(m => m.Teams.Contains(team) && m.Matches.Where(match => match.IsComplete).Any()).Count();
     };
 
     Because of = () => resultHelper = new ViewResultHelper<DetailsViewModel>(controller.Details(team.Id));
@@ -78,5 +80,11 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
       resultHelper.Model.Players.Each(player => player.EightBallSkillLevel.ShouldEqual(
         team.Players.Where(p => p.FullName.Equals(player.Name)).Single()
         .SkillLevels.Where(sl => sl.GameType == team.Division.Season.GameType).First().Value));
+
+    It should_return_has_season_results = () =>
+      resultHelper.Model.HasSeasonResults.ShouldBeTrue();
+
+    It should_return_the_correct_number_of_season_results = () =>
+      resultHelper.Model.SeasonResults.Count().ShouldEqual(numberOfSeasonResults);
   }
 }

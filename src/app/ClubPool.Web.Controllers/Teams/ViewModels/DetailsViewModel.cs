@@ -11,6 +11,8 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public IEnumerable<DetailsPlayerViewModel> Players { get; set; }
     public string Record { get; set; }
     public string Rank { get; set; }
+    public IEnumerable<DetailsMeetViewModel> SeasonResults { get; set; }
+    public bool HasSeasonResults { get; set; }
 
     public DetailsViewModel(Team team) {
       Name = team.Name;
@@ -21,6 +23,19 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       }
       Players = players;
       Rank = CalculateRank(team);
+      var teamMeets = team.Division.Meets.Where(m => m.Teams.Contains(team) && m.Matches.Where(match => match.IsComplete).Any())
+                                         .OrderByDescending(m => m.Week);
+      if (teamMeets.Any()) {
+        HasSeasonResults = true;
+        var seasonResults = new List<DetailsMeetViewModel>();
+        foreach (var meet in teamMeets) {
+          seasonResults.Add(new DetailsMeetViewModel(meet, team));
+        }
+        SeasonResults = seasonResults;
+      }
+      else {
+        HasSeasonResults = false;
+      }
     }
 
     protected string CalculateRank(Team team) {
@@ -65,4 +80,43 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       }
     }
   }
+
+  public class DetailsMeetViewModel
+  {
+    public string Opponent { get; set; }
+    public IEnumerable<DetailsMatchViewModel> Matches { get; set; }
+
+    public DetailsMeetViewModel(Meet meet, Team team) {
+      Opponent = meet.Teams.Where(t => t != team).Single().Name;
+      var matches = new List<DetailsMatchViewModel>();
+      foreach (var match in meet.Matches.Where(m => m.IsComplete)) {
+        matches.Add(new DetailsMatchViewModel(match, team));
+      }
+      Matches = matches;
+    }
+  }
+
+  public class DetailsMatchViewModel
+  {
+    public string TeamPlayerName { get; set; }
+    public int TeamPlayerWins { get; set; }
+    public string OpponentPlayerName { get; set; }
+    public int OpponentPlayerWins { get; set; }
+    public bool Win { get; set; }
+
+    public DetailsMatchViewModel(Match match, Team team) {
+      var teamPlayer = match.Players.Where(p => team.Players.Contains(p)).Single();
+      TeamPlayerName = teamPlayer.FullName;
+      var oppPlayer = match.Players.Where(p => p != teamPlayer).Single();
+      OpponentPlayerName = oppPlayer.FullName;
+      Win = match.Winner == teamPlayer;
+      if (!match.IsForfeit) {
+        var teamResult = match.Results.Where(r => r.Player == teamPlayer).Single();
+        TeamPlayerWins = teamResult.Wins;
+        var oppResult = match.Results.Where(r => r != teamResult).Single();
+        OpponentPlayerWins = oppResult.Wins;
+      }
+    }
+  }
 }
+
