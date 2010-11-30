@@ -69,40 +69,56 @@ Team Details
 <%= Html.ScriptInclude("jquery.form.js") %>
 
 <script type="text/javascript">
-  var currentTeamName = "";
-  $(document).ready(function () {
+  var currentTeamName = "<%= Model.Name %>";
+  // declare formOpts explicitly, since we need to use it in two different places
+  var formOpts = {
+    success: function (response, status, xhr, form) {
+      $log("success");
+      $log("xhr:", xhr);
+      $log("status: " + status);
+      $log("response:", response);
+      if (xhr.status === 200) {
+        if (response.Success) {
+          // update was successful, do nothing
+        }
+        else {
+          // some type of error, probably validation
+          // TODO: display error
+        }
+      }
+    },
+    error: function (xhr, status, error) {
+      $log("error");
+      $log("status: " + status);
+      $log("error:", error);
+      $log("xhr:", xhr);
+      // TODO: display server error?
+    },
+    beforeSubmit: function () {
+      $log("beforeSubmit");
+      var valid = $("#update_name_form").validate().form();
+      $log("valid: " + valid);
+      var different = $("#name").val() != currentTeamName;
+      $log("different: " + different);
+      var ret = valid && different;
+      $log("returning: " + ret);
+      if (ret) {
+        currentTeamName = $("#name").val();
+      }
+      return ret;
+    }
+  };
+
+  $(function () {
     // style table
     $("#season-results-table tbody:last").removeClass("meet").find("tr:last").addClass("last");
 
     // set up team name text box event handlers
-    $("#name").blur(saveName).keypress(function (e) {
-      if (e.charCode == 13) {
-        saveName();
-      }
-    }).focus(function (e) {
+    $("#name").blur(saveName).focus(function (e) {
       currentTeamName = $(this).val();
     });
-    
     // create ajax form
-    $("#update_name_form").ajaxForm({
-      success: function (response, status, xhr, form) {
-        if (xhr.status === 200) {
-          if (response.Success) {
-            // update was successful, do nothing
-          }
-          else {
-            // some type of error, probably validation
-            // TODO: display error
-          }
-        }
-      },
-      error: function (xhr, status, error) {
-        // TODO: display server error?
-      },
-      beforeSubmit: function () {
-        return $("#update_name_form").validate().form();
-      }
-    });
+    $("#update_name_form").ajaxForm(formOpts);
 
     // set up validation
     $("#update_name_form").validate({
@@ -111,10 +127,7 @@ Team Details
   });
 
   function saveName() {
-    var newTeamName = $("#name").val();
-    if (newTeamName !== currentTeamName) {
-      $("#update_name_form").ajaxSubmit();
-    }
+    $("#update_name_form").ajaxSubmit(formOpts);
   }
 </script>
 </asp:Content>
