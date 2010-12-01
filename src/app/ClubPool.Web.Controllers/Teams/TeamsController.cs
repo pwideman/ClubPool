@@ -22,6 +22,7 @@ using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
 using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Teams
 {
@@ -201,7 +202,7 @@ namespace ClubPool.Web.Controllers.Teams
     [ValidateAntiForgeryToken]
     public ActionResult UpdateName(UpdateNameViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
-        // TODO: return error
+        return Json(new AjaxUpdateResponseViewModel(false, "Invalid name"));
       }
       var team = teamRepository.Get(viewModel.Id);
       if (null == team) {
@@ -209,12 +210,13 @@ namespace ClubPool.Web.Controllers.Teams
       }
 
       if (team.Division.TeamNameIsInUse(viewModel.Name)) {
-        // TODO: return error
+        return Json(new AjaxUpdateResponseViewModel(false, 
+          string.Format("There is already a team named '{0}' in this team's division", viewModel.Name)));
       }
       else {
         team.Name = viewModel.Name;
       }
-      return new JsonResult();
+      return Json(new AjaxUpdateResponseViewModel(true));
     }
 
 

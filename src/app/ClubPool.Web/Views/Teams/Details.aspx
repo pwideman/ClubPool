@@ -5,7 +5,7 @@
 <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.UpdateName(null), FormMethod.Post, new { id = "update_name_form" })) { %>
 <%= Html.AntiForgeryToken()%>
 <%= Html.HiddenFor(m => m.Id) %>
-<p><input type="text" id="name" name="name" class="team-name required" value="<%= Html.Encode(Model.Name) %>" title="Click to edit team name"/></p>
+<p><input type="text" id="name" name="name" class="team-name required" size="30" value="<%= Html.Encode(Model.Name) %>" title="Click to edit team name, enter or tab out to save"/></p>
 <% } %>
 <div class="container">
   <div class="header">Details</div>
@@ -73,26 +73,19 @@ Team Details
   // declare formOpts explicitly, since we need to use it in two different places
   var formOpts = {
     success: function (response, status, xhr, form) {
-      $log("success");
-      $log("xhr:", xhr);
-      $log("status: " + status);
-      $log("response:", response);
       if (xhr.status === 200) {
         if (response.Success) {
-          // update was successful, do nothing
+          currentTeamName = $("#name").val();
+          $("#name").effect("highlight", 1500);
         }
         else {
-          // some type of error, probably validation
-          // TODO: display error
+          $("#name").ajaxUpdateError({ message: response.Error });
+          $("#name").val(currentTeamName);
         }
       }
     },
     error: function (xhr, status, error) {
-      $log("error");
-      $log("status: " + status);
-      $log("error:", error);
-      $log("xhr:", xhr);
-      // TODO: display server error?
+      $("#name").ajaxUpdateError({ message: "An error occurred on the server while saving your changes, try again" });
     },
     beforeSubmit: function () {
       $log("beforeSubmit");
@@ -102,9 +95,7 @@ Team Details
       $log("different: " + different);
       var ret = valid && different;
       $log("returning: " + ret);
-      if (ret) {
-        currentTeamName = $("#name").val();
-      }
+      $("#name").ajaxUpdateError("close");
       return ret;
     }
   };

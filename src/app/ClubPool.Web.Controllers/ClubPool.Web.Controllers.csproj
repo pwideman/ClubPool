@@ -116,6 +116,7 @@
     <Compile Include="Seasons\ViewModels\SeasonSummaryViewModel.cs" />
     <Compile Include="Seasons\ViewModels\TeamViewModel.cs" />
     <Compile Include="Seasons\ViewModels\SeasonViewModel.cs" />
+    <Compile Include="Shared\ViewModels\AjaxUpdateResponseViewModel.cs" />
     <Compile Include="Teams\TeamsController.cs" />
     <Compile Include="Teams\ViewModels\CreateTeamViewModel.cs" />
     <Compile Include="Teams\ViewModels\DetailsViewModel.cs" />
@@ -178,9 +179,7 @@
       <Name>ClubPool.Web.Controls</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Shared\ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

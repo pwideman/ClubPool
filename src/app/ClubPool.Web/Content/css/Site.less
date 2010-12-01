@@ -1034,6 +1034,18 @@ div.dashboard-item-container {
 
 // teams/details
 
+div#ajax_update_error {
+  position: absolute;
+  display: none;
+  margin: 0;
+}
+
+input#name.error {
+  outline: 2px solid red !important;
+  background-color: @error_background_color;
+  color: @error_foreground;
+}
+
 input.team-name {
   color: #114884;
   margin: 2px;
