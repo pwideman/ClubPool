@@ -12,6 +12,7 @@ using xVal.ServerSide;
 
 using ClubPool.Web.Controllers.Attributes;
 using ClubPool.Framework.Validation;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers
 {
@@ -59,6 +60,18 @@ namespace ClubPool.Web.Controllers
     protected ActionResult ErrorView(string message) {
       TempData[GlobalViewDataProperty.PageErrorMessage] = message;
       return View("Error");
+    }
+
+    protected JsonResult AjaxUpdate() {
+      return AjaxUpdate(true, null);
+    }
+
+    protected JsonResult AjaxUpdate(bool success) {
+      return AjaxUpdate(success, null);
+    }
+
+    protected JsonResult AjaxUpdate(bool success, string message) {
+      return Json(new AjaxUpdateResponseViewModel(success, message));
     }
   }
 }
