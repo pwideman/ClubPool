@@ -187,13 +187,18 @@ namespace ClubPool.Web.Controllers.Teams
     [Authorize]
     [Transaction]
     public ActionResult Details(int id) {
-      //var user = userRepository.FindOne(u => u.Username.Equals(authService.GetCurrentPrincipal().Username));
+      var user = userRepository.Get(authService.GetCurrentPrincipal().UserId);
       var team = teamRepository.Get(id);
       if (null == team) {
         return HttpNotFound();
       }
       var viewModel = new DetailsViewModel(team);
+      viewModel.CanUpdateName = UserCanUpdateTeamName(user, team);
       return View(viewModel);
+    }
+
+    protected bool UserCanUpdateTeamName(User user, Team team) {
+      return user.IsInRole(Roles.Administrators) || user.IsInRole(Roles.Officers) || team.Players.Contains(user);
     }
 
     [Authorize]
@@ -202,21 +207,23 @@ namespace ClubPool.Web.Controllers.Teams
     [ValidateAntiForgeryToken]
     public ActionResult UpdateName(UpdateNameViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
-        return Json(new AjaxUpdateResponseViewModel(false, "Invalid name"));
+        return AjaxUpdate(false, "Invalid name");
       }
       var team = teamRepository.Get(viewModel.Id);
       if (null == team) {
         return HttpNotFound();
       }
-
+      var user = userRepository.Get(authService.GetCurrentPrincipal().UserId);
+      if (!UserCanUpdateTeamName(user, team)) {
+        return AjaxUpdate(false, "You do not have permission to update this team's name");
+      }
       if (team.Division.TeamNameIsInUse(viewModel.Name)) {
-        return Json(new AjaxUpdateResponseViewModel(false, 
-          string.Format("There is already a team named '{0}' in this team's division", viewModel.Name)));
+        return AjaxUpdate(false, string.Format("There is already a team named '{0}' in this team's division", viewModel.Name));
       }
       else {
         team.Name = viewModel.Name;
       }
-      return Json(new AjaxUpdateResponseViewModel(true));
+      return AjaxUpdate();
     }
 
 

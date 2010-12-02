@@ -42,6 +42,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static IList<Match> matches;
     protected static IList<Meet> meets;
     protected static IList<Division> divisions;
+    protected static User adminUser;
 
     Establish context = () => {
       authenticationService = AuthHelper.CreateMockAuthenticationService();
@@ -75,6 +76,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       foreach (var user in users) {
         user.UpdateSkillLevel(season.GameType, matchResultRepository);
       }
+      adminUser = users[0];
     };
   }
 
@@ -83,7 +85,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
   {
     static ViewResultHelper<IndexViewModel> resultHelper;
     static User user;
-    static string username = "1";
+    static string username;
     static int skillLevel;
     static string teamName;
     static string teammate;
@@ -92,8 +94,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static int seasonResultsCount;
 
     Establish context = () => {
-      authenticationService.MockPrincipal.MockIdentity.Name = username;
-      user = users.Where(u => u.Username.Equals(username)).Single();
+      user = users.Skip(2).First();
+      username = user.Username;
+      authenticationService.MockPrincipal.User = user;
       skillLevel = user.SkillLevels.Where(sl => sl.GameType == season.GameType).First().Value;
       team = teams.Where(t => t.Players.Contains(user)).Single();
       teamName = team.Name;
@@ -157,14 +160,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ViewResultHelper<IndexViewModel> resultHelper;
 
     Establish context = () => {
-      var principal = authenticationService.MockPrincipal;
-      principal.Roles = new string[] { Roles.Administrators };
-      principal.MockIdentity.Name = "admin";
-      // set up an admin user that is not in a team
-      var adminUser = new User("admin", "test", "admin", "user", "test");
-      adminUser.SetIdTo(1000);
-      adminUser.AddRole(new Role(Roles.Administrators));
-      users.Add(adminUser);
+      authenticationService.MockPrincipal.User = adminUser;
     };
 
     Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());

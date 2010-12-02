@@ -22,22 +22,38 @@ namespace ClubPool.Testing.Core
       IList<Match> matches,
       IList<MatchResult> matchResults) {
 
+      // set up admin & officer users
+      var userId = 1;
+      var user = new User("admin", "admin", "admin", "user", "admin@email.com");
+      user.SetIdTo(userId++);
+      user.SetVersionTo(1);
+      user.AddRole(new Role(Roles.Administrators));
+      users.Add(user);
+      user = new User("officer", "officer", "officer", "user", "officer@email.com");
+      user.SetIdTo(userId++);
+      user.SetVersionTo(1);
+      user.AddRole(new Role(Roles.Officers));
+      users.Add(user);
       // set up the test season
       var season = new Season("test season", GameType.EightBall);
       season.IsActive = true;
       season.SetIdTo(1);
-      var userId = 1;
+      season.SetVersionTo(1);
       var division = new Division("Test Division", DateTime.Parse("1/1/2011"), season);
       division.SetIdTo(1);
+      division.SetVersionTo(1);
       divisions.Add(division);
       season.AddDivision(division);
       for (int j = 1; j < 13; j++) {
         var team = new Team(j.ToString(), division);
+        team.SetIdTo(j);
+        team.SetVersionTo(1);
         teams.Add(team);
         division.AddTeam(team);
         for (int k = userId; k < userId + 2; k++) {
-          var user = new User(k.ToString(), "test", k.ToString(), "user", "test");
+          user = new User(k.ToString(), "test", k.ToString(), "user", "test");
           user.SetIdTo(k);
+          user.SetVersionTo(1);
           team.AddPlayer(user);
           users.Add(user);
         }
@@ -51,15 +67,24 @@ namespace ClubPool.Testing.Core
 
       foreach (var week in meetQuery) {
         var meetDate = division.StartingDate.AddDays(week.Week);
+        int meetId = 1;
+        int matchId = 1;
+        int matchResultId = 1;
         foreach (var meet in week.Meets) {
+          meet.SetIdTo(meetId++);
           meets.Add(meet);
           meet.IsComplete = true;
           foreach (var match in meet.Matches) {
+            match.SetIdTo(matchId++);
             match.IsComplete = true;
             var mr = new MatchResult(match.Player1, 20, 0, 3);
+            mr.SetIdTo(matchResultId++);
+            mr.SetVersionTo(1);
             match.AddResult(mr);
             matchResults.Add(mr);
             mr = new MatchResult(match.Player2, 20, 0, 2);
+            mr.SetIdTo(matchResultId++);
+            mr.SetVersionTo(1);
             match.AddResult(mr);
             matchResults.Add(mr);
             match.Winner = match.Player1;

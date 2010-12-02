@@ -2,10 +2,15 @@
 <%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
+<% if (Model.CanUpdateName) { %>
 <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.UpdateName(null), FormMethod.Post, new { id = "update_name_form" })) { %>
 <%= Html.AntiForgeryToken()%>
 <%= Html.HiddenFor(m => m.Id) %>
 <p><input type="text" id="name" name="name" class="team-name required" size="30" value="<%= Html.Encode(Model.Name) %>" title="Click to edit team name, enter or tab out to save"/></p>
+<% }
+   }
+   else { %>
+<h4><%= Model.Name%></h4>
 <% } %>
 <div class="container">
   <div class="header">Details</div>
@@ -66,6 +71,7 @@ Team Details
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+<% if (Model.CanUpdateName) { %>
 <%= Html.ScriptInclude("jquery.form.js") %>
 
 <script type="text/javascript">
@@ -79,7 +85,7 @@ Team Details
           $("#name").effect("highlight", 1500);
         }
         else {
-          $("#name").ajaxUpdateError({ message: response.Error });
+          $("#name").ajaxUpdateError({ message: response.Message });
           $("#name").val(currentTeamName);
         }
       }
@@ -101,9 +107,6 @@ Team Details
   };
 
   $(function () {
-    // style table
-    $("#season-results-table tbody:last").removeClass("meet").find("tr:last").addClass("last");
-
     // set up team name text box event handlers
     $("#name").blur(saveName).focus(function (e) {
       currentTeamName = $(this).val();
@@ -120,5 +123,13 @@ Team Details
   function saveName() {
     $("#update_name_form").ajaxSubmit(formOpts);
   }
+</script>
+<% } %>
+
+<script type="text/javascript">
+  $(function() {
+    // style table
+    $("#season-results-table tbody:last").removeClass("meet").find("tr:last").addClass("last");
+  });
 </script>
 </asp:Content>

@@ -8,6 +8,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
   public class DetailsViewModel
   {
     public int Id { get; set; }
+    public bool CanUpdateName { get; set; }
     public string Name { get; set; }
     public IEnumerable<DetailsPlayerViewModel> Players { get; set; }
     public string Record { get; set; }
