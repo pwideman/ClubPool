@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Principal;
+using System.Linq;
 
 using Rhino.Mocks;
 
@@ -69,6 +70,8 @@ namespace ClubPool.Testing.ApplicationServices.Authentication
         user = value;
         UserId = value.Id;
         Username = value.Username;
+        MockIdentity.Name = Username;
+        roles = user.Roles.Select(r => r.Name).ToArray();
       }
     }
 
