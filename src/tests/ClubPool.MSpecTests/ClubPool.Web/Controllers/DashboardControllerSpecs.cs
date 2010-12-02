@@ -52,7 +52,12 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       teamRepository = MockRepository.GenerateStub<ITeamRepository>();
       meetRepository = MockRepository.GenerateStub<IMeetRepository>();
 
-      controller = new DashboardController(authenticationService, userRepository, seasonRepository, meetRepository, teamRepository);
+      controller = new DashboardController(authenticationService,
+        userRepository,
+        seasonRepository,
+        meetRepository,
+        teamRepository,
+        matchResultRepository);
       ControllerHelper.CreateMockControllerContext(controller);
 
       teams = new List<Team>();

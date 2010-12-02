@@ -24,24 +24,28 @@ namespace ClubPool.Web.Controllers.Dashboard
     protected ISeasonRepository seasonRepository;
     protected IMeetRepository meetRepository;
     protected ITeamRepository teamRepository;
+    protected IMatchResultRepository matchResultRepository;
 
     public DashboardController(IAuthenticationService authSvc,
       IUserRepository userRepository,
       ISeasonRepository seasonRepository,
       IMeetRepository meetRepository,
-      ITeamRepository teamRepository) {
+      ITeamRepository teamRepository,
+      IMatchResultRepository matchResultRepository) {
 
       Check.Require(null != authSvc, "authSvc cannot be null");
       Check.Require(null != userRepository, "userRepository cannot be null");
       Check.Require(null != seasonRepository, "seasonRepository cannot be null");
       Check.Require(null != meetRepository, "meetRepository cannot be null");
       Check.Require(null != teamRepository, "teamRepository cannot be null");
+      Check.Require(null != matchResultRepository, "matchResultRepository cannot be null");
 
       authenticationService = authSvc;
       this.userRepository = userRepository;
       this.seasonRepository = seasonRepository;
       this.meetRepository = meetRepository;
       this.teamRepository = teamRepository;
+      this.matchResultRepository = matchResultRepository;
     }
 
     [Authorize]
@@ -51,7 +55,7 @@ namespace ClubPool.Web.Controllers.Dashboard
       var user = userRepository.FindOne(u => u.Username.Equals(principal.Identity.Name));
       var currentSeason = seasonRepository.FindOne(s => s.IsActive);
       var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
-      var viewModel = new IndexViewModel(user, team);
+      var viewModel = new IndexViewModel(user, team, matchResultRepository);
 
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;

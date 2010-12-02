@@ -10,8 +10,15 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
     public string Message { get; set; }
     public bool Success { get; set; }
 
-    public AjaxUpdateResponseViewModel(bool success, string message = null) {
+    public AjaxUpdateResponseViewModel() {
+      Success = true;
+    }
+
+    public AjaxUpdateResponseViewModel(bool success) {
       Success = success;
+    }
+
+    public AjaxUpdateResponseViewModel(bool success, string message): this(success) {
       Message = message;
     }
   }

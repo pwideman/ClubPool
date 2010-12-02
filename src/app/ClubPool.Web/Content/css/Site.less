@@ -985,6 +985,7 @@ div.dashboard-item-container {
         padding: 0;
       }
       table.results {
+        font-size: 85%;
         margin: auto;
         thead {
           tr {
@@ -1000,11 +1001,12 @@ div.dashboard-item-container {
               text-align: center;
               padding: 6px;
             }
-            td.player {
-              min-width: 120px;
+            td.player, td.team {
+              min-width: 90px;
+              max-width: 120px;
             }
           }
-          tr.winner {
+          tr.winner, tr.included {
             background-color: @yellow_highlight;
           }
         }
@@ -1019,7 +1021,7 @@ div.dashboard-item-container {
           }
         }
       }
-      table#season_results {
+      table#season_results, table#skilllevelcalc {
         tbody {
           tr {
             border-bottom: 1px dashed #CCCCCC;

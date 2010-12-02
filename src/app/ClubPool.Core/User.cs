@@ -113,16 +113,21 @@ namespace ClubPool.Core
       }
     }
 
+    public virtual List<MatchResult> GetMatchResultsUsedInSkillLevelCalculation(GameType gameType, IMatchResultRepository matchResultRepository) {
+      var matchResults = (from result in matchResultRepository.GetMatchResultsForPlayerAndGameType(this, gameType)
+                          where !result.Match.IsForfeit
+                          orderby result.Match.DatePlayed descending,
+                          result.Wins > 0 ? (result.Innings - result.DefensiveShots) / result.Wins : 0 ascending,
+                          result.Innings ascending
+                          select result).Take(10).ToList();
+      return matchResults;
+    }
+
     public virtual void UpdateSkillLevel(GameType gameType, IMatchResultRepository matchResultRepository) {
       switch (gameType) {
         case GameType.EightBall:
           // get the last 10 matches for this player & game type
-          var matchResults = (from result in matchResultRepository.GetMatchResultsForPlayerAndGameType(this, gameType)
-                              where !result.Match.IsForfeit
-                              orderby result.Match.DatePlayed descending,
-                              result.Wins > 0 ? (result.Innings - result.DefensiveShots) / result.Wins : 0 ascending,
-                              result.Innings ascending
-                              select result).Take(10).ToList();
+          var matchResults = GetMatchResultsUsedInSkillLevelCalculation(gameType, matchResultRepository);
 
           if (!matchResults.Any()) {
             // this player has no valid match results for this game type, see if there's
@@ -181,7 +186,7 @@ namespace ClubPool.Core
       }
     }
 
-    protected List<MatchResult> CullTopMatchResults(List<MatchResult> matchResults) {
+    public virtual List<MatchResult> CullTopMatchResults(List<MatchResult> matchResults) {
       matchResults.Sort(new MatchResultComparer());
       int numToCount = Math.Min((int)Math.Ceiling((double)matchResults.Count / (double)2), 5);
       List<MatchResult> listMatchesIncluded = new List<MatchResult>();

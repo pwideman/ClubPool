@@ -5,7 +5,7 @@
     <%= Html.ContentImage("home.png", "Home") %>
     <span><%= Model.UserFullName %>'s Dashboard</span>
   </div>
-  <div class="dashboard-item-container">
+  <div class="dashboard-item-container" style="width: 40%;">
     <% if (Model.HasLastMeetStats) { %>
     <div class="dashboard-item">
       <div class="dashboard-item-header">Last Match Results vs <%= Html.Encode(Model.LastMeetStats.OpponentTeam) %></div>
@@ -59,7 +59,7 @@
     </div>
     <% } %>
   </div>
-  <div class="dashboard-item-container">
+  <div class="dashboard-item-container" style="width: 55%;">
     <% if (Model.HasCurrentSeasonStats) { %>
     <div class="dashboard-item">
       <div class="dashboard-item-header">Current Season Stats & Info</div>
@@ -71,6 +71,37 @@
           <li>Teammate: <%= Model.CurrentSeasonStats.Teammate %></li>
           <li>Team Record: <%= Model.CurrentSeasonStats.TeamRecord %></li>
         </ul>
+      </div>
+    </div>
+    <% } %>
+    <% if (Model.SkillLevelCalculation.HasSkillLevel) { %>
+    <div class="dashboard-item">
+      <div class="dashboard-item-header">Skill Level Calculation Statistics</div>
+      <div class="dashboard-item-content">
+        <table id="skilllevelcalc" class="results">
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>Player</th>
+              <th>Innings</th>
+              <th>Defensive Shots</th>
+              <th>Net Innings</th>
+              <th>Wins</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% foreach (var result in Model.SkillLevelCalculation.SkillLevelMatchResults) { %>
+            <tr <%= result.Included ? @"class=""included""" : "" %>>
+              <td class="team"><%= Html.Encode(result.Team) %></td>
+              <td class="player"><%= Html.Encode(result.Player) %></td>
+              <td><%= Html.Encode(result.Innings) %></td>
+              <td><%= Html.Encode(result.DefensiveShots) %></td>
+              <td><%= Html.Encode(result.NetInnings) %></td>
+              <td><%= Html.Encode(result.Wins) %></td>
+            </tr>
+          <% } %>
+          </tbody>
+        </table>
       </div>
     </div>
     <% } %>

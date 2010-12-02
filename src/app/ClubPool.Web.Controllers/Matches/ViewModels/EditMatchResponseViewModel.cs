@@ -5,15 +5,15 @@ using System.Text;
 
 using SharpArch.Core.CommonValidator;
 
+using ClubPool.Web.Controllers.Shared.ViewModels;
+
 namespace ClubPool.Web.Controllers.Matches.ViewModels
 {
-  public class EditMatchResponseViewModel
+  public class EditMatchResponseViewModel : AjaxUpdateResponseViewModel
   {
-    public bool Success { get; set; }
     public IEnumerable<ValidationResultViewModel> ValidationResults { get; set; }
-    public string Message { get; set; }
 
-    public EditMatchResponseViewModel() {
+    public EditMatchResponseViewModel() : base() {
       ValidationResults = new List<ValidationResultViewModel>();
     }
 
