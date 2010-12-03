@@ -101,6 +101,7 @@
     <Compile Include="Matches\MatchesController.cs" />
     <Compile Include="Matches\ViewModels\EditMatchResponseViewModel.cs" />
     <Compile Include="Matches\ViewModels\EditMatchViewModel.cs" />
+    <Compile Include="Matches\ViewModels\UserHistoryViewModel.cs" />
     <Compile Include="Meets\MeetsController.cs" />
     <Compile Include="Meets\ViewModels\MeetViewModel.cs" />
     <Compile Include="Meets\ViewModels\PlayerViewModel.cs" />

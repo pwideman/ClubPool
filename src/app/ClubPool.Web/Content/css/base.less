@@ -22,12 +22,18 @@ table.domain-list {
     }
   }
 
-  tbody {
+  tbody.content {
     td {
       padding: 8px 16px;
       text-align: center;
       border-bottom: 1px solid @light_blue;
     }
+    tr.even {
+      background-color: #F7F6F3;
+    }
+  }
+
+  tbody.mouseover-highlight-row {
     tr:hover {
       td {
         background-color: @light_blue;

@@ -62,7 +62,7 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="content mouseover-highlight-row">
               <% foreach (var team in division.Teams) { %>
                 <tr>
                   <td><%= team.Id%></td>

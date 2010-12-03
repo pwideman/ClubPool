@@ -25,7 +25,7 @@
           <th></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="content mouseover-highlight-row">
     <% foreach (var item in Model.Items) { %>
         <tr>
           <td><%= Html.Encode(item.Id) %></td>
@@ -50,12 +50,12 @@
           </td>
         </tr>
     <% } %>
+      </tbody>
       <tr class="pager">
         <td colspan="99">
           <% Html.RenderPartial("Pager"); %>
         </td>
       </tr>
-      </tbody>
     </table>
   </div>
   <%

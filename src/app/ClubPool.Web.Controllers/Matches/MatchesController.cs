@@ -43,6 +43,23 @@ namespace ClubPool.Web.Controllers.Matches
       this.authService = authService;
     }
 
+    [HttpGet]
+    [Transaction]
+    [Authorize]
+    public ActionResult UserHistory(int id, int? page) {
+      var user = userRepository.Get(id);
+      if (null == user) {
+        return HttpNotFound();
+      }
+
+      var userMatches = from match in matchRepository.GetAll()
+                        where (match.Player1 == user || match.Player2 == user) && match.IsComplete
+                        orderby match.DatePlayed descending
+                        select new UserHistoryMatchViewModel(match);
+      var viewModel = new UserHistoryViewModel(user, userMatches, page.GetValueOrDefault(1), 15);
+      return View(viewModel);
+    }
+
     [HttpPost]
     [Transaction]
     [Authorize]
