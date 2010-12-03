@@ -90,10 +90,11 @@
 
 .loginStatusPanel
 {
-  right: 25px;
+  top:0;
+  right: 20px;
   float: right;
   display: inline;
-  position: relative;
+  position: absolute;
   background: @light_blue;
   padding: 4px 20px 10px 20px;
   color: black;
@@ -120,8 +121,8 @@
 
 .sidebar-container
 {
-  width: 270px;
-  margin-right: -330px;
+  width: 230px;
+  margin-right: -290px;
   padding: 0;
   text-align: center;
 }
@@ -162,14 +163,14 @@ div.sidebar-form-gadget
     min-height: 34px;
 
     span.form-label-left {
-      width: 70px;
+      width: 60px;
       padding-right: 4px;
       margin-top: 8px;
     }
 
     div.form-input {
       input {
-        width: 120px;
+        width: 100px;
         height: 16px;
       }
     }
@@ -956,8 +957,19 @@ div.userinfo-tab {
 
 // dashboard/index
 
+div.dashboard {
+  width: 99%;
+  font-size: 90%;
+}
+div.dashboard-column-left {
+  min-width: 260px;
+  width: 39%;
+}
+div.dashboard-column-right {
+  width: 60%;
+  min-width: 440px;
+}
 div.dashboard-item-container {
-  width: 49%;
   display: inline-block;
   vertical-align: top;
   div.dashboard-item {
@@ -976,16 +988,17 @@ div.dashboard-item-container {
       font-size: 110%;
     }
     div.dashboard-item-content {
-      padding: 8px 24px;
+      padding: 8px;
       text-align: center;
       margin: auto;
+      overflow: hidden;
       ul {
         text-align: left;
         list-style-type: none;
         padding: 0;
       }
       table.results {
-        font-size: 85%;
+        width: 99%;
         margin: auto;
         thead {
           tr {
@@ -1003,7 +1016,7 @@ div.dashboard-item-container {
             }
             td.player, td.team {
               min-width: 90px;
-              max-width: 120px;
+              max-width: 160px;
             }
           }
           tr.winner, tr.included {
@@ -1021,10 +1034,23 @@ div.dashboard-item-container {
           }
         }
       }
-      table#season_results, table#skilllevelcalc {
+      table#season_results, table#skill_level_calc {
         tbody {
           tr {
             border-bottom: 1px dashed #CCCCCC;
+          }
+          tr.last {
+            border-bottom: 0 !important;
+          }
+        }
+      }
+      table#skill_level_calc {
+        tbody.skill_level_matches {
+          border-bottom: 3px double @standard_blue;
+        }
+        tbody.skill_level_totals {
+          tr {
+            border-bottom: 1px solid black;
           }
         }
       }

@@ -22,7 +22,6 @@
       <% if (Model.HasCurrentTeam) { %>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.CurrentTeamId), "Team")%></li>
       <% } %>
-      <li><a href="/dashboard/stats">Stats</a></li>
       <li><a href="/dashboard/history">Match History</a></li>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(Model.UserId), "Member Info") %></li>
     </ul>

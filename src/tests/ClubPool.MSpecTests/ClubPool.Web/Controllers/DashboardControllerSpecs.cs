@@ -92,8 +92,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static User user;
     static string username;
     static int skillLevel;
-    static string teamName;
-    static string teammate;
+    static User teammate;
     static Meet lastMeet;
     static Team team;
     static int seasonResultsCount;
@@ -104,8 +103,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       authenticationService.MockPrincipal.User = user;
       skillLevel = user.SkillLevels.Where(sl => sl.GameType == season.GameType).First().Value;
       team = teams.Where(t => t.Players.Contains(user)).Single();
-      teamName = team.Name;
-      teammate = team.Players.Where(p => p != user).Single().FullName;
+      teammate = team.Players.Where(p => p != user).Single();
       lastMeet = meets.Where(m => m.Teams.Contains(team) && m.IsComplete).OrderByDescending(m => m.Week).First();
       seasonResultsCount = (from m in meets
                             where m.Teams.Contains(team) && m.IsComplete
@@ -135,10 +133,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       resultHelper.Model.CurrentSeasonStats.SkillLevel.ShouldEqual(skillLevel);
 
     It should_return_the_current_season_stats_team_name = () =>
-      resultHelper.Model.CurrentSeasonStats.TeamName.ShouldEqual(teamName);
+      resultHelper.Model.CurrentSeasonStats.TeamName.ShouldEqual(team.Name);
 
-    It should_return_the_current_season_stats_teammate = () =>
-      resultHelper.Model.CurrentSeasonStats.Teammate.ShouldEqual(teammate);
+    It should_return_the_current_season_stats_team_id = () =>
+      resultHelper.Model.CurrentSeasonStats.TeamId.ShouldEqual(team.Id);
+
+    It should_return_the_current_season_stats_teammate_name = () =>
+      resultHelper.Model.CurrentSeasonStats.TeammateName.ShouldEqual(teammate.FullName);
+
+    It should_return_the_current_season_stats_teammate_id = () =>
+      resultHelper.Model.CurrentSeasonStats.TeammateId.ShouldEqual(teammate.Id);
 
     It should_return_the_current_season_stats_personal_record = () =>
       resultHelper.Model.CurrentSeasonStats.PersonalRecord.ShouldNotBeEmpty();

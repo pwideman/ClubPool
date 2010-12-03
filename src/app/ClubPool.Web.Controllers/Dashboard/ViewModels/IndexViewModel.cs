@@ -73,8 +73,11 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
       if (null != skillLevel) {
         vm.SkillLevel = skillLevel.Value;
       }
+      vm.TeamId = team.Id;
       vm.TeamName = team.Name;
-      vm.Teammate = team.Players.Where(p => p != user).Single().FullName;
+      var teammate = team.Players.Where(p => p != user).Single();
+      vm.TeammateName = teammate.FullName;
+      vm.TeammateId = teammate.Id;
       var winsAndLosses = team.GetWinsAndLossesForPlayer(user);
       var pct = (double)winsAndLosses[0] / (double)(winsAndLosses[0] + winsAndLosses[1]);
       vm.PersonalRecord = string.Format("{0} - {1} ({2})", winsAndLosses[0], winsAndLosses[1], pct.ToString(".00"));
@@ -91,7 +94,9 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
     public string PersonalRecord { get; set; }
     public string TeamRecord { get; set; }
     public string TeamName { get; set; }
-    public string Teammate { get; set; }
+    public int TeamId { get; set; }
+    public string TeammateName { get; set; }
+    public int TeammateId { get; set; }
   }
 
   public class LastMeetViewModel
@@ -165,10 +170,15 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
     public int TotalCulledNetInnings { get; set; }
     public int TotalCulledWins { get; set; }
     public bool HasSkillLevel { get; set; }
+    public double TotalIG { get; set; }
+    public double CulledIG { get; set; }
+    public int EightBallSkillLevel { get; set; }
 
     public SkillLevelCalculationViewModel(User player, IMatchResultRepository matchResultRepository) {
-      var matchResults = player.GetMatchResultsUsedInSkillLevelCalculation(GameType.EightBall, matchResultRepository);
-      if (null != matchResults && matchResults.Count > 0) {
+      var sl = player.SkillLevels.Where(s => s.GameType == GameType.EightBall).SingleOrDefault();
+      if (null != sl) {
+        EightBallSkillLevel = sl.Value;
+        var matchResults = player.GetMatchResultsUsedInSkillLevelCalculation(GameType.EightBall, matchResultRepository);
         HasSkillLevel = true;
         var culledMatchResults = player.CullTopMatchResults(matchResults);
         var results = new List<SkillLevelMatchResultViewModel>();
@@ -187,7 +197,9 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
           TotalNetInnings += resultvm.NetInnings;
           TotalWins += resultvm.Wins;
         }
-        SkillLevelMatchResults = results;
+        SkillLevelMatchResults = results.OrderByDescending(r => r.Date);
+        TotalIG = (double)TotalNetInnings / (double)TotalWins;
+        CulledIG = (double)TotalCulledNetInnings / (double)TotalCulledWins;
       }
     }
   }
@@ -195,18 +207,17 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
   public class SkillLevelMatchResultViewModel : MatchResultViewModel
   {
     public string Team { get; set; }
-    public string Date { get; set; }
+    public DateTime Date { get; set; }
     public bool Included { get; set; }
     public int NetInnings { get; set; }
 
     public SkillLevelMatchResultViewModel(MatchResult matchResult, User player) : base(matchResult) {
       var match = matchResult.Match;
-      Date = string.Format("{0} {1}", match.DatePlayed.ToShortDateString(), match.DatePlayed.ToShortTimeString());
+      Date = match.DatePlayed;
       Team = match.Meet.Teams.Where(t => !t.Players.Contains(player)).Single().Name;
       NetInnings = Innings - DefensiveShots;
       // for this we display our opponent
       Player = match.Players.Where(p => p != player).Single().FullName;
-
     }
   }
 }
