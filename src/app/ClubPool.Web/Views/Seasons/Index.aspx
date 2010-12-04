@@ -73,5 +73,10 @@ Seasons - ClubPool
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+<script type="text/javascript">
+  $(function () {
+    $("tbody.content tr:odd").addClass("alt");
+  });
+</script>
 </asp:Content>
 

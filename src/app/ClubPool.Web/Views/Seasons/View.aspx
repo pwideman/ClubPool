@@ -171,7 +171,8 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
   <script type="text/javascript">
-    $(document).ready(function () {
+    $(function () {
+      $("tbody.content tr:odd").addClass("alt");
       $("#divisiontabs").tabs({
         cookie: {}
       });

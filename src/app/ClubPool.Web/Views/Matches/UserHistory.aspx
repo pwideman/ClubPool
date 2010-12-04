@@ -59,7 +59,7 @@ User History
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
 <script type="text/javascript">
   $(function () {
-    $("table.match-history tr:even").addClass("even");
+    $("tbody.content tr:odd").addClass("alt");
   });
 </script>
 </asp:Content>
