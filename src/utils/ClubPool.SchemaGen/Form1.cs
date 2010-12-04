@@ -548,10 +548,10 @@ namespace ClubPool.SchemaGen
           }
           seasonRepo.SaveOrUpdate(season);
         }
-        output("Setting first season as active");
-        var firstSeason = seasonRepo.GetAll().First();
-        firstSeason.IsActive = true;
-        seasonRepo.SaveOrUpdate(firstSeason);
+        //output("Setting first season as active");
+        //var firstSeason = seasonRepo.GetAll().First();
+        //firstSeason.IsActive = true;
+        //seasonRepo.SaveOrUpdate(firstSeason);
         output("Committing transaction");
         seasonRepo.DbContext.CommitTransaction();
       }
