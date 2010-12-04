@@ -143,6 +143,9 @@ namespace ClubPool.Web.Controllers.Matches
       var gameType = match.Meet.Division.Season.GameType;
       player1.UpdateSkillLevel(gameType, matchResultRepository);
       player2.UpdateSkillLevel(gameType, matchResultRepository);
+      // set meet to complete if all matches are complete
+      var meet = match.Meet;
+      meet.IsComplete = !meet.Matches.Where(m => !m.IsComplete).Any();
       return Json(new EditMatchResponseViewModel(true));
     }
   }
