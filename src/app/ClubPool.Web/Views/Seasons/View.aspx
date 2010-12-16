@@ -116,26 +116,7 @@
                 </div>
                 <% } %>
               </div>
-              <table class="schedule-table">
-                <thead>
-                  <tr>
-                    <th>Week</th>
-                    <th>Date</th>
-                    <th colspan="<%= division.Schedule.NumberOfMeetsPerWeek %>">Matches</th>
-                  </tr>
-                </thead>
-                <% foreach (var week in division.Schedule.Weeks) { %>
-                <tbody>
-                  <tr>
-                    <td><%= week.Week%></td>
-                    <td><%= week.Date.ToShortDateString()%></td>
-                  <% foreach (var meet in week.Meets) { %>
-                    <td><%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(c => c.View(meet.Id), meet.Team1Name + " vs " + meet.Team2Name)%></td>
-                  <% } %>
-                  </tr>
-                <% } %>
-                </tbody>
-              </table>
+              <% Html.RenderPartial("ScheduleView", division.Schedule); %>
               <% }
                else { %>
               <p>This division does not have a schedule.</p>

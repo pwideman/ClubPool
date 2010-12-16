@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using ClubPool.Core;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Seasons.ViewModels
 {
@@ -39,26 +40,5 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
     public bool HasEnoughTeamsForSchedule { get; set; }
     public IEnumerable<TeamViewModel> Teams { get; set; }
     public ScheduleViewModel Schedule { get; set; }
-  }
-
-  public class ScheduleViewModel
-  {
-    public ScheduleViewModel() {
-      Weeks = new List<ScheduleWeekViewModel>();
-    }
-
-    public ScheduleViewModel(IEnumerable<Meet> meets, DateTime startingDate) {
-      Weeks = meets.GroupBy(meet => meet.Week)
-        .OrderBy(g => g.Key)
-        .Select(g => new ScheduleWeekViewModel() {
-          Week = g.Key + 1,
-          Date = startingDate.AddDays(g.Key * 7),
-          Meets = g.Select(meet => new MeetViewModel(meet))
-        });
-      NumberOfMeetsPerWeek = Weeks.First().Meets.Count();
-    }
-
-    public IEnumerable<ScheduleWeekViewModel> Weeks { get; set; }
-    public int NumberOfMeetsPerWeek { get; set; }
   }
 }

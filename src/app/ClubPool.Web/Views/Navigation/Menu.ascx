@@ -14,9 +14,9 @@
   <% if (Model.HasActiveSeason) { %>
   <li><a href="#">Current Season</a>
     <ul>
-      <li>Schedule</li>
-      <li>Team Standings</li>
-      <li>Player Standings</li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.CurrentSeason.CurrentSeasonController>(c => c.Schedule(), "Schedule")%></li>
+      <li><a href="#">Team Standings</a></li>
+      <li><a href="#">Player Standings</a></li>
     </ul>
   </li>
   <% } %>

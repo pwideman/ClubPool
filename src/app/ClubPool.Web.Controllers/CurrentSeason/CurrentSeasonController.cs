@@ -11,7 +11,7 @@ using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
 
-//using ClubPool.Web.Controllers.CurrentSeason.ViewModels;
+using ClubPool.Web.Controllers.CurrentSeason.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
@@ -40,7 +40,13 @@ namespace ClubPool.Web.Controllers.CurrentSeason
     [Transaction]
     public ActionResult Schedule() {
       var season = seasonRepository.GetAll().Where(s => s.IsActive).Single();
-
+      if (null == season) {
+        return ErrorView("There is no current season");
+      }
+      else {
+        var viewModel = new CurrentSeasonScheduleViewModel(season);
+        return View(viewModel);
+      }
     }
 
   }

@@ -200,6 +200,7 @@
     <Content Include="Scripts\superfish.js" />
     <Content Include="Scripts\supersubs.js" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
+    <Content Include="Views\CurrentSeason\Schedule.aspx" />
     <Content Include="Views\Dashboard\Index.aspx" />
     <Content Include="Views\Dashboard\AlertsGadget.aspx" />
     <Content Include="Views\Divisions\CreateSchedule.aspx" />
@@ -213,6 +214,7 @@
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Divisions\Create.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
+    <Content Include="Views\Shared\ScheduleView.ascx" />
     <Content Include="Views\Teams\Details.aspx" />
     <Content Include="Views\Teams\PlayerListView.ascx" />
     <Content Include="Views\Seasons\TeamView.ascx" />
