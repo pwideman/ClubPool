@@ -13,6 +13,11 @@
   </li>
   <% if (Model.HasActiveSeason) { %>
   <li><a href="#">Current Season</a>
+    <ul>
+      <li>Schedule</li>
+      <li>Team Standings</li>
+      <li>Player Standings</li>
+    </ul>
   </li>
   <% } %>
   <% if (Model.UserIsLoggedIn) { %>
