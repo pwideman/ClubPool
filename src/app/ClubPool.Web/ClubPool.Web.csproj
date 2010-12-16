@@ -201,6 +201,7 @@
     <Content Include="Scripts\supersubs.js" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Views\CurrentSeason\Schedule.aspx" />
+    <Content Include="Views\CurrentSeason\Standings.aspx" />
     <Content Include="Views\Dashboard\Index.aspx" />
     <Content Include="Views\Dashboard\AlertsGadget.aspx" />
     <Content Include="Views\Divisions\CreateSchedule.aspx" />

@@ -15,8 +15,7 @@
   <li><a href="#">Current Season</a>
     <ul>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.CurrentSeason.CurrentSeasonController>(c => c.Schedule(), "Schedule")%></li>
-      <li><a href="#">Team Standings</a></li>
-      <li><a href="#">Player Standings</a></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.CurrentSeason.CurrentSeasonController>(c => c.Standings(), "Standings") %></li>
     </ul>
   </li>
   <% } %>

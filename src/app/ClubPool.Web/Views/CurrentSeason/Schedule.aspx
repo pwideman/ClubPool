@@ -27,6 +27,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
+Schedule
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">

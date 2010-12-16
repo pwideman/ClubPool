@@ -13,7 +13,10 @@
       <td><%= week.Week%></td>
       <td><%= week.Date.ToShortDateString()%></td>
     <% foreach (var meet in week.Meets) { %>
-      <td><%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(c => c.View(meet.Id), meet.Team1Name + " vs " + meet.Team2Name)%></td>
+      <td <%= meet.Highlight ? @"class=""highlight""" : "" %>>
+        <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(c => c.View(meet.Id), meet.Team1Name + " vs " + meet.Team2Name)%>
+        <div class="schedule-links"><a href="<%= Url.Action("Scoresheet", "Meets", new { id = meet.Id })%>"><%= Html.ContentImage("printer-medium.png", "Print a scoresheet") %></a></div>
+      </td>
     <% } %>
     </tr>
   <% } %>

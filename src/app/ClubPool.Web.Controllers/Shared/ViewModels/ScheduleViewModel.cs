@@ -13,13 +13,15 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
       Weeks = new List<ScheduleWeekViewModel>();
     }
 
-    public ScheduleViewModel(IEnumerable<Meet> meets, DateTime startingDate) {
+    public ScheduleViewModel(IEnumerable<Meet> meets, DateTime startingDate, Team teamToHighlight = null) {
       Weeks = meets.GroupBy(meet => meet.Week)
         .OrderBy(g => g.Key)
         .Select(g => new ScheduleWeekViewModel() {
           Week = g.Key + 1,
           Date = startingDate.AddDays(g.Key * 7),
-          Meets = g.Select(meet => new MeetViewModel(meet))
+          Meets = g.Select(meet => new MeetViewModel(meet) {
+            Highlight = (null == teamToHighlight) ? false : meet.Teams.Contains(teamToHighlight)
+          })
         });
       NumberOfMeetsPerWeek = Weeks.First().Meets.Count();
     }
@@ -42,6 +44,7 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
     public bool IsComplete { get; set; }
     public int Week { get; set; }
     public int Id { get; set; }
+    public bool Highlight { get; set; }
 
     public MeetViewModel() {
     }

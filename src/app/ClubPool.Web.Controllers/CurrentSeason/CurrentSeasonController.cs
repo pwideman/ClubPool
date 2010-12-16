@@ -19,32 +19,52 @@ using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Web.Controllers.Attributes;
+using ClubPool.ApplicationServices.Authentication.Contracts;
 
 namespace ClubPool.Web.Controllers.CurrentSeason
 {
   public class CurrentSeasonController : BaseController
   {
     protected ISeasonRepository seasonRepository;
-    protected IDivisionRepository divisionRepository;
+    protected IUserRepository userRepository;
+    protected IAuthenticationService authService;
 
-    public CurrentSeasonController(ISeasonRepository seasonRepo, IDivisionRepository divisionRepo) {
+    public CurrentSeasonController(ISeasonRepository seasonRepo, IUserRepository userRepo, IAuthenticationService authService) {
       Check.Require(null != seasonRepo, "seasonRepo cannot be null");
-      Check.Require(null != divisionRepo, "divisionRepo cannot be null");
+      Check.Require(null != userRepo, "userRepo cannot be null");
+      Check.Require(null != authService, "authService cannot be null");
 
       seasonRepository = seasonRepo;
-      divisionRepository = divisionRepo;
+      userRepository = userRepo;
+      this.authService = authService;
     }
 
     [Authorize]
     [HttpGet]
     [Transaction]
     public ActionResult Schedule() {
+      var user = userRepository.Get(authService.GetCurrentPrincipal().UserId);
       var season = seasonRepository.GetAll().Where(s => s.IsActive).Single();
       if (null == season) {
         return ErrorView("There is no current season");
       }
       else {
-        var viewModel = new CurrentSeasonScheduleViewModel(season);
+        var viewModel = new CurrentSeasonScheduleViewModel(season, user);
+        return View(viewModel);
+      }
+    }
+
+    [Authorize]
+    [HttpGet]
+    [Transaction]
+    public ActionResult Standings() {
+      var user = userRepository.Get(authService.GetCurrentPrincipal().UserId);
+      var season = seasonRepository.GetAll().Where(s => s.IsActive).Single();
+      if (null == season) {
+        return ErrorView("There is no current season");
+      }
+      else {
+        var viewModel = new CurrentSeasonStandingsViewModel(season, user);
         return View(viewModel);
       }
     }
