@@ -146,7 +146,7 @@ namespace ClubPool.Web.Controllers.Users
         user = userRepository.FindOne(u => u.Username.Equals(viewModel.Username));
       }
       else if (!string.IsNullOrEmpty(viewModel.Email)) {
-        user = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Username)).FirstOrDefault();
+        user = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Email)).FirstOrDefault();
       }
 
       if (null != user) {
@@ -278,9 +278,11 @@ namespace ClubPool.Web.Controllers.Users
       }
       var canEditStatus = CanEditUserStatus(currentPrincipal, user);
       var canEditRoles = CanEditUserRoles(currentPrincipal, user);
+      var canEditPassword = CanEditUserPassword(currentPrincipal, user);
       var viewModel = new EditViewModel(user);
       viewModel.ShowStatus = canEditStatus;
       viewModel.ShowRoles = canEditRoles;
+      viewModel.ShowPassword = canEditPassword;
       if (canEditRoles) {
         viewModel.LoadAvailableRoles(roleRepository);
       }
@@ -288,7 +290,7 @@ namespace ClubPool.Web.Controllers.Users
     }
 
 
-    // TODO: These 3 CanEdit* methods should really be in some type of service,
+    // TODO: These 4 CanEdit* methods should really be in some type of service,
     // maybe the AuthenticationService?
     protected bool CanEditUser(ClubPoolPrincipal principal, User user) {
       // admins & officers can edit the basic properties of all users,
@@ -324,6 +326,11 @@ namespace ClubPool.Web.Controllers.Users
       return principal.IsInRole(Roles.Administrators);
     }
 
+    protected bool CanEditUserPassword(ClubPoolPrincipal principal, User user) {
+      // no one can update a user's password but that user
+      return principal.UserId == user.Id;
+    }
+
 
     [HttpPost]
     [Transaction]
@@ -341,9 +348,12 @@ namespace ClubPool.Web.Controllers.Users
       }
       var canEditStatus = CanEditUserStatus(currentPrincipal, user);
       var canEditRoles = CanEditUserRoles(currentPrincipal, user);
+      var canEditPassword = CanEditUserPassword(currentPrincipal, user);
+
       // must reset these in case we redisplay the form
       viewModel.ShowStatus = canEditStatus;
       viewModel.ShowRoles = canEditRoles;
+      viewModel.ShowPassword = canEditPassword;
 
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
@@ -388,6 +398,9 @@ namespace ClubPool.Web.Controllers.Users
             user.AddRole(roleRepository.Get(roleId));
           }
         }
+      }
+      if (canEditPassword && null != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password.Trim())) {
+        user.Password = membershipService.EncodePassword(viewModel.Password, user.PasswordSalt);
       }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
       return this.RedirectToAction(c => c.Edit(viewModel.Id));

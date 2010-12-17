@@ -12,6 +12,10 @@ using ClubPool.Core.Contracts;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
+  [Compare(Message = "Passwords do not match",
+    PrimaryPropertyName = "ConfirmPassword",
+    PropertyToCompare = "Password",
+    Operator = xVal.Rules.ComparisonRule.Operator.Equals)]
   public class EditViewModel : UserViewModelBase
   {
     [Min(1)]
@@ -23,6 +27,12 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     [DisplayName("Locked")]
     public bool IsLocked { get; set; }
 
+    [DisplayName("Password:")]
+    public string Password { get; set; }
+
+    [DisplayName("Confirm password:")]
+    public string ConfirmPassword { get; set; }
+
     [Min(1)]
     public int Version { get; set; }
 
@@ -33,6 +43,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
 
     public bool ShowStatus { get; set; }
     public bool ShowRoles { get; set; }
+    public bool ShowPassword { get; set; }
 
     public EditViewModel()
       : base() {

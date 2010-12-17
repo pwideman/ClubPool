@@ -63,7 +63,7 @@ namespace ClubPool.ApplicationServices.Membership
       return password.Equals(passwordToVerify);
     }
 
-    protected string EncodePassword(string password, string salt) {
+    public string EncodePassword(string password, string salt) {
       Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
       Check.Require(!string.IsNullOrEmpty(salt), "Hashed passwords require a salt value");
 
@@ -138,7 +138,7 @@ namespace ClubPool.ApplicationServices.Membership
     
     protected string GeneratePasswordResetToken(User user, DateTime date) {
       var ticks = date.Ticks.ToString("0000000000000000000");
-      var hash = new HMACSHA1(Convert.FromBase64String(user.PasswordSalt));
+      var hash = new HMACSHA512(Convert.FromBase64String(user.PasswordSalt));
       return ticks + Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(ticks + user.Username + user.Password + user.PasswordSalt)));
     }
 

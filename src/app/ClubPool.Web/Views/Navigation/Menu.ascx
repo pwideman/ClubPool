@@ -1,9 +1,7 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Navigation.ViewModels.MenuViewModel>" %>
 
 <ul class="sf-menu">
-	<li>
-		<a href="/home">Home</a>
-  </li>
+	<li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Index(), "Home") %></li>
   <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(x => x.Login(string.Empty), "Login")%></li>
   <li><a href="#">League</a>
     <ul>
@@ -22,7 +20,7 @@
   <% if (Model.UserIsLoggedIn) { %>
   <li><a href="#">My</a>
     <ul>
-      <li><a href="/dashboard">Home</a></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Dashboard.DashboardController>(c => c.Index(), "Home") %></li>
       <% if (Model.HasCurrentTeam) { %>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.CurrentTeamId), "Team")%></li>
       <% } %>

@@ -16,5 +16,6 @@ namespace ClubPool.ApplicationServices.Membership.Contracts
     bool EmailIsInUse(string email);
     string GeneratePasswordResetToken(User user);
     bool ValidatePasswordResetToken(string token, User user);
+    string EncodePassword(string password, string salt);
   }
 }

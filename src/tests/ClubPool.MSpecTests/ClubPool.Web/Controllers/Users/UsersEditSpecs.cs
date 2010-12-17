@@ -34,6 +34,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     protected static List<Role> roles;
     protected static Role adminRole;
     protected static Role officerRole;
+    protected static string password = "pass";
 
     Establish context = () => {
       roles = new List<Role>();
@@ -43,7 +44,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       officerRole = new Role(Roles.Officers);
       officerRole.SetIdTo(2);
       roles.Add(officerRole);
-      user = new User("user", "pass", "user", "one", "user@user.com");
+      user = new User("user", password, "user", "one", "user@user.com");
       user.SetIdTo(userId);
       user.SetVersionTo(1);
       userRepository.Stub(r => r.Get(userId)).Return(user);
@@ -70,11 +71,16 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
         IsApproved = !isApproved,
         Id = userId,
         Roles = new int[] { adminRole.Id, officerRole.Id },
-        Version = 1
+        Version = 1,
+        Password = "newpass",
+        ConfirmPassword = "newpass"
       };
 
       user.IsLocked = isLocked;
       user.IsApproved = isApproved;
+
+      membershipService.Stub(s => s.EncodePassword(null, null)).IgnoreArguments().Return(null).WhenCalled(
+        m => m.ReturnValue = m.Arguments[0]);
     };
   }
 
@@ -119,6 +125,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_initialize_the_available_roles = () =>
       roles.Each(r => resultHelper.Model.AvailableRoles.Where(ar => ar.Id == r.Id).Any().ShouldBeTrue());
+
+    It should_not_show_the_password = () =>
+      resultHelper.Model.ShowPassword.ShouldBeFalse();
   }
 
   [Subject(typeof(UsersController))]
@@ -155,6 +164,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_show_the_roles_fields = () =>
       resultHelper.Model.ShowRoles.ShouldBeFalse();
+
+    It should_not_show_the_password = () =>
+      resultHelper.Model.ShowPassword.ShouldBeFalse();
   }
 
   [Subject(typeof(UsersController))]
@@ -192,6 +204,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_show_the_roles_fields = () =>
       resultHelper.Model.ShowRoles.ShouldBeFalse();
+
+    It should_not_show_the_password = () =>
+      resultHelper.Model.ShowPassword.ShouldBeFalse();
   }
 
   [Subject(typeof(UsersController))]
@@ -224,6 +239,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_show_the_roles_fields = () =>
       resultHelper.Model.ShowRoles.ShouldBeFalse();
+
+    It should_show_the_password = () =>
+      resultHelper.Model.ShowPassword.ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
@@ -255,6 +273,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_show_the_roles_fields = () =>
       resultHelper.Model.ShowRoles.ShouldBeFalse();
+
+    It should_show_the_password = () =>
+      resultHelper.Model.ShowPassword.ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
@@ -286,6 +307,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_show_the_roles_fields = () =>
       resultHelper.Model.ShowRoles.ShouldBeFalse();
+
+    It should_not_show_the_password = () =>
+      resultHelper.Model.ShowPassword.ShouldBeFalse();
   }
 
   [Subject(typeof(UsersController))]
@@ -346,6 +370,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
+
+    It should_not_update_the_password = () =>
+      user.Password.ShouldNotEqual(viewModel.Password);
   }
 
   [Subject(typeof(UsersController))]
@@ -388,6 +415,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
+
+    It should_not_update_the_password = () =>
+      user.Password.ShouldNotEqual(viewModel.Password);
   }
 
   [Subject(typeof(UsersController))]
@@ -435,6 +465,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
+
+    It should_not_update_the_password = () =>
+      user.Password.ShouldNotEqual(viewModel.Password);
   }
 
   [Subject(typeof(UsersController))]
@@ -479,6 +512,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
+
+    It should_update_the_password = () =>
+      user.Password.ShouldEqual(viewModel.Password);
   }
 
   [Subject(typeof(UsersController))]
@@ -522,6 +558,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
+
+    It should_update_the_password = () =>
+      user.Password.ShouldEqual(viewModel.Password);
   }
 
   [Subject(typeof(UsersController))]

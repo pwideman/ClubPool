@@ -9,9 +9,6 @@
        Html.RenderPartial("ErrorMessage");
      } %>
   <div class="form-content edit-user-form">
-    <div class="form-header">
-      All fields are required
-    </div>
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
       <fieldset>
         <%= Html.AntiForgeryToken()%>
@@ -24,6 +21,22 @@
             <%= Html.ValidationMessageFor(m => m.Username)%>
           </div>
         </div>
+        <% if (Model.ShowPassword) { %>
+        <div class="form-row">
+          <span class="form-label-left"><%= Html.LabelFor(m => m.Password)%></span>
+          <div class="form-input">
+            <%= Html.PasswordFor(m => m.Password)%>
+            <%= Html.ValidationMessageFor(m => m.Password)%>
+          </div>
+        </div>
+        <div class="form-row">
+          <span class="form-label-left"><%= Html.LabelFor(m => m.ConfirmPassword)%></span>
+          <div class="form-input">
+            <%= Html.PasswordFor(m => m.ConfirmPassword)%>
+            <%= Html.ValidationMessageFor(m => m.ConfirmPassword)%>
+          </div>
+        </div>
+        <% } %>
         <div class="form-row">
           <span class="form-label-left"><%= Html.LabelFor(m => m.Email)%></span>
           <div class="form-input">
