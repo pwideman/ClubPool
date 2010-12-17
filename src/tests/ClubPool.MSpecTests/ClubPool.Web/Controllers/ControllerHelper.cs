@@ -19,9 +19,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     public static HttpContextBase CreateMockHttpContext() {
       var mockIdentity = MockRepository.GenerateMock<IIdentity>();
       var mockPrincipal = MockRepository.GenerateMock<IPrincipal>();
-      mockPrincipal.Expect(p => p.Identity).Return(mockIdentity);
+      mockPrincipal.Stub(p => p.Identity).Return(mockIdentity);
       var mockHttpContext = MockRepository.GenerateMock<HttpContextBase>();
-      mockHttpContext.Expect(c => c.User).Return(mockPrincipal);
+      mockHttpContext.Stub(c => c.User).Return(mockPrincipal);
+      var requestContext = new RequestContext(mockHttpContext, new RouteData());
+      var mockRequest = MockRepository.GenerateMock<HttpRequestBase>();
+      mockHttpContext.Stub(c => c.Request).Return(mockRequest);
+      mockHttpContext.Stub(c => c.CurrentHandler).Return(new MvcHandler(requestContext));
       return mockHttpContext;
     }
 

@@ -3,6 +3,8 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
+using System.Web.Routing;
+using System.Web;
 
 using Microsoft.Web.Mvc;
 //using MvcContrib;
@@ -132,20 +134,50 @@ namespace ClubPool.Web.Controllers.Users
     [HttpPost]
     [Transaction]
     public ActionResult ResetPassword(ResetPasswordViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
-        return View(viewModel);
-      }
-      var user = userRepository.FindOne(u => u.Username.Equals(viewModel.Username));
-      if (null == user) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "There is no user by that username";
-        return View(viewModel);
+      if (string.IsNullOrEmpty(viewModel.Username) && string.IsNullOrEmpty(viewModel.Email)) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "You must enter a username or email address";
+        return View();
       }
 
-      var newPasswords = membershipService.GenerateTempHashedPassword(user.PasswordSalt);
-      user.Password = newPasswords[1];
-      var body = string.Format("Your ClubPool password has been reset to: {0}", newPasswords[0]);
-      emailService.SendSystemEmail(user.Email, "ClubPool password reset", body);
+      string token = "";
+      User user = null;
+
+      if (!string.IsNullOrEmpty(viewModel.Username)) {
+        user = userRepository.FindOne(u => u.Username.Equals(viewModel.Username));
+      }
+      else if (!string.IsNullOrEmpty(viewModel.Email)) {
+        user = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Username)).FirstOrDefault();
+      }
+
+      if (null != user) {
+        // we found a user, send the email containing reset token
+        token = membershipService.GeneratePasswordResetToken(user);
+        var helper = new UrlHelper(((MvcHandler)HttpContext.CurrentHandler).RequestContext);
+        var url = helper.Action("ValidatePasswordResetToken", "Users", new { token = token }, HttpContext.Request.Url.Scheme);
+        var body = string.Format("You have requested to reset your password at ClubPool. Click the following link to be logged into your" +
+          " account and taken to the member info page, where you can change your password. The link is valid for 24 hours." + Environment.NewLine + Environment.NewLine +
+          "WARNING: IF YOU DID NOT REQUEST THIS EMAIL, DO NOT CLICK THE LINK BELOW, AND ALERT THE SITE ADMINISTRATOR" + Environment.NewLine + Environment.NewLine +
+          url);
+        emailService.SendSystemEmail(user.Email, "ClubPool password reset", body);
+      }
+      // always go to the complete page, we don't want potential attackers to be able to
+      // discover valid usernames through this interface
       return View("ResetPasswordComplete");
+    }
+
+    [HttpGet]
+    [Transaction]
+    public ActionResult ValidatePasswordResetToken(string token) {
+      var users = userRepository.GetAll();
+      foreach (var user in users) {
+        if (membershipService.ValidatePasswordResetToken(token, user)) {
+          authenticationService.LogIn(user.Username, false);
+          return this.RedirectToAction(c => c.Edit(user.Id));
+        }
+      }
+      // if we got here, the token is not valid
+      TempData[GlobalViewDataProperty.PageErrorMessage] = "The reset password link that you clicked on is invalid, enter your information again";
+      return this.RedirectToAction(c => c.ResetPassword());
     }
 
     public ActionResult Logout() {

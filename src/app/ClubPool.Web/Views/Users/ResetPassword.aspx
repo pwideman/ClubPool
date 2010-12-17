@@ -2,11 +2,13 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
 <h5>Reset Password</h5>
-<p>Enter your username below to have a new temporary password sent to the email address registered with
-the username. You may change the temporary password by going to My > Member Info after logging in.</p>
+<p>Enter your username or email address below to have an email containing password reset instructions sent to the email address registered with
+the username (or to the supplied email address).</p>
 <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.ResetPassword(null), 
       FormMethod.Post)) { %>
-  Username: <%= Html.TextBoxFor(m => m.Username, new { @class = "username" })%> <%= Html.SubmitButton("submit", "Reset Password") %>
+  <div><span class="resetpassword-label">Username:</span><%= Html.TextBoxFor(m => m.Username, new { @class = "resetpassword-field" })%></div>
+  <div><span class="resetpassword-label">Email:</span><%= Html.TextBoxFor(m => m.Email, new { @class="resetpassword-field"}) %></div>
+  <div><%= Html.SubmitButton("submit", "Reset Password") %></div>
 <% } %>
 <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.ResetPasswordViewModel>().DisableMessages() %>
 <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) { 

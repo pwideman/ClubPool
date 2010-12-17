@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
 
-<p>Your password has been reset. An email has been sent to the registered email address containing the new temporary password.</p>
+<p>An email containing a link to reset your password has been sent to the email address you provided.</p>
 
 </asp:Content>
 

@@ -669,8 +669,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     static ViewResultHelper resultHelper;
     static ResetPasswordViewModel viewModel;
     static string username = "test";
-    static string newPassword = "newpassword";
-    static string newHashedPassword = "hashedPassword";
+    static string token = "testtoken";
     static User user;
     static string emailTo;
     static string emailSubject;
@@ -678,21 +677,19 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     Establish context = () => {
       viewModel = new ResetPasswordViewModel() { Username = username };
-      membershipService.Stub(s => s.GenerateTempHashedPassword(null)).IgnoreArguments().Return(new string[2] { newPassword, newHashedPassword });
       user = new User(username, "test", "test", "user", "test") { Password = "before", PasswordSalt = "salt" };
       userRepository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(user);
+      membershipService.Stub(s => s.GeneratePasswordResetToken(user)).IgnoreArguments().Return(token);
       emailService.Stub(s => s.SendSystemEmail("", null, null)).IgnoreArguments()
         .WhenCalled(m => { 
           emailTo = m.Arguments[0] as string;
           emailSubject = m.Arguments[1] as string;
           emailBody = m.Arguments[2] as string;
         });
+      controller.ControllerContext.HttpContext.Request.Stub(r => r.Url).Return(new Uri("http://host/users/resetpassword"));
     };
 
     Because of = () => resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel));
-
-    It should_reset_the_user_password = () =>
-      user.Password.ShouldEqual(newHashedPassword);
 
     It should_return_the_reset_password_complete_view = () =>
       resultHelper.Result.ViewName.ShouldEqual("ResetPasswordComplete");
@@ -700,27 +697,29 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_send_the_user_an_email = () =>
       emailTo.ShouldEqual(user.Email);
 
-    It should_send_the_new_password_in_the_email = () =>
-      emailBody.ShouldContain(newPassword);
+    // cannot assert this until I figure out how to mock the controller context
+    // enough to allow UrlHelper to work
+    //It should_send_the_token_in_the_email = () =>
+    //  emailBody.ShouldContain(token);
   }
 
   [Subject(typeof(UsersController))]
   public class when_asked_to_reset_a_password_for_a_nonexistent_username : specification_for_users_controller
   {
     static ResetPasswordViewModel viewModel;
-    static ViewResultHelper<ResetPasswordViewModel> resultHelper;
+    static ViewResultHelper resultHelper;
 
     Establish context = () => {
       viewModel = new ResetPasswordViewModel() { Username = "bad" };
     };
 
-    Because of = () => resultHelper = new ViewResultHelper<ResetPasswordViewModel>(controller.ResetPassword(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel));
 
-    It should_return_the_default_view = () =>
-      resultHelper.Result.ViewName.ShouldBeEmpty();
+    It should_return_the_reset_password_complete_view = () =>
+      resultHelper.Result.ViewName.ShouldEqual("ResetPasswordComplete");
 
-    It should_add_a_page_error_message = () =>
-      resultHelper.Result.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+    It should_not_send_an_email = () =>
+      emailService.AssertWasNotCalled(s => s.SendSystemEmail("", null, null), c => c.IgnoreArguments());
   }
 
   [Subject(typeof(UsersController))]
@@ -738,8 +737,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_return_the_default_view = () =>
       resultHelper.Result.ViewName.ShouldBeEmpty();
 
-    It should_add_a_model_state_error_for_username = () =>
-      resultHelper.Result.ViewData.ModelState.Keys.ShouldContain("Username");
+    It should_return_a_page_error_message = () =>
+      resultHelper.Result.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
   }
 
   [Subject(typeof(UsersController))]
@@ -782,21 +781,27 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   public class when_asked_to_recover_username_for_a_nonexistent_email : specification_for_users_controller
   {
     static RecoverUsernameViewModel viewModel;
-    static ViewResultHelper<RecoverUsernameViewModel> resultHelper;
+    static ViewResultHelper resultHelper;
+    static string emailTo;
+    static string testEmail = "bad@email.com";
 
     Establish context = () => {
-      viewModel = new RecoverUsernameViewModel() { Email = "bad@email.com" };
+      viewModel = new RecoverUsernameViewModel() { Email = testEmail };
       var user = new User("test", "test", "test", "user", "test");
       userRepository.Stub(r => r.GetAll()).Return(new List<User>() { user }.AsQueryable());
+      emailService.Stub(s => s.SendSystemEmail("", null, null)).IgnoreArguments()
+        .WhenCalled(m => {
+          emailTo = m.Arguments[0] as string;
+        });
     };
 
-    Because of = () => resultHelper = new ViewResultHelper<RecoverUsernameViewModel>(controller.RecoverUsername(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel));
 
-    It should_return_the_default_view = () =>
-      resultHelper.Result.ViewName.ShouldBeEmpty();
+    It should_return_the_recover_username_complete_view = () =>
+      resultHelper.Result.ViewName.ShouldEqual("RecoverUsernameComplete");
 
-    It should_add_a_page_error_message = () =>
-      resultHelper.Result.TempData.Keys.ShouldContain(GlobalViewDataProperty.PageErrorMessage);
+    It should_send_the_user_an_email = () =>
+      emailTo.ShouldEqual(testEmail);
   }
 
   [Subject(typeof(UsersController))]

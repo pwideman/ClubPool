@@ -14,6 +14,7 @@ namespace ClubPool.ApplicationServices.Membership.Contracts
     User CreateUser(string username, string password, string firstName, string lastName, string email, bool isApproved, bool isLocked);
     bool UsernameIsInUse(string username);
     bool EmailIsInUse(string email);
-    string[] GenerateTempHashedPassword(string salt);
+    string GeneratePasswordResetToken(User user);
+    bool ValidatePasswordResetToken(string token, User user);
   }
 }

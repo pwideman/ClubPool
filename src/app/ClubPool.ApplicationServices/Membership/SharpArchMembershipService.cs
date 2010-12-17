@@ -132,10 +132,27 @@ namespace ClubPool.ApplicationServices.Membership
       return Convert.ToBase64String(buf);
     }
 
-    public string[] GenerateTempHashedPassword(string salt) {
-      var pass = System.Web.Security.Membership.GeneratePassword(14, 7);
-      return new string[2] { pass, EncodePassword(pass, salt) };
+    public string GeneratePasswordResetToken(User user) {
+      return GeneratePasswordResetToken(user, DateTime.Now);
+    }
+    
+    protected string GeneratePasswordResetToken(User user, DateTime date) {
+      var ticks = date.Ticks.ToString("0000000000000000000");
+      var hash = new HMACSHA1(Convert.FromBase64String(user.PasswordSalt));
+      return ticks + Convert.ToBase64String(hash.ComputeHash(Encoding.Unicode.GetBytes(ticks + user.Username + user.Password + user.PasswordSalt)));
     }
 
+    public bool ValidatePasswordResetToken(string token, User user) {
+      var dt = new DateTime(long.Parse(token.Substring(0, 19)));
+      var ts = DateTime.Now - dt;
+      if (ts.Days > 0) {
+        return false;
+      }
+      else {
+        var validToken = GeneratePasswordResetToken(user, dt);
+        return validToken.Equals(token, StringComparison.InvariantCulture);
+      }
+
+    }
   }
 }

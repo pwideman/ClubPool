@@ -2,9 +2,9 @@
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class ResetPasswordViewModel : ValidatableViewModel
+  public class ResetPasswordViewModel
   {
-    [NotNullNotEmpty]
     public string Username { get; set; }
+    public string Email { get; set; }
   }
 }
