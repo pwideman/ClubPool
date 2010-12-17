@@ -433,16 +433,18 @@ namespace ClubPool.Web.Controllers.Users
         return View(viewModel);
       }
       var usernames = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Email)).Select(u => u.Username).ToList();
+      string body = "";
       if (!usernames.Any()) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "There are no usernames associated with that email address";
-        return View(viewModel);
+        body = string.Format("There are no usernames registered for the email address '{0}'.", viewModel.Email);
       }
-      
-      var body = new StringBuilder(string.Format("The following usernames are registered for the email address '{0}':", viewModel.Email) + Environment.NewLine);
-      foreach (var username in usernames) {
-        body.Append(Environment.NewLine + username);
+      else {
+        var bodysb = new StringBuilder(string.Format("The following usernames are registered for the email address '{0}':", viewModel.Email) + Environment.NewLine);
+        foreach (var username in usernames) {
+          bodysb.Append(Environment.NewLine + username);
+        }
+        body = bodysb.ToString();
       }
-      emailService.SendSystemEmail(viewModel.Email, "ClubPool Username Assistance", body.ToString());
+      emailService.SendSystemEmail(viewModel.Email, "ClubPool Username Assistance", body);
       return View("RecoverUsernameComplete");
     }
   }
