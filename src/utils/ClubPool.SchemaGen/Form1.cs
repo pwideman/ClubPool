@@ -16,6 +16,8 @@ using SharpArch.Data.NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using MySql.Data.MySqlClient;
 using nhconfig=NHibernate.Cfg;
+using log4net;
+using NHibernate.Linq;
 
 using Core=ClubPool.Core;
 using ClubPool.Data;
@@ -30,6 +32,7 @@ namespace ClubPool.SchemaGen
     protected long beginTicks = 0;
     protected nhconfig.Configuration nhConfig;
     protected Action workerAction = null;
+    protected static readonly ILog logger = LogManager.GetLogger(typeof(SchemaGen));
 
     public SchemaGen() {
       InitializeComponent();
@@ -56,6 +59,7 @@ namespace ClubPool.SchemaGen
     }
 
     private void startBackgroundWorker(Action action) {
+      logger.Info("Starting background worker");
       EnableButtons(false);
       backgroundWorker1.RunWorkerAsync(action);
     }
@@ -109,10 +113,12 @@ namespace ClubPool.SchemaGen
       }
       else {
         var elapsedTime = new TimeSpan(DateTime.Now.Ticks - beginTicks);
-        OutputTextBox.AppendText(Environment.NewLine + string.Format("{0}:{1}.{2} - {3}",
+        var msg = Environment.NewLine + string.Format("{0}:{1}.{2} - {3}",
           elapsedTime.Minutes.ToString("00"),
           elapsedTime.Seconds.ToString("00"),
-          elapsedTime.Milliseconds.ToString("000"), text));
+          elapsedTime.Milliseconds.ToString("000"), text);
+        logger.Info(msg);
+        OutputTextBox.AppendText(msg);
         OutputTextBox.SelectionStart = OutputTextBox.Text.Length;
         OutputTextBox.ScrollToCaret();
         OutputTextBox.Update();
@@ -120,6 +126,30 @@ namespace ClubPool.SchemaGen
     }
 
     private void TestProcess() {
+      var seasonRepo = new SeasonRepository();
+      //var season = seasonRepo.GetAll().Where(s => s.IsActive).FetchMany(s => s.Divisions).ThenFetchMany(d => d.Teams).ThenFetchMany(t => t.Players).Single();
+      var season = seasonRepo.GetAll().Where(s => s.IsActive).Fetch(s => s.Divisions).Single();
+      output("Active season: " + season.Name);
+      foreach (var division in season.Divisions) {
+        output("Division: " + division.Name);
+        foreach (var team in division.Teams) {
+          output("Team: " + team.Name);
+          foreach (var player in team.Players) {
+            output("Player: " + player.FullName);
+          }
+        }
+        //foreach (var meet in division.Meets) {
+        //  output("Meet: " + meet.Id);
+        //  output(meet.Team1.Name + " vs " + meet.Team2.Name);
+        //  foreach (var match in meet.Matches) {
+        //    output("Match: " + match.Id);
+        //    output(match.Player1.FullName + " vs " + match.Player2.FullName);
+        //    foreach (var result in match.Results) {
+        //      output("Result for " + result.Player.FullName);
+        //    }
+        //  }
+        //}
+      }
     }
 
     private void ImportIPDataSQL() {
