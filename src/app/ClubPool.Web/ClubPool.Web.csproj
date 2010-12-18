@@ -228,7 +228,6 @@
     <Content Include="Views\Seasons\Index.aspx" />
     <Content Include="Views\Seasons\SeasonEditControl.ascx" />
     <Content Include="Views\Seasons\View.aspx" />
-    <Content Include="Views\Shared\DebugFormSubmission.ascx" />
     <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\FormError.ascx" />
     <Content Include="Views\Shared\NotificationMessage.ascx" />
@@ -241,7 +240,6 @@
     <Content Include="Views\Users\LoginControl.ascx" />
     <Content Include="Views\Shared\Rescues\DefaultError.aspx" />
     <Content Include="Views\Users\AccountHelp.aspx" />
-    <Content Include="Views\Users\Copy of Index.aspx" />
     <Content Include="Views\Users\Index.aspx" />
     <Content Include="Views\Users\Login.aspx" />
     <Content Include="Views\Users\LoginGadget.aspx" />

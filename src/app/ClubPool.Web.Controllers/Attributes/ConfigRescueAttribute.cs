@@ -4,6 +4,8 @@ using System.Web.Mvc;
 
 using MvcContrib.Filters;
 
+using ClubPool.Framework.Configuration;
+
 namespace ClubPool.Web.Controllers.Attributes
 {
   public class ConfigRescueAttribute : RescueAttribute
@@ -12,17 +14,7 @@ namespace ClubPool.Web.Controllers.Attributes
     public ConfigRescueAttribute(string view, params Type[] exceptionTypes) : base(view, exceptionTypes) { }
 
     public override void OnException(ExceptionContext filterContext) {
-      var useRescuesAppSetting = ConfigurationManager.AppSettings["UseRescues"];
-      bool useRescues;
-      if (string.IsNullOrEmpty(useRescuesAppSetting)) {
-        useRescues = true;
-      }
-      else {
-        var parsed = bool.TryParse(useRescuesAppSetting, out useRescues);
-        if (!parsed) {
-          useRescues = true;
-        }
-      }
+      bool useRescues = ClubPoolConfigurationSection.GetConfig().UseRescues;
       if (useRescues) {
         base.OnException(filterContext);
       }

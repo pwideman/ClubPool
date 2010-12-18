@@ -8,6 +8,7 @@ using System.Configuration;
 using SharpArch.Core;
 
 using ClubPool.ApplicationServices.Messaging.Contracts;
+using ClubPool.Framework.Configuration;
 
 namespace ClubPool.ApplicationServices.Messaging
 {
@@ -17,8 +18,9 @@ namespace ClubPool.ApplicationServices.Messaging
     protected string systemEmailAddress;
 
     public EmailService() {
-      smtpHost = ConfigurationManager.AppSettings["SmtpHost"];
-      systemEmailAddress = ConfigurationManager.AppSettings["SystemEmailAddress"];
+      var config = ClubPoolConfigurationSection.GetConfig();
+      smtpHost = config.SmtpHost;
+      systemEmailAddress = config.SystemEmailAddress;
     }
 
     public void SendSystemEmail(string to, string subject, string body) {
