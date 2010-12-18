@@ -23,6 +23,7 @@ using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Framework;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
+using ClubPool.Framework.Configuration;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
@@ -153,12 +154,13 @@ namespace ClubPool.Web.Controllers.Users
         // we found a user, send the email containing reset token
         token = membershipService.GeneratePasswordResetToken(user);
         var helper = new UrlHelper(((MvcHandler)HttpContext.CurrentHandler).RequestContext);
+        var siteName = ClubPoolConfigurationSection.GetConfig().SiteName;
         var url = helper.Action("ValidatePasswordResetToken", "Users", new { token = token }, HttpContext.Request.Url.Scheme);
-        var body = string.Format("You have requested to reset your password at ClubPool. Click the following link to be logged into your" +
-          " account and taken to the member info page, where you can change your password. The link is valid for 24 hours." + Environment.NewLine + Environment.NewLine +
-          "WARNING: IF YOU DID NOT REQUEST THIS EMAIL, DO NOT CLICK THE LINK BELOW, AND ALERT THE SITE ADMINISTRATOR" + Environment.NewLine + Environment.NewLine +
-          url);
-        emailService.SendSystemEmail(user.Email, "ClubPool password reset", body);
+        var body = string.Format("You have requested to reset your password at {0}. Click the following link to be logged into your" +
+          " account and taken to the member info page, where you can change your password. The link is valid for 24 hours.{1}{1}" +
+          "WARNING: IF YOU DID NOT REQUEST THIS EMAIL, DO NOT CLICK THE LINK BELOW, AND ALERT THE SITE ADMINISTRATOR{1}{1}{2}",
+          siteName, Environment.NewLine, url);
+        emailService.SendSystemEmail(user.Email, string.Format("{0} password reset", siteName), body);
       }
       // always go to the complete page, we don't want potential attackers to be able to
       // discover valid usernames through this interface
@@ -212,15 +214,15 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected void SendNewUserAwaitingApprovalEmail(User newUser) {
-      var officers = roleRepository.FindOne(RoleQueries.RoleByName(Roles.Officers)).Users;
-      if (officers.Any()) {
-        var officerEmailAddresses = officers.Select(u => u.Email).ToList();
-        var subject = "New user sign up at ClubPool";
+      var administrators = roleRepository.FindOne(r => r.Name.Equals(Roles.Administrators)).Users;
+      if (administrators.Any()) {
+        var adminEmailAddresses = administrators.Select(u => u.Email).ToList();
+        var siteName = ClubPoolConfigurationSection.GetConfig().SiteName;
+        var subject = string.Format("New user sign up at {0}", siteName);
         var body = new StringBuilder();
-        body.Append("A new user has signed up at ClubPool and needs admin approval:" + Environment.NewLine);
-        body.Append(string.Format("Username: {0}" + Environment.NewLine + "Name: {1} {2}" + Environment.NewLine + "Email: {3}",
-          newUser.Username, newUser.FirstName, newUser.LastName, newUser.Email));
-        emailService.SendSystemEmail(officerEmailAddresses, subject, body.ToString());
+        body.AppendFormat("A new user has signed up at {0} and needs admin approval:{1}{1}", siteName, Environment.NewLine);
+        body.AppendFormat("Username: {0}{1}Name: {2} {3}{1}Email: {4}", newUser.Username, Environment.NewLine, newUser.FirstName, newUser.LastName, newUser.Email);
+        emailService.SendSystemEmail(adminEmailAddresses, subject, body.ToString());
       }
     }
 
@@ -483,13 +485,15 @@ namespace ClubPool.Web.Controllers.Users
         body = string.Format("There are no usernames registered for the email address '{0}'.", viewModel.Email);
       }
       else {
-        var bodysb = new StringBuilder(string.Format("The following usernames are registered for the email address '{0}':", viewModel.Email) + Environment.NewLine);
+        var bodysb = new StringBuilder(string.Format("The following usernames are registered for the email address '{0}':{1}", 
+          viewModel.Email, Environment.NewLine));
         foreach (var username in usernames) {
           bodysb.Append(Environment.NewLine + username);
         }
         body = bodysb.ToString();
       }
-      emailService.SendSystemEmail(viewModel.Email, "ClubPool Username Assistance", body);
+      var siteName = ClubPoolConfigurationSection.GetConfig().SiteName;
+      emailService.SendSystemEmail(viewModel.Email, string.Format("{0} Username Assistance", siteName), body);
       return View("RecoverUsernameComplete");
     }
   }

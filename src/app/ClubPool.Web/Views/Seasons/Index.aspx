@@ -68,9 +68,7 @@
   %>
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Seasons - ClubPool
-</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Seasons</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
 <script type="text/javascript">

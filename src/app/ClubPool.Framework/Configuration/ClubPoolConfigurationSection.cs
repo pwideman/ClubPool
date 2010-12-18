@@ -32,5 +32,12 @@ namespace ClubPool.Framework.Configuration
         return (bool)this["useRescues"];
       }
     }
+
+    [ConfigurationProperty("siteName", DefaultValue="ClubPool")]
+    public string SiteName {
+      get {
+        return this["siteName"] as string;
+      }
+    }
   }
 }

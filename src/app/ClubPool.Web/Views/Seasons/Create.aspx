@@ -25,9 +25,7 @@
   </div>
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-  Add Season - ClubPool
-</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Add Season</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
 </asp:Content>

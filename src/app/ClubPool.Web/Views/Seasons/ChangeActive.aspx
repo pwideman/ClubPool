@@ -30,7 +30,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Change Active Season - ClubPool
+Change Active Season
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
