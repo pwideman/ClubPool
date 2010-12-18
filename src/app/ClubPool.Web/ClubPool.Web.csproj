@@ -202,9 +202,9 @@
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Views\CurrentSeason\Schedule.aspx" />
     <Content Include="Views\CurrentSeason\Standings.aspx" />
+    <Content Include="Views\CurrentSeason\StandingsPlayer.ascx" />
     <Content Include="Views\Dashboard\Index.aspx" />
     <Content Include="Views\Dashboard\AlertsGadget.aspx" />
-    <Content Include="Views\Divisions\CreateSchedule.aspx" />
     <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Home\StaleObjectStateError.aspx" />

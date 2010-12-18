@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.CurrentSeason.ViewModels.CurrentSeasonStandingsViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-<h4><%= Model.Name %> Standings</h4>
+<h4><%= Html.Encode(Model.Name) %> Standings</h4>
 
 <% if (!Model.HasDivisions) { %>
 <p>This season has no divisions.</p>
@@ -9,7 +9,7 @@
 <div id="divisiontabs">
   <ul>
   <% foreach (var division in Model.Divisions) { %>
-    <li><a href="#division-<%= division.Id%>"><%= division.Name%></a></li>
+    <li><a href="#division-<%= division.Id%>"><%= Html.Encode(division.Name)%></a></li>
   <% } %>
   </ul>
   <% foreach (var division in Model.Divisions) {
@@ -37,31 +37,11 @@
           <% foreach (var team in division.Teams) { %>
             <tr <%= team.Highlight ? @"class=""highlight""" : "" %>>
               <td><%= team.Rank %></td>
-              <td><%= team.Name %></td>
+              <td><%= Html.Encode(team.Name) %></td>
               <td><%= string.Format("{0} - {1}", team.Wins, team.Losses) %></td>
               <td><%= string.Format("{0:0.00}", team.WinPercentage) %></td>
-              <% if (null != team.Player1) { %>
-              <td><%= team.Player1.Name%></td>
-              <td><%= team.Player1.SkillLevel%></td>
-              <td><%= string.Format("{0} - {1}", team.Player1.Wins, team.Player1.Losses)%></td>
-              <td><%= string.Format("{0:0.00}", team.Player1.WinPercentage)%></td>
-              <% } else { %>
-              <td/>
-              <td/>
-              <td/>
-              <td/>
-              <% } %>
-              <% if (null != team.Player2) { %>
-              <td><%= team.Player2.Name%></td>
-              <td><%= team.Player2.SkillLevel%></td>
-              <td><%= string.Format("{0} - {1}", team.Player2.Wins, team.Player2.Losses)%></td>
-              <td><%= string.Format("{0:0.00}", team.Player2.WinPercentage)%></td>
-              <% } else { %>
-              <td/>
-              <td/>
-              <td/>
-              <td/>
-              <% } %>
+              <% Html.RenderPartial("StandingsPlayer", team.Player1); %>
+              <% Html.RenderPartial("StandingsPlayer", team.Player2); %>
             </tr>
           <% } %>
           </tbody>
@@ -87,10 +67,7 @@
           <% foreach (var player in division.Players) { %>
             <tr <%= player.Highlight ? @"class=""highlight""" : "" %>>
               <td><%= player.Rank %></td>
-              <td><%= player.Name %></td>
-              <td><%= player.SkillLevel %></td>
-              <td><%= string.Format("{0} - {1}", player.Wins, player.Losses) %></td>
-              <td><%= string.Format("{0:0.00}", player.WinPercentage) %></td>
+              <% Html.RenderPartial("StandingsPlayer", player); %>
             </tr>
           <% } %>
           </tbody>
