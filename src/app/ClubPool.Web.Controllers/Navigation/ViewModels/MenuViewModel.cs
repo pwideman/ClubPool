@@ -12,6 +12,7 @@ namespace ClubPool.Web.Controllers.Navigation.ViewModels
     public int UserId { get; set; }
     public bool HasActiveSeason { get; set; }
     public int ActiveSeasonId { get; set; }
+    public string ActiveSeasonName { get; set; }
     public bool HasCurrentTeam { get; set; }
     public int CurrentTeamId { get; set; }
   }

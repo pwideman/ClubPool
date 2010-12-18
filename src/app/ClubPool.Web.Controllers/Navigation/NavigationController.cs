@@ -50,6 +50,7 @@ namespace ClubPool.Web.Controllers.Navigation
         viewModel.HasActiveSeason = true;
         var season = seasonRepository.FindOne(s => s.IsActive);
         viewModel.ActiveSeasonId = season.Id;
+        viewModel.ActiveSeasonName = season.Name;
         if (viewModel.UserIsLoggedIn) {
           var team = teamRepository.FindOne(t => t.Division.Season == season && t.Players.Where(p => p.Id == viewModel.UserId).Any());
           if (null != team) {
