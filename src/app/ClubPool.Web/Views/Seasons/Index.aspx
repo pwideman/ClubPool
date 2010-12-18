@@ -28,7 +28,7 @@
       <tbody class="content mouseover-highlight-row">
     <% foreach (var item in Model.Items) { %>
         <tr>
-          <td><%= Html.Encode(item.Id) %></td>
+          <td><%= item.Id %></td>
           <td><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.View(item.Id), item.Name) %></td>
           <td>
             <% if (item.IsActive) { %>

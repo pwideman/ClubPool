@@ -35,7 +35,7 @@
       <tbody class="content mouseover-highlight-row">
     <% foreach (var item in Model.Items) { %>
         <tr>
-          <td><%= Html.Encode(item.Id) %></td>
+          <td><%= item.Id %></td>
           <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(item.Id), item.Username) %></td>
           <td><%= Html.Encode(item.Name) %></td>
           <td><%= Html.Encode(item.Email) %></td>
@@ -81,9 +81,7 @@
   %>
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Users - ClubPool
-</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Users</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
 <script type="text/javascript">

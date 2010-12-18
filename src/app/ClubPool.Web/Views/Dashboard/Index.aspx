@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
     <%= Html.ContentImage("home.png", "Home") %>
-    <span><%= Model.UserFullName %>'s Dashboard</span>
+    <span><%= Html.Encode(Model.UserFullName) %>'s Dashboard</span>
   </div>
   <div class="dashboard">
     <div class="dashboard-item-container dashboard-column-left">
@@ -25,9 +25,9 @@
                  foreach(var result in match.Results) { %>
               <tr <%= result.Winner ? @"class=""winner""" : "" %>>
                 <td class="player"><%= Html.Encode(result.Player) %></td>
-                <td><%= Html.Encode(result.Innings) %></td>
-                <td><%= Html.Encode(result.DefensiveShots) %></td>
-                <td><%= Html.Encode(result.Wins) %></td>
+                <td><%= result.Innings %></td>
+                <td><%= result.DefensiveShots %></td>
+                <td><%= result.Wins %></td>
               </tr>
             <%  } } %>
             </tbody>
@@ -97,10 +97,10 @@
                 <td><%= string.Format("{0} {1}", result.Date.ToShortDateString(), result.Date.ToShortTimeString()) %></td>
                 <td class="team"><%= Html.Encode(result.Team) %></td>
                 <td class="player"><%= Html.Encode(result.Player) %></td>
-                <td><%= Html.Encode(result.Innings) %></td>
-                <td><%= Html.Encode(result.DefensiveShots) %></td>
-                <td><%= Html.Encode(result.NetInnings) %></td>
-                <td><%= Html.Encode(result.Wins) %></td>
+                <td><%= result.Innings %></td>
+                <td><%= result.DefensiveShots %></td>
+                <td><%= result.NetInnings %></td>
+                <td><%= result.Wins %></td>
               </tr>
             <% } %>
             </tbody>

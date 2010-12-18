@@ -9,16 +9,12 @@
   an email once an administrator has verified your information.</p>
   
   <div class="form-content">
-    <div class="form-header">
-      All fields are required
-    </div>
     <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
           Html.RenderPartial("ErrorMessage");
         } %>
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), FormMethod.Post, new { @class = "signupForm normal" })) { %>
       <fieldset>
         <%= Html.AntiForgeryToken()%>
-        <%= Html.HiddenFor(m => m.PreviousUsername)%>
         <% Html.RenderPartial("CreateUserControl"); %>
         <div class="spacer">&nbsp;</div>
         <div class="form-row">

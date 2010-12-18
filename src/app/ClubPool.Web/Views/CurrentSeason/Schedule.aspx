@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
 
-<h4><%= Model.Name%> Schedule</h4>
+<h4><%= Html.Encode(Model.Name)%> Schedule</h4>
 
 <% if (!Model.HasDivisions) { %>
 <p>This season has no divisions.</p>
@@ -10,7 +10,7 @@
 <div id="divisiontabs">
   <ul>
   <% foreach (var division in Model.Divisions) { %>
-    <li><a href="#division-<%= division.Id%>"><%= division.Name%></a></li>
+    <li><a href="#division-<%= division.Id%>"><%= Html.Encode(division.Name)%></a></li>
   <% } %>
   </ul>
   <% foreach (var division in Model.Divisions) { %>

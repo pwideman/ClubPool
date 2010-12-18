@@ -2,15 +2,14 @@
 <%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-<% if (Model.CanUpdateName) { %>
-<% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.UpdateName(null), FormMethod.Post, new { id = "update_name_form" })) { %>
+<% if (Model.CanUpdateName) {
+     using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.UpdateName(null), FormMethod.Post, new { id = "update_name_form" })) { %>
 <%= Html.AntiForgeryToken()%>
 <%= Html.HiddenFor(m => m.Id) %>
 <p><input type="text" id="name" name="name" class="team-name required" size="30" value="<%= Html.Encode(Model.Name) %>" title="Click to edit team name, enter or tab out to save"/></p>
-<% }
-   }
-   else { %>
-<h4><%= Model.Name%></h4>
+<%   }
+   } else { %>
+<h4><%= Html.Encode(Model.Name)%></h4>
 <% } %>
 <div class="container">
   <div class="header">Details</div>
@@ -51,10 +50,10 @@
           <tr <%= match.Win ? @"class=""winner""" : "" %>>
             <td><%= Html.Encode(meet.Opponent)%></td>
             <td><%= Html.Encode(match.OpponentPlayerName)%></td>
-            <td><%= Html.Encode(match.OpponentPlayerWins)%></td>
+            <td><%= match.OpponentPlayerWins%></td>
             <td><%= Html.Encode(match.TeamPlayerName)%></td>
-            <td><%= Html.Encode(match.TeamPlayerWins)%></td>
-            <td><%= Html.Encode(match.Win ? "W" : "L")%></td>
+            <td><%= match.TeamPlayerWins%></td>
+            <td><%= match.Win ? "W" : "L"%></td>
           </tr>
         <%   } %>
         </tbody>

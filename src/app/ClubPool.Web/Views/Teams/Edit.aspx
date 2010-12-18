@@ -2,12 +2,11 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
-    <span>Edit team <%= Model.Name %></span>
+    <span>Edit team <%= Html.Encode(Model.Name) %></span>
   </div>
   <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-          Html.RenderPartial("ErrorMessage");
+       Html.RenderPartial("ErrorMessage");
      } %>
-
   <div class="form-content">
     <div class="form-header">
       All fields are required
@@ -29,7 +28,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Edit Team - ClubPool
+Edit Team
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">

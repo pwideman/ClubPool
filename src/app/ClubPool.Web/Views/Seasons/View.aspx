@@ -7,7 +7,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
-    <span><%= Model.Name %></span>
+    <span><%= Html.Encode(Model.Name) %></span>
   </div>
 
   <div class="action-button-row">
@@ -21,7 +21,7 @@
     <ul>
       <% foreach (var division in Model.Divisions) { %>
       <li>
-        <a href="#division-<%= division.Id %>"><%= division.Name%></a>
+        <a href="#division-<%= division.Id %>"><%= Html.Encode(division.Name)%></a>
       </li>
       <% } %>
     </ul>
@@ -72,7 +72,7 @@
                     <div class="season-view-player-list">
                       <ul>
                       <% foreach (var player in team.Players) { %>
-                        <li><%= player.Name%></li>
+                        <li><%= Html.Encode(player.Name)%></li>
                       <% } %>
                       </ul>
                     </div>
@@ -86,8 +86,8 @@
                           using (var form = Html.BeginForm<TeamsController>(c => c.Delete(team.Id), FormMethod.Post, new { @class = "invisible" })) { %>
                       <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
                       <%= Html.AntiForgeryToken()%>
-                    <%   }
-                        } %>
+                    <%    }
+                       } %>
                   </td>
                 </tr>
               <% } %>
@@ -147,7 +147,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-<%= Model.Name %> - ClubPool
+<%= Html.Encode(Model.Name) %>
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">

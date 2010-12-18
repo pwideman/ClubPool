@@ -2,14 +2,14 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
-    <span>Add team to <%= Model.DivisionName %></span>
+    <span>Add team to <%= Html.Encode(Model.DivisionName) %></span>
   </div>
   <div class="form-content">
     <div class="form-header">
       All fields are required
     </div>
     <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-          Html.RenderPartial("ErrorMessage");
+         Html.RenderPartial("ErrorMessage");
        } 
        using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Create(null), FormMethod.Post, new { @class = "normal" })) {
     %>
@@ -28,7 +28,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Add Team - ClubPool
+Add Team
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">

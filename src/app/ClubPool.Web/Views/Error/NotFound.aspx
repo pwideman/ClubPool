@@ -9,7 +9,7 @@
 </head>
 <body>
   <div class="rescuediv corner">
-    Oops! The requested resource cannot be found.
+    That page does not exist.
   </div>
 </body>
 </html>

@@ -27,14 +27,14 @@
         <td><%= Html.Encode(item.Season)%></td>
         <td><%= Html.Encode(item.Team1) %></td>
         <td><%= Html.Encode(item.Player1)%></td>
-        <td><%= Html.Encode(item.Player1Innings)%></td>
-        <td><%= Html.Encode(item.Player1DefensiveShots)%></td>
-        <td><%= Html.Encode(item.Player1Wins)%></td>
+        <td><%= item.Player1Innings%></td>
+        <td><%= item.Player1DefensiveShots%></td>
+        <td><%= item.Player1Wins%></td>
         <td><%= Html.Encode(item.Team2) %></td>
         <td><%= Html.Encode(item.Player2)%></td>
-        <td><%= Html.Encode(item.Player2Innings)%></td>
-        <td><%= Html.Encode(item.Player2DefensiveShots)%></td>
-        <td><%= Html.Encode(item.Player2Wins)%></td>
+        <td><%= item.Player2Innings%></td>
+        <td><%= item.Player2DefensiveShots%></td>
+        <td><%= item.Player2Wins%></td>
         <td><%= Html.Encode(item.Winner) %></td>
       </tr>
   <% } %>

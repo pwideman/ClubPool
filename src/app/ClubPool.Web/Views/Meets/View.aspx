@@ -22,7 +22,7 @@ Match Details
     <span>Match Details</span>
   </div>
   <p>
-    <strong><%= Model.Team1Name %></strong> vs. <strong><%= Model.Team2Name %></strong>, 
+    <strong><%= Html.Encode(Model.Team1Name) %></strong> vs. <strong><%= Html.Encode(Model.Team2Name) %></strong>, 
     scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate%>)
   </p>
   <div class="action-button-row">
@@ -59,7 +59,7 @@ Match Details
           }
            %>
           <tr class="first<%= firstWinnerClass%>" id="<%= match.Id%>_1">
-            <td><%= matchIndex.ToString() %></td>
+            <td><%= matchIndex %></td>
             <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(match.Player1.Id), match.Player1.Name)%></td>
             <td id="<%=match.Id%>_p1innings"><%= match.Player1.Innings%></td>
             <td id="<%=match.Id%>_p1defshots"><%= match.Player1.DefensiveShots%></td>
@@ -77,7 +77,7 @@ Match Details
           <tr class="status" id="<%= match.Id%>_3">
             <td>Status:</td>
             <td colspan="4" class="status" id="<%= match.Id%>_status">
-              <%= match.Status%>
+              <%= Html.Encode(match.Status)%>
             </td>
             <td>
               <% if (Model.AllowUserToEnterResults) { %>

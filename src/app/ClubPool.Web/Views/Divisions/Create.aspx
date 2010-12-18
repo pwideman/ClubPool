@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
-    <span>Add Division to <%= Model.SeasonName %></span>
+    <span>Add Division to <%= Html.Encode(Model.SeasonName) %></span>
   </div>
   <div class="form-content">
     <div class="form-header">

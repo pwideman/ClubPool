@@ -2,15 +2,12 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
-    <span>Edit division <%= Model.Name %> - <%= Model.SeasonName %></span>
+    <span>Edit division <%= Html.Encode(Model.Name + " (" + Model.SeasonName + ")") %></span>
   </div>
   <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-        Html.RenderPartial("ErrorMessage");
-      } %>
+       Html.RenderPartial("ErrorMessage");
+     } %>
   <div class="form-content">
-    <div class="form-header">
-      All fields are required
-    </div>
     <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>
@@ -28,7 +25,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Edit Division - ClubPool
+Edit Division
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">

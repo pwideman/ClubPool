@@ -21,7 +21,7 @@
     <% if (Model.Players.Any()) { %>
       <ul>
       <% foreach (var player in Model.Players) { %>
-        <li><%= player.Name%></li>
+        <li><%= Html.Encode(player.Name)%></li>
       <% } %>
       </ul>
       <% } else { %>

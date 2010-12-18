@@ -13,15 +13,15 @@
   <div id="details-tab" class="userinfo-tab">
     <div class="details-row">
       <div class="details-label">Username:</div>
-      <div class="details-data"><%= Model.Username %></div>
+      <div class="details-data"><%= Html.Encode(Model.Username) %></div>
     </div>
     <div class="details-row">
       <div class="details-label">Name:</div>
-      <div class="details-data"><%= Model.Name %></div>
+      <div class="details-data"><%= Html.Encode(Model.Name)%></div>
     </div>
     <div class="details-row">
       <div class="details-label">Email:</div>
-      <div class="details-data"><%= Model.Email %></div>
+      <div class="details-data"><%= Html.Encode(Model.Email)%></div>
     </div>
     <div class="details-row">
       <div class="details-label">8-ball skill level:</div>
@@ -30,7 +30,7 @@
     <% if (Model.ShowAdminProperties) { %>
     <fieldset>
       <legend>Admin</legend>
-      <div>Roles: <%= Model.Roles.Length > 0 ? string.Join(", ", Model.Roles) : "None"%></div>
+      <div>Roles: <%= Model.Roles.Length > 0 ? Html.Encode(string.Join(", ", Model.Roles)) : "None"%></div>
       <div>User is <%= Model.IsApproved ? "approved" : "unapproved"%></div>
       <div>User is <%= Model.IsLocked ? "locked" : "unlocked"%></div>
     </fieldset>
@@ -45,6 +45,7 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
+User Details
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">

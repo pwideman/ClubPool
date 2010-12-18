@@ -3,10 +3,10 @@
   <ul>
     <% foreach (var player in Model) { %>
     <li class="simple-user-list-item" id="<%= player.Id %>">
-      <div class="simple-user-list-item-heading"><%= player.Name%></div>
+      <div class="simple-user-list-item-heading"><%= Html.Encode(player.Name)%></div>
       <ul>
-        <li><%= player.Username%></li>
-        <li><%= player.Email%></li>
+        <li><%= Html.Encode(player.Username)%></li>
+        <li><%= Html.Encode(player.Email)%></li>
       </ul>
     </li>
     <% } %>

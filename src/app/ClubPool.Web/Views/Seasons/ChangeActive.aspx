@@ -6,7 +6,7 @@
 </div>
 
 <% if (!string.IsNullOrEmpty(Model.CurrentActiveSeasonName)) { %>
-<p>The current active season is: <strong><%= Model.CurrentActiveSeasonName%></strong></p>
+<p>The current active season is: <strong><%= Html.Encode(Model.CurrentActiveSeasonName)%></strong></p>
 <% } else { %>
 <p>There is no active season.</p>
 <% } %>
@@ -18,7 +18,7 @@
   Select a new active season:
   <select name="id">
   <% foreach (var s in Model.InactiveSeasons) { %>
-    <option value="<%= s.Id %>"><%= s.Name %></option>
+    <option value="<%= s.Id %>"><%= Html.Encode(s.Name) %></option>
   <% } %>
   </select>
   <input class="submit-button" type="submit" value="Change" />

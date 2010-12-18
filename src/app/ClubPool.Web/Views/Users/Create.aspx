@@ -6,9 +6,6 @@
     <span>Add User</span>
   </div>
   <div class="form-content add-user-form">
-    <div class="form-header">
-      All fields are required
-    </div>
     <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
           Html.RenderPartial("ErrorMessage");
         } 
@@ -22,14 +19,12 @@
         <input class="submit-button" type="submit" value="Create User" />
       </div>
     </fieldset>
-    <% } %>
+    <%  } %>
     <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.CreateViewModel>() %>
   </div>
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-  Add User - ClubPool
-</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Add User</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
 </asp:Content>
