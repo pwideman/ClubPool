@@ -153,7 +153,6 @@
     <Compile Include="Code\HtmlHelperExtensions.cs" />
     <Compile Include="Code\ModelBinder.cs" />
     <Compile Include="Code\UrlHelperExtensions.cs" />
-    <Compile Include="CastleWindsor\WindsorExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
