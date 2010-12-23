@@ -9,7 +9,7 @@
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
   <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Approve(null))) { %>
     <%= Html.AntiForgeryToken() %>
-    <table style="width: 600px;" class="domain-list">
+    <table style="width: 600px;" class="domain-list" id="unapproved_users">
       <thead>
         <tr>
           <th>Name</th>
@@ -23,7 +23,7 @@
           <td align="center"><input class="submit-button" type="submit" value="Approve" /></td>
         </tr>
       </tfoot>
-      <tbody>
+      <tbody class="content">
         <% foreach (var user in Model.UnapprovedUsers) { %>
           <tr>
             <td><%= Html.Encode(user.Name) %></td>
@@ -48,11 +48,12 @@
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
   <script type="text/javascript">
-    $(document).ready(function () {
+    $(function () {
       $("#approveall").click(function () {
         var approved = $(this).attr("checked");
         $("input[name=userids]").attr("checked", approved);
       });
+      $("#unapproved_users tbody.content tr:odd").addClass("alt");
     });
   </script>
 </asp:Content>
