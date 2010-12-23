@@ -84,7 +84,7 @@ namespace ClubPool.Web
       ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
       ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
 
-      container.RegisterControllers(typeof(BaseController).Assembly);
+      container.RegisterControllersByAssemblies(typeof(BaseController).Assembly);
       container.Install(FromAssembly.This());
 
     }

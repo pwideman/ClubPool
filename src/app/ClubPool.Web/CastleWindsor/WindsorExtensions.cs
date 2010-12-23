@@ -18,12 +18,7 @@ namespace ClubPool.Web.CastleWindsor
   /// </summary>
   public static class WindsorExtensions
   {
-    public static IWindsorContainer RegisterController<T>(this IWindsorContainer container) where T : IController {
-      container.RegisterControllers(typeof(T));
-      return container;
-    }
-
-    public static IWindsorContainer RegisterControllers(this IWindsorContainer container, params Type[] controllerTypes) {
+    public static IWindsorContainer RegisterControllersByTypes(this IWindsorContainer container, params Type[] controllerTypes) {
       foreach (var type in controllerTypes) {
         if (ControllerExtensions.IsController(type)) {
           container.Register(Component.For(type).Named(type.FullName.ToLower()).LifeStyle.Is(LifestyleType.Transient));
@@ -33,9 +28,9 @@ namespace ClubPool.Web.CastleWindsor
       return container;
     }
 
-    public static IWindsorContainer RegisterControllers(this IWindsorContainer container, params Assembly[] assemblies) {
+    public static IWindsorContainer RegisterControllersByAssemblies(this IWindsorContainer container, params Assembly[] assemblies) {
       foreach (var assembly in assemblies) {
-        container.RegisterControllers(assembly.GetExportedTypes());
+        container.RegisterControllersByTypes(assembly.GetExportedTypes());
       }
       return container;
     }
