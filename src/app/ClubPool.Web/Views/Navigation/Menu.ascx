@@ -9,7 +9,7 @@
       <li><a href="/league/rules">Rules</a></li>
     </ul>
   </li>
-  <% if (Model.HasActiveSeason) { %>
+  <% if (Model.UserIsLoggedIn && Model.HasActiveSeason) { %>
   <li><a href="#"><%= Html.Encode(Model.ActiveSeasonName) %></a>
     <ul>
       <% if (Model.HasCurrentTeam) { %>
