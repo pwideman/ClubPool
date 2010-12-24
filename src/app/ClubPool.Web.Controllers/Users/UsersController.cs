@@ -134,6 +134,7 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpPost]
     [Transaction]
+    [ValidateAntiForgeryToken]
     public ActionResult ResetPassword(ResetPasswordViewModel viewModel) {
       if (string.IsNullOrEmpty(viewModel.Username) && string.IsNullOrEmpty(viewModel.Email)) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "You must enter a username or email address";

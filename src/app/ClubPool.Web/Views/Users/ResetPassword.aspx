@@ -6,6 +6,7 @@
 the username (or to the supplied email address).</p>
 <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.ResetPassword(null), 
       FormMethod.Post)) { %>
+  <%= Html.AntiForgeryToken() %>
   <div><span class="resetpassword-label">Username:</span><%= Html.TextBoxFor(m => m.Username, new { @class = "resetpassword-field" })%></div>
   <div><span class="resetpassword-label">Email:</span><%= Html.TextBoxFor(m => m.Email, new { @class="resetpassword-field"}) %></div>
   <div><%= Html.SubmitButton("submit", "Reset Password") %></div>
