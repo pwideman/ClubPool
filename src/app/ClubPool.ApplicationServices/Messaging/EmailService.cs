@@ -7,6 +7,7 @@ using System.Configuration;
 
 using SharpArch.Core;
 
+using ClubPool.ApplicationServices.Configuration.Contracts;
 using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Framework.Configuration;
 
@@ -17,8 +18,10 @@ namespace ClubPool.ApplicationServices.Messaging
     protected string smtpHost;
     protected string systemEmailAddress;
 
-    public EmailService() {
-      var config = ClubPoolConfigurationSection.GetConfig();
+    public EmailService(IConfigurationService configService) {
+      Check.Require(null != configService, "configService cannot be null");
+
+      var config = configService.GetConfig();
       smtpHost = config.SmtpHost;
       systemEmailAddress = config.SystemEmailAddress;
     }

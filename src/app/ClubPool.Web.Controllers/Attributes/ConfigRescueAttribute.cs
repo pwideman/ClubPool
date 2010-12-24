@@ -3,8 +3,9 @@ using System.Configuration;
 using System.Web.Mvc;
 
 using MvcContrib.Filters;
+using Microsoft.Practices.ServiceLocation;
 
-using ClubPool.Framework.Configuration;
+using ClubPool.ApplicationServices.Configuration.Contracts;
 
 namespace ClubPool.Web.Controllers.Attributes
 {
@@ -14,7 +15,9 @@ namespace ClubPool.Web.Controllers.Attributes
     public ConfigRescueAttribute(string view, params Type[] exceptionTypes) : base(view, exceptionTypes) { }
 
     public override void OnException(ExceptionContext filterContext) {
-      bool useRescues = ClubPoolConfigurationSection.GetConfig().UseRescues;
+      // I hate using ServiceLocator for this, but not much choice here
+      var configService = ServiceLocator.Current.GetInstance<IConfigurationService>();
+      bool useRescues = configService.GetConfig().UseRescues;
       if (useRescues) {
         base.OnException(filterContext);
       }
