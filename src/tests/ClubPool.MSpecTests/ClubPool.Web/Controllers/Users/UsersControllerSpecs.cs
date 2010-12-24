@@ -742,6 +742,30 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   }
 
   [Subject(typeof(UsersController))]
+  public class when_asked_to_reset_a_password_with_an_invalid_captcha : specification_for_users_controller
+  {
+    static ResetPasswordViewModel viewModel;
+    static ViewResultHelper<ResetPasswordViewModel> resultHelper;
+
+    Establish context = () => {
+      viewModel = new ResetPasswordViewModel();
+      viewModel.Username = "test";
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<ResetPasswordViewModel>(controller.ResetPassword(viewModel, false));
+
+    It should_return_the_default_view = () =>
+      resultHelper.Result.ViewName.ShouldBeEmpty();
+
+    It should_return_a_validation_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
+
+    It should_return_a_validation_error_for_the_captcha_field = () =>
+      resultHelper.Result.ViewData.ModelState.Keys.ShouldContain("captcha");
+  }
+
+
+  [Subject(typeof(UsersController))]
   public class when_asked_to_recover_username : specification_for_users_controller
   {
     static ViewResultHelper resultHelper;
@@ -765,7 +789,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
         });
     };
 
-    Because of = () => resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel, true));
 
     It should_return_the_recover_username_complete_view = () =>
       resultHelper.Result.ViewName.ShouldEqual("RecoverUsernameComplete");
@@ -795,7 +819,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
         });
     };
 
-    Because of = () => resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel, true));
 
     It should_return_the_recover_username_complete_view = () =>
       resultHelper.Result.ViewName.ShouldEqual("RecoverUsernameComplete");
@@ -814,7 +838,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       viewModel = new RecoverUsernameViewModel();
     };
 
-    Because of = () => resultHelper = new ViewResultHelper<RecoverUsernameViewModel>(controller.RecoverUsername(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper<RecoverUsernameViewModel>(controller.RecoverUsername(viewModel, true));
 
     It should_return_the_default_view = () =>
       resultHelper.Result.ViewName.ShouldBeEmpty();
@@ -822,4 +846,28 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_add_a_model_state_error_for_email = () =>
       resultHelper.Result.ViewData.ModelState.Keys.ShouldContain("Email");
   }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_to_recover_a_username_with_an_invalid_captcha : specification_for_users_controller
+  {
+    static RecoverUsernameViewModel viewModel;
+    static ViewResultHelper<RecoverUsernameViewModel> resultHelper;
+
+    Establish context = () => {
+      viewModel = new RecoverUsernameViewModel();
+      viewModel.Email = "test@test.com";
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<RecoverUsernameViewModel>(controller.RecoverUsername(viewModel, false));
+
+    It should_return_the_default_view = () =>
+      resultHelper.Result.ViewName.ShouldBeEmpty();
+
+    It should_return_a_validation_error = () =>
+      resultHelper.Result.ViewData.ModelState.IsValid.ShouldBeFalse();
+
+    It should_return_a_validation_error_for_the_captcha_field = () =>
+      resultHelper.Result.ViewData.ModelState.Keys.ShouldContain("captcha");
+  }
+
 }

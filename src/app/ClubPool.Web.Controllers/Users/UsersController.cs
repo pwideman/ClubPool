@@ -483,10 +483,17 @@ namespace ClubPool.Web.Controllers.Users
     [HttpPost]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult RecoverUsername(RecoverUsernameViewModel viewModel) {
+    [CaptchaValidation("captcha")]
+    public ActionResult RecoverUsername(RecoverUsernameViewModel viewModel, bool captchaValid) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
+      
+      if (!captchaValid) {
+        ModelState.AddModelError("captcha", "Incorrect. Try again.");
+        return View(viewModel);
+      }
+
       var usernames = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Email)).Select(u => u.Username).ToList();
       string body = "";
       if (!usernames.Any()) {
