@@ -482,6 +482,7 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpPost]
     [Transaction]
+    [ValidateAntiForgeryToken]
     public ActionResult RecoverUsername(RecoverUsernameViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
