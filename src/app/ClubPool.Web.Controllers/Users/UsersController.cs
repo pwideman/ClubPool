@@ -14,6 +14,7 @@ using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
 
+using ClubPool.ApplicationServices.Configuration.Contracts;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.ApplicationServices.Authentication;
@@ -38,12 +39,14 @@ namespace ClubPool.Web.Controllers.Users
     protected IRoleRepository roleRepository;
     protected IEmailService emailService;
     protected IUserRepository userRepository;
+    protected IConfigurationService configService;
 
     public UsersController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
       IEmailService emailSvc,
       IUserRepository userRepo,
-      IRoleRepository roleRepo)
+      IRoleRepository roleRepo,
+      IConfigurationService configService)
     {
 
       Check.Require(null != authSvc, "authSvc cannot be null");
@@ -51,13 +54,14 @@ namespace ClubPool.Web.Controllers.Users
       Check.Require(null != userRepo, "userRepo cannot be null");
       Check.Require(null != roleRepo, "roleRepo cannot be null");
       Check.Require(null != emailSvc, "emailSvc cannot be null");
-
+      Check.Require(null != configService, "configService cannot be null");
 
       authenticationService = authSvc;
       membershipService = membershipSvc;
       emailService = emailSvc;
       userRepository = userRepo;
       roleRepository = roleRepo;
+      this.configService = configService;
     }
 
     protected void RollbackUserTransaction() {
@@ -161,7 +165,7 @@ namespace ClubPool.Web.Controllers.Users
         // we found a user, send the email containing reset token
         token = membershipService.GeneratePasswordResetToken(user);
         var helper = new UrlHelper(((MvcHandler)HttpContext.CurrentHandler).RequestContext);
-        var siteName = ClubPoolConfigurationSection.GetConfig().SiteName;
+        var siteName = configService.GetConfig().SiteName;
         var url = helper.Action("ValidatePasswordResetToken", "Users", new { token = token }, HttpContext.Request.Url.Scheme);
         var body = string.Format("You have requested to reset your password at {0}. Click the following link to be logged into your" +
           " account and taken to the member info page, where you can change your password. The link is valid for 24 hours.{1}{1}" +
@@ -224,7 +228,7 @@ namespace ClubPool.Web.Controllers.Users
       var administrators = roleRepository.FindOne(r => r.Name.Equals(Roles.Administrators)).Users;
       if (administrators.Any()) {
         var adminEmailAddresses = administrators.Select(u => u.Email).ToList();
-        var siteName = ClubPoolConfigurationSection.GetConfig().SiteName;
+        var siteName = configService.GetConfig().SiteName;
         var subject = string.Format("New user sign up at {0}", siteName);
         var body = new StringBuilder();
         body.AppendFormat("A new user has signed up at {0} and needs admin approval:{1}{1}", siteName, Environment.NewLine);
@@ -507,7 +511,7 @@ namespace ClubPool.Web.Controllers.Users
         }
         body = bodysb.ToString();
       }
-      var siteName = ClubPoolConfigurationSection.GetConfig().SiteName;
+      var siteName = configService.GetConfig().SiteName;
       emailService.SendSystemEmail(viewModel.Email, string.Format("{0} Username Assistance", siteName), body);
       return View("RecoverUsernameComplete");
     }

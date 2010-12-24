@@ -8,8 +8,9 @@ namespace ClubPool.Framework.Configuration
 {
   public class ClubPoolConfigurationSection : ConfigurationSection
   {
-    public static ClubPoolConfigurationSection GetConfig() {
-      return ConfigurationManager.GetSection("clubPool") as ClubPoolConfigurationSection;
+    public static ClubPoolConfiguration GetConfig() {
+      var section = ConfigurationManager.GetSection("clubPool") as ClubPoolConfigurationSection;
+      return new ClubPoolConfiguration(section.SiteName, section.SmtpHost, section.SystemEmailAddress, section.UseRescues);
     }
 
     [ConfigurationProperty("smtpHost")]

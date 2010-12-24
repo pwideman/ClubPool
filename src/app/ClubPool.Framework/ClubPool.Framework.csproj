@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Configuration\ClubPoolConfigurationSection.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\IQueryableExtensions.cs" />

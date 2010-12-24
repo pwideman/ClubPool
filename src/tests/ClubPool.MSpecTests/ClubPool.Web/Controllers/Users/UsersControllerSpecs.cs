@@ -11,6 +11,7 @@ using Rhino.Mocks;
 using Machine.Specifications;
 using SharpArch.Testing;
 
+using ClubPool.ApplicationServices.Configuration.Contracts;
 using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.ApplicationServices.Authentication;
 using ClubPool.ApplicationServices.Authentication.Contracts;
@@ -24,6 +25,7 @@ using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
 using ClubPool.Testing.ApplicationServices.Authentication;
 using ClubPool.Testing;
+using ClubPool.Framework.Configuration;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 {
@@ -35,6 +37,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     protected static IMembershipService membershipService;
     protected static IUserRepository userRepository;
     protected static IEmailService emailService;
+    protected static IConfigurationService configService;
 
     Establish context = () => {
       roleRepository = MockRepository.GenerateStub<IRoleRepository>();
@@ -42,7 +45,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       membershipService = MockRepository.GenerateStub<IMembershipService>();
       userRepository = MockRepository.GenerateStub<IUserRepository>();
       emailService = MockRepository.GenerateStub<IEmailService>();
-      controller = new UsersController(authenticationService, membershipService, emailService, userRepository, roleRepository);
+      configService = MockRepository.GenerateStub<IConfigurationService>();
+      var config = new ClubPoolConfiguration("test", "test", "test@test.com", false);
+      configService.Stub(c => c.GetConfig()).Return(config);
+      controller = new UsersController(authenticationService, membershipService, emailService, userRepository, roleRepository, configService);
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
     };
