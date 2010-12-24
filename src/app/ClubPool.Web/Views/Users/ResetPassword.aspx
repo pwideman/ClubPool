@@ -10,9 +10,9 @@ the username (or to the supplied email address).</p>
   <div><span class="resetpassword-label">Username:</span><%= Html.TextBoxFor(m => m.Username, new { @class = "resetpassword-field" })%></div>
   <div><span class="resetpassword-label">Email:</span><%= Html.TextBoxFor(m => m.Email, new { @class="resetpassword-field"}) %></div>
   <p>
-  <div><%= Html.CaptchaImage(50, 180)%></div>
-  <div><label for="captcha">Enter the text from the image above:</label></div>
-  <div><%= Html.CaptchaTextBox("captcha")%><%= Html.ValidationMessage("captcha")%></div>
+    <div><%= Html.CaptchaImage(50, 180)%></div>
+    <div><label for="captcha">Enter the text from the image above:</label></div>
+    <div><%= Html.CaptchaTextBox("captcha")%><%= Html.ValidationMessage("captcha")%></div>
   </p>
   <div><%= Html.SubmitButton("submit", "Reset Password") %></div>
 <% } %>
