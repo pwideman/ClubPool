@@ -689,7 +689,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       controller.ControllerContext.HttpContext.Request.Stub(r => r.Url).Return(new Uri("http://host/users/resetpassword"));
     };
 
-    Because of = () => resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel, true));
 
     It should_return_the_reset_password_complete_view = () =>
       resultHelper.Result.ViewName.ShouldEqual("ResetPasswordComplete");
@@ -713,7 +713,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       viewModel = new ResetPasswordViewModel() { Username = "bad" };
     };
 
-    Because of = () => resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel, true));
 
     It should_return_the_reset_password_complete_view = () =>
       resultHelper.Result.ViewName.ShouldEqual("ResetPasswordComplete");
@@ -732,7 +732,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       viewModel = new ResetPasswordViewModel();
     };
 
-    Because of = () => resultHelper = new ViewResultHelper<ResetPasswordViewModel>(controller.ResetPassword(viewModel));
+    Because of = () => resultHelper = new ViewResultHelper<ResetPasswordViewModel>(controller.ResetPassword(viewModel, true));
 
     It should_return_the_default_view = () =>
       resultHelper.Result.ViewName.ShouldBeEmpty();

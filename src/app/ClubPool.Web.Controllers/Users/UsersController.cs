@@ -135,10 +135,16 @@ namespace ClubPool.Web.Controllers.Users
     [HttpPost]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult ResetPassword(ResetPasswordViewModel viewModel) {
+    [CaptchaValidation("captcha")]
+    public ActionResult ResetPassword(ResetPasswordViewModel viewModel, bool captchaValid) {
       if (string.IsNullOrEmpty(viewModel.Username) && string.IsNullOrEmpty(viewModel.Email)) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "You must enter a username or email address";
         return View();
+      }
+
+      if (!captchaValid) {
+        ModelState.AddModelError("captcha", "Incorrect. Try again.");
+        return View(viewModel);
       }
 
       string token = "";
