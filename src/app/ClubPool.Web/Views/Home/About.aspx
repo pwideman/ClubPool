@@ -5,7 +5,8 @@
 
 <h5>About this website</h5>
 
-<p>The <%= Model.SiteName %> website is built with the following components:</p>
+<p>The <%= Model.SiteName %> website is based on the ClubPool project located at <a href="http://github.com/pwideman/clubpool/">
+http://github.com/pwideman/clubpool/</a>. ClubPool is built with the following components:</p>
 <ul>
   <li><a href="http://www.asp.net/mvc">ASP.NET MVC</a></li>
   <li><a href="http://mvccontrib.codeplex.com/">MvcContrib</a></li>
