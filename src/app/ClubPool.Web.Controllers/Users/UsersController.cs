@@ -220,7 +220,13 @@ namespace ClubPool.Web.Controllers.Users
         return View(viewModel);
       }
 
-      SendNewUserAwaitingApprovalEmail(user);
+      try {
+        SendNewUserAwaitingApprovalEmail(user);
+      }
+      catch (System.Net.Mail.SmtpException e) {
+        // log mail exception but don't let it interrupt the process
+        ErrorSignal.FromCurrentContext().Raise(e);
+      }
       return View("SignUpComplete");
     }
 
