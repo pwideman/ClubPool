@@ -5,9 +5,6 @@
     <span>Add Division to <%= Html.Encode(Model.SeasonName) %></span>
   </div>
   <div class="form-content">
-    <div class="form-header">
-      All fields are required
-    </div>
     <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
           Html.RenderPartial("ErrorMessage");
         }
