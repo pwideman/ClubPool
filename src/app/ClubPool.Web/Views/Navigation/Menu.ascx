@@ -41,4 +41,5 @@
     </ul>
   </li>
   <% } %>
+  <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.About(), "About") %></li>
 </ul>

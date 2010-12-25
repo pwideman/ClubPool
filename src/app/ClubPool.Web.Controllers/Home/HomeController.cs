@@ -11,17 +11,21 @@ using ClubPool.Core;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.ApplicationServices.Configuration.Contracts;
 
 namespace ClubPool.Web.Controllers.Home
 {
   public class HomeController : BaseController
   {
     protected IAuthenticationService authenticationService;
+    protected IConfigurationService configService;
 
-    public HomeController(IAuthenticationService authSvc) {
+    public HomeController(IAuthenticationService authSvc, IConfigurationService configService) {
       Check.Require(null != authSvc, "authSvc cannot be null");
+      Check.Require(null != configService, "configService cannot be null");
 
       authenticationService = authSvc;
+      this.configService = configService;
     }
 
     public ActionResult Index() {
@@ -42,6 +46,12 @@ namespace ClubPool.Web.Controllers.Home
         sidebarGadgetCollection.Add(LoginSidebarGadget.Name, loginGadget);
       }
       return sidebarGadgetCollection;
+    }
+
+    public ActionResult About() {
+      var viewModel = new AboutViewModel();
+      viewModel.SiteName = configService.GetConfig().SiteName;
+      return View(viewModel);
     }
   }
 }

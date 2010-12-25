@@ -17,6 +17,7 @@ using ClubPool.Web.Controllers.Home;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.ApplicationServices.Configuration.Contracts;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Home
 {
@@ -24,10 +25,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Home
   {
     protected static HomeController controller;
     protected static IAuthenticationService authenticationService;
+    protected static IConfigurationService configService;
 
     Establish context = () => {
       authenticationService = MockRepository.GenerateStub<IAuthenticationService>();
-      controller = new HomeController(authenticationService);
+      configService = MockRepository.GenerateStub<IConfigurationService>();
+
+      controller = new HomeController(authenticationService, configService);
       ControllerHelper.CreateMockControllerContext(controller);
     };
   }

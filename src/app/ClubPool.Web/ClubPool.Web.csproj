@@ -204,6 +204,7 @@
     <Content Include="Views\Dashboard\Index.aspx" />
     <Content Include="Views\Dashboard\AlertsGadget.aspx" />
     <Content Include="Views\Error\NotFound.aspx" />
+    <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Home\StaleObjectStateError.aspx" />
     <Content Include="Views\Matches\UserHistory.aspx" />
