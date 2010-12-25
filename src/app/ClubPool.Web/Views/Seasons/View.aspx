@@ -17,6 +17,7 @@
     </div>
   </div>
 
+  <% if (Model.Divisions.Any()) { %>
   <div id="divisiontabs">
     <ul>
       <% foreach (var division in Model.Divisions) { %>
@@ -32,15 +33,17 @@
           <%= Html.ContentImage("edit-medium.png", "Edit Division") %>
           <%= Html.ActionLink<DivisionsController>(c => c.Edit(division.Id), "Edit this division") %>
         </div>
+        <% if (!division.HasSchedule) { %>
         <div class="action-button">
-          <%= Html.ContentImage("add-medium.png", "Add Team") %>
-          <%= Html.ActionLink<TeamsController>(c => c.Create(division.Id), "Add a new team to this division") %>
+          <%= Html.ContentImage("add-medium.png", "Add Team")%>
+          <%= Html.ActionLink<TeamsController>(c => c.Create(division.Id), "Add a new team to this division")%>
         </div>
-        <% if (division.CanDelete) { %>
+        <% }
+           if (division.CanDelete) { %>
         <div class="action-button">
           <% using (var form = Html.BeginForm<DivisionsController>(c => c.Delete(division.Id), FormMethod.Post)) { %>
           <%= Html.AntiForgeryToken()%>
-          <%= Html.ContentImage("delete-medium.png", "Delete Team") %>
+          <%= Html.ContentImage("delete-medium.png", "Delete Division") %>
           <a href="#" class="submit-form-link">Delete this division</a>
           <% } %>
         </div>     
@@ -59,6 +62,7 @@
                   <th>ID</th>
                   <th>Name</th>
                   <th>Players</th>
+                  <th></th>
                   <th></th>
                 </tr>
               </thead>
@@ -82,7 +86,9 @@
                     <a href="<%= Html.BuildUrlFromExpression<TeamsController>(c => c.Edit(team.Id)) %>">
                     <%= Html.ContentImage("edit-medium.png", "Edit")%>
                     </a>
-                    <% if (team.CanDelete) {
+                  </td>
+                  <td class="action-column">
+                    <% if (!division.HasSchedule) {
                           using (var form = Html.BeginForm<TeamsController>(c => c.Delete(team.Id), FormMethod.Post, new { @class = "invisible" })) { %>
                       <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
                       <%= Html.AntiForgeryToken()%>
@@ -101,7 +107,8 @@
           <% if (division.HasEnoughTeamsForSchedule) { %>
             <% if (division.HasSchedule) { %>
               <div class="action-button-row">
-                <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.RecreateSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
+                <% if (!division.HasCompletedMatches) {
+                     using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.RecreateSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
                   <%= Html.AntiForgeryToken()%>
                   <div class="action-button">
                     <%= Html.ContentImage("refresh-medium.png", "Recreate Schedule")%>
@@ -114,7 +121,8 @@
                   <%= Html.ContentImage("delete-medium.png", "Clear Schedule")%>
                   <a href="#" class="submit-form-link">Clear the schedule</a>
                 </div>
-                <% } %>
+                <% }
+                 }%>
               </div>
               <% Html.RenderPartial("ScheduleView", division.Schedule); %>
               <% }
@@ -135,8 +143,8 @@
     </div>
     <% } %>
   </div>
-
-  <%
+  <% }
+  
     if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
       Html.RenderPartial("ErrorMessage");
     }

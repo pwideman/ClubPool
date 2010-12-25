@@ -38,6 +38,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     protected static IUserRepository userRepository;
     protected static IEmailService emailService;
     protected static IConfigurationService configService;
+    protected static IMatchResultRepository matchResultRepository;
 
     Establish context = () => {
       roleRepository = MockRepository.GenerateStub<IRoleRepository>();
@@ -48,7 +49,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       configService = MockRepository.GenerateStub<IConfigurationService>();
       var config = new ClubPoolConfiguration("test", "test", "test@test.com", false);
       configService.Stub(c => c.GetConfig()).Return(config);
-      controller = new UsersController(authenticationService, membershipService, emailService, userRepository, roleRepository, configService);
+      matchResultRepository = MockRepository.GenerateStub<IMatchResultRepository>();
+      controller = new UsersController(authenticationService, membershipService, 
+        emailService, userRepository, roleRepository, configService, matchResultRepository);
       ControllerHelper.CreateMockControllerContext(controller);
       ServiceLocatorHelper.AddValidator();
     };
@@ -556,6 +559,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       user = new User("test", "test", "test", "test", "test");
       userRepository.Stub(r => r.Get(userId)).Return(user);
       userRepository.Expect(r => r.Delete(user));
+      matchResultRepository.Stub(r => r.GetAll()).Return(new List<MatchResult>().AsQueryable());
       pageRouteValue = new KeyValuePair<string, object>("page", page);
     };
 

@@ -93,10 +93,6 @@ namespace ClubPool.Core
       }
     }
 
-    public virtual bool CanDelete() {
-      return true;
-    }
-
     public virtual void AddSkillLevel(SkillLevel skillLevel) {
       Check.Require(null != skillLevel, "skillLevel cannot be null");
 

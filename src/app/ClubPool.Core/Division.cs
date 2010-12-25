@@ -50,12 +50,19 @@ namespace ClubPool.Core
     }
 
     public virtual bool CanDelete() {
-      // can delete if we have no teams
-      return true;// teams.Count == 0;
+      return !HasCompletedMatches();
+    }
+
+    public virtual bool HasCompletedMatches() {
+      return Meets.Where(m => m.Matches.Where(match => match.IsComplete).Any()).Any();
     }
 
     public virtual void AddTeam(Team team) {
       Check.Require(null != team, "team cannot be null");
+
+      if (Meets.Any()) {
+        throw new Exception("This division already has a schedule, teams cannot be added or removed");
+      }
 
       if (!teams.Contains(team)) {
         teams.Add(team);
@@ -66,6 +73,10 @@ namespace ClubPool.Core
     public virtual void RemoveTeam(Team team) {
       Check.Require(null != team, "team cannot be null");
 
+      if (Meets.Any()) {
+        throw new Exception("This division already has a schedule, teams cannot be added or removed");
+      }
+
       if (teams.Contains(team)) {
         teams.Remove(team);
         team.Division = null;
@@ -73,32 +84,41 @@ namespace ClubPool.Core
     }
 
     public virtual void RemoveAllTeams() {
+      if (Meets.Any()) {
+        throw new Exception("This division already has a schedule, teams cannot be added or removed");
+      }
+
       foreach (var team in teams) {
         team.Division = null;
       }
       teams.Clear();
     }
 
-    public virtual void AddMeet(Meet meet) {
-      Check.Require(null != meet, "meet cannot be null");
+    //public virtual void AddMeet(Meet meet) {
+    //  Check.Require(null != meet, "meet cannot be null");
 
-      if (!meets.Contains(meet)) {
-        meets.Add(meet);
-      }
-    }
+    //  if (!meets.Contains(meet)) {
+    //    meets.Add(meet);
+    //  }
+    //}
 
-    public virtual void RemoveMeet(Meet meet) {
-      if (null != meet && meets.Contains(meet)) {
-        meets.Remove(meet);
-      }
-    }
+    //public virtual void RemoveMeet(Meet meet) {
+    //  if (null != meet && meets.Contains(meet)) {
+    //    meets.Remove(meet);
+    //  }
+    //}
 
     public virtual bool TeamNameIsInUse(string name) {
       return Teams.Where(t => t.Name.Equals(name)).Any();
     }
 
     public virtual void ClearSchedule() {
-      meets.Clear();
+      if (!HasCompletedMatches()) {
+        meets.Clear();
+      }
+      else {
+        throw new Exception("There are already completed matches in this division, the schedule cannot be cleared");
+      }
     }
 
     public virtual void CreateSchedule(IDivisionRepository divisionRepository) {

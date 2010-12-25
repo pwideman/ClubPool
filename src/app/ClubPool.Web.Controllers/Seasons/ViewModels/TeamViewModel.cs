@@ -16,13 +16,11 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
     public TeamViewModel(Team team) {
       Id = team.Id;
       Name = team.Name;
-      CanDelete = team.CanDelete();
       Players = team.Players.Select(p => new PlayerViewModel(p)).ToList();
     }
 
     public int Id { get; set; }
     public string Name { get; set; }
-    public bool CanDelete { get; set; }
     public IEnumerable<PlayerViewModel> Players { get; set; }
   }
 }

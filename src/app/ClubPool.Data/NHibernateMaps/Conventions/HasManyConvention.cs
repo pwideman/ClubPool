@@ -9,6 +9,7 @@ namespace ClubPool.Data.NHibernateMaps.Conventions
       instance.Key.Column(instance.EntityType.Name + "Id");
       instance.Cascade.AllDeleteOrphan();
       instance.Access.ReadOnlyPropertyThroughCamelCaseField();
+      instance.Inverse();
     }
   }
 }

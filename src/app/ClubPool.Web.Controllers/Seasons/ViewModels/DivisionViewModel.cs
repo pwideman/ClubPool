@@ -10,6 +10,16 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
 {
   public class DivisionViewModel
   {
+    public int Id { get; set; }
+    public DateTime StartingDate { get; set; }
+    public string Name { get; set; }
+    public bool CanDelete { get; set; }
+    public bool HasSchedule { get; set; }
+    public bool HasEnoughTeamsForSchedule { get; set; }
+    public bool HasCompletedMatches { get; set; }
+    public IEnumerable<TeamViewModel> Teams { get; set; }
+    public ScheduleViewModel Schedule { get; set; }
+
     public DivisionViewModel() {
       Teams = new List<TeamViewModel>();
     }
@@ -22,6 +32,9 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
       if (division.Meets.Any()) {
         Schedule = new ScheduleViewModel(division.Meets, division.StartingDate);
         HasSchedule = true;
+        if (division.Meets.Where(m => m.Matches.Where(match => match.IsComplete).Any()).Any()) {
+          HasCompletedMatches = true;
+        }
       }
       Teams = division.Teams.Select(t => new TeamViewModel(t)).ToList();
       if (Teams.Count() > 1) {
@@ -31,14 +44,5 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
         HasEnoughTeamsForSchedule = false;
       }
     }
-
-    public int Id { get; set; }
-    public DateTime StartingDate { get; set; }
-    public string Name { get; set; }
-    public bool CanDelete { get; set; }
-    public bool HasSchedule { get; set; }
-    public bool HasEnoughTeamsForSchedule { get; set; }
-    public IEnumerable<TeamViewModel> Teams { get; set; }
-    public ScheduleViewModel Schedule { get; set; }
   }
 }

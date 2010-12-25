@@ -102,14 +102,16 @@ namespace ClubPool.Web.Controllers.Teams
       if (null == team) {
         return HttpNotFound();
       }
-      if (!team.CanDelete()) {
+      var division = team.Division;
+      if (division.Meets.Any()) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The team cannot be deleted";
       }
       else {
+        division.RemoveTeam(team);
         teamRepository.Delete(team);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was deleted";
       }
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(team.Division.Season.Id));
+      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
 
     [HttpGet]

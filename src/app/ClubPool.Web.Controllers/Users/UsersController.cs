@@ -40,13 +40,15 @@ namespace ClubPool.Web.Controllers.Users
     protected IEmailService emailService;
     protected IUserRepository userRepository;
     protected IConfigurationService configService;
+    protected IMatchResultRepository matchResultRepository;
 
     public UsersController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
       IEmailService emailSvc,
       IUserRepository userRepo,
       IRoleRepository roleRepo,
-      IConfigurationService configService)
+      IConfigurationService configService,
+      IMatchResultRepository matchResultRepository)
     {
 
       Check.Require(null != authSvc, "authSvc cannot be null");
@@ -55,6 +57,7 @@ namespace ClubPool.Web.Controllers.Users
       Check.Require(null != roleRepo, "roleRepo cannot be null");
       Check.Require(null != emailSvc, "emailSvc cannot be null");
       Check.Require(null != configService, "configService cannot be null");
+      Check.Require(null != matchResultRepository, "matchResultRepository cannot be null");
 
       authenticationService = authSvc;
       membershipService = membershipSvc;
@@ -62,6 +65,7 @@ namespace ClubPool.Web.Controllers.Users
       userRepository = userRepo;
       roleRepository = roleRepo;
       this.configService = configService;
+      this.matchResultRepository = matchResultRepository;
     }
 
     protected void RollbackUserTransaction() {
@@ -252,7 +256,7 @@ namespace ClubPool.Web.Controllers.Users
       if (null == userToDelete) {
         return HttpNotFound();
       }
-      if (userToDelete.CanDelete()) {
+      if (CanDeleteUser(userToDelete, matchResultRepository)) {
         userRepository.Delete(userToDelete);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
       }
@@ -260,6 +264,11 @@ namespace ClubPool.Web.Controllers.Users
         TempData[GlobalViewDataProperty.PageErrorMessage] = "There is data in the system referencing this user, the user cannot be deleted.";
       }
       return this.RedirectToAction(c => c.Index(page));
+    }
+
+    protected bool CanDeleteUser(User user, IMatchResultRepository matchResultRepository) {
+      var results = matchResultRepository.GetAll().Where(r => r.Player == user).Any();
+      return !results;
     }
 
     [HttpGet]

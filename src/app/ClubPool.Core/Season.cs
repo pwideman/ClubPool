@@ -62,7 +62,8 @@ namespace ClubPool.Core
     }
 
     public virtual bool CanDelete() {
-      return !IsActive;// && divisions.Count == 0;
+      // can only delete if this is not the active season and it has divisions that can't be deleted
+      return !IsActive && !Divisions.Where(d => !d.CanDelete()).Any();
     }
 
     public virtual bool DivisionNameIsInUse(string name) {

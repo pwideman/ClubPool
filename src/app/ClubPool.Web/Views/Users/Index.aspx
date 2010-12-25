@@ -54,12 +54,10 @@
             </a>
           </td>
           <td class="action-column">
-            <% if (item.CanDelete) {
-                 using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Delete(item.Id, Model.CurrentPage), FormMethod.Post)) { %>
+            <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Delete(item.Id, Model.CurrentPage), FormMethod.Post)) { %>
               <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
               <%= Html.AntiForgeryToken()%>
-            <%   }
-               } %>
+            <% } %>
           </td>
         </tr>
     <% } %>

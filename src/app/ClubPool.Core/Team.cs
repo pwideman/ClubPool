@@ -38,11 +38,6 @@ namespace ClubPool.Core
       players = new List<User>();
     }
 
-    public virtual bool CanDelete() {
-      // if there are no players this team can be deleted
-      return true;// players.Count == 0;
-    }
-
     public virtual int[] GetWinsAndLosses() {
       var matches = from meet in Division.Meets
                     where meet.Teams.Contains(this)

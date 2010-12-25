@@ -134,7 +134,7 @@ namespace ClubPool.Web.Controllers.Seasons
       }
       else {
         TempData[GlobalViewDataProperty.PageErrorMessage] = 
-          "There is other data in the system that references this season, it cannot be deleted.";
+          "There are completed matches in this season, it cannot be deleted.";
       }
 
       return this.RedirectToAction(c => c.Index(page));
