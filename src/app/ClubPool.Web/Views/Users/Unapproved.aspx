@@ -40,7 +40,16 @@
     if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) {
       Html.RenderPartial("NotificationMessage");
     }
-  %>
+    if (TempData.ContainsKey("FailedEmails")) {
+      var failedEmails = TempData["FailedEmails"] as List<ClubPool.Core.User>; %>
+    <p>The system failed to send email notification to the following users:
+      <ul>
+        <% foreach(var user in failedEmails) { %>
+        <li><%= Html.Encode(string.Format("{0} ({1})", user.FullName, user.Email)) %></li>
+        <% } %>
+      </ul>
+    </p>
+ <% } %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Users Awaiting Approval

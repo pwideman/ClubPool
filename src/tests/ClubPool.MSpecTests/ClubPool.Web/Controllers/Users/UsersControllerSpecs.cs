@@ -504,6 +504,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   {
     static RedirectToRouteResultHelper resultHelper;
     static IList<User> users;
+    static List<string> emails;
+    static int emailAttempts;
 
     Establish context = () => {
       users = new List<User>() {
@@ -512,6 +514,13 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
         new User("user3", "user3", "user", "three", "user3@user.com").SetIdTo(3) as User
       };
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
+      emails = new List<string>();
+      emailService.Stub(s => s.SendSystemEmail("", "", "")).IgnoreArguments().WhenCalled(m => {
+        emailAttempts++;
+        var email = (string)m.Arguments[0];
+        emails.Add(email);
+      });
+      controller.ControllerContext.HttpContext.Request.Stub(r => r.Url).Return(new Uri("http://host/users/unapproved"));
     };
 
     Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Approve(new int[] {1,2}));
@@ -529,6 +538,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_return_a_notification_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
+
+    It should_send_an_email_to_each_user = () =>
+      emailAttempts.ShouldEqual(2);
   }
 
   [Subject(typeof(UsersController))]

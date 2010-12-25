@@ -7,12 +7,12 @@ using System.Web.Routing;
 using System.Web;
 
 using Microsoft.Web.Mvc;
-//using MvcContrib;
 using MvcContrib.ActionResults;
 using MvcContrib.Pagination;
 using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
+using Elmah;
 
 using ClubPool.ApplicationServices.Configuration.Contracts;
 using ClubPool.ApplicationServices.Membership.Contracts;
@@ -272,8 +272,25 @@ namespace ClubPool.Web.Controllers.Users
     public ActionResult Approve(int[] userIds) {
       var users = userRepository.GetAll().WhereIdIn(userIds);
       if (users.Any()) {
+        var siteName = configService.GetConfig().SiteName;
+        var emailSubject = string.Format("{0} account approved", siteName);
+        var helper = new UrlHelper(((MvcHandler)HttpContext.CurrentHandler).RequestContext);
+        var url = helper.Action("Login", "Users", null, HttpContext.Request.Url.Scheme);
+        var failedEmails = new List<User>();
         foreach (var user in users) {
           user.IsApproved = true;
+          var body = string.Format("Your {0} user account has been approved.{1}{1}Username: {2}{1}{1}Login here: {3}",
+            siteName, Environment.NewLine, user.Username, url);
+          try {
+            emailService.SendSystemEmail(user.Email, emailSubject, body);
+          }
+          catch (System.Net.Mail.SmtpException e) {
+            ErrorSignal.FromCurrentContext().Raise(e);
+            failedEmails.Add(user);
+          }
+        }
+        if (failedEmails.Any()) {
+          TempData["FailedEmails"] = failedEmails;
         }
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The selected users have been approved.";
       }
