@@ -25,8 +25,11 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       Id = meet.Id;
       ScheduledWeek = meet.Week + 1;
       ScheduledDate = meet.Division.StartingDate.AddDays(meet.Week * 7).ToShortDateString();
-      Team1Name = meet.Team1.Name;
-      Team2Name = meet.Team2.Name;
+      var teams = meet.Teams.ToArray();
+      var team1 = teams[0];
+      var team2 = teams[1];
+      Team1Name = team1.Name;
+      Team2Name = team2.Name;
       var matches = new List<MatchViewModel>();
       var early = true;
       foreach (var match in meet.Matches) {
@@ -71,7 +74,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       var completedMatches = from meet in match.Meet.Division.Meets
                              where meet.IsComplete
                              from ma in meet.Matches
-                             where ma.Player1 == player || ma.Player2 == player
+                             where ma.Players.Contains(player)
                              select ma;
 
       int wins = 0;
@@ -112,8 +115,9 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       Id = match.Id;
       IsComplete = match.IsComplete;
       IsForfeit = match.IsForfeit;
-      Player1 = new MatchPlayerViewModel(match.Player1, match);
-      Player2 = new MatchPlayerViewModel(match.Player2, match);
+      var players = match.Players.ToArray();
+      Player1 = new MatchPlayerViewModel(players[0], match);
+      Player2 = new MatchPlayerViewModel(players[1], match);
       if (match.IsComplete) {
         if (!match.IsForfeit) {
           DatePlayed = match.DatePlayed.ToShortDateString();

@@ -15,11 +15,15 @@ namespace ClubPool.Data.NHibernateMaps
       //mapping.References(x => x.Winner);
       //mapping.References(x => x.Player1);
       //mapping.References(x => x.Player2);
-      mapping.IgnoreProperty(x => x.Players);
       //mapping.HasMany<Team>(x => x.Results)
       //  .AsBag()
       //  .Cascade.AllDeleteOrphan()
       //  .Access.ReadOnlyPropertyThroughCamelCaseField();
+      mapping.HasManyToMany<User>(x => x.Players)
+        .Cascade.SaveUpdate()
+        .Access.ReadOnlyPropertyThroughCamelCaseField()
+        .AsBag()
+        .Table("MatchesPlayers");
     }
   }
 }

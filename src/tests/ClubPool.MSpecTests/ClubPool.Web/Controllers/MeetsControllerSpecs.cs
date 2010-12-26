@@ -31,7 +31,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     protected static MockAuthenticationService authenticationService;
     protected static IMeetRepository meetRepository;
     protected static int id = 1;
-    protected static TestMeet meet;
+    protected static Meet meet;
     protected static User loggedInUser;
 
     Establish context = () => {
@@ -53,7 +53,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       var team2 = new Team("team2", division);
       team2.AddPlayer(new User("t2p1", "pass", "e", "f", "e"));
       team2.AddPlayer(new User("t2p2", "pass", "e", "f", "e"));
-      meet = new TestMeet(team1, team2, 0, division);
+      meet = new Meet(team1, team2, 0);
       meetRepository.Stub(r => r.Get(id)).Return(meet);
     };
   }
@@ -86,7 +86,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
     static ViewResultHelper<MeetViewModel> resultHelper;
 
     Establish context = () => {
-      loggedInUser = meet.Team1.Players.First();
+      loggedInUser = meet.Teams.First().Players.First();
     };
 
     Because of = () => resultHelper = new ViewResultHelper<MeetViewModel>(controller.View(id));

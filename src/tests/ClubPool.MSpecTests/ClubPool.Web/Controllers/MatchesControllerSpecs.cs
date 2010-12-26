@@ -89,7 +89,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       player2 = new User("player2", "test", "player2", "test", "test");
       player2.SetIdTo(player2Id);
       team2.AddPlayer(player2);
-      var meet = new TestMeet(team1, team2, 1, division);
+      var meet = new Meet(team1, team2, 1);
       match = new Match(meet, player1, player2);
       match.SetIdTo(matchId);
 
@@ -342,28 +342,28 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       match.IsForfeit.ShouldBeFalse();
 
     It should_add_player1_results_to_the_match = () =>
-      match.Results.Where(r => r.Player == match.Player1).Count().ShouldEqual(1);
+      match.Results.Where(r => r.Player == match.Players.First()).Count().ShouldEqual(1);
 
     It should_set_player1_results_innings_correctly = () =>
-      match.Results.Where(r => r.Player == match.Player1).First().Innings.ShouldEqual(viewModel.Player1Innings);
+      match.Results.Where(r => r.Player == match.Players.First()).First().Innings.ShouldEqual(viewModel.Player1Innings);
 
     It should_set_player1_defensive_shots_correctly = () =>
-      match.Results.Where(r => r.Player == match.Player1).First().DefensiveShots.ShouldEqual(viewModel.Player1DefensiveShots);
+      match.Results.Where(r => r.Player == match.Players.First()).First().DefensiveShots.ShouldEqual(viewModel.Player1DefensiveShots);
 
     It should_set_player1_wins_correctly = () =>
-      match.Results.Where(r => r.Player == match.Player1).First().Wins.ShouldEqual(viewModel.Player1Wins);
+      match.Results.Where(r => r.Player == match.Players.First()).First().Wins.ShouldEqual(viewModel.Player1Wins);
 
     It should_add_player2_results_to_the_match = () =>
-      match.Results.Where(r => r.Player == match.Player2).Count().ShouldEqual(1);
+      match.Results.Where(r => r.Player == match.Players.ElementAt(1)).Count().ShouldEqual(1);
 
     It should_set_player2_results_innings_correctly = () =>
-      match.Results.Where(r => r.Player == match.Player2).First().Innings.ShouldEqual(viewModel.Player2Innings);
+      match.Results.Where(r => r.Player == match.Players.ElementAt(1)).First().Innings.ShouldEqual(viewModel.Player2Innings);
 
     It should_set_player2_defensive_shots_correctly = () =>
-      match.Results.Where(r => r.Player == match.Player2).First().DefensiveShots.ShouldEqual(viewModel.Player2DefensiveShots);
+      match.Results.Where(r => r.Player == match.Players.ElementAt(1)).First().DefensiveShots.ShouldEqual(viewModel.Player2DefensiveShots);
 
     It should_set_player2_wins_correctly = () =>
-      match.Results.Where(r => r.Player == match.Player2).First().Wins.ShouldEqual(viewModel.Player2Wins);
+      match.Results.Where(r => r.Player == match.Players.ElementAt(1)).First().Wins.ShouldEqual(viewModel.Player2Wins);
 
     It should_set_the_match_winner = () =>
       match.Winner.ShouldEqual(player1);

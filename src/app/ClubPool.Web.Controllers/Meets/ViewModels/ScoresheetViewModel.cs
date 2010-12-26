@@ -20,8 +20,11 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       Id = meet.Id;
       ScheduledWeek = meet.Week + 1;
       ScheduledDate = meet.Division.StartingDate.AddDays(meet.Week * 7);
-      Team1Name = meet.Team1.Name;
-      Team2Name = meet.Team2.Name;
+      var teams = meet.Teams.ToArray();
+      var team1 = teams[0];
+      var team2 = teams[1];
+      Team1Name = team1.Name;
+      Team2Name = team2.Name;
       var matches = new List<ScoresheetMatchViewModel>();
       foreach (var match in meet.Matches) {
         matches.Add(new ScoresheetMatchViewModel(match));
@@ -40,8 +43,9 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       Id = match.Id;
 
       var gameType = match.Meet.Division.Season.GameType;
-      Player1 = new PlayerViewModel(match.Player1, gameType);
-      Player2 = new PlayerViewModel(match.Player2, gameType);
+      var players = match.Players.ToArray();
+      Player1 = new PlayerViewModel(players[0], gameType);
+      Player2 = new PlayerViewModel(players[1], gameType);
 
       Player1.GamesToWin = CalculateGamesToWin(Player1.SkillLevel, Player2.SkillLevel);
       Player2.GamesToWin = CalculateGamesToWin(Player2.SkillLevel, Player1.SkillLevel);

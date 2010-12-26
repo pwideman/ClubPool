@@ -41,19 +41,23 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
 
     public UserHistoryMatchViewModel(Match match) {
       Season = match.Meet.Division.Season.Name;
-      Team1 = match.Meet.Team1.Name;
-      Team2 = match.Meet.Team2.Name;
-      Player1 = match.Player1.FullName;
-      Player2 = match.Player2.FullName;
+      var teams = match.Meet.Teams.ToArray();
+      var team1 = teams[0];
+      var team2 = teams[1];
+      Team1 = team1.Name;
+      Team2 = team2.Name;
+      var players = match.Players.ToArray();
+      Player1 = players[0].FullName;
+      Player2 = players[1].FullName;
       if (match.IsComplete) {
         Winner = match.Winner.FullName;
         if (!match.IsForfeit) {
           Date = match.DatePlayed;
-          var results = match.Results.Where(r => r.Player == match.Player1).Single();
+          var results = match.Results.Where(r => r.Player == players[0]).Single();
           Player1Innings = results.Innings;
           Player1DefensiveShots = results.DefensiveShots;
           Player1Wins = results.Wins;
-          results = match.Results.Where(r => r.Player == match.Player2).Single();
+          results = match.Results.Where(r => r.Player == players[1]).Single();
           Player2Innings = results.Innings;
           Player2DefensiveShots = results.DefensiveShots;
           Player2Wins = results.Wins;

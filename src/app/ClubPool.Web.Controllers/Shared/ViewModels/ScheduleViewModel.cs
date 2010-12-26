@@ -53,8 +53,11 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
       Id = meet.Id;
       Week = meet.Week;
       IsComplete = meet.IsComplete;
-      Team1Name = meet.Team1.Name;
-      Team2Name = meet.Team2.Name;
+      var teams = meet.Teams.ToArray();
+      var team1 = teams[0];
+      var team2 = teams[1];
+      Team1Name = team1.Name;
+      Team2Name = team2.Name;
     }
   }
 

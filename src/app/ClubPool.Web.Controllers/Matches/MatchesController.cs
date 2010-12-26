@@ -53,7 +53,7 @@ namespace ClubPool.Web.Controllers.Matches
       }
 
       var userMatches = from match in matchRepository.GetAll()
-                        where (match.Player1 == user || match.Player2 == user) && match.IsComplete
+                        where (match.Players.Contains(user)) && match.IsComplete
                         orderby match.DatePlayed descending
                         select new UserHistoryMatchViewModel(match);
       var viewModel = new UserHistoryViewModel(user, userMatches, page.GetValueOrDefault(1), 15);

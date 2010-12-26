@@ -255,27 +255,35 @@ namespace ClubPool.SchemaGen
       Dictionary<int, int> newIds,
       Dictionary<int, int> oldTeamIds) {
 
-      var meetText = @"insert into meets (id, week, iscomplete, divisionid, team1id, team2id)
-                       values (@id, @week, true, @divisionid, @team1id, @team2id);";
+      var meetText = @"insert into meets (id, week, iscomplete, divisionid)
+                       values (@id, @week, true, @divisionid);";
       var meetCmd = new MySqlCommand(meetText, conn, tx);
       meetCmd.Prepare();
       meetCmd.Parameters.AddWithValue("@id", 1);
       meetCmd.Parameters.AddWithValue("@week", 1);
       meetCmd.Parameters.AddWithValue("@divisionid", divisionId);
-      meetCmd.Parameters.AddWithValue("@team1id", 1);
-      meetCmd.Parameters.AddWithValue("@team2id", 1);
 
-      var matchText = @"insert into matches (id, iscomplete, isforfeit, dateplayed, meetid, player1id, player2id, winnerid)
-                        values (@id, true, @isforfeit, @dateplayed, @meetid, @player1id, @player2id, @winnerid);";
+      var meetTeamText = @"insert into meetsteams (meetid, teamid) values (@meetid, @teamid);";
+      var meetTeamCmd = new MySqlCommand(meetTeamText, conn, tx);
+      meetTeamCmd.Prepare();
+      meetTeamCmd.Parameters.AddWithValue("@meetid", 1);
+      meetTeamCmd.Parameters.AddWithValue("@teamid", 1);
+
+      var matchText = @"insert into matches (id, iscomplete, isforfeit, dateplayed, meetid, winnerid)
+                        values (@id, true, @isforfeit, @dateplayed, @meetid, @winnerid);";
       var matchCmd = new MySqlCommand(matchText, conn, tx);
       matchCmd.Prepare();
       matchCmd.Parameters.AddWithValue("@id", 1);
       matchCmd.Parameters.AddWithValue("@isforfeit", false);
       matchCmd.Parameters.AddWithValue("@dateplayed", DateTime.Now);
       matchCmd.Parameters.AddWithValue("@meetid", 1);
-      matchCmd.Parameters.AddWithValue("@player1id", 1);
-      matchCmd.Parameters.AddWithValue("@player2id", 2);
       matchCmd.Parameters.AddWithValue("@winnerid", 1);
+
+      var matchPlayerText = @"insert into matchesplayers (matchid, userid) values (@matchid, @playerid);";
+      var matchPlayerCmd = new MySqlCommand(matchPlayerText, conn, tx);
+      matchPlayerCmd.Prepare();
+      matchPlayerCmd.Parameters.AddWithValue("@matchid", 1);
+      matchPlayerCmd.Parameters.AddWithValue("@playerid", 1);
 
       var matchResultText = @"insert into matchresults (id, version, innings, defensiveshots, wins, matchid, playerid)
                               values (@id, 1, @innings, 0, @wins, @matchid, @playerid);";
@@ -305,10 +313,14 @@ namespace ClubPool.SchemaGen
           var meetId = nextId++;
           meetCmd.Parameters["@id"].Value = meetId;
           meetCmd.Parameters["@week"].Value = meet.Matches.First().Week;
-          meetCmd.Parameters["@team1id"].Value = oldTeamIds[team.Team.ID];
-          meetCmd.Parameters["@team2id"].Value = oldTeamIds[meet.Opponent.ID];
           output(string.Format("inserting meet for team1 {0} and team2 {1}", team.Team.Name, meet.Opponent.Name));
           meetCmd.ExecuteNonQuery();
+
+          meetTeamCmd.Parameters["@meetid"].Value = meetId;
+          meetTeamCmd.Parameters["@teamid"].Value = oldTeamIds[team.Team.ID];
+          meetTeamCmd.ExecuteNonQuery();
+          meetTeamCmd.Parameters["@teamid"].Value = oldTeamIds[meet.Opponent.ID];
+          meetTeamCmd.ExecuteNonQuery();
 
           matchCmd.Parameters["@meetid"].Value = meetId;
           foreach (var match in meet.Matches) {
@@ -317,8 +329,6 @@ namespace ClubPool.SchemaGen
             matchCmd.Parameters["@isforfeit"].Value =
               (match.IsCompleted && match.Player1Innings == 0 && match.Player2Innings == 0 && match.Player1Wins == 0 && match.Player2Wins == 0);
             matchCmd.Parameters["@dateplayed"].Value = match.DatePlayed.Value;
-            matchCmd.Parameters["@player1id"].Value = oldIds[match.Player1Id];
-            matchCmd.Parameters["@player2id"].Value = oldIds[match.Player2Id];
             if (match.IsCompleted && match.WinnerId.HasValue && match.WinnerId.Value > 0) {
               matchCmd.Parameters["@winnerid"].Value = oldIds[match.WinnerId.Value];
             }
@@ -327,6 +337,12 @@ namespace ClubPool.SchemaGen
             }
             output(string.Format("inserting match for player1 {0} and player2 {1}", match.Player1.UserName, match.Player2.UserName));
             matchCmd.ExecuteNonQuery();
+
+            matchPlayerCmd.Parameters["@matchid"].Value = matchId;
+            matchPlayerCmd.Parameters["@playerid"].Value = oldIds[match.Player1Id];
+            matchPlayerCmd.ExecuteNonQuery();
+            matchPlayerCmd.Parameters["@playerid"].Value = oldIds[match.Player2Id];
+            matchPlayerCmd.ExecuteNonQuery();
 
             resultCmd.Parameters["@matchid"].Value = matchId;
 

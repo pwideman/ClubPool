@@ -10,13 +10,12 @@ namespace ClubPool.Core
   public class Match : Entity
   {
     protected IList<MatchResult> results;
+    protected IList<User> players;
 
     public virtual Meet Meet { get; set; }
     public virtual bool IsComplete { get; set; }
     public virtual bool IsForfeit { get; set; }
-    public virtual User Player1 { get; set; }
-    public virtual User Player2 { get; set; }
-    public virtual IEnumerable<User> Players { get { return new User[2] { Player1, Player2 }; } }
+    public virtual IEnumerable<User> Players { get { return players; } }
     public virtual User Winner { get; set; }
     public virtual IEnumerable<MatchResult> Results { get { return results; } }
     public virtual DateTime DatePlayed { get; set; }
@@ -33,12 +32,13 @@ namespace ClubPool.Core
       Check.Require(meet.Teams.Where(t => t.Players.Contains(player2)).Any(), "player2 is not a member of any of the meet's teams");
 
       Meet = meet;
-      Player1 = player1;
-      Player2 = player2;
+      players.Add(player1);
+      players.Add(player2);
     }
 
     protected void InitMembers() {
       results = new List<MatchResult>();
+      players = new List<User>();
     }
 
     public virtual void AddResult(MatchResult result) {

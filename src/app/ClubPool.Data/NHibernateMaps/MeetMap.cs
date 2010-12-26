@@ -15,11 +15,17 @@ namespace ClubPool.Data.NHibernateMaps
       //mapping.References(x => x.Division).Cascade.All();
       //mapping.References(x => x.Team1);
       //mapping.References(x => x.Team2);
-      mapping.IgnoreProperty(x => x.Teams);
+      //mapping.IgnoreProperty(x => x.Teams);
       //mapping.HasMany<Team>(x => x.Matches)
       //  .AsBag()
       //  .Cascade.AllDeleteOrphan()
       //  .Access.ReadOnlyPropertyThroughCamelCaseField();
+      mapping.HasManyToMany<Team>(x => x.Teams)
+        .Cascade.SaveUpdate()
+        .Access.ReadOnlyPropertyThroughCamelCaseField()
+        .AsBag()
+        .Table("MeetsTeams");
+
     }
   }
 }

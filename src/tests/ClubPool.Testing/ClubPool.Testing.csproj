@@ -60,7 +60,6 @@
     <Compile Include="ApplicationServices\Authentication\AuthHelper.cs" />
     <Compile Include="ApplicationServices\Membership\PasswordHelper.cs" />
     <Compile Include="Core\DomainModelHelper.cs" />
-    <Compile Include="Core\TestMeet.cs" />
     <Compile Include="EntityVersionSetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
