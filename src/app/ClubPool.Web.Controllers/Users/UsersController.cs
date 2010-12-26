@@ -382,73 +382,96 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
-      var user = userRepository.Get(viewModel.Id);
-      if (null == user) {
-        return ErrorView("The user you were editing was deleted by another user");
-      }
-      var currentPrincipal = authenticationService.GetCurrentPrincipal();
-      var canEditUser = CanEditUser(currentPrincipal, user);
-      if (!canEditUser) {
-        return ErrorView("You are not authorized to edit this user");
-      }
-      var canEditStatus = CanEditUserStatus(currentPrincipal, user);
-      var canEditRoles = CanEditUserRoles(currentPrincipal, user);
-      var canEditPassword = CanEditUserPassword(currentPrincipal, user);
+      var usernameChanged = false;
+      var authTicketChanged = false;
+      var previousUsername = "";
+      try {
+        var user = userRepository.Get(viewModel.Id);
+        if (null == user) {
+          return ErrorView("The user you were editing was deleted by another user");
+        }
+        var currentPrincipal = authenticationService.GetCurrentPrincipal();
+        var canEditUser = CanEditUser(currentPrincipal, user);
+        if (!canEditUser) {
+          return ErrorView("You are not authorized to edit this user");
+        }
+        var canEditStatus = CanEditUserStatus(currentPrincipal, user);
+        var canEditRoles = CanEditUserRoles(currentPrincipal, user);
+        var canEditPassword = CanEditUserPassword(currentPrincipal, user);
+        var editingSelf = currentPrincipal.UserId == user.Id;
 
-      // must reset these in case we redisplay the form
-      viewModel.ShowStatus = canEditStatus;
-      viewModel.ShowRoles = canEditRoles;
-      viewModel.ShowPassword = canEditPassword;
+        // must reset these in case we redisplay the form
+        viewModel.ShowStatus = canEditStatus;
+        viewModel.ShowRoles = canEditRoles;
+        viewModel.ShowPassword = canEditPassword;
 
-      if (!ValidateViewModel(viewModel)) {
-        return View(viewModel);
-      }
-
-      if (viewModel.Version != user.Version) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = 
-          "This user was updated by another user while you were viewing this page. Enter your changes again.";
-        return this.RedirectToAction(c => c.Edit(viewModel.Id));
-      }
-
-      if (!user.Username.Equals(viewModel.Username)) {
-        // verify that the new username is not in use
-        if (membershipService.UsernameIsInUse(viewModel.Username)) {
-          ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
-          viewModel.LoadAvailableRoles(roleRepository);
-          RollbackUserTransaction();
+        if (!ValidateViewModel(viewModel)) {
           return View(viewModel);
         }
-        user.Username = viewModel.Username;
-      }
-      if (!user.Email.Equals(viewModel.Email)) {
-        // verify that the new email is not in use
-        if (membershipService.EmailIsInUse(viewModel.Email)) {
-          ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
-          viewModel.LoadAvailableRoles(roleRepository);
-          RollbackUserTransaction();
-          return View(viewModel);
+
+        if (viewModel.Version != user.Version) {
+          TempData[GlobalViewDataProperty.PageErrorMessage] =
+            "This user was updated by another user while you were viewing this page. Enter your changes again.";
+          return this.RedirectToAction(c => c.Edit(viewModel.Id));
         }
-        user.Email = viewModel.Email;
-      }
-      user.FirstName = viewModel.FirstName;
-      user.LastName = viewModel.LastName;
-      if (canEditStatus) {
-        user.IsApproved = viewModel.IsApproved;
-        user.IsLocked = viewModel.IsLocked;
-      }
-      if (canEditRoles) {
-        user.RemoveAllRoles();
-        if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
-          foreach (int roleId in viewModel.Roles) {
-            user.AddRole(roleRepository.Get(roleId));
+
+        if (!user.Username.Equals(viewModel.Username)) {
+          // verify that the new username is not in use
+          if (membershipService.UsernameIsInUse(viewModel.Username)) {
+            ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
+            viewModel.LoadAvailableRoles(roleRepository);
+            RollbackUserTransaction();
+            return View(viewModel);
+          }
+          previousUsername = user.Username;
+          user.Username = viewModel.Username;
+          usernameChanged = true;
+        }
+        if (!user.Email.Equals(viewModel.Email)) {
+          // verify that the new email is not in use
+          if (membershipService.EmailIsInUse(viewModel.Email)) {
+            ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
+            viewModel.LoadAvailableRoles(roleRepository);
+            RollbackUserTransaction();
+            return View(viewModel);
+          }
+          user.Email = viewModel.Email;
+        }
+        user.FirstName = viewModel.FirstName;
+        user.LastName = viewModel.LastName;
+        if (canEditStatus) {
+          user.IsApproved = viewModel.IsApproved;
+          user.IsLocked = viewModel.IsLocked;
+        }
+        if (canEditRoles) {
+          user.RemoveAllRoles();
+          if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
+            foreach (int roleId in viewModel.Roles) {
+              user.AddRole(roleRepository.Get(roleId));
+            }
           }
         }
+        if (canEditPassword && null != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password.Trim())) {
+          user.Password = membershipService.EncodePassword(viewModel.Password, user.PasswordSalt);
+        }
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
+        if (editingSelf && usernameChanged) {
+          // we must update the auth ticket
+          // using LogIn to do this will reset the persistent cookie
+          // setting to false, which is not ideal but the other way
+          // would be more complicated than its worth
+          authenticationService.LogIn(user.Username, false);
+          authTicketChanged = true;
+        }
+        return this.RedirectToAction(c => c.Edit(viewModel.Id));
       }
-      if (canEditPassword && null != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password.Trim())) {
-        user.Password = membershipService.EncodePassword(viewModel.Password, user.PasswordSalt);
+      catch (Exception) {
+        // revert new auth ticket, if set
+        if (authTicketChanged) {
+          authenticationService.LogIn(previousUsername, false);
+        }
+        throw;
       }
-      TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
-      return this.RedirectToAction(c => c.Edit(viewModel.Id));
     }
 
     [HttpGet]
