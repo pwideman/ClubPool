@@ -147,8 +147,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 
   public class specification_for_teams_updatename : specification_for_teams_details
   {
-    protected static JsonResultHelper<AjaxUpdateResponseViewModel> resultHelper;
-    protected static Team team;
+    protected static new JsonResultHelper<AjaxUpdateResponseViewModel> resultHelper;
     protected static UpdateNameViewModel viewModel;
     protected static string newName = "NewName";
 
