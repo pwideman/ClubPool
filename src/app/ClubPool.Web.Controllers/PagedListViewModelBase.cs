@@ -18,6 +18,23 @@ namespace ClubPool.Web.Controllers
       Items = source.Page(index, pageSize).ToList();
       First = index * pageSize + 1;
       Last = First + Items.Count() - 1;
+      if (TotalPages > 2) {
+        var numPageLinksToShow = 5;
+        var first = Math.Max(CurrentPage - numPageLinksToShow / 2, 1);
+        var last = Math.Min(CurrentPage + numPageLinksToShow / 2, TotalPages);
+        if (last - first < numPageLinksToShow - 1) {
+          if (1 == first) {
+            last += numPageLinksToShow - (last - first) - 1;
+          }
+          else {
+            first -= numPageLinksToShow - (last - first) - 1;
+          }
+          last = Math.Min(last, TotalPages);
+          first = Math.Max(first, 1);
+        }
+        FirstPageNumberLink = first;
+        LastPageNumberLink = last;
+      }
     }
 
     public IEnumerable<T> Items { get; set; }
@@ -30,5 +47,7 @@ namespace ClubPool.Web.Controllers
     public int Last { get; set; }
     public int Total { get; set; }
     public int TotalPages { get; set; }
+    public int FirstPageNumberLink { get; set; }
+    public int LastPageNumberLink { get; set; }
   }
 }

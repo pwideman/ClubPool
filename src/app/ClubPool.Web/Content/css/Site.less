@@ -569,28 +569,56 @@ tr.pager:hover {
   }
 }
 
+// begin pager
+
 span.pager-info {
   margin-right: 12px;
   font-size: 80%;
 }
 
-span.pager-links {
-  word-spacing: 0;
-  font-size: 90%;
-  a {
-    text-decoration: none;
-    padding: 4px;
-  }
-  span.pager-number-links {
-    span.current-page {
-      font-weight: bold;
-      padding: 4px;
+ul.pager {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style:none;
+    display: inline-block;
+    a {
+      margin: 0;
+      padding: 4px 6px;
+      border: 1px solid #9aafe5;
+      text-decoration: none;
+      color: @dark_blue;
+    }
+    a:hover {
+      color: @dark_blue;
+      border: 1px solid #0e509e;
     }
   }
-  span.pager-arrow-links {
-    font-size: 110%;
+  
+  li.first, li.next, li.last, li.previous {
+  }
+  
+  li.disabled {
+    border: 1px solid #DEDEDE;
+    padding: 4px 6px;
+    color: #888888;
+  }
+
+  li.currentpage {
+    border: 1px solid #2e6ab1;
+    background: #2e6ab1;
+    color: #FFFFFF;
+    font-weight:bold;
+    padding: 4px 6px;
   }
 }
+
+// end pager
 
 td.action-column {
   min-width: 32px !important;
