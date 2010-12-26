@@ -38,9 +38,10 @@ http://github.com/pwideman/clubpool/</a>. ClubPool is built with the following c
 
 <p>Special thanks to the team behind the <a href="http://whocanhelpme.codeplex.com/">Who Can Help Me?</a> sample application for all of the great ideas.</p>
 
-<p>Icons by:
+<p>Icons used:
   <ul>
-    <li><a href="http://dryicons.com">DryIcons</a></li>
+    <li><a href="http://dryicons.com">Coquette by DryIcons</a></li>
+    <li><a href="http://kyo-tux.deviantart.com/">Phuzion by kyo-tux</a></li>
   </ul>
 </p>
 </asp:Content>
