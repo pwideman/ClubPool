@@ -1,7 +1,7 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Home.ViewModels.IndexViewModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-  <h3>Welcome to the Club Pool League Website</h3>
+  <h3>Welcome to the <%= Model.SiteName %> website</h3>
   <h4>About the league</h4>
   <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque bibendum elementum

@@ -30,6 +30,7 @@ namespace ClubPool.Web.Controllers.Home
 
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
+      viewModel.SiteName = configService.GetConfig().SiteName;
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
