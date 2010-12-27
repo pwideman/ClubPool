@@ -61,13 +61,17 @@ namespace ClubPool.Web.Controllers.Home
     [HttpGet]
     [Authorize]
     public ActionResult Rules() {
-      return View();
+      var viewModel = new RulesViewModel();
+      viewModel.SiteName = configService.GetConfig().SiteName;
+      return View(viewModel);
     }
 
     [HttpGet]
     [Authorize]
     public ActionResult Regulations() {
-      return View();
+      var viewModel = new RegulationsViewModel();
+      viewModel.SiteName = configService.GetConfig().SiteName;
+      return View(viewModel);
     }
   }
 }
