@@ -91,6 +91,9 @@
     <Compile Include="Attributes\ConfigRescueAttribute.cs" />
     <Compile Include="Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="BaseController.cs" />
+    <Compile Include="Contact\ContactController.cs" />
+    <Compile Include="Contact\ViewModels\ContactViewModelBase.cs" />
+    <Compile Include="Contact\ViewModels\TeamViewModel.cs" />
     <Compile Include="CurrentSeason\CurrentSeasonController.cs" />
     <Compile Include="CurrentSeason\ViewModels\CurrentSeasonScheduleViewModel.cs" />
     <Compile Include="CurrentSeason\ViewModels\CurrentSeasonStandingsViewModel.cs" />

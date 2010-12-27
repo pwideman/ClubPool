@@ -93,12 +93,14 @@ namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
   public class StandingsTeamViewModel : StandingsViewModelBase
   {
     public string Name { get; set; }
+    public int Id { get; set; }
     public StandingsPlayerViewModel Player1 { get; set; }
     public StandingsPlayerViewModel Player2 { get; set; }
 
     public StandingsTeamViewModel(Team team, User userToHighlight) {
-      Highlight = team.Players.Contains(userToHighlight);
+      Id = team.Id;
       Name = team.Name;
+      Highlight = team.Players.Contains(userToHighlight);
       var winsAndLosses = team.GetWinsAndLosses();
       Wins = winsAndLosses[0];
       Losses = winsAndLosses[1];
