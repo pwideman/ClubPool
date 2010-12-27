@@ -28,6 +28,7 @@ namespace ClubPool.Web.Controllers.Home
       this.configService = configService;
     }
 
+    [HttpGet]
     public ActionResult Index() {
       var viewModel = new IndexViewModel();
       viewModel.SiteName = configService.GetConfig().SiteName;
@@ -36,6 +37,7 @@ namespace ClubPool.Web.Controllers.Home
       return View(viewModel);
     }
 
+    [HttpGet]
     public ActionResult StaleObjectStateError() {
       return View();
     }
@@ -49,10 +51,23 @@ namespace ClubPool.Web.Controllers.Home
       return sidebarGadgetCollection;
     }
 
+    [HttpGet]
     public ActionResult About() {
       var viewModel = new AboutViewModel();
       viewModel.SiteName = configService.GetConfig().SiteName;
       return View(viewModel);
+    }
+
+    [HttpGet]
+    [Authorize]
+    public ActionResult Rules() {
+      return View();
+    }
+
+    [HttpGet]
+    [Authorize]
+    public ActionResult Regulations() {
+      return View();
     }
   }
 }

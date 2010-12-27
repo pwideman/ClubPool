@@ -5,8 +5,8 @@
   <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(x => x.Login(string.Empty), "Login")%></li>
   <li><a href="#">League</a>
     <ul>
-      <li><a href="/league/regulations">Regulations</a></li>
-      <li><a href="/league/rules">Rules</a></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Rules(), "Rules") %></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Regulations(), "Regulations") %></li>
     </ul>
   </li>
   <% if (Model.UserIsLoggedIn && Model.HasActiveSeason) { %>

@@ -206,7 +206,9 @@
     <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\Index.aspx" />
+    <Content Include="Views\Home\Rules.aspx" />
     <Content Include="Views\Home\StaleObjectStateError.aspx" />
+    <Content Include="Views\Home\Regulations.aspx" />
     <Content Include="Views\Matches\UserHistory.aspx" />
     <Content Include="Views\Meets\Scoresheet.aspx" />
     <Content Include="Views\Meets\View.aspx" />
