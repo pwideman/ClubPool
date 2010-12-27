@@ -11,8 +11,9 @@
    } else { %>
 <h4><%= Html.Encode(Model.Name)%></h4>
 <% } %>
-<p>
-<%= Html.ActionLink<ClubPool.Web.Controllers.Contact.ContactController>(c => c.Team(Model.Id), string.Format("Send {0} an email", Model.Name)) %>
+<p class="team-details-email">
+  <%= Html.ContentImage("mail-medium.png", "Email " + Model.Name) %>
+  <%= Html.ActionLink<ClubPool.Web.Controllers.Contact.ContactController>(c => c.Team(Model.Id), string.Format("Send {0} an email", Model.Name)) %>
 </p>
 <div class="container">
   <div class="header">Details</div>
