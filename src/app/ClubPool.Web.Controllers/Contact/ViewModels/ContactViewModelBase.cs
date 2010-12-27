@@ -10,6 +10,11 @@ namespace ClubPool.Web.Controllers.Contact.ViewModels
 {
   public abstract class ContactViewModelBase : ValidatableViewModel
   {
+    [Min(1)]
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
     [NotNullNotEmpty]
     [Email]
     [DisplayName("Reply to Address:")]

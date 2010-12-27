@@ -93,6 +93,7 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="Contact\ContactController.cs" />
     <Compile Include="Contact\ViewModels\ContactViewModelBase.cs" />
+    <Compile Include="Contact\ViewModels\PlayerViewModel.cs" />
     <Compile Include="Contact\ViewModels\TeamViewModel.cs" />
     <Compile Include="CurrentSeason\CurrentSeasonController.cs" />
     <Compile Include="CurrentSeason\ViewModels\CurrentSeasonScheduleViewModel.cs" />

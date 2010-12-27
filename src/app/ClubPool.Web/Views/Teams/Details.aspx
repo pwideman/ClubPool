@@ -11,6 +11,9 @@
    } else { %>
 <h4><%= Html.Encode(Model.Name)%></h4>
 <% } %>
+<p>
+<%= Html.ActionLink<ClubPool.Web.Controllers.Contact.ContactController>(c => c.Team(Model.Id), string.Format("Send {0} an email", Model.Name)) %>
+</p>
 <div class="container">
   <div class="header">Details</div>
   <div class="content">
@@ -19,7 +22,7 @@
         Players:
         <ul>
           <% foreach (var player in Model.Players) { %>
-          <li><%= Html.Encode(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel)) %></li>
+          <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(player.Id), string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel)) %></li>
           <% } %>
         </ul>
       </li>

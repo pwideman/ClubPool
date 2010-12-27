@@ -22,7 +22,8 @@ Match Details
     <span>Match Details</span>
   </div>
   <p>
-    <strong><%= Html.Encode(Model.Team1Name) %></strong> vs. <strong><%= Html.Encode(Model.Team2Name) %></strong>, 
+    <strong><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.Team1Id), Model.Team1Name) %></strong> vs. 
+    <strong><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.Team2Id), Model.Team2Name) %></strong>, 
     scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate%>)
   </p>
   <div class="action-button-row">

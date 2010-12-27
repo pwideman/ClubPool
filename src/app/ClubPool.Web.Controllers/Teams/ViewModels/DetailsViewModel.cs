@@ -72,10 +72,12 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
 
   public class DetailsPlayerViewModel
   {
+    public int Id { get; set; }
     public string Name { get; set; }
     public int EightBallSkillLevel { get; set; }
 
     public DetailsPlayerViewModel(User player) {
+      Id = player.Id;
       Name = player.FullName;
       var skillLevel = player.SkillLevels.Where(sl => sl.GameType == GameType.EightBall).FirstOrDefault();
       if (null != skillLevel) {

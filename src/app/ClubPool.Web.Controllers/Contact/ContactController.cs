@@ -60,7 +60,7 @@ namespace ClubPool.Web.Controllers.Contact
         return View(viewModel);
       }
 
-      var team = teamRepository.Get(viewModel.TeamId);
+      var team = teamRepository.Get(viewModel.Id);
       if (null == team) {
         return HttpNotFound();
       }
@@ -68,6 +68,43 @@ namespace ClubPool.Web.Controllers.Contact
       var addresses = team.Players.Select(p => p.Email).ToList();
       emailService.SendEmail(viewModel.ReplyToAddress,
         addresses, 
+        new List<string>() { viewModel.ReplyToAddress },
+        null,
+        viewModel.Subject,
+        viewModel.Body);
+
+      return View("EmailSuccess");
+    }
+
+    [HttpGet]
+    [Authorize]
+    [Transaction]
+    public ActionResult Player(int id) {
+      var player = userRepository.Get(id);
+      if (null == player) {
+        return HttpNotFound();
+      }
+      var sender = userRepository.Get(authenticationService.GetCurrentPrincipal().UserId);
+      var viewModel = new PlayerViewModel(player, sender);
+      return View(viewModel);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [Transaction]
+    public ActionResult Player(PlayerViewModel viewModel) {
+      if (!ValidateViewModel(viewModel)) {
+        return View(viewModel);
+      }
+
+      var player = userRepository.Get(viewModel.Id);
+      if (null == player) {
+        return HttpNotFound();
+      }
+
+      var to = player.Email;
+      emailService.SendEmail(viewModel.ReplyToAddress,
+        new List<string>() { to },
         new List<string>() { viewModel.ReplyToAddress },
         null,
         viewModel.Subject,

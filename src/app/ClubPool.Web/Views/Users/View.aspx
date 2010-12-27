@@ -21,7 +21,7 @@
     </div>
     <div class="details-row">
       <div class="details-label">Email:</div>
-      <div class="details-data"><%= Html.Encode(Model.Email)%></div>
+      <div class="details-data"><%= Html.ActionLink<ClubPool.Web.Controllers.Contact.ContactController>(c => c.Player(Model.Id), Model.Email)%></div>
     </div>
     <div class="details-row">
       <div class="details-label">8-ball skill level:</div>

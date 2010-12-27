@@ -13,7 +13,9 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
     public int ScheduledWeek { get; set; }
     public string ScheduledDate { get; set; }
     public string Team1Name { get; set; }
+    public int Team1Id { get; set; }
     public string Team2Name { get; set; }
+    public int Team2Id { get; set; }
     public IEnumerable<MatchViewModel> Matches { get; protected set; }
     public bool AllowUserToEnterResults { get; set; }
 
@@ -28,7 +30,9 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       var teams = meet.Teams.ToArray();
       var team1 = teams[0];
       var team2 = teams[1];
+      Team1Id = team1.Id;
       Team1Name = team1.Name;
+      Team2Id = team2.Id;
       Team2Name = team2.Name;
       var matches = new List<MatchViewModel>();
       var early = true;

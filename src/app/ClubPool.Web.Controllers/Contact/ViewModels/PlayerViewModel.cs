@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using NHibernate.Validator.Constraints;
-
 using ClubPool.Core;
 
 namespace ClubPool.Web.Controllers.Contact.ViewModels
 {
-  public class TeamViewModel : ContactViewModelBase
+  public class PlayerViewModel : ContactViewModelBase
   {
-    public TeamViewModel() {
+    public PlayerViewModel() {
     }
 
-    public TeamViewModel(Team team, User sender) {
-      Id = team.Id;
-      Name = team.Name;
+    public PlayerViewModel(User player, User sender) {
+      Id = player.Id;
+      Name = player.FullName;
       ReplyToAddress = sender.Email;
     }
   }

@@ -37,7 +37,7 @@
           <% foreach (var team in division.Teams) { %>
             <tr <%= team.Highlight ? @"class=""highlight""" : "" %>>
               <td><%= team.Rank %></td>
-              <td><%= Html.ActionLink<ClubPool.Web.Controllers.Contact.ContactController>(c => c.Team(team.Id), team.Name) %></td>
+              <td><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(team.Id), team.Name) %></td>
               <td><%= string.Format("{0} - {1}", team.Wins, team.Losses) %></td>
               <td><%= string.Format("{0:0.00}", team.WinPercentage) %></td>
               <% Html.RenderPartial("StandingsPlayer", team.Player1); %>

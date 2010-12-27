@@ -200,6 +200,7 @@
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Views\Contact\ContactView.ascx" />
     <Content Include="Views\Contact\EmailSuccess.aspx" />
+    <Content Include="Views\Contact\Player.aspx" />
     <Content Include="Views\Contact\Team.aspx" />
     <Content Include="Views\CurrentSeason\Schedule.aspx" />
     <Content Include="Views\CurrentSeason\Standings.aspx" />

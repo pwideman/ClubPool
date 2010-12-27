@@ -1,5 +1,10 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Contact.ViewModels.ContactViewModelBase>" %>
 
+<h4>Send email to <%= Model.Name %></h4>
+
+<%= Html.HiddenFor(m => m.Id) %>
+<%= Html.AntiForgeryToken() %>
+
 <div class="contact-view">
   <div class="contact-view-row">
     <div class="contact-view-label"><%= Html.LabelFor(m => m.ReplyToAddress) %></div>

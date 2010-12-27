@@ -17,6 +17,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public bool IsLocked { get; set; }
     public int SkillLevel { get; set; }
     public bool ShowAdminProperties { get; set; }
+    public int Id { get; set; }
 
     public ViewViewModel() {
       Roles = new string[0];
@@ -25,6 +26,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public ViewViewModel(User user)
       : this() {
 
+      Id = user.Id;
       Username = user.Username;
       Name = user.FullName;
       Email = user.Email;
