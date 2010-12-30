@@ -3,12 +3,14 @@
 <ul class="sf-menu">
 	<li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Index(), "Home") %></li>
   <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(x => x.Login(string.Empty), "Login")%></li>
+  <% if (Model.UserIsLoggedIn) { %>
   <li><a href="#">League</a>
     <ul>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Rules(), "Rules") %></li>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Regulations(), "Regulations") %></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Rules(), "Rules")%></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Regulations(), "Regulations")%></li>
     </ul>
   </li>
+  <% } %>
   <% if (Model.UserIsLoggedIn && Model.HasActiveSeason) { %>
   <li><a href="#"><%= Html.Encode(Model.ActiveSeasonName) %></a>
     <ul>
