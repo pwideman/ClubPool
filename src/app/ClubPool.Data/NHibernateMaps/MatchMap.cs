@@ -19,11 +19,11 @@ namespace ClubPool.Data.NHibernateMaps
       //  .AsBag()
       //  .Cascade.AllDeleteOrphan()
       //  .Access.ReadOnlyPropertyThroughCamelCaseField();
-      mapping.HasManyToMany<User>(x => x.Players)
-        .Cascade.SaveUpdate()
-        .Access.ReadOnlyPropertyThroughCamelCaseField()
-        .AsBag()
-        .Table("MatchesPlayers");
+      //mapping.HasManyToMany<User>(x => x.Players)
+      //  .Cascade.SaveUpdate()
+      //  .Access.ReadOnlyPropertyThroughCamelCaseField()
+      //  .AsBag()
+      //  .Table("MatchesPlayers");
     }
   }
 }

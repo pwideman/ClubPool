@@ -279,11 +279,13 @@ namespace ClubPool.SchemaGen
       matchCmd.Parameters.AddWithValue("@meetid", 1);
       matchCmd.Parameters.AddWithValue("@winnerid", 1);
 
-      var matchPlayerText = @"insert into MatchesPlayers (matchid, userid) values (@matchid, @playerid);";
+      var matchPlayerText = @"insert into MatchPlayers (id, matchid, playerid, teamid) values (@id, @matchid, @playerid, @teamid);";
       var matchPlayerCmd = new MySqlCommand(matchPlayerText, conn, tx);
       matchPlayerCmd.Prepare();
+      matchPlayerCmd.Parameters.AddWithValue("@id", 1);
       matchPlayerCmd.Parameters.AddWithValue("@matchid", 1);
       matchPlayerCmd.Parameters.AddWithValue("@playerid", 1);
+      matchPlayerCmd.Parameters.AddWithValue("@teamid", 1);
 
       var matchResultText = @"insert into MatchResults (id, version, innings, defensiveshots, wins, matchid, playerid)
                               values (@id, 1, @innings, 0, @wins, @matchid, @playerid);";
@@ -338,10 +340,14 @@ namespace ClubPool.SchemaGen
             output(string.Format("inserting match for player1 {0} and player2 {1}", match.Player1.UserName, match.Player2.UserName));
             matchCmd.ExecuteNonQuery();
 
+            matchPlayerCmd.Parameters["@id"].Value = nextId++;
             matchPlayerCmd.Parameters["@matchid"].Value = matchId;
             matchPlayerCmd.Parameters["@playerid"].Value = oldIds[match.Player1Id];
+            matchPlayerCmd.Parameters["@teamid"].Value = oldTeamIds[match.Team1Id];
             matchPlayerCmd.ExecuteNonQuery();
+            matchPlayerCmd.Parameters["@id"].Value = nextId++;
             matchPlayerCmd.Parameters["@playerid"].Value = oldIds[match.Player2Id];
+            matchPlayerCmd.Parameters["@teamid"].Value = oldTeamIds[match.Team2Id];
             matchPlayerCmd.ExecuteNonQuery();
 
             resultCmd.Parameters["@matchid"].Value = matchId;

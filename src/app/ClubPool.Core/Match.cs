@@ -10,12 +10,12 @@ namespace ClubPool.Core
   public class Match : Entity
   {
     protected IList<MatchResult> results;
-    protected IList<User> players;
+    protected IList<MatchPlayer> players;
 
     public virtual Meet Meet { get; set; }
     public virtual bool IsComplete { get; set; }
     public virtual bool IsForfeit { get; set; }
-    public virtual IEnumerable<User> Players { get { return players; } }
+    public virtual IEnumerable<MatchPlayer> Players { get { return players; } }
     public virtual User Winner { get; set; }
     public virtual IEnumerable<MatchResult> Results { get { return results; } }
     public virtual DateTime DatePlayed { get; set; }
@@ -24,25 +24,27 @@ namespace ClubPool.Core
       InitMembers();
     }
 
-    public Match(Meet meet, User player1, User player2) : this() {
+    public Match(Meet meet, MatchPlayer player1, MatchPlayer player2) : this() {
       Check.Require(null != meet, "meet cannot be null");
       Check.Require(null != player1, "player1 cannot be null");
       Check.Require(null != player2, "player2 cannot be null");
-      Check.Require(meet.Teams.Where(t => t.Players.Contains(player1)).Any(), "player1 is not a member of any of the meet's teams");
-      Check.Require(meet.Teams.Where(t => t.Players.Contains(player2)).Any(), "player2 is not a member of any of the meet's teams");
+      Check.Require(meet.Teams.Contains(player1.Team), "player1 is not a member of any of the meet's teams");
+      Check.Require(meet.Teams.Contains(player2.Team), "player2 is not a member of any of the meet's teams");
 
       Meet = meet;
       players.Add(player1);
+      player1.Match = this;
       players.Add(player2);
+      player2.Match = this;
     }
 
     protected void InitMembers() {
       results = new List<MatchResult>();
-      players = new List<User>();
+      players = new List<MatchPlayer>();
     }
 
     public virtual void AddResult(MatchResult result) {
-      if (!Players.Contains(result.Player)) {
+      if (!Players.Where(p => p.Player == result.Player).Any()) {
         throw new ArgumentException("The match result must apply to one of this match's players", "result");
       }
       if (!results.Contains(result)) {

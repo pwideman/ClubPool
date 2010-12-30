@@ -78,7 +78,7 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       var completedMatches = from meet in match.Meet.Division.Meets
                              where meet.IsComplete
                              from ma in meet.Matches
-                             where ma.Players.Contains(player)
+                             where ma.Players.Where(p => p.Player == player).Any()
                              select ma;
 
       int wins = 0;
@@ -120,8 +120,8 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       IsComplete = match.IsComplete;
       IsForfeit = match.IsForfeit;
       var players = match.Players.ToArray();
-      Player1 = new MatchPlayerViewModel(players[0], match);
-      Player2 = new MatchPlayerViewModel(players[1], match);
+      Player1 = new MatchPlayerViewModel(players[0].Player, match);
+      Player2 = new MatchPlayerViewModel(players[1].Player, match);
       if (match.IsComplete) {
         if (!match.IsForfeit) {
           DatePlayed = match.DatePlayed.ToShortDateString();

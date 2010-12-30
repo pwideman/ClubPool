@@ -61,7 +61,7 @@ namespace ClubPool.Core
       var matches = from meet in Division.Meets
                     where meet.Teams.Contains(this)
                     from match in meet.Matches
-                    where match.IsComplete && match.Players.Contains(player)
+                    where match.IsComplete && match.Players.Where(p => p.Player == player).Any()
                     select match;
       int wins = 0;
       int losses = 0;
@@ -106,7 +106,7 @@ namespace ClubPool.Core
         foreach (var meet in meets) {
           var matches = meet.Matches.ToList();
           foreach (var match in matches) {
-            if (match.Players.Contains(player) && !match.IsComplete) {
+            if (match.Players.Where(p => p.Player == player).Any() && !match.IsComplete) {
               meet.RemoveMatch(match);
             }
           }
@@ -131,8 +131,8 @@ namespace ClubPool.Core
             // because it's possible that some matches were played ahead of time
             // and one of the players in the match was removed from their team and
             // replaced by another player. In this case, the completed match stands.
-            if (meet.Matches.Where(m => m.Players.Contains(opponent)).Count() < players.Count) {
-              meet.AddMatch(new Match(meet, player, opponent));
+            if (meet.Matches.Where(m => m.Players.Where(p => p.Player == opponent).Any()).Count() < players.Count) {
+              meet.AddMatch(new Match(meet, new MatchPlayer(player, this), new MatchPlayer(opponent, opposingTeam)));
             }
           }
         }

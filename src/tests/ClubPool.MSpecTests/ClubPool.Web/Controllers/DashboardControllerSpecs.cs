@@ -108,7 +108,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
       seasonResultsCount = (from m in meets
                             where m.Teams.Contains(team) && m.IsComplete
                             from match in m.Matches
-                            where match.Players.Contains(user)
+                            where match.Players.Where(p => p.Player == user).Any()
                             select match).Count();
     };
 

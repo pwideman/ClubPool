@@ -78,17 +78,17 @@ namespace ClubPool.Testing.Core
             match.SetIdTo(matchId++);
             match.IsComplete = true;
             var players = match.Players.ToArray();
-            var mr = new MatchResult(players[0], 20, 0, 3);
+            var mr = new MatchResult(players[0].Player, 20, 0, 3);
             mr.SetIdTo(matchResultId++);
             mr.SetVersionTo(1);
             match.AddResult(mr);
             matchResults.Add(mr);
-            mr = new MatchResult(players[1], 20, 0, 2);
+            mr = new MatchResult(players[1].Player, 20, 0, 2);
             mr.SetIdTo(matchResultId++);
             mr.SetVersionTo(1);
             match.AddResult(mr);
             matchResults.Add(mr);
-            match.Winner = players[0];
+            match.Winner = players[0].Player;
             match.DatePlayed = meetDate;
             matches.Add(match);
           }

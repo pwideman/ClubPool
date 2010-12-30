@@ -47,17 +47,17 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
       Team1 = team1.Name;
       Team2 = team2.Name;
       var players = match.Players.ToArray();
-      Player1 = players[0].FullName;
-      Player2 = players[1].FullName;
+      Player1 = players[0].Player.FullName;
+      Player2 = players[1].Player.FullName;
       if (match.IsComplete) {
         Winner = match.Winner.FullName;
         if (!match.IsForfeit) {
           Date = match.DatePlayed;
-          var results = match.Results.Where(r => r.Player == players[0]).Single();
+          var results = match.Results.Where(r => r.Player == players[0].Player).Single();
           Player1Innings = results.Innings;
           Player1DefensiveShots = results.DefensiveShots;
           Player1Wins = results.Wins;
-          results = match.Results.Where(r => r.Player == players[1]).Single();
+          results = match.Results.Where(r => r.Player == players[1].Player).Single();
           Player2Innings = results.Innings;
           Player2DefensiveShots = results.DefensiveShots;
           Player2Wins = results.Wins;

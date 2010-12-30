@@ -53,7 +53,7 @@ namespace ClubPool.Web.Controllers.Matches
       }
 
       var userMatches = from match in matchRepository.GetAll()
-                        where (match.Players.Contains(user)) && match.IsComplete
+                        where (match.Players.Where(p => p.Player == user).Any()) && match.IsComplete
                         orderby match.DatePlayed descending
                         select new UserHistoryMatchViewModel(match);
       var viewModel = new UserHistoryViewModel(user, userMatches, page.GetValueOrDefault(1), 15);
@@ -111,11 +111,11 @@ namespace ClubPool.Web.Controllers.Matches
       }
 
       var player1 = userRepository.Get(viewModel.Player1Id);
-      if (null == player1 || !match.Players.Contains(player1)) {
+      if (null == player1 || !match.Players.Where(p => p.Player == player1).Any()) {
         return Json(new EditMatchResponseViewModel(false, "Player 1 is not a valid player for this match"));
       }
       var player2 = userRepository.Get(viewModel.Player2Id);
-      if (null == player2 || !match.Players.Contains(player2)) {
+      if (null == player2 || !match.Players.Where(p => p.Player == player2).Any()) {
         return Json(new EditMatchResponseViewModel(false, "Player 2 is not a valid player for this match"));
       }
 

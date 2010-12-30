@@ -77,6 +77,7 @@
     <Compile Include="Division.cs" />
     <Compile Include="GameType.cs" />
     <Compile Include="Match.cs" />
+    <Compile Include="MatchPlayer.cs" />
     <Compile Include="MatchResult.cs" />
     <Compile Include="Meet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

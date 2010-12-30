@@ -44,8 +44,8 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
 
       var gameType = match.Meet.Division.Season.GameType;
       var players = match.Players.ToArray();
-      Player1 = new PlayerViewModel(players[0], gameType);
-      Player2 = new PlayerViewModel(players[1], gameType);
+      Player1 = new PlayerViewModel(players[0].Player, gameType);
+      Player2 = new PlayerViewModel(players[1].Player, gameType);
 
       Player1.GamesToWin = CalculateGamesToWin(Player1.SkillLevel, Player2.SkillLevel);
       Player2.GamesToWin = CalculateGamesToWin(Player2.SkillLevel, Player1.SkillLevel);

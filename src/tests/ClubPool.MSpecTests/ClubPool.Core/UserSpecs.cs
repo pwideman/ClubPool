@@ -17,17 +17,19 @@ namespace ClubPool.MSpecTests.ClubPool.Core
     protected static User opponent;
     protected static Meet meet;
     protected static IList<MatchResult> results;
+    protected static Team playerTeam;
+    protected static Team opponentTeam;
 
     Establish context = () => {
       player = new User("test", "test", "test", "test", "test");
       opponent = new User("opponent", "opponent", "opponent", "opponent", "opponent");
       var season = new Season("test", GameType.EightBall);
       var division = new Division("test", DateTime.Parse("1/1/2011"), season);
-      var team1 = new Team("team1", division);
-      var team2 = new Team("team2", division);
-      team1.AddPlayer(player);
-      team2.AddPlayer(opponent);
-      meet = new Meet(team1, team2, 1);
+      playerTeam = new Team("team1", division);
+      opponentTeam = new Team("team2", division);
+      playerTeam.AddPlayer(player);
+      opponentTeam.AddPlayer(opponent);
+      meet = new Meet(playerTeam, opponentTeam, 1);
 
       results = new List<MatchResult>();
 
@@ -39,7 +41,7 @@ namespace ClubPool.MSpecTests.ClubPool.Core
 
     protected static MatchResult CreateResult(int innings, int defensiveShots, int wins, Match match = null) {
       if (null == match) {
-        match = new Match(meet, player, opponent);
+        match = new Match(meet, new MatchPlayer(player, playerTeam), new MatchPlayer(opponent, opponentTeam));
       }
       return new MatchResult(player, innings, defensiveShots, wins) { Match = match };
     }
@@ -260,27 +262,30 @@ namespace ClubPool.MSpecTests.ClubPool.Core
   public class when_asked_to_update_skill_level_with_more_than_ten_results : specification_for_User
   {
     Establish context = () => {
-      var match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/1/2011") };
+      var p1 = new MatchPlayer(player, playerTeam);
+      var p2 = new MatchPlayer(opponent, opponentTeam);
+
+      var match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/1/2011") };
       results.Add(CreateResult(20, 0, 7, match));
       results.Add(CreateResult(20, 0, 8, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/2/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/2/2011") };
       results.Add(CreateResult(20, 0, 4, match));
       results.Add(CreateResult(20, 0, 1, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/3/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/3/2011") };
       results.Add(CreateResult(21, 0, 3, match));
       results.Add(CreateResult(21, 0, 3, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/4/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/4/2011") };
       results.Add(CreateResult(20, 0, 5, match));
       results.Add(CreateResult(20, 0, 2, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/5/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/5/2011") };
       results.Add(CreateResult(20, 0, 2, match));
       results.Add(CreateResult(20, 0, 3, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/6/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/6/2011") };
       results.Add(CreateResult(20, 0, 2, match));
       results.Add(CreateResult(20, 0, 3, match));
     };
@@ -293,25 +298,28 @@ namespace ClubPool.MSpecTests.ClubPool.Core
   public class when_asked_to_update_skill_level_and_order_by_date_includes_more_than_10_results : specification_for_User
   {
     Establish context = () => {
-      var match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/1/2011") };
+      var p1 = new MatchPlayer(player, playerTeam);
+      var p2 = new MatchPlayer(opponent, opponentTeam);
+
+      var match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/1/2011") };
       results.Add(CreateResult(20, 0, 4, match));
       results.Add(CreateResult(20, 0, 1, match));
       results.Add(CreateResult(20, 0, 7, match));
       results.Add(CreateResult(20, 0, 8, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/3/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/3/2011") };
       results.Add(CreateResult(21, 0, 3, match));
       results.Add(CreateResult(21, 0, 3, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/4/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/4/2011") };
       results.Add(CreateResult(20, 0, 5, match));
       results.Add(CreateResult(20, 0, 2, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/5/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/5/2011") };
       results.Add(CreateResult(20, 0, 2, match));
       results.Add(CreateResult(20, 0, 3, match));
 
-      match = new Match(meet, player, opponent) { DatePlayed = DateTime.Parse("1/6/2011") };
+      match = new Match(meet, p1, p2) { DatePlayed = DateTime.Parse("1/6/2011") };
       results.Add(CreateResult(20, 0, 2, match));
       results.Add(CreateResult(20, 0, 3, match));
     };

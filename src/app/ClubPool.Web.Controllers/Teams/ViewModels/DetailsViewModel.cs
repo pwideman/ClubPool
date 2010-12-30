@@ -57,7 +57,9 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
         while (rank > 0 && q[rank-1].Team.GetWinPercentage() == myWinPct) {
           rank--;
         }
-        tied = (q[rank + 1].Team.GetWinPercentage() == myWinPct);
+        if (rank < (q.Length - 1)) {
+          tied = (q[rank + 1].Team.GetWinPercentage() == myWinPct);
+        }
       }
       return (tied ? "T" : "") + (rank+1).ToString();
 
@@ -116,9 +118,9 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public bool Win { get; set; }
 
     public DetailsMatchViewModel(Match match, Team team) {
-      var teamPlayer = match.Players.Where(p => team.Players.Contains(p)).Single();
+      var teamPlayer = match.Players.Where(p => p.Team == team).Single().Player;
       TeamPlayerName = teamPlayer.FullName;
-      var oppPlayer = match.Players.Where(p => p != teamPlayer).Single();
+      var oppPlayer = match.Players.Where(p => p.Player != teamPlayer).Single().Player;
       OpponentPlayerName = oppPlayer.FullName;
       Win = match.Winner == teamPlayer;
       if (!match.IsForfeit) {

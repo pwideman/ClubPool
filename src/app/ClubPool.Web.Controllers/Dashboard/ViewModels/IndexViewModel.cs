@@ -39,13 +39,13 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
                     where m.Teams.Contains(team) && m.IsComplete
                     orderby m.Week descending
                     from match in m.Matches
-                    where match.Players.Contains(user)
+                    where match.Players.Where(p => p.Player == user).Any()
                     select match;
       if (matches.Any()) {
         results = new List<SeasonResultViewModel>();
         foreach (var match in matches) {
           var result = new SeasonResultViewModel() {
-            Player = match.Players.Where(p => p != user).First().FullName,
+            Player = match.Players.Where(p => p.Player != user).First().Player.FullName,
             Team = match.Meet.Teams.Where(t => t != team).First().Name,
             Win = match.Winner == user
           };
@@ -217,7 +217,7 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
       Team = match.Meet.Teams.Where(t => !t.Players.Contains(player)).Single().Name;
       NetInnings = Innings - DefensiveShots;
       // for this we display our opponent
-      Player = match.Players.Where(p => p != player).Single().FullName;
+      Player = match.Players.Where(p => p.Player != player).Single().Player.FullName;
     }
   }
 }

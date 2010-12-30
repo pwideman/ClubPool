@@ -47,7 +47,7 @@ namespace ClubPool.Core
       var team2 = teams[1];
       foreach (var team1Player in team1.Players) {
         foreach (var team2Player in team2.Players) {
-          AddMatch(new Match(this, team1Player, team2Player));
+          AddMatch(new Match(this, new MatchPlayer(team1Player, team1), new MatchPlayer(team2Player, team2)));
         }
       }
     }
@@ -56,7 +56,7 @@ namespace ClubPool.Core
       var allTeamPlayers = (from team in Teams
                             from player in team.Players
                             select player).ToList();
-      if (match.Players.Where(p => !allTeamPlayers.Contains(p)).Any()) {
+      if (match.Players.Where(p => !allTeamPlayers.Contains(p.Player)).Any()) {
         throw new ArgumentException("all players in match must be members of the meet's teams", "match");
       }
       if (!matches.Contains(match)) {
