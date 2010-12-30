@@ -47,7 +47,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository = MockRepository.GenerateStub<IUserRepository>();
       emailService = MockRepository.GenerateStub<IEmailService>();
       configService = MockRepository.GenerateStub<IConfigurationService>();
-      var config = new ClubPoolConfiguration("test", "test", "test@test.com", false);
+      var config = new ClubPoolConfiguration("test", "test", "test@test.com", "test", false);
       configService.Stub(c => c.GetConfig()).Return(config);
       matchResultRepository = MockRepository.GenerateStub<IMatchResultRepository>();
       controller = new UsersController(authenticationService, membershipService, 
