@@ -30,6 +30,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Home
     Establish context = () => {
       authenticationService = MockRepository.GenerateStub<IAuthenticationService>();
       configService = MockRepository.GenerateStub<IConfigurationService>();
+      configService.Stub(s => s.GetConfig()).Return(new Framework.Configuration.ClubPoolConfiguration("test", "test", "test", null, false));
 
       controller = new HomeController(authenticationService, configService);
       ControllerHelper.CreateMockControllerContext(controller);
