@@ -204,7 +204,9 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpGet]
     public ActionResult SignUp() {
-      return View(new SignUpViewModel());
+      var vm = new SignUpViewModel();
+      vm.SiteName = configService.GetConfig().SiteName;
+      return View(vm);
     }
 
     [HttpPost]

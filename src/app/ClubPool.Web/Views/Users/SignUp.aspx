@@ -2,17 +2,17 @@
 <%@ Import Namespace="ClubPool.Web.Controls.Captcha" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-  <strong>Sign up for a new Club Pool League account</strong>
+  <strong>Sign up for a new <%= Html.Encode(Model.SiteName) %> account</strong>
 
   <p>Complete the form below to sign up for a new league account. A site administrator will
   need to verify your account information before you will be able to log in. You will receive
   an email once an administrator has verified your information.</p>
   
+  <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+       Html.RenderPartial("ErrorMessage");
+     } %>
   <div class="form-content">
-    <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-          Html.RenderPartial("ErrorMessage");
-        } %>
-    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), FormMethod.Post, new { @class = "signupForm normal" })) { %>
+    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), FormMethod.Post, new { @class = "normal" })) { %>
       <fieldset>
         <%= Html.AntiForgeryToken()%>
         <% Html.RenderPartial("CreateUserControl"); %>
