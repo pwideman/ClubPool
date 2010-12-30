@@ -179,7 +179,6 @@
     <Content Include="Content\css\images\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
     <Content Include="Content\css\menu.less" />
-    <None Include="Content\css\jquery-ui-1.8.5.redmond.less" />
     <Content Include="Content\css\jquery.timeentry.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -264,6 +263,7 @@
     <Content Include="Content\css\site.less" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
+    <Content Include="Content\css\jqueryui.css" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
