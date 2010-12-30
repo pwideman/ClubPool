@@ -9,9 +9,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
     <%= Html.Stylesheet("site.less") %>
-
+    <%= Html.Stylesheet("jqueryui.css") %>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/jquery.validate.min.js"></script>
     <%= Html.ScriptInclude("jquery.bgiframe.min.js") %>
     <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
