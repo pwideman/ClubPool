@@ -195,7 +195,7 @@ namespace ClubPool.SchemaGen
 
       output("Migrating seasons");
 
-      var commandText = @"insert into seasons(id, version, name, isactive, gametype) 
+      var commandText = @"insert into Seasons(id, version, name, isactive, gametype) 
                           values (@id, 1, @name, false, @gametype);";
       var seasonCmd = new MySqlCommand(commandText, conn, tx);
       seasonCmd.Prepare();
@@ -223,7 +223,7 @@ namespace ClubPool.SchemaGen
 
       output(string.Format("Migrating divisions for season '{0}'", season.Year.ToString()));
 
-      var commandText = @"insert into divisions (id, version, startingdate, name, seasonid)
+      var commandText = @"insert into Divisions (id, version, startingdate, name, seasonid)
                           values (@id, 1, @date, @name, @seasonid);";
       var cmd = new MySqlCommand(commandText, conn, tx);
       cmd.Prepare();
@@ -255,7 +255,7 @@ namespace ClubPool.SchemaGen
       Dictionary<int, int> newIds,
       Dictionary<int, int> oldTeamIds) {
 
-      var meetText = @"insert into meets (id, week, iscomplete, divisionid)
+      var meetText = @"insert into Meets (id, week, iscomplete, divisionid)
                        values (@id, @week, true, @divisionid);";
       var meetCmd = new MySqlCommand(meetText, conn, tx);
       meetCmd.Prepare();
@@ -263,13 +263,13 @@ namespace ClubPool.SchemaGen
       meetCmd.Parameters.AddWithValue("@week", 1);
       meetCmd.Parameters.AddWithValue("@divisionid", divisionId);
 
-      var meetTeamText = @"insert into meetsteams (meetid, teamid) values (@meetid, @teamid);";
+      var meetTeamText = @"insert into MeetsTeams (meetid, teamid) values (@meetid, @teamid);";
       var meetTeamCmd = new MySqlCommand(meetTeamText, conn, tx);
       meetTeamCmd.Prepare();
       meetTeamCmd.Parameters.AddWithValue("@meetid", 1);
       meetTeamCmd.Parameters.AddWithValue("@teamid", 1);
 
-      var matchText = @"insert into matches (id, iscomplete, isforfeit, dateplayed, meetid, winnerid)
+      var matchText = @"insert into Matches (id, iscomplete, isforfeit, dateplayed, meetid, winnerid)
                         values (@id, true, @isforfeit, @dateplayed, @meetid, @winnerid);";
       var matchCmd = new MySqlCommand(matchText, conn, tx);
       matchCmd.Prepare();
@@ -279,13 +279,13 @@ namespace ClubPool.SchemaGen
       matchCmd.Parameters.AddWithValue("@meetid", 1);
       matchCmd.Parameters.AddWithValue("@winnerid", 1);
 
-      var matchPlayerText = @"insert into matchesplayers (matchid, userid) values (@matchid, @playerid);";
+      var matchPlayerText = @"insert into MatchesPlayers (matchid, userid) values (@matchid, @playerid);";
       var matchPlayerCmd = new MySqlCommand(matchPlayerText, conn, tx);
       matchPlayerCmd.Prepare();
       matchPlayerCmd.Parameters.AddWithValue("@matchid", 1);
       matchPlayerCmd.Parameters.AddWithValue("@playerid", 1);
 
-      var matchResultText = @"insert into matchresults (id, version, innings, defensiveshots, wins, matchid, playerid)
+      var matchResultText = @"insert into MatchResults (id, version, innings, defensiveshots, wins, matchid, playerid)
                               values (@id, 1, @innings, 0, @wins, @matchid, @playerid);";
       var resultCmd = new MySqlCommand(matchResultText, conn, tx);
       resultCmd.Prepare();
@@ -375,14 +375,14 @@ namespace ClubPool.SchemaGen
 
       output(string.Format("Migrating teams for division {0}", division.Description));
 
-      var commandText = @"insert into teams (id, version, name, divisionid) values (@id, 1, @name, @divisionid);";
+      var commandText = @"insert into Teams (id, version, name, divisionid) values (@id, 1, @name, @divisionid);";
       var cmd = new MySqlCommand(commandText, conn, tx);
       cmd.Prepare();
       cmd.Parameters.AddWithValue("@id", 1);
       cmd.Parameters.AddWithValue("@name", "name");
       cmd.Parameters.AddWithValue("@divisionid", divisionId);
 
-      commandText = @"insert into teamsplayers (teamid, userid) values (@teamid, @userid);";
+      commandText = @"insert into TeamsPlayers (teamid, userid) values (@teamid, @userid);";
       var playerCmd = new MySqlCommand(commandText, conn, tx);
       playerCmd.Prepare();
       playerCmd.Parameters.AddWithValue("@teamid", 1);
@@ -418,7 +418,7 @@ namespace ClubPool.SchemaGen
 
       output("Migrating users");
 
-      var commandText = @"insert into users(id, version, username, firstname, lastname, email, password, passwordsalt, isapproved, islocked) 
+      var commandText = @"insert into Users(id, version, username, firstname, lastname, email, password, passwordsalt, isapproved, islocked) 
                           values (@id, 1, @username, @firstname, @lastname, @email, @password, @passwordsalt, true, false);";
       var command = new MySqlCommand(commandText, conn, tx);
       command.Prepare();
