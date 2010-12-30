@@ -10,10 +10,11 @@ namespace ClubPool.Framework.Configuration
     public ClubPoolConfiguration() {
     }
 
-    public ClubPoolConfiguration(string siteName, string smtpHost, string systemEmailAddress, bool useRescues) {
+    public ClubPoolConfiguration(string siteName, string smtpHost, string systemEmailAddress, string systemEmailPassword, bool useRescues) {
       SiteName = siteName;
       SmtpHost = smtpHost;
       SystemEmailAddress = systemEmailAddress;
+      SystemEmailPassword = systemEmailPassword;
       UseRescues = useRescues;
     }
 
@@ -21,5 +22,6 @@ namespace ClubPool.Framework.Configuration
     public bool UseRescues { get; protected set; }
     public string SmtpHost { get; protected set; }
     public string SystemEmailAddress { get; protected set; }
+    public string SystemEmailPassword { get; protected set; }
   }
 }

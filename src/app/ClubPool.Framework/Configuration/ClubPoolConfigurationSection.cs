@@ -10,7 +10,7 @@ namespace ClubPool.Framework.Configuration
   {
     public static ClubPoolConfiguration GetConfig() {
       var section = ConfigurationManager.GetSection("clubPool") as ClubPoolConfigurationSection;
-      return new ClubPoolConfiguration(section.SiteName, section.SmtpHost, section.SystemEmailAddress, section.UseRescues);
+      return new ClubPoolConfiguration(section.SiteName, section.SmtpHost, section.SystemEmailAddress, section.SystemEmailPassword, section.UseRescues);
     }
 
     [ConfigurationProperty("smtpHost")]
@@ -24,6 +24,13 @@ namespace ClubPool.Framework.Configuration
     public string SystemEmailAddress {
       get {
         return this["systemEmailAddress"] as string;
+      }
+    }
+
+    [ConfigurationProperty("systemEmailPassword")]
+    public string SystemEmailPassword {
+      get {
+        return this["systemEmailPassword"] as string;
       }
     }
 
