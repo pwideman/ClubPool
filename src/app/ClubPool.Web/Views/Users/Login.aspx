@@ -5,12 +5,17 @@
     <%= Html.ContentImage("logoff.png", "Login") %>
     <span>Login</span>
   </div>
-  <div class="form-content login-form corner">
-    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Login(string.Empty), 
-          FormMethod.Post, new { @class = "normal", id = "loginForm" })) { %>
-      <% Html.RenderPartial("LoginControl"); %>
-    <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel>().DisableMessages() %>
+  <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+       Html.RenderPartial("ErrorMessage");
+     } %>
+  <div>
+    <div class="form-content login-form corner">
+      <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Login(string.Empty), 
+            FormMethod.Post, new { @class = "normal", id = "loginForm" })) { %>
+        <% Html.RenderPartial("LoginControl"); %>
+      <% } %>
+      <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel>().DisableMessages() %>
+    </div>
   </div>
 </asp:Content>
 

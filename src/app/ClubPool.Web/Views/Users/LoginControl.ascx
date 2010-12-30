@@ -1,8 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel>" %>
 <fieldset>
-  <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) { 
-       Html.RenderPartial("ErrorMessage");
-     } %>
   <%= Html.HiddenFor(m => m.ReturnUrl) %>
   <div class="form-row">
     <span class="form-label-left"><%= Html.LabelFor(m => m.Username) %></span>
