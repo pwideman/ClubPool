@@ -13,7 +13,7 @@
 <% } %>
 <p class="team-details-email">
   <%= Html.ContentImage("mail-medium.png", "Email " + Model.Name) %>
-  <%= Html.ActionLink<ClubPool.Web.Controllers.Contact.ContactController>(c => c.Team(Model.Id), string.Format("Send {0} an email", Model.Name)) %>
+  <a href="mailto:<%= Model.Email%>"><%= Html.Encode(string.Format("Send {0} an email", Model.Name)) %></a>
 </p>
 <div class="container">
   <div class="header">Details</div>

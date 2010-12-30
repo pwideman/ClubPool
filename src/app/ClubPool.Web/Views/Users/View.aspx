@@ -22,7 +22,7 @@
     <div class="details-row">
       <div class="details-label">Email:</div>
       <div class="details-data email">
-        <%= Html.ActionLink<ClubPool.Web.Controllers.Contact.ContactController>(c => c.Player(Model.Id), Model.Email)%>
+        <a href="mailto:<%= Model.Email%>"><%= Html.Encode(Model.Email) %></a>
         <%= Html.ContentImage("mail-medium.png", "Email " + Model.Name) %>
       </div>
     </div>

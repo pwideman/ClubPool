@@ -15,14 +15,20 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public string Rank { get; set; }
     public IEnumerable<DetailsMeetViewModel> SeasonResults { get; set; }
     public bool HasSeasonResults { get; set; }
+    public string Email { get; set; }
 
     public DetailsViewModel(Team team) {
       Id = team.Id;
       Name = team.Name;
       Record = GetRecord(team);
       var players = new List<DetailsPlayerViewModel>();
+      Email = "";
       foreach(var player in team.Players) {
         players.Add(new DetailsPlayerViewModel(player));
+        if (Email.Length > 0) {
+          Email += ",";
+        }
+        Email += player.Email;
       }
       Players = players;
       Rank = CalculateRank(team);
