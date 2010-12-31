@@ -154,14 +154,12 @@ div.rescuediv
   overflow: hidden;
   clear: both;
   min-width: 860px;
+  z-index: 1;
 }
 
 #container .column 
 {
-  position: relative;
   float: left;
-  padding-bottom: 20010px;
-  margin-bottom: -20000px;
 }
 
 /* HEADER
@@ -170,6 +168,7 @@ div.rescuediv
 {
   padding: 0;
   margin: 0;
+  z-index: 2;
 }
 
 /* menu
@@ -181,6 +180,7 @@ div.rescuediv
   font-size: 12px;
   height: 32px;
   background-color: @light_blue;
+  z-index: 2;
 }
 
 /* main content
@@ -189,6 +189,7 @@ div.rescuediv
 {
   width: 100%;
   padding: 0 10px 10px 20px;
+  z-index: 1;
 }
 
 div.blue-button 

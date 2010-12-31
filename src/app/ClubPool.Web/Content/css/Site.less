@@ -16,6 +16,11 @@
 @import "base";
 @import "menu";
 
+.ie7fix {
+  zoom: 1;
+  *display: inline;
+}
+
 .topcorner(@radius: 12px)
 {
   -moz-border-radius-topleft: @radius;
@@ -205,6 +210,7 @@ div.heading {
     display: inline-block;
     padding-top: 8px;
     vertical-align: top;
+    .ie7fix;
   }
 }
   
@@ -242,6 +248,7 @@ div.form-content
   padding: 8px;
   background-color: @light_blue;
   display: inline-block;
+  .ie7fix;
   .corner;
 }
 
@@ -269,6 +276,7 @@ span.form-label-left
   padding-right: 8px;
   vertical-align: top;
   margin-top: 8px;
+  .ie7fix;
 }
 
 span.required
@@ -288,6 +296,7 @@ div.form-input
   display: inline-block;
   padding: 0;
   vertical-align: top;
+  .ie7fix;
 
   input
   {
@@ -338,6 +347,7 @@ div.form-checkbox-list
   border: 1px solid lightgrey;
   background-color: @extralight_blue;
   padding: 8px;
+  .ie7fix;
   ul {
     list-style-type: none;
     padding: 0;
@@ -355,6 +365,7 @@ div.simple-user-list
   max-width: 610px;
   min-width: 200px;
   min-height: 60px;
+  .ie7fix;
 
   ul {
     margin: 0;
@@ -371,6 +382,7 @@ div.simple-user-list
       padding: 4px;
       width: 180px;
       overflow: hidden;
+      .ie7fix;
 
       div.simple-user-list-item-heading {
         background-image: url(../images/user-small.png);
@@ -494,6 +506,7 @@ div.form-message {
       display: inline-block;
       margin-top: 5px;
       vertical-align: middle;
+      .ie7fix;
     }
   }
 
@@ -543,6 +556,7 @@ div.form-message {
   padding: 0 30px 0 10px;
   display: inline-block;
   margin: 10px 0px;
+  .ie7fix;
 }
 
 .notification {
@@ -580,12 +594,14 @@ ul.pager {
   margin: 0;
   padding: 0;
   display: inline-block;
+  .ie7fix;
   li {
     margin: 0;
     padding: 0;
     border: 0;
     list-style:none;
     display: inline-block;
+    .ie7fix;
     a {
       margin: 0;
       padding: 4px 6px;
@@ -634,6 +650,7 @@ div.action-button
   font-size: 90%;
   display: inline-block;
   padding: 2px 4px;
+  .ie7fix;
   img {
     vertical-align: middle;
   }
@@ -701,6 +718,7 @@ table.season-view-teams-table {
 
 div.season-view-teams-content {
   display: inline-block;
+  .ie7fix;
 }
 
 form.inline {
@@ -736,6 +754,7 @@ table.match-details {
 
       div.status {
         display: inline-block;
+        .ie7fix;
         img {
           vertical-align: middle;
         }
@@ -831,6 +850,7 @@ div#enter_results_window {
           div {
             text-align: left;
             display: inline-block;
+            .ie7fix;
           }
         }
       }
@@ -883,9 +903,11 @@ div.userinfo-tab {
       display: inline-block;
       width: 120px;
       text-align: right;
+      .ie7fix;
     }
     div.details-data {
       display: inline-block;
+      .ie7fix;
     }
     div.email {
       img {
@@ -921,6 +943,7 @@ div.dashboard-column-right {
 div.dashboard-item-container {
   display: inline-block;
   vertical-align: top;
+  .ie7fix;
   div.dashboard-item {
     border: 2px solid @medium_blue;
     .corner(8px);
@@ -1056,6 +1079,7 @@ div.container {
   margin: 6px;
   text-align: center;
   display: inline-block;
+  .ie7fix;
   div.header {
     .topcorner(4px);
     background-color: @medium_blue;
@@ -1207,6 +1231,7 @@ table.schedule-table {
 span.resetpassword-label {
   display: inline-block;
   width: 100px;
+  .ie7fix;
 }
 
 input.resetpassword-field {
@@ -1236,6 +1261,7 @@ div.contact-view {
       width: 140px;
       text-align: right;
       vertical-align: top;
+      .ie7fix;
     }
     div.contact-view-field {
       input[type='text'], textarea {
@@ -1251,6 +1277,7 @@ div.contact-view {
       display: inline-block;
       width: 500px;
       text-align: center;
+      .ie7fix;
     }
   }
 }
