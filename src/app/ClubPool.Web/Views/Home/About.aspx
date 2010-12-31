@@ -25,12 +25,9 @@ http://github.com/pwideman/clubpool/</a>. ClubPool is built with the following c
   <li>jQuery plugins:
     <ul>
       <li><a href="http://www.itgroup.com.ph/alphanumeric/">jQuery AlphaNumeric</a></li>
-      <li><a href="http://docs.jquery.com/Plugins/bgiframe">jquery.bgiframe</a></li>
       <li><a href="http://github.com/carhartl/jquery-cookie">jquery.cookie</a></li>
-      <li><a href="http://jquery.malsup.com/corner/">jquery.corner</a></li>
       <li><a href="http://jupiterjs.com/news/delegate-able-hover-events-for-jquery">jquery.event.hover</a></li>
       <li><a href="http://malsup.com/jquery/form/">jquery.form</a></li>
-      <li><a href="http://cherne.net/brian/resources/jquery.hoverIntent.html">jquery.hoverIntent</a></li>
       <li><a href="http://keith-wood.name/timeEntry.html">jquery.timeentry</a></li>
       <li><a href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation</a></li>
       <li><a href="http://users.tpg.com.au/j_birch/plugins/superfish">jQuery Superfish menus (with supersubs)</a></li>
