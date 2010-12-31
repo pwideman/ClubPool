@@ -9,17 +9,6 @@ $(function () {
     animation: { opacity: "show" },
     speed: "fast"
   });
-  if ($.browser.msie && $.browser.version.substr(0, 1) > 7) {
-
-    // round the corners on standard elements
-    // only do this in IE, others will use css
-    // sidebar gadgets
-    var sidebarCornerRadius = "10px";
-    $(".sidebar-corner").corner(sidebarCornerRadius);
-    // normal radius
-    var normalCornerRadius = "12px";
-    $(".corner").corner(normalCornerRadius);
-  }
   $(".notification").effect("fade", { easing: "easeInExpo" }, 5000);
 });
 

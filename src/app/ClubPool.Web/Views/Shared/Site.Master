@@ -13,13 +13,9 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
     <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/jquery.validate.min.js"></script>
-    <%= Html.ScriptInclude("jquery.bgiframe.min.js") %>
     <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
     <%= Html.ScriptInclude("supersubs.js") %>
     <%= Html.ScriptInclude("superfish.js") %>
-    <% if (Request.Browser.Browser.ToLower().Contains("ie")) { %>
-    <%= Html.ScriptInclude("jquery.corner.js") %>
-    <% } %>
     <%= Html.ScriptInclude("jquery.cookie.js") %>
     <%= Html.ScriptInclude("xVal.jquery.validate.js") %>
     <%= Html.ScriptInclude("clubpool.js") %>

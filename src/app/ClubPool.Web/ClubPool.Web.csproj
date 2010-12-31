@@ -186,12 +186,9 @@
     <Content Include="Scripts\jquery-1.4.4.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.alphanumeric.js" />
-    <Content Include="Scripts\jquery.bgiframe.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
-    <Content Include="Scripts\jquery.corner.js" />
     <Content Include="Scripts\jquery.event.hover-1.0.js" />
     <Content Include="Scripts\jquery.form.js" />
-    <Content Include="Scripts\jquery.hoverIntent.minified.js" />
     <Content Include="Scripts\jquery.timeentry.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\superfish.js" />
