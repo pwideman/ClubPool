@@ -57,6 +57,7 @@ User History
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+<%= Html.Script("jquery.query.js") %>
 <script type="text/javascript">
   $(function () {
     $("tbody.content tr:odd").addClass("alt");

@@ -71,6 +71,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Seasons</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+<%= Html.Script("jquery.query.js") %>
 <script type="text/javascript">
   $(function () {
     $("tbody.content tr:odd").addClass("alt");

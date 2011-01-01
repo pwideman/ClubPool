@@ -74,7 +74,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
     };
 
-    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(page));
+    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(page, null));
 
     It should_set_the_number_of_users_to_the_page_size = () =>
       resultHelper.Model.Items.Count().ShouldEqual(pageSize);
@@ -93,6 +93,29 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
 
     It should_set_the_total_pages = () =>
       resultHelper.Model.TotalPages.ShouldEqual(pages);
+  }
+
+  [Subject(typeof(UsersController))]
+  public class when_asked_for_the_default_view_with_search_query : specification_for_users_controller
+  {
+    static ViewResultHelper<IndexViewModel> resultHelper;
+    static int page = 1;
+    static int pages = 3;
+    static int pageSize = 10;
+
+    Establish context = () => {
+      var users = new List<User>();
+      users.Add(new User("a", "a", "a", "a", "a"));
+      users.Add(new User("b", "b", "b", "b", "b"));
+      users.Add(new User("c", "c", "c", "c", "c"));
+      
+      userRepository.Stub(r => r.GetAll()).Return(users.AsQueryable());
+    };
+
+    Because of = () => resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(page, "a c"));
+
+    It should_only_return_users_matching_the_query = () =>
+      resultHelper.Model.Total.ShouldEqual(2);
   }
 
   [Subject(typeof(UsersController))]
@@ -554,6 +577,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     static User user;
     static int page = 5;
     static KeyValuePair<string, object> pageRouteValue;
+    static KeyValuePair<string, object> qRouteValue;
 
     Establish context = () => {
       user = new User("test", "test", "test", "test", "test");
@@ -561,9 +585,10 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
       userRepository.Expect(r => r.Delete(user));
       matchResultRepository.Stub(r => r.GetAll()).Return(new List<MatchResult>().AsQueryable());
       pageRouteValue = new KeyValuePair<string, object>("page", page);
+      qRouteValue = new KeyValuePair<string, object>("q", "test");
     };
 
-    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(userId, page));
+    Because of = () => resultHelper = new RedirectToRouteResultHelper(controller.Delete(userId, page, "test"));
 
     It should_delete_the_user = () =>
       userRepository.VerifyAllExpectations();
@@ -574,6 +599,9 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_retain_the_current_page = () =>
       resultHelper.Result.RouteValues.ShouldContain(pageRouteValue);
 
+    It should_retain_the_current_search_query = () =>
+      resultHelper.Result.RouteValues.ShouldContain(qRouteValue);
+
     It should_return_a_notification_message = () =>
       controller.TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage).ShouldBeTrue();
   }
@@ -583,7 +611,7 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
   {
     static HttpNotFoundResultHelper resultHelper;
 
-    Because of = () => resultHelper = new HttpNotFoundResultHelper(controller.Delete(0, 5));
+    Because of = () => resultHelper = new HttpNotFoundResultHelper(controller.Delete(0, 5, null));
 
     It should_not_delete_the_user = () =>
       userRepository.AssertWasNotCalled(r => r.Delete(null), x => x.IgnoreArguments());

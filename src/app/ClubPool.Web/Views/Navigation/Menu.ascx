@@ -37,7 +37,7 @@
       <% if (Model.HasActiveSeason) { %>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.View(Model.ActiveSeasonId), "Active Season")%></li>
       <% } %>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Index(null), "Users") %></li>
+      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Index(null, null), "Users") %></li>
       <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(null), "Seasons") %></li>
       <li><a href="<%= Url.Content("~/elmah.axd")%>">Error Log</a></li>
     </ul>

@@ -74,12 +74,32 @@ namespace ClubPool.Web.Controllers.Users
 
     [Authorize(Roles=Roles.Administrators)]
     [Transaction]
-    public ActionResult Index(int? page) {
+    public ActionResult Index(int? page, string q) {
       int pageSize = 10;
-      var query = from u in userRepository.GetAll()
+      var userQuery = from u in userRepository.GetAll()
+                      select u;
+      if (!string.IsNullOrEmpty(q)) {
+        q = HttpUtility.UrlDecode(q);
+        var pieces = q.Split(' ').Where(s => !string.IsNullOrEmpty(s));
+        // this is horribly inefficient, poorly designed client side searching,
+        // but we'll only have a couple hundred users so the performance is not
+        // a huge concern.
+        var searchQuery = new List<User>();
+        foreach (var piece in pieces) {
+          var tempQuery = userQuery.Where(u => u.Username.Contains(piece) || piece.Contains(u.Username) ||
+                                               u.FirstName.Contains(piece) || piece.Contains(u.FirstName) ||
+                                               u.LastName.Contains(piece) || piece.Contains(u.LastName)).ToList();
+          searchQuery = searchQuery.Union(tempQuery).ToList();
+        }
+        userQuery = searchQuery.AsQueryable();
+      }
+      var query = from u in userQuery
                   orderby u.LastName, u.FirstName
                   select new UserSummaryViewModel(u);
       var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
+      if (!string.IsNullOrEmpty(q)) {
+        viewModel.SearchQuery = q;
+      }
       return View(viewModel);
     }
 
@@ -253,7 +273,7 @@ namespace ClubPool.Web.Controllers.Users
     [HttpPost]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, int page) {
+    public ActionResult Delete(int id, int page, string q) {
       User userToDelete = userRepository.Get(id);
       if (null == userToDelete) {
         return HttpNotFound();
@@ -265,7 +285,7 @@ namespace ClubPool.Web.Controllers.Users
       else {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "There is data in the system referencing this user, the user cannot be deleted.";
       }
-      return this.RedirectToAction(c => c.Index(page));
+      return this.RedirectToAction(c => c.Index(page, q));
     }
 
     protected bool CanDeleteUser(User user, IMatchResultRepository matchResultRepository) {
@@ -497,7 +517,7 @@ namespace ClubPool.Web.Controllers.Users
       }
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was created successfully";
-      return this.RedirectToAction(c => c.Index(null));
+      return this.RedirectToAction(c => c.Index(null, null));
     }
 
     protected User CreateUser(CreateViewModel viewModel, bool approved, bool locked) {

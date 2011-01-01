@@ -597,31 +597,31 @@ ul.pager {
   .ie7fix;
   li {
     margin: 0;
-    padding: 0;
+    padding: 4px 6px;
     border: 0;
     list-style:none;
-    display: inline-block;
+    display: inline;
     .ie7fix;
-    a {
-      margin: 0;
-      padding: 4px 6px;
-      border: 1px solid #9aafe5;
-      text-decoration: none;
-      color: @dark_blue;
-    }
-    a:hover {
-      color: #FFF;
-      border: 1px solid #2e6ab1;
-      background-color: #2e6ab1;
-    }
+  }
+
+  li.pagelink {
+    border: 1px solid #9aafe5;
+    color: @dark_blue;
+    cursor: pointer;
+  }
+
+  li.pagelink:hover {
+    color: #FFF;
+    border: 1px solid #2e6ab1;
+    background-color: #2e6ab1;
   }
   
   li.first, li.next, li.last, li.previous {
+    margin: 1px;
   }
   
   li.disabled {
     border: 1px solid #DEDEDE;
-    padding: 4px 6px;
     color: #888888;
   }
 
@@ -630,7 +630,6 @@ ul.pager {
     background: #2e6ab1;
     color: #FFFFFF;
     font-weight:bold;
-    padding: 4px 6px;
   }
 }
 
@@ -1317,3 +1316,26 @@ ol.rules {
   }
 }
 // end rules
+
+// begin users/index
+
+div.users-search-container {
+  margin: 4px;
+  input.users-search-input {
+    width: 200px;
+    border: 1px solid @standard_blue;
+    .corner(4px);
+    padding: 4px;
+  }
+  img.users-search-icon {
+    margin-left: 6px;
+    vertical-align: top;
+    cursor: pointer;
+  }
+}
+
+div.users-list-container {
+  margin: 12px 4px;
+}
+
+// end users/index
