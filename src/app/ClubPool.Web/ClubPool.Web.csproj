@@ -178,8 +178,8 @@
     <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\css\images\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="Content\css\jquery-ui-timepicker.css" />
     <Content Include="Content\css\menu.less" />
-    <Content Include="Content\css\jquery.timeentry.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\clubpool.js" />
@@ -191,7 +191,8 @@
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\jquery.placeholder.js" />
     <Content Include="Scripts\jquery.query.js" />
-    <Content Include="Scripts\jquery.timeentry.min.js" />
+    <Content Include="Scripts\jquery.ui.timepicker-0.0.3.js" />
+    <Content Include="Scripts\jquery.ui.timepicker-0.0.3.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\superfish.js" />
