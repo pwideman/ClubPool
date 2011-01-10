@@ -79,12 +79,24 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
       vm.TeammateName = teammate.FullName;
       vm.TeammateId = teammate.Id;
       var winsAndLosses = team.GetWinsAndLossesForPlayer(user);
-      var pct = (double)winsAndLosses[0] / (double)(winsAndLosses[0] + winsAndLosses[1]);
-      vm.PersonalRecord = string.Format("{0} - {1} ({2})", winsAndLosses[0], winsAndLosses[1], pct.ToString(".00"));
+      vm.PersonalRecord = GetRecordText(winsAndLosses[0], winsAndLosses[1]);
       winsAndLosses = team.GetWinsAndLosses();
-      pct = (double)winsAndLosses[0] / (double)(winsAndLosses[0] + winsAndLosses[1]);
-      vm.TeamRecord = string.Format("{0} - {1} ({2})", winsAndLosses[0], winsAndLosses[1], pct.ToString(".00"));
+      vm.TeamRecord = GetRecordText(winsAndLosses[0], winsAndLosses[1]);
       return vm;
+    }
+
+    private string GetRecordText(int wins, int losses) {
+      var pct = GetWinPercentage(wins, losses);
+      return string.Format("{0} - {1} ({2})", wins, losses, pct.ToString(".00"));
+    }
+
+    private double GetWinPercentage(int wins, int losses) {
+      double pct = 0;
+      var total = wins + losses;
+      if (total > 0) {
+        pct = (double)wins / (double)total;
+      }
+      return pct;
     }
   }
 
