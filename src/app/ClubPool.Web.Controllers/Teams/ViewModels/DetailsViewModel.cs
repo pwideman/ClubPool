@@ -52,14 +52,14 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       var q = division.Teams.OrderByDescending(t => t.GetWinPercentage()).Select((o,i) => new { Rank = i, Team = o }).ToArray();
       var rank = q.Where(o => o.Team == team).Select(o => o.Rank).Single();
       var tied = false;
+      var myWinPct = team.GetWinPercentage();
       if (rank > 0) {
-        var myWinPct = team.GetWinPercentage();
         while (rank > 0 && q[rank-1].Team.GetWinPercentage() == myWinPct) {
           rank--;
         }
-        if (rank < (q.Length - 1)) {
-          tied = (q[rank + 1].Team.GetWinPercentage() == myWinPct);
-        }
+      }
+      if (rank < (q.Length - 1)) {
+        tied = (q[rank + 1].Team.GetWinPercentage() == myWinPct);
       }
       return (tied ? "T" : "") + (rank+1).ToString();
 
