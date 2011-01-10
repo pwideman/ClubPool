@@ -426,6 +426,7 @@ namespace ClubPool.Web.Controllers.Users
         viewModel.ShowStatus = canEditStatus;
         viewModel.ShowRoles = canEditRoles;
         viewModel.ShowPassword = canEditPassword;
+        viewModel.LoadAvailableRoles(roleRepository);
 
         if (!ValidateViewModel(viewModel)) {
           return View(viewModel);
@@ -441,7 +442,6 @@ namespace ClubPool.Web.Controllers.Users
           // verify that the new username is not in use
           if (membershipService.UsernameIsInUse(viewModel.Username)) {
             ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
-            viewModel.LoadAvailableRoles(roleRepository);
             RollbackUserTransaction();
             return View(viewModel);
           }
@@ -453,7 +453,6 @@ namespace ClubPool.Web.Controllers.Users
           // verify that the new email is not in use
           if (membershipService.EmailIsInUse(viewModel.Email)) {
             ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
-            viewModel.LoadAvailableRoles(roleRepository);
             RollbackUserTransaction();
             return View(viewModel);
           }
