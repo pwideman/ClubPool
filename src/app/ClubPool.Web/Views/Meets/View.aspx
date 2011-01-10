@@ -8,8 +8,8 @@ Match Details
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
   <%= Html.ScriptInclude("jquery.alphanumeric.js") %>
   <%= Html.ScriptInclude("jquery.form.js") %>
-  <%= Html.ScriptInclude("jquery.timeentry.min.js") %>
-  <%= Html.Stylesheet("jquery.timeentry.css") %>
+  <%= Html.ScriptInclude("jquery.ui.timepicker-0.0.3.min.js") %>
+  <%= Html.Stylesheet("jquery-ui-timepicker.css") %>
   <script type="text/javascript">
     // preload loading image
     var img = new Image(16, 16);
@@ -127,7 +127,7 @@ Match Details
           <td><input type="text" name="Player2DefensiveShots" class="integer-input"/></td>
           <td><input type="text" name="Player2Wins" class="integer-input"/></td>
           <td><input type="radio" name="Winner" id="player2Winner" /></td>
-          <td class="date-time"><%= Html.TextBox("Time", "", new { @class = "timeentry" }) %></td>
+          <td class="date-time"><%= Html.TextBox("Time", "", new { @class = "timepicker" }) %></td>
         </tr>
         <tr class="forfeit">
           <td colspan="99">
@@ -176,16 +176,17 @@ Match Details
     var $current_match_rows = null;
     var $waiting_on_submit = false;
 
-    $(document).ready(function () {
+    $(function () {
       // set up date & time controls
       $("input.datepicker").datepicker({
         showOn: 'button',
         buttonImage: '<%= Url.ContentImageUrl("calendar.gif") %>',
         buttonImageOnly: true
       });
-      $("input.timeentry").timeEntry({
-        ampmPrefix: " ",
-        spinnerImage: '<%= Url.ContentImageUrl("spinnerDefault.png") %>'
+      $("input.timepicker").timepicker({
+        timeSeparator: ":",
+        showPeriod: true,
+        showLeadingZero: false
       });
       // create ajax form
       $("#enter_results_form").ajaxForm({
