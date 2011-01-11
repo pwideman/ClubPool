@@ -35,7 +35,9 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     }
 
     private void LoadAvailablePlayers(IUserRepository userRepository, Season season) {
-      availablePlayers = userRepository.GetUnassignedUsersForSeason(season).Select(u => new PlayerViewModel(u)).ToList();
+      availablePlayers = (from u in userRepository.GetUnassignedUsersForSeason(season)
+                         orderby u.LastName, u.FirstName
+                         select new PlayerViewModel(u)).ToList();
     }
 
     private void RefreshPlayers(IUserRepository userRepository) {

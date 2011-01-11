@@ -24,9 +24,9 @@
 </div>
 <div class="form-row">
   <span class="form-label-left"><%= Html.LabelFor(m => m.AvailablePlayers) %></span>
-  <span id="AvailablePlayersList">
+  <div id="AvailablePlayersList">
     <% Html.RenderPartial("PlayerListView", Model.AvailablePlayers); %>
-  </span>
+  </div>
 </div>
 <script type="text/javascript">
   var playersList, availablePlayersList;
