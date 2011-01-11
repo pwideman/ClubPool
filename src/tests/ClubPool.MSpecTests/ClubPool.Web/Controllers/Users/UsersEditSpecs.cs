@@ -126,8 +126,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_initialize_the_available_roles = () =>
       roles.Each(r => resultHelper.Model.AvailableRoles.Where(ar => ar.Id == r.Id).Any().ShouldBeTrue());
 
-    It should_not_show_the_password = () =>
-      resultHelper.Model.ShowPassword.ShouldBeFalse();
+    It should_show_the_password = () =>
+      resultHelper.Model.ShowPassword.ShouldBeTrue();
   }
 
   [Subject(typeof(UsersController))]
@@ -371,8 +371,8 @@ namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users
     It should_not_update_the_id = () =>
       user.Id.ShouldEqual(viewModel.Id);
 
-    It should_not_update_the_password = () =>
-      user.Password.ShouldNotEqual(viewModel.Password);
+    It should_update_the_password = () =>
+      user.Password.ShouldEqual(viewModel.Password);
   }
 
   [Subject(typeof(UsersController))]

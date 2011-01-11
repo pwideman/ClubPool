@@ -394,8 +394,8 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected bool CanEditUserPassword(ClubPoolPrincipal principal, User user) {
-      // no one can update a user's password but that user
-      return principal.UserId == user.Id;
+      // admins & self can edit password
+      return principal.IsInRole(Roles.Administrators) || principal.UserId == user.Id;
     }
 
 
