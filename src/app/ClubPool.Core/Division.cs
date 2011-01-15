@@ -121,8 +121,10 @@ namespace ClubPool.Core
       }
     }
 
-    public virtual void CreateSchedule(IDivisionRepository divisionRepository) {
+    public virtual void CreateSchedule(IDivisionRepository divisionRepository, int numberOfByes = 0) {
       Check.Require(null != divisionRepository, "divisionRepository cannot be null");
+      Check.Require(numberOfByes >= 0, "numberOfByes must be >= 0");
+
       divisionRepository.Refresh(this);
       if (meets.Any()) {
         throw new CreateScheduleException("A schedule for this division already exists");
@@ -134,39 +136,38 @@ namespace ClubPool.Core
         }
 
         var numTeams = teams.Count;
+        var realNumberOfTeams = numTeams - 1;
         if (numTeams < 2) {
           throw new ArgumentException("division must have 2 or more teams to create a schedule", "division");
         }
 
-        var includeBye = (numTeams % 2 != 0) ? true : false;
-        var numMatches = numTeams / 2;
-        var numWeeks = includeBye ? numTeams : numTeams - 1;
+        var needBye = (numTeams % 2 != 0) ? true : false;
+        if (0 == numberOfByes && needBye) {
+          numberOfByes = 1;
+        }
+        numTeams += numberOfByes;
+        var numWeeks = numTeams - 1;
         var opponent = -1;
 
         for (int i = 0; i < numWeeks; i++) {
           for (int j = 0; j < numTeams; j++) {
-            if (includeBye) {
-              opponent = (numTeams + i - j - 1) % numTeams;
-            }
-            else {
-              if (j < (numTeams - 1)) {
-                if (i == ((2 * j + 1) % (numTeams - 1))) {
-                  opponent = numTeams - 1;
-                }
-                else {
-                  opponent = ((numTeams - 1) + i - j - 1) % (numTeams - 1);
-                }
+            if (j < (numTeams - 1)) {
+              if (i == ((2 * j + 1) % (numTeams - 1))) {
+                opponent = numTeams - 1;
               }
               else {
-                for (int p = 0; p < numTeams; p++) {
-                  if (i == (2 * p + 1) % (numTeams - 1)) {
-                    opponent = p;
-                    break;
-                  }
+                opponent = ((numTeams - 1) + i - j - 1) % (numTeams - 1);
+              }
+            }
+            else {
+              for (int p = 0; p < numTeams; p++) {
+                if (i == (2 * p + 1) % (numTeams - 1)) {
+                  opponent = p;
+                  break;
                 }
               }
             }
-            if (opponent != j) {
+            if (opponent != j && opponent <= realNumberOfTeams && j <= realNumberOfTeams) {
               if (!meets.Where(m => m.Teams.Contains(teams[j]) && m.Teams.Contains(teams[opponent])).Any()) {
                 Meet m = new Meet(teams[j], teams[opponent], i);
                 meets.Add(m);

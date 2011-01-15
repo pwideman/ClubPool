@@ -165,10 +165,13 @@ namespace ClubPool.Web.Controllers.Divisions
     [Authorize(Roles = Roles.Administrators)]
     [Transaction]
     [ValidateAntiForgeryToken]
-    public ActionResult CreateSchedule(int id) {
+    public ActionResult CreateSchedule(int id, int? byes) {
+      if (null == byes) {
+        byes = 0;
+      }
       var division = divisionRepository.Get(id);
       try {
-        division.CreateSchedule(divisionRepository);
+        division.CreateSchedule(divisionRepository, (int)byes);
       }
       catch (CreateScheduleException e) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = e.Message;

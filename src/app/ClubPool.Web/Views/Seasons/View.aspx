@@ -108,14 +108,7 @@
             <% if (division.HasSchedule) { %>
               <div class="action-button-row">
                 <% if (!division.HasCompletedMatches) {
-                     using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.RecreateSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
-                  <%= Html.AntiForgeryToken()%>
-                  <div class="action-button">
-                    <%= Html.ContentImage("refresh-medium.png", "Recreate Schedule")%>
-                    <a href="#" class="submit-form-link">Recreate the schedule</a>
-                  </div>
-                <% } %>
-                <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.ClearSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
+                   using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.ClearSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
                 <%= Html.AntiForgeryToken()%>
                 <div class="action-button">
                   <%= Html.ContentImage("delete-medium.png", "Clear Schedule")%>
@@ -128,8 +121,12 @@
               <% }
                else { %>
               <p>This division does not have a schedule.</p>
-              <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id), FormMethod.Post, new { @class = "normal" })) { %>
+              <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id, null))) { %>
                 <%= Html.AntiForgeryToken()%>
+                <div class="schedule-byes-container">
+                  <label for="byes">Number of byes:</label>
+                  <input class="schedule-byes" type="text" name="byes" value="0"/>
+                </div>
                 <input class="submit-button" type="submit" value="Create Schedule" />
               <% }
                } %>
@@ -159,6 +156,8 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+  <%= Html.ScriptInclude("jquery.alphanumeric.js") %>
+
   <script type="text/javascript">
     $(function () {
       $("tbody.content tr:odd").addClass("alt");
@@ -171,6 +170,7 @@
       $(".submit-form-link").click(function () {
         $(this).parents("form:first").submit();
       });
+      $(".schedule-byes").numeric();
     });
   </script>
 </asp:Content>
