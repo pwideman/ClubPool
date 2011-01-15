@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Teams.ViewModels.EditTeamViewModel>" %>
+<%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
@@ -32,4 +33,5 @@ Edit Team
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
+<%= Html.ScriptInclude("jquery.alphanumeric.js") %>
 </asp:Content>

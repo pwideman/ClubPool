@@ -27,6 +27,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       : this(userRepository, team.Division.Season) {
       Name = team.Name;
       Players = team.Players.Select(p => new PlayerViewModel(p)).ToList();
+      SchedulePriority = team.SchedulePriority;
     }
 
     protected void InitMembers() {
@@ -74,6 +75,11 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     [DisplayName("Name:")]
     [NotNullNotEmpty]
     public string Name { get; set; }
+
+    [DisplayName("Schedule priority:")]
+    [Min(0)]
+    public int SchedulePriority { get; set; }
+
   }
 
 }

@@ -148,6 +148,7 @@ namespace ClubPool.Core
         numTeams += numberOfByes;
         var numWeeks = numTeams - 1;
         var opponent = -1;
+        var scheduleTeams = teams.OrderBy(t => t.SchedulePriority).ToArray();
 
         for (int i = 0; i < numWeeks; i++) {
           for (int j = 0; j < numTeams; j++) {
@@ -168,8 +169,8 @@ namespace ClubPool.Core
               }
             }
             if (opponent != j && opponent <= realNumberOfTeams && j <= realNumberOfTeams) {
-              if (!meets.Where(m => m.Teams.Contains(teams[j]) && m.Teams.Contains(teams[opponent])).Any()) {
-                Meet m = new Meet(teams[j], teams[opponent], i);
+              if (!meets.Where(m => m.Teams.Contains(scheduleTeams[j]) && m.Teams.Contains(scheduleTeams[opponent])).Any()) {
+                Meet m = new Meet(scheduleTeams[j], scheduleTeams[opponent], i);
                 meets.Add(m);
               }
             }

@@ -81,6 +81,8 @@ namespace ClubPool.Web.Controllers.Teams
       }
 
       var team = new Team(viewModel.Name, division);
+      team.SchedulePriority = viewModel.SchedulePriority;
+
       if (viewModel.Players.Any()) {
         foreach (var playerViewModel in viewModel.Players) {
           var player = userRepository.Get(playerViewModel.Id);
@@ -157,6 +159,8 @@ namespace ClubPool.Web.Controllers.Teams
         }
         team.Name = viewModel.Name;
       }
+
+      team.SchedulePriority = viewModel.SchedulePriority;
 
       if (null != viewModel.Players && viewModel.Players.Any()) {
         var newPlayers = new List<User>();

@@ -13,6 +13,13 @@
   </div>
 </div>
 <div class="form-row">
+  <span class="form-label-left"><%= Html.LabelFor(m => m.SchedulePriority)%></span>
+  <div class="form-input">
+    <%= Html.TextBoxFor(m => m.SchedulePriority, new { @class = "integer-input" })%>
+    <%= Html.ValidationMessageFor(m => m.SchedulePriority)%>
+  </div>
+</div>
+<div class="form-row">
   <span class="form-label-left"><%= Html.LabelFor(m => m.Players) %></span>
   <span id="PlayersList">
     <% Html.RenderPartial("PlayerListView", Model.Players); %>
@@ -41,7 +48,9 @@
     playersList.parent().droppable("option", "accept", accept);
   }
 
-  $(document).ready(function () {
+  $(function () {
+    $(".integer-input").numeric();
+
     playersList = $("#PlayersList > div > ul");
     availablePlayersList = $("#AvailablePlayersList > div > ul");
 

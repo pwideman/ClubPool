@@ -18,6 +18,8 @@ namespace ClubPool.Core
     [DomainSignature]
     public virtual Division Division { get; set; }
 
+    public virtual int SchedulePriority { get; set; }
+
     public virtual int Version { get; protected set; }
     
     public virtual IEnumerable<User> Players { get { return players; } }
