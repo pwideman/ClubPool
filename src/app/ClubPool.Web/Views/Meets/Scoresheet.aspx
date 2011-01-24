@@ -9,6 +9,11 @@
     <%= Html.Stylesheet("scoresheet.less") %>
   </head>
   <body>
+    <div class="noprint notification-container">
+      <div class="notification">
+	      This page should be printed in landscape mode with 1" margins (or less) and no marginalia
+      </div>
+    </div>
     <div class="header">
       <%= Html.Encode(Model.Team1Name + " vs " + Model.Team2Name) %>
     </div>
@@ -21,7 +26,7 @@
             <th>SL</th>
             <th>GTW</th>
             <th>Innings</th>
-            <th>Defensive Shots</th>
+            <th>Def</th>
             <th>Wins</th>
           </tr>
         </thead>

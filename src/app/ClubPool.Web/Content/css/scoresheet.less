@@ -1,11 +1,8 @@
-﻿html 
+﻿html, body
 {
-  font: .8em Verdana, Arial, Helvetica;
-}
-
-body
-{
-  padding: 10px;
+  font: .9em Verdana, Arial, Helvetica;
+  padding: 0;
+  margin: 0;
 }
 
 div.header 
@@ -14,14 +11,31 @@ div.header
   text-align: center;
   font-size: 150%;
   font-weight: bold;
-  padding: 12px;
-  margin: 10px;
+  margin-bottom: 12px;
 }
+
+@media print {
+  .noprint { display: none; }
+}
+
+div.notification-container {
+  text-align: center;
+  padding: 10px;
+  div.notification {
+    display: inline-block;
+    background-color: #FFFFD8;
+    border: 1px solid red;
+    color: red;
+    padding: 20px;
+    text-align: center;
+  }
+}
+
 
 table.scoresheet
 {
   margin: auto;
-  width: 9in;
+  width: 8.6in;
   border-collapse: collapse;
   border: 1px solid black;
 
@@ -42,7 +56,7 @@ table.scoresheet
     hr {
       border: none;
       border-top: 1px dashed gray;
-      margin: 34px 4px;
+      margin: 24px 4px;
     }
   }
   
@@ -53,17 +67,17 @@ table.scoresheet
 
   td.innings-column 
   {
-    min-width: 5in;
+    min-width: 4.5in;
   }
 
   td.defshots-column
   {
-    min-width: .75in;
+    min-width: .7in;
   }
 
   td.wins-column
   {
-    min-width: .75in;
+    min-width: .7in;
   }
 
   tr.spacer-row td
