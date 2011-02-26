@@ -897,12 +897,12 @@ div.action-button-row-small {
 // users/view
 
 div.userinfo-tabs {
-  width: 500px;
+  display: inline-block;
+  min-width: 600px;
+  .ie7fix;
 }
 
 div.userinfo-tab {
-  width: 500px;
-  height: 220px;
   div.details-row {
     padding: 6px;
     min-height: 20px;
@@ -931,13 +931,17 @@ div.userinfo-tab {
   }
 }
 
+div#slc-tab {
+  font-size: 80%;
+}
+
 // end users/view
 
 // dashboard/index
 
 div.dashboard {
   width: 99%;
-  font-size: 90%;
+  font-size: .9em;
 }
 div.dashboard-column-left {
   min-width: 260px;
@@ -976,33 +980,6 @@ div.dashboard-item-container {
         list-style-type: none;
         padding: 0;
       }
-      table.results {
-        width: 99%;
-        margin: auto;
-        thead {
-          tr {
-            th {
-              padding: 4px 8px;
-              border-bottom: 2px solid @dark_blue;
-            }
-          }
-        }
-        tbody {
-          tr {
-            td {
-              text-align: center;
-              padding: 6px;
-            }
-            td.player, td.team {
-              min-width: 90px;
-              max-width: 160px;
-            }
-          }
-          tr.winner, tr.included {
-            background-color: @yellow_highlight;
-          }
-        }
-      }
       table#lastmeet {
         tbody {
           tr.match {
@@ -1013,23 +990,13 @@ div.dashboard-item-container {
           }
         }
       }
-      table#season_results, table#skill_level_calc {
+      table#season_results {
         tbody {
           tr {
             border-bottom: 1px dashed #CCCCCC;
           }
           tr.last {
             border-bottom: 0 !important;
-          }
-        }
-      }
-      table#skill_level_calc {
-        tbody.skill_level_matches {
-          border-bottom: 3px double @standard_blue;
-        }
-        tbody.skill_level_totals {
-          tr {
-            border-bottom: 1px solid black;
           }
         }
       }
@@ -1354,4 +1321,58 @@ div#AvailablePlayersList {
   display: inline-block;
   height: 400px;
   overflow: auto;
+}
+
+// end teams/create
+
+// skill level calc view
+
+table#skill_level_calc {
+  tbody {
+    tr {
+      border-bottom: 1px dashed #CCCCCC;
+    }
+    tr.last {
+      border-bottom: 0 !important;
+    }
+  }
+  tbody.skill_level_matches {
+    border-bottom: 3px double @standard_blue;
+  }
+  tbody.skill_level_totals {
+    tr {
+      border-bottom: 1px solid black;
+    }
+  }
+}
+
+// end skill level calc view
+
+// match results table
+table.results {
+  width: 99%;
+  margin: auto;
+  thead {
+    tr {
+      th {
+        padding: 4px 8px;
+        border-bottom: 2px solid @dark_blue;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        text-align: center;
+        padding: 6px;
+      }
+      td.player, td.team {
+        min-width: 90px;
+        max-width: 160px;
+      }
+    }
+    tr.winner, tr.included {
+      background-color: @yellow_highlight;
+    }
+  }
 }

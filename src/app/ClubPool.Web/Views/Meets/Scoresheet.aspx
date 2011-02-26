@@ -11,7 +11,7 @@
   <body>
     <div class="noprint notification-container">
       <div class="notification">
-	      This page should be printed in landscape mode with 1" margins (or less) and no marginalia
+        This page should be printed in landscape mode with 1" margins (or less) and no marginalia
       </div>
     </div>
     <div class="header">

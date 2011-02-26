@@ -221,6 +221,7 @@
     <Content Include="Views\Divisions\Create.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\ScheduleView.ascx" />
+    <Content Include="Views\Shared\SkillLevelCalculationView.ascx" />
     <Content Include="Views\Teams\Details.aspx" />
     <Content Include="Views\Teams\PlayerListView.ascx" />
     <Content Include="Views\Seasons\TeamView.ascx" />
@@ -307,17 +308,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1062</DevelopmentServerPort>
-          <DevelopmentServerVPath>/clubpool</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

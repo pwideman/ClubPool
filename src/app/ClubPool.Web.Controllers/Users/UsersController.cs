@@ -549,7 +549,7 @@ namespace ClubPool.Web.Controllers.Users
         return HttpNotFound();
       }
 
-      var viewModel = new ViewViewModel(user);
+      var viewModel = new ViewViewModel(user, matchResultRepository);
       var principal = authenticationService.GetCurrentPrincipal();
       viewModel.ShowAdminProperties = principal.IsInRole(Roles.Administrators);
       return View(viewModel);

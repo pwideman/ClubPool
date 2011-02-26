@@ -7,7 +7,7 @@
 <div id="tabs" class="userinfo-tabs">
   <ul>
     <li><a href="#details-tab">Details</a></li>
-    <li><a href="#history-tab">History</a></li>
+    <li><a href="#slc-tab">Skill Level Calculation</a></li>
   </ul>
 
   <div id="details-tab" class="userinfo-tab">
@@ -40,8 +40,8 @@
     <% } %>
   </div>
 
-  <div id="history-tab" class="userinfo-tab">
-    Coming soon...
+  <div id="slc-tab" class="userinfo-tab">
+    <% Html.RenderPartial("SkillLevelCalculationView", Model.SkillLevelCalculation); %>
   </div>
 </div>
 
@@ -56,5 +56,6 @@ User Details
   $(document).ready(function () {
     $("#tabs").tabs();
   });
+  $("#skill_level_calc tr:last").addClass("last");
 </script>
 </asp:Content>

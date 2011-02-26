@@ -127,6 +127,7 @@
     <Compile Include="Seasons\ViewModels\SeasonViewModel.cs" />
     <Compile Include="Shared\ViewModels\AjaxUpdateResponseViewModel.cs" />
     <Compile Include="Shared\ViewModels\ScheduleViewModel.cs" />
+    <Compile Include="Shared\ViewModels\SkillLevelCalculationViewModel.cs" />
     <Compile Include="Teams\TeamsController.cs" />
     <Compile Include="Teams\ViewModels\CreateTeamViewModel.cs" />
     <Compile Include="Teams\ViewModels\DetailsViewModel.cs" />
