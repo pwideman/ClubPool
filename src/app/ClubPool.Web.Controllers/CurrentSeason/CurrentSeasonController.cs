@@ -69,5 +69,27 @@ namespace ClubPool.Web.Controllers.CurrentSeason
       }
     }
 
+    [Authorize]
+    [HttpGet]
+    [Transaction]
+    public ActionResult DownloadAllPlayersStandings() {
+      var season = seasonRepository.GetAll().Where(s => s.IsActive).Single();
+      if (null == season) {
+        return ErrorView("There is no current season");
+      }
+      else {
+        // TODO: Use a more optimized way to get this data, this works for now
+        var viewModel = new CurrentSeasonStandingsViewModel(season, null);
+        Response.AddHeader("Content-Disposition", "attachment;filename=" + season.Name + ".csv");
+        StringBuilder csv = new StringBuilder("Rank,Name,Skill Level,Wins,Losses,Win %\n");
+        int i = 1;
+        foreach (var player in viewModel.AllPlayers) {
+          csv.AppendFormat("{0},{1},{2},{3},{4},{5:0.00}\n", i++, player.Name, player.SkillLevel,
+            player.Wins, player.Losses, player.WinPercentage);
+        }
+        return Content(csv.ToString(), "text/csv");
+      }
+    }
+
   }
 }

@@ -81,6 +81,12 @@
   </div>
   <% } %>
   <div id="allplayers">
+    <div class="action-button-row">
+      <div class="action-button">
+        <%= Html.ContentImage("download-medium.png", "Download CSV") %>
+        <%= Html.ActionLink<ClubPool.Web.Controllers.CurrentSeason.CurrentSeasonController>(c => c.DownloadAllPlayersStandings(), "Download CSV")%>
+      </div>
+    </div>
     <table class="standings-table player-standings-table">
       <thead>
         <tr>

@@ -104,7 +104,9 @@ namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
     public StandingsTeamViewModel(Team team, User userToHighlight) {
       Id = team.Id;
       Name = team.Name;
-      Highlight = team.Players.Contains(userToHighlight);
+      if (null != userToHighlight) {
+        Highlight = team.Players.Contains(userToHighlight);
+      }
       var winsAndLosses = team.GetWinsAndLosses();
       Wins = winsAndLosses[0];
       Losses = winsAndLosses[1];
@@ -128,7 +130,9 @@ namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
     public StandingsPlayerViewModel(User player, Team team, User userToHighlight) {
       Id = player.Id;
       Name = player.FullName;
-      Highlight = player == userToHighlight;
+      if (null != userToHighlight) {
+        Highlight = player == userToHighlight;
+      }
       var gameType = team.Division.Season.GameType;
       var slQuery = player.SkillLevels.Where(sl => sl.GameType == gameType);
       if (slQuery.Any()) {
