@@ -12,6 +12,7 @@ namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
     public string Name { get; set; }
     public IEnumerable<StandingsDivisionViewModel> Divisions { get; set; }
     public bool HasDivisions { get; set; }
+    public IEnumerable<StandingsPlayerViewModel> AllPlayers { get; set; }
 
     public CurrentSeasonStandingsViewModel(Season season, User userToHighlight) {
       Name = season.Name;
@@ -22,6 +23,11 @@ namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
           divisions.Add(new StandingsDivisionViewModel(division, userToHighlight));
         }
         Divisions = divisions;
+        var players = new List<StandingsPlayerViewModel>();
+        foreach (var division in Divisions) {
+          players.AddRange(division.Players);
+        }
+        AllPlayers = players.OrderByDescending(p => p.WinPercentage).ThenByDescending(p => p.Wins).ThenByDescending(p => p.SkillLevel);
       }
       else {
         HasDivisions = false;
@@ -66,7 +72,7 @@ namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
     }
 
     private List<T> RankList<T>(List<T> list) where T:StandingsViewModelBase {
-      var newlist = list.OrderByDescending(t => t.WinPercentage).ToList();
+      var newlist = list.OrderByDescending(t => t.WinPercentage).ThenByDescending(t => t.Wins).ToList();
       var count = newlist.Count;
       var currentRank = 1;
       string rank = "1";

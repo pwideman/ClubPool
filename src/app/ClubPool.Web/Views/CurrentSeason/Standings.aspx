@@ -11,6 +11,7 @@
   <% foreach (var division in Model.Divisions) { %>
     <li><a href="#division-<%= division.Id%>"><%= Html.Encode(division.Name)%></a></li>
   <% } %>
+    <li><a href="#allplayers">All Players</a></li>
   </ul>
   <% foreach (var division in Model.Divisions) {
        var divisionPrefix = "division-" + division.Id.ToString(); %>
@@ -79,6 +80,28 @@
     </div>
   </div>
   <% } %>
+  <div id="allplayers">
+    <table class="standings-table player-standings-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Skill Level</th>
+          <th>Record</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% int i = 1;
+         foreach (var player in Model.AllPlayers) { %>
+        <tr <%= player.Highlight ? @"class=""highlight""" : "" %>>
+          <td><%= i++ %></td>
+          <% Html.RenderPartial("StandingsPlayer", player); %>
+        </tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
 </div>
 <% } %>
 
