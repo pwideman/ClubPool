@@ -36,7 +36,7 @@ namespace ClubPool.Web.Code
           propertyType.IsGenericType &&
           (propertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
            propertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-           propertyType.GetGenericTypeDefinition() == typeof(ISet<>) ||
+           propertyType.GetGenericTypeDefinition() == typeof(Iesi.Collections.Generic.ISet<>) ||
            propertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
       bool isSimpleGenericBindableEntityViewModelCollection =
