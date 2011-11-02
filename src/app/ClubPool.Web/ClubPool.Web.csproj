@@ -295,7 +295,23 @@
     <Folder Include="logs\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="connectionstrings.config" />
+    <Content Include="config\connectionstrings.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config\clubpool.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config\machinekey.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
