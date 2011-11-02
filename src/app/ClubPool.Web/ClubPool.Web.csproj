@@ -294,6 +294,9 @@
     <Folder Include="Content\Images\" />
     <Folder Include="logs\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="connectionstrings.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <Target Name="BeforeBuild">
