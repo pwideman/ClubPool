@@ -4,7 +4,7 @@ using System.Security;
 
 [assembly: AllowPartiallyTrustedCallers]
 [assembly: AssemblyCopyright("Copyright © Paul Wideman 2010")]
-[assembly: AssemblyConfiguration("debug")]
+[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
