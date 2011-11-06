@@ -13,7 +13,7 @@ namespace ClubPool.Web.Controls.Captcha
   /// <summary>
   /// 
   /// </summary>
-  public static class HtmlHelperExtension
+  public static class HtmlHelperExtensions
   {
     /// <summary>
     /// Creates a captcha text box
