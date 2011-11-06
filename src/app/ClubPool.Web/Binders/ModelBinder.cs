@@ -10,7 +10,7 @@ using Iesi.Collections.Generic;
 using ClubPool.Core;
 using ClubPool.Web.Controllers;
 
-namespace ClubPool.Web.Code
+namespace ClubPool.Web.Binders
 {
   /// <summary>
   /// This custom model binder supports binding EntityViewModelBase collections, using only the id integers. It and

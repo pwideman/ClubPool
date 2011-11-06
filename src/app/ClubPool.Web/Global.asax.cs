@@ -33,7 +33,7 @@ using ClubPool.Framework.Validation;
 using ClubPool.Web.Controllers;
 using ClubPool.Data.NHibernateMaps;
 using ClubPool.Web.CastleWindsor;
-using ClubPool.Web.Code;
+using ClubPool.Web.Binders;
 using ClubPool.ApplicationServices.Authentication;
 
 namespace ClubPool.Web

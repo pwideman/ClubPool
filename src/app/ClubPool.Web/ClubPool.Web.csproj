@@ -148,9 +148,8 @@
     <Compile Include="CastleWindsor\CustomRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\GenericRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\ValidatorInstaller.cs" />
-    <Compile Include="Code\HtmlHelperExtensions.cs" />
-    <Compile Include="Code\ModelBinder.cs" />
-    <Compile Include="Code\UrlHelperExtensions.cs" />
+    <Compile Include="Extensions\ContentExtensions.cs" />
+    <Compile Include="Binders\ModelBinder.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
