@@ -370,16 +370,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />
-    <Folder Include="logs\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\connectionstrings.config" />
+    <Content Include="Config\connectionstrings.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\clubpool.config" />
+    <Content Include="Config\clubpool.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config\machinekey.config" />
+    <Content Include="Config\machinekey.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.Debug.config">
