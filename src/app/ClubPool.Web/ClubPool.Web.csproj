@@ -148,6 +148,85 @@
     <Compile Include="CastleWindsor\CustomRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\GenericRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\ValidatorInstaller.cs" />
+    <Compile Include="Controllers\Attributes\ConfigRescueAttribute.cs" />
+    <Compile Include="Controllers\Attributes\ElmahRescueAttribute.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\Contact\ContactController.cs" />
+    <Compile Include="Controllers\Contact\ViewModels\ContactViewModelBase.cs" />
+    <Compile Include="Controllers\Contact\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Controllers\Contact\ViewModels\TeamViewModel.cs" />
+    <Compile Include="Controllers\ControllerEnums.cs" />
+    <Compile Include="Controllers\CurrentSeason\CurrentSeasonController.cs" />
+    <Compile Include="Controllers\CurrentSeason\ViewModels\CurrentSeasonScheduleViewModel.cs" />
+    <Compile Include="Controllers\CurrentSeason\ViewModels\CurrentSeasonStandingsViewModel.cs" />
+    <Compile Include="Controllers\Dashboard\DashboardController.cs" />
+    <Compile Include="Controllers\Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
+    <Compile Include="Controllers\Dashboard\ViewModels\AlertsViewModel.cs" />
+    <Compile Include="Controllers\Dashboard\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Controllers\Divisions\DivisionsController.cs" />
+    <Compile Include="Controllers\Divisions\ViewModels\CreateDivisionViewModel.cs" />
+    <Compile Include="Controllers\Divisions\ViewModels\DivisionViewModel.cs" />
+    <Compile Include="Controllers\Divisions\ViewModels\EditDivisionViewModel.cs" />
+    <Compile Include="Controllers\Error\ErrorController.cs" />
+    <Compile Include="Controllers\Extensions\ModelStateDictionaryExtensions.cs" />
+    <Compile Include="Controllers\Home\HomeController.cs" />
+    <Compile Include="Controllers\Home\ViewModels\AboutViewModel.cs" />
+    <Compile Include="Controllers\Home\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Controllers\Home\ViewModels\RegulationsViewModel.cs" />
+    <Compile Include="Controllers\Home\ViewModels\RulesViewModel.cs" />
+    <Compile Include="Controllers\HttpNotFoundResult.cs" />
+    <Compile Include="Controllers\Matches\MatchesController.cs" />
+    <Compile Include="Controllers\Matches\ViewModels\EditMatchResponseViewModel.cs" />
+    <Compile Include="Controllers\Matches\ViewModels\EditMatchViewModel.cs" />
+    <Compile Include="Controllers\Matches\ViewModels\UserHistoryViewModel.cs" />
+    <Compile Include="Controllers\Meets\MeetsController.cs" />
+    <Compile Include="Controllers\Meets\ViewModels\MeetViewModel.cs" />
+    <Compile Include="Controllers\Meets\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Controllers\Meets\ViewModels\ScoresheetViewModel.cs" />
+    <Compile Include="Controllers\Navigation\NavigationController.cs" />
+    <Compile Include="Controllers\Navigation\ViewModels\MenuViewModel.cs" />
+    <Compile Include="Controllers\PagedListViewModelBase.cs" />
+    <Compile Include="Controllers\PartialRequest.cs" />
+    <Compile Include="Controllers\RouteRegistrar.cs" />
+    <Compile Include="Controllers\Seasons\SeasonsController.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\ChangeActiveViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\CreateSeasonViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\DivisionViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\EditSeasonViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\SeasonSummaryViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\SeasonViewModel.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels\TeamViewModel.cs" />
+    <Compile Include="Controllers\Shared\SidebarGadgets\LoginSidebarGadget.cs" />
+    <Compile Include="Controllers\Shared\ViewModels\AjaxUpdateResponseViewModel.cs" />
+    <Compile Include="Controllers\Shared\ViewModels\ScheduleViewModel.cs" />
+    <Compile Include="Controllers\Shared\ViewModels\SkillLevelCalculationViewModel.cs" />
+    <Compile Include="Controllers\SidebarGadgetBase.cs" />
+    <Compile Include="Controllers\SidebarGadgetCollection.cs" />
+    <Compile Include="Controllers\Teams\TeamsController.cs" />
+    <Compile Include="Controllers\Teams\ViewModels\CreateTeamViewModel.cs" />
+    <Compile Include="Controllers\Teams\ViewModels\DetailsViewModel.cs" />
+    <Compile Include="Controllers\Teams\ViewModels\EditTeamViewModel.cs" />
+    <Compile Include="Controllers\Teams\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Controllers\Teams\ViewModels\TeamViewModel.cs" />
+    <Compile Include="Controllers\Teams\ViewModels\UpdateNameViewModel.cs" />
+    <Compile Include="Controllers\Users\UsersController.cs" />
+    <Compile Include="Controllers\Users\ViewModels\CreateViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\EditViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\LoginStatusViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\LoginViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\RecoverUsernameViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\ResetPasswordViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\RoleViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\SignUpViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\UnapprovedViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\UserSummaryViewModel.cs" />
+    <Compile Include="Controllers\Users\ViewModels\UserViewModelBase.cs" />
+    <Compile Include="Controllers\Users\ViewModels\ViewViewModel.cs" />
+    <Compile Include="Controllers\ValidatableViewModel.cs" />
+    <Compile Include="Controllers\ViewModelBase.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />
     <Compile Include="Binders\ModelBinder.cs" />
     <Compile Include="Global.asax.cs">
@@ -272,10 +351,6 @@
     <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
       <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
       <Name>ClubPool.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClubPool.Web.Controllers\ClubPool.Web.Controllers.csproj">
-      <Project>{2EBEB3C2-E3E7-4782-9288-6FBA771C031F}</Project>
-      <Name>ClubPool.Web.Controllers</Name>
     </ProjectReference>
     <ProjectReference Include="..\ClubPool.Core\ClubPool.Core.csproj">
       <Project>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</Project>

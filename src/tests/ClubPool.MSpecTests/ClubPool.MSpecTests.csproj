@@ -146,10 +146,6 @@
       <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
       <Name>ClubPool.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\app\ClubPool.Web.Controllers\ClubPool.Web.Controllers.csproj">
-      <Project>{2EBEB3C2-E3E7-4782-9288-6FBA771C031F}</Project>
-      <Name>ClubPool.Web.Controllers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\app\ClubPool.Web\ClubPool.Web.csproj">
       <Project>{4230FBF1-9D6D-4F42-8040-7519F25251AE}</Project>
       <Name>ClubPool.Web</Name>
