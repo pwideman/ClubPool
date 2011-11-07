@@ -6,7 +6,7 @@ using System.Web.Routing;
 using System.Web.Mvc;
 using Microsoft.Web.Mvc;
 
-namespace ClubPool.Web.Extensions
+namespace ClubPool.Web.Infrastructure
 {
   /// <summary>
   /// Custom extensions to the System.Web.Mvc.HtmlHelper class
