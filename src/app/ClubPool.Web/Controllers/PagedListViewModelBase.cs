@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using ClubPool.Core;
-using ClubPool.Framework.Extensions;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers
 {

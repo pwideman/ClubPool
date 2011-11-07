@@ -6,10 +6,10 @@ using SharpArch.Testing;
 using Machine.Specifications;
 
 using ClubPool.Testing.Core;
+using ClubPool.Testing;
 using ClubPool.Core;
-using ClubPool.Web.Controllers.Teams.ViewModels;
-using ClubPool.Framework.Extensions;
 using ClubPool.Core.Contracts;
+using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Web.Controllers.Shared.ViewModels;
 using ClubPool.Web.Controllers.Teams;
 

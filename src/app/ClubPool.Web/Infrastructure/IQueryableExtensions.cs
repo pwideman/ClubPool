@@ -5,7 +5,7 @@ using System.Text;
 
 using SharpArch.Core;
 
-namespace ClubPool.Framework.Extensions
+namespace ClubPool.Web.Infrastructure
 {
   public static class IQueryableExtensions
   {

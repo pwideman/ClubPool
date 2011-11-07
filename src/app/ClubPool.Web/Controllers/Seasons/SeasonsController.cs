@@ -13,7 +13,7 @@ using xVal.ServerSide;
 
 using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
-using ClubPool.Framework.Extensions;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;

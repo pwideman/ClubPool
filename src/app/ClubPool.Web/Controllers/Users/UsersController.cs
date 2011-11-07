@@ -15,7 +15,7 @@ using xVal.ServerSide;
 using Elmah;
 
 using ClubPool.Framework;
-using ClubPool.Framework.Extensions;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.Validation;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;

@@ -5,7 +5,7 @@ using System.Text;
 
 using SharpArch.Core;
 
-namespace ClubPool.Framework.Extensions
+namespace ClubPool.Testing
 {
   public static class IEnumerableExtensions
   {

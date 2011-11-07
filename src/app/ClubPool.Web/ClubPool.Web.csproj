@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
+    <Compile Include="Infrastructure\IQueryableExtensions.cs" />
     <Compile Include="Services\ServicesInstaller.cs" />
     <Compile Include="CastleWindsor\CustomRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\GenericRepositoriesInstaller.cs" />

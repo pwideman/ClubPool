@@ -17,7 +17,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Matches;
 using ClubPool.Web.Controllers.Matches.ViewModels;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Framework.Extensions;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Testing;
 using ClubPool.Testing.Core;
 using ClubPool.Testing.Services.Authentication;

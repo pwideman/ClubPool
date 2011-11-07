@@ -17,7 +17,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Teams;
 using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Framework.Extensions;
+using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams.ViewModels
 {

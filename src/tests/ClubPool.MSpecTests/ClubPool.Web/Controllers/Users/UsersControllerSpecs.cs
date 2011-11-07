@@ -14,7 +14,7 @@ using SharpArch.Testing;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Framework.Extensions;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Users;
 using ClubPool.Web.Controllers.Users.ViewModels;

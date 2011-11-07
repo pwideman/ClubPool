@@ -8,7 +8,7 @@ using System.Web.Security;
 using SharpArch.Core;
 using SharpArch.Core.DomainModel;
 
-using ClubPool.Framework.Extensions;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Queries;
