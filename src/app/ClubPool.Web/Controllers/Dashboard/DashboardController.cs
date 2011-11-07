@@ -9,11 +9,11 @@ using SharpArch.Web.NHibernate;
 
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
-using ClubPool.ApplicationServices.Membership.Contracts;
-using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.Framework.NHibernate;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
 using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
-using ClubPool.Framework.NHibernate;
 
 namespace ClubPool.Web.Controllers.Dashboard
 {

@@ -155,10 +155,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\app\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
-      <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
-      <Name>ClubPool.ApplicationServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\app\ClubPool.Core\ClubPool.Core.csproj">
       <Project>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</Project>
       <Name>ClubPool.Core</Name>
@@ -170,6 +166,10 @@
     <ProjectReference Include="..\..\app\ClubPool.Framework\ClubPool.Framework.csproj">
       <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
       <Name>ClubPool.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\app\ClubPool.Web\ClubPool.Web.csproj">
+      <Project>{4230FBF1-9D6D-4F42-8040-7519F25251AE}</Project>
+      <Name>ClubPool.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

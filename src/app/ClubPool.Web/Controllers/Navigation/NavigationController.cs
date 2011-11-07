@@ -8,9 +8,8 @@ using SharpArch.Core;
 
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
-using ClubPool.ApplicationServices.Membership.Contracts;
-using ClubPool.ApplicationServices.Authentication.Contracts;
-using ClubPool.ApplicationServices.Authentication;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
 
 namespace ClubPool.Web.Controllers.Navigation

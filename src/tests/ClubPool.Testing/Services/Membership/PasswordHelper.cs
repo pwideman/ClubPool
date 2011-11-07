@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace ClubPool.Testing.ApplicationServices.Membership
+namespace ClubPool.Testing.Services.Membership
 {
   public static class PasswordHelper
   {

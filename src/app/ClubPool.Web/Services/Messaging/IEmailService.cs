@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ClubPool.ApplicationServices.Messaging.Contracts
+namespace ClubPool.Web.Services.Messaging
 {
   public interface IEmailService
   {

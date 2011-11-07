@@ -5,7 +5,7 @@ using System.Text;
 
 using ClubPool.Framework.Configuration;
 
-namespace ClubPool.ApplicationServices.Configuration.Contracts
+namespace ClubPool.Web.Services.Configuration
 {
   public interface IConfigurationService
   {

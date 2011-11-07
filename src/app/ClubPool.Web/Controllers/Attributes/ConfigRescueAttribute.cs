@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using MvcContrib.Filters;
 using Microsoft.Practices.ServiceLocation;
 
-using ClubPool.ApplicationServices.Configuration.Contracts;
+using ClubPool.Web.Services.Configuration;
 
 namespace ClubPool.Web.Controllers.Attributes
 {

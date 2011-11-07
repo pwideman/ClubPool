@@ -7,13 +7,13 @@ using Castle.Windsor;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 
-namespace ClubPool.Web.CastleWindsor
+namespace ClubPool.Web.Services
 {
-  public class ApplicationServicesInstaller : IWindsorInstaller
+  public class ServicesInstaller : IWindsorInstaller
   {
     public void Install(IWindsorContainer container, IConfigurationStore store) {
       container.Register(
-          AllTypes.FromAssemblyNamed("ClubPool.ApplicationServices")
+          AllTypes.FromThisAssembly()
           .Pick().WithService.DefaultInterface());
     }
   }

@@ -8,11 +8,11 @@ using System.Configuration;
 
 using SharpArch.Core;
 
-using ClubPool.ApplicationServices.Configuration.Contracts;
-using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Framework.Configuration;
 
-namespace ClubPool.ApplicationServices.Messaging
+using ClubPool.Web.Services.Configuration;
+
+namespace ClubPool.Web.Services.Messaging
 {
   public class EmailService : IEmailService
   {

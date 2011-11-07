@@ -9,13 +9,13 @@ using Rhino.Mocks;
 using Machine.Specifications;
 using SharpArch.Testing;
 
-using ClubPool.ApplicationServices.Membership.Contracts;
-using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Navigation;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
-using ClubPool.Testing.ApplicationServices.Authentication;
+using ClubPool.Testing.Services.Authentication;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {

@@ -7,10 +7,9 @@ using SharpArch.Core;
 
 using ClubPool.Core;
 using ClubPool.Core.Queries;
-using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.Framework.NHibernate;
 
-namespace ClubPool.ApplicationServices.Membership
+namespace ClubPool.Web.Services.Membership
 {
   public class SharpArchRoleService : IRoleService
   {

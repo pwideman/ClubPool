@@ -20,7 +20,7 @@ using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
 using ClubPool.Testing;
 using ClubPool.Testing.Core;
-using ClubPool.Testing.ApplicationServices.Authentication;
+using ClubPool.Testing.Services.Authentication;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers
 {

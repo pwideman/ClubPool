@@ -9,8 +9,8 @@ using Machine.Specifications;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Queries;
-using ClubPool.ApplicationServices.Membership;
-using ClubPool.Testing.ApplicationServices.Membership;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Testing.Services.Membership;
 
 namespace ClubPool.MSpecTests.ClubPool.ApplicationServices.Membership
 {

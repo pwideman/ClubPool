@@ -4,7 +4,7 @@ using System.Security.Principal;
 using SharpArch.Core;
 using ClubPool.Core;
 
-namespace ClubPool.ApplicationServices.Authentication
+namespace ClubPool.Web.Services.Authentication
 {
   /// <summary>
   /// An implementation of IPrincipal that uses our role service to determine

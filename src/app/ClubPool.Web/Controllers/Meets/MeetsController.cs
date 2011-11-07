@@ -7,15 +7,15 @@ using System.Collections.Generic;
 using SharpArch.Core;
 using SharpArch.Web.NHibernate;
 
-using ClubPool.Web.Controllers.Meets.ViewModels;
-using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Framework;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
-using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.Web.Services.Authentication;
+using ClubPool.Web.Controllers.Meets.ViewModels;
+using ClubPool.Web.Controllers.Extensions;
 
 namespace ClubPool.Web.Controllers.Meets
 {

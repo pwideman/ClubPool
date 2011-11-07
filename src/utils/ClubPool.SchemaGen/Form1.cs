@@ -22,7 +22,7 @@ using NHibernate.Linq;
 using Core=ClubPool.Core;
 using ClubPool.Data;
 using ClubPool.Data.NHibernateMaps;
-using ClubPool.ApplicationServices.Membership;
+using ClubPool.Web.Services.Membership;
 using ClubPool.Framework.NHibernate;
 
 namespace ClubPool.SchemaGen

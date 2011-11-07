@@ -11,15 +11,15 @@ using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
 
-using ClubPool.Web.Controllers.CurrentSeason.ViewModels;
-using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Web.Controllers.Attributes;
-using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.Web.Controllers.CurrentSeason.ViewModels;
+using ClubPool.Web.Controllers.Extensions;
+using ClubPool.Web.Services.Authentication;
 
 namespace ClubPool.Web.Controllers.CurrentSeason
 {

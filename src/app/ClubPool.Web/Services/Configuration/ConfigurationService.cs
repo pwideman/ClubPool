@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 
 using ClubPool.Framework.Configuration;
-using ClubPool.ApplicationServices.Configuration.Contracts;
 
-namespace ClubPool.ApplicationServices.Configuration
+namespace ClubPool.Web.Services.Configuration
 {
   public class ConfigurationService : IConfigurationService
   {

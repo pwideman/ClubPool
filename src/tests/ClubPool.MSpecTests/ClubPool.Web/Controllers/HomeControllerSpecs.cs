@@ -16,8 +16,8 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Home;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
-using ClubPool.ApplicationServices.Authentication.Contracts;
-using ClubPool.ApplicationServices.Configuration.Contracts;
+using ClubPool.Web.Services.Authentication;
+using ClubPool.Web.Services.Configuration;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Home
 {

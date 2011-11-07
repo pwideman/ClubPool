@@ -8,11 +8,11 @@ using System.Collections.Generic;
 using SharpArch.Core;
 using SharpArch.Web.NHibernate;
 
-using ClubPool.Web.Controllers.Contact.ViewModels;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
-using ClubPool.ApplicationServices.Authentication.Contracts;
-using ClubPool.ApplicationServices.Messaging.Contracts;
+using ClubPool.Web.Services.Authentication;
+using ClubPool.Web.Services.Messaging;
+using ClubPool.Web.Controllers.Contact.ViewModels;
 
 namespace ClubPool.Web.Controllers.Contact
 {

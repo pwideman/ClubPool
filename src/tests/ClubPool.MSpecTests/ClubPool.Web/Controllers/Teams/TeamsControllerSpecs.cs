@@ -19,8 +19,8 @@ using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
 using ClubPool.Testing;
-using ClubPool.Testing.ApplicationServices.Authentication;
-using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.Testing.Services.Authentication;
+using ClubPool.Web.Services.Authentication;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Teams
 {

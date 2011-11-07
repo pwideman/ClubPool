@@ -4,11 +4,10 @@ using System.Linq;
 
 using Rhino.Mocks;
 
-using ClubPool.ApplicationServices.Authentication;
-using ClubPool.ApplicationServices.Authentication.Contracts;
+using ClubPool.Web.Services.Authentication;
 using ClubPool.Core;
 
-namespace ClubPool.Testing.ApplicationServices.Authentication
+namespace ClubPool.Testing.Services.Authentication
 {
   public static class AuthHelper
   {

@@ -14,13 +14,6 @@ using SharpArch.Core;
 using xVal.ServerSide;
 using Elmah;
 
-using ClubPool.ApplicationServices.Configuration.Contracts;
-using ClubPool.ApplicationServices.Membership.Contracts;
-using ClubPool.ApplicationServices.Authentication.Contracts;
-using ClubPool.ApplicationServices.Authentication;
-using ClubPool.ApplicationServices.Messaging.Contracts;
-using ClubPool.Web.Controllers.Users.ViewModels;
-using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Framework;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.Validation;
@@ -29,6 +22,12 @@ using ClubPool.Core;
 using ClubPool.Core.Contracts;
 using ClubPool.Core.Queries;
 using ClubPool.Web.Controls.Captcha;
+using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Web.Services.Authentication;
+using ClubPool.Web.Services.Messaging;
+using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.Extensions;
 
 namespace ClubPool.Web.Controllers.Users
 {

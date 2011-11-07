@@ -11,18 +11,17 @@ using Rhino.Mocks;
 using Machine.Specifications;
 using SharpArch.Testing;
 
-using ClubPool.ApplicationServices.Membership.Contracts;
-using ClubPool.ApplicationServices.Authentication;
-using ClubPool.ApplicationServices.Authentication.Contracts;
-using ClubPool.ApplicationServices.Messaging.Contracts;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Web.Services.Authentication;
+using ClubPool.Web.Services.Messaging;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Users;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Extensions;
-using ClubPool.Testing.ApplicationServices.Authentication;
+using ClubPool.Testing.Services.Authentication;
 using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Users

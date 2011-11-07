@@ -6,10 +6,9 @@ using System.Web;
 using System.Web.Security;
 using System.Security.Principal;
 
-using ClubPool.ApplicationServices.Authentication.Contracts;
 using ClubPool.Core;
 
-namespace ClubPool.ApplicationServices.Authentication
+namespace ClubPool.Web.Services.Authentication
 {
   public class FormsAuthenticationService : IAuthenticationService
   {

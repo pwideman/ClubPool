@@ -144,7 +144,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CastleWindsor\ApplicationServicesInstaller.cs" />
+    <Compile Include="Services\ServicesInstaller.cs" />
     <Compile Include="CastleWindsor\CustomRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\GenericRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\ValidatorInstaller.cs" />
@@ -243,6 +243,17 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Authentication\ClubPoolPrincipal.cs" />
+    <Compile Include="Services\Authentication\IAuthenticationService.cs" />
+    <Compile Include="Services\Authentication\FormsAuthenticationService.cs" />
+    <Compile Include="Services\Configuration\ConfigurationService.cs" />
+    <Compile Include="Services\Configuration\IConfigurationService.cs" />
+    <Compile Include="Services\Membership\IMembershipService.cs" />
+    <None Include="Services\Membership\IRoleService.cs" />
+    <Compile Include="Services\Membership\SharpArchMembershipService.cs" />
+    <None Include="Services\Membership\SharpArchRoleService.cs" />
+    <Compile Include="Services\Messaging\IEmailService.cs" />
+    <Compile Include="Services\Messaging\EmailService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\base.less" />
@@ -351,10 +362,6 @@
     <Content Include="Content\css\jqueryui.css" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
-      <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
-      <Name>ClubPool.ApplicationServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
       <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
       <Name>ClubPool.Framework</Name>

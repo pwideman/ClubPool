@@ -6,7 +6,7 @@ using System.Web.Security;
 
 using ClubPool.Core;
 
-namespace ClubPool.ApplicationServices.Membership.Contracts
+namespace ClubPool.Web.Services.Membership
 {
   public interface IMembershipService
   {

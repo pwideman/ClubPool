@@ -8,14 +8,13 @@ using System.Web.Security;
 using SharpArch.Core;
 using SharpArch.Core.DomainModel;
 
-using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.Framework.Extensions;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Queries;
 using ClubPool.Core.Contracts;
 
-namespace ClubPool.ApplicationServices.Membership
+namespace ClubPool.Web.Services.Membership
 {
   public class SharpArchMembershipService : IMembershipService
   {

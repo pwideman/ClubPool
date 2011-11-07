@@ -103,8 +103,8 @@
   <ItemGroup>
     <Compile Include="ActionResultExtensions.cs" />
     <Compile Include="ActionResultHelpers.cs" />
-    <Compile Include="ClubPool.ApplicationServices\Membership\SharpArchMembershipServiceSpecs.cs" />
-    <None Include="ClubPool.ApplicationServices\Membership\SharpArchRoleServiceSpecs.cs" />
+    <Compile Include="ClubPool.Web\Services\Membership\SharpArchMembershipServiceSpecs.cs" />
+    <None Include="ClubPool.Web\Services\Membership\SharpArchRoleServiceSpecs.cs" />
     <Compile Include="ClubPool.Core\UserSpecs.cs" />
     <Compile Include="ClubPool.Data\TestDoubles\EntityDuplicateCheckerStub.cs" />
     <Compile Include="ClubPool.Web\Controllers\ControllerHelper.cs" />
@@ -130,10 +130,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\app\ClubPool.ApplicationServices\ClubPool.ApplicationServices.csproj">
-      <Project>{3052CCC3-3F02-4C68-BAB5-1B4ACF7C6CF9}</Project>
-      <Name>ClubPool.ApplicationServices</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\app\ClubPool.Core\ClubPool.Core.csproj">
       <Project>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</Project>
       <Name>ClubPool.Core</Name>

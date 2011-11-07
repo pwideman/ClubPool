@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ClubPool.ApplicationServices.Membership.Contracts
+namespace ClubPool.Web.Services.Membership
 {
   public interface IRoleService
   {

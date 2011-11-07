@@ -34,7 +34,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Data.NHibernateMaps;
 using ClubPool.Web.CastleWindsor;
 using ClubPool.Web.Binders;
-using ClubPool.ApplicationServices.Authentication;
+using ClubPool.Web.Services.Authentication;
 
 namespace ClubPool.Web
 {

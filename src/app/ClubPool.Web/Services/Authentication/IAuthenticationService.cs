@@ -6,7 +6,7 @@ using System.Security.Principal;
 
 using ClubPool.Core;
 
-namespace ClubPool.ApplicationServices.Authentication.Contracts
+namespace ClubPool.Web.Services.Authentication
 {
   public interface IAuthenticationService
   {

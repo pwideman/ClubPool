@@ -10,16 +10,16 @@ using Machine.Specifications;
 using SharpArch.Testing;
 using SharpArch.Core.DomainModel;
 
-using ClubPool.Web.Controllers.Dashboard;
-using ClubPool.Web.Controllers.Dashboard.ViewModels;
-using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
-using ClubPool.ApplicationServices.Authentication.Contracts;
-using ClubPool.ApplicationServices.Membership.Contracts;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;
 using ClubPool.Core.Contracts;
-using ClubPool.Testing.ApplicationServices.Authentication;
 using ClubPool.Web.Controllers;
+using ClubPool.Web.Controllers.Dashboard;
+using ClubPool.Web.Controllers.Dashboard.ViewModels;
+using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
+using ClubPool.Web.Services.Authentication;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Testing.Services.Authentication;
 using ClubPool.Testing;
 using ClubPool.Testing.Core;
 
