@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using ClubPool.Framework.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 
 namespace ClubPool.Web.Services.Configuration
 {

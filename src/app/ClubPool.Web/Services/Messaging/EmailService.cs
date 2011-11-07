@@ -8,7 +8,7 @@ using System.Configuration;
 
 using SharpArch.Core;
 
-using ClubPool.Framework.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 
 using ClubPool.Web.Services.Configuration;
 

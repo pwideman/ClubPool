@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace ClubPool.Framework.Configuration
+namespace ClubPool.Web.Infrastructure.Configuration
 {
   public class ClubPoolConfigurationSection : ConfigurationSection
   {
