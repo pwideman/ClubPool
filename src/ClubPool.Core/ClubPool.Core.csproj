@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B0659B70-C931-4E5B-B56C-32223414252C}</ProjectGuid>
+    <ProjectGuid>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClubPool.Framework</RootNamespace>
-    <AssemblyName>ClubPool.Framework</AssemblyName>
+    <RootNamespace>ClubPool.Core</RootNamespace>
+    <AssemblyName>ClubPool.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -36,11 +36,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NHibernate, Version=3.0.0.1001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\NHibernate.dll</HintPath>
+      <HintPath>..\..\lib\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Validator, Version=1.2.0.3001, Culture=neutral, PublicKeyToken=70154e18752585bd, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Validator, Version=1.0.0.4000, Culture=neutral, PublicKeyToken=70154e18752585bd, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\NHibernate.Validator.dll</HintPath>
     </Reference>
@@ -49,42 +53,62 @@
       <HintPath>..\..\lib\SharpArch.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xVal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8fbed92c68c4006, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\xVal.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
+    <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Validation\CompareAttribute.cs" />
-    <Compile Include="Validation\IValidateMultipleProperties.cs" />
-    <Compile Include="Validation\NHValidatorRulesProvider.cs" />
-    <Compile Include="Validation\ValidatableExtensions.cs" />
-    <Compile Include="NHibernate\ILinqRepository.cs" />
-    <Compile Include="NHibernate\LinqRepository.cs" />
+    <Compile Include="Contracts\IDivisionRepository.cs" />
+    <Compile Include="Contracts\IMatchRepository.cs" />
+    <Compile Include="Contracts\IMatchResultRepository.cs" />
+    <Compile Include="Contracts\IMeetRepository.cs" />
+    <Compile Include="Contracts\IRoleRepository.cs" />
+    <Compile Include="Contracts\ISeasonRepository.cs" />
+    <Compile Include="Contracts\ITeamRepository.cs" />
+    <Compile Include="Contracts\IUserRepository.cs" />
+    <Compile Include="CreateScheduleException.cs" />
+    <Compile Include="Division.cs" />
+    <Compile Include="GameType.cs" />
+    <Compile Include="Match.cs" />
+    <Compile Include="MatchPlayer.cs" />
+    <Compile Include="MatchResult.cs" />
+    <Compile Include="Meet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validation\ValidatableObject.cs" />
+    <Compile Include="Queries\RoleQueries.cs" />
+    <Compile Include="Queries\SeasonQueries.cs" />
+    <Compile Include="Queries\UserQueries.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="Roles.cs" />
+    <Compile Include="Season.cs" />
+    <Compile Include="SkillLevel.cs" />
+    <Compile Include="Team.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="IEntityWithVersion.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
+      <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
+      <Name>ClubPool.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+      -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>
