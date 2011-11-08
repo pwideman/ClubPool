@@ -1,2 +1,0 @@
--- Use smtp desktop test util for email sending code
--- Get cascading deletes working
