@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 
-[assembly: AllowPartiallyTrustedCallers]
+//[assembly: AllowPartiallyTrustedCallers]
 [assembly: AssemblyCopyright("Copyright © Paul Wideman 2010")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]

@@ -59,7 +59,7 @@
       this.importIPDataSQLButton.Name = "importIPDataSQLButton";
       this.importIPDataSQLButton.Size = new System.Drawing.Size(146, 23);
       this.importIPDataSQLButton.TabIndex = 3;
-      this.importIPDataSQLButton.Text = "Import IP Data SQL";
+      this.importIPDataSQLButton.Text = "Import IP Data";
       this.importIPDataSQLButton.UseVisualStyleBackColor = true;
       this.importIPDataSQLButton.Click += new System.EventHandler(this.importIPDataSQLButton_Click);
       // 
