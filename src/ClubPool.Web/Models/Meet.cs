@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 using ClubPool.Web.Infrastructure;
-using ClubPool.Core;
 
 namespace ClubPool.Web.Models
 {
   public class Meet : Entity
   {
-    protected IList<Match> matches;
-    protected IList<Team> teams;
-
     public virtual int Week { get; protected set; }
     public virtual Division Division { get; protected set; }
     public virtual bool IsComplete { get; set; }
-    public virtual IEnumerable<Team> Teams { get { return teams; } }
-    public virtual IEnumerable<Match> Matches { get { return matches; } }
+    public virtual ICollection<Team> Teams { get; private set; }
+    public virtual ICollection<Match> Matches { get; private set; }
 
     protected Meet() {
       InitMembers();
@@ -32,19 +27,19 @@ namespace ClubPool.Web.Models
       Division = team1.Division;
       Week = week;
 
-      teams.Add(team1);
-      teams.Add(team2);
-      createMatches();
+      Teams.Add(team1);
+      Teams.Add(team2);
+      //createMatches();
     }
 
     protected void InitMembers() {
-      matches = new List<Match>();
-      teams = new List<Team>();
+      Matches = new HashSet<Match>();
+      Teams = new HashSet<Team>();
     }
 
     protected void createMatches() {
-      var team1 = teams[0];
-      var team2 = teams[1];
+      var team1 = Teams.ElementAt(0);
+      var team2 = Teams.ElementAt(1);
       foreach (var team1Player in team1.Players) {
         foreach (var team2Player in team2.Players) {
           AddMatch(new Match(this, new MatchPlayer(team1Player, team1), new MatchPlayer(team2Player, team2)));
@@ -59,24 +54,24 @@ namespace ClubPool.Web.Models
       if (match.Players.Where(p => !allTeamPlayers.Contains(p.Player)).Any()) {
         throw new ArgumentException("all players in match must be members of the meet's teams", "match");
       }
-      if (!matches.Contains(match)) {
+      if (!Matches.Contains(match)) {
         match.Meet = this;
-        matches.Add(match);
+        Matches.Add(match);
       }
     }
 
     public virtual void RemoveMatch(Match match) {
-      if (matches.Contains(match)) {
-        matches.Remove(match);
+      if (Matches.Contains(match)) {
+        Matches.Remove(match);
         match.Meet = null;
       }
     }
 
     public virtual void RemoveAllMatches() {
-      foreach (var match in matches) {
+      foreach (var match in Matches) {
         match.Meet = null;
       }
-      matches.Clear();
+      Matches.Clear();
     }
 
     public virtual bool UserCanEnterMatchResults(User user) {

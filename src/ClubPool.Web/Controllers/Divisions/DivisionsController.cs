@@ -14,7 +14,7 @@ using xVal.ServerSide;
 
 using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
-using ClubPool.Web.Infrastructure;
+//using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;

@@ -17,7 +17,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Divisions;
 using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Web.Infrastructure;
+//using ClubPool.Web.Infrastructure;
 using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Divisions

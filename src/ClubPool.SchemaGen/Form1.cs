@@ -167,6 +167,7 @@ namespace ClubPool.SchemaGen
         using (var context = new ClubPoolContext()) {
           ImportRoles(session, context);
           ImportUsers(session, context);
+          ImportSeasons(session, context);
           output("Saving changes");
           context.SaveChanges();
         }
@@ -180,7 +181,9 @@ namespace ClubPool.SchemaGen
         var newrole = new Models.Role(role.Name);
         context.Roles.Add(newrole);
       }
+      output("Finished importing roles, saving");
       context.SaveChanges();
+      output("Saved");
     }
 
     private void ImportUsers(ISession session, ClubPoolContext context) {
@@ -191,11 +194,132 @@ namespace ClubPool.SchemaGen
         newuser.IsApproved = user.IsApproved;
         newuser.IsLocked = user.IsLocked;
         foreach (var role in user.Roles) {
-          //newuser.AddRole(context.Roles.Single(r => r.Name == role.Name));
-          newuser.Roles.Add(context.Roles.Single(r => r.Name == role.Name));
+          newuser.AddRole(context.Roles.Single(r => r.Name == role.Name));
         }
+        ImportSkillLevels(user, newuser, context);
         context.Users.Add(newuser);
       }
+      output("Finished importing users, saving");
+      context.SaveChanges();
+      output("Saved");
+    }
+
+    private void ImportSkillLevels(Core.User oldUser, Models.User newUser, ClubPoolContext context) {
+      output("Importing skill levels for user " + newUser.Username);
+      foreach (var sl in oldUser.SkillLevels) {
+        var newsl = new Models.SkillLevel(newUser, ClubPool.Web.Infrastructure.GameType.EightBall, sl.Value);
+        newUser.AddSkillLevel(newsl);
+      }
+      output("Finished importing skill levels");
+    }
+
+    private void ImportSeasons(ISession session, ClubPoolContext context) {
+      output("Importing seasons");
+      foreach (var season in session.Query<Core.Season>()) {
+        var newseason = new Models.Season(season.Name, ClubPool.Web.Infrastructure.GameType.EightBall) {
+          IsActive = season.IsActive
+        };
+        context.Seasons.Add(newseason);
+        context.SaveChanges();
+        ImportDivisions(season, newseason, session, context);
+      }
+      output("Finished importing seasons, saving");
+      context.SaveChanges();
+      output("Saved");
+    }
+
+    private void ImportDivisions(Core.Season oldSeason, Models.Season newSeason, ISession session, ClubPoolContext context) {
+      output("Importing divisions for season " + newSeason.Name);
+      foreach (var division in oldSeason.Divisions) {
+        var newdivision = new Models.Division(division.Name, division.StartingDate, newSeason);
+        newSeason.AddDivision(newdivision);
+        context.Divisions.Add(newdivision);
+        context.SaveChanges();
+        ImportTeams(division, newdivision, context);
+        ImportMeets(division, newdivision, context);
+      }
+      output("Finished importing divisions");
+      //output("Finished importing divisions, saving");
+      //context.SaveChanges();
+      //output("Saved");
+    }
+
+    private void ImportMeets(Core.Division oldDivision, Models.Division newDivision, ClubPoolContext context) {
+      output("Importing meets for division " + newDivision.Name);
+      foreach (var meet in oldDivision.Meets) {
+        var oldTeam1 = meet.Teams.ElementAt(0);
+        var oldTeam2 = meet.Teams.ElementAt(1);
+        var team1 = context.Teams.Single(t => t.Division.Id == newDivision.Id && t.Name == oldTeam1.Name);
+        var team2 = context.Teams.Single(t => t.Division.Id == newDivision.Id && t.Name == oldTeam2.Name);
+        var newmeet = new Models.Meet(team1, team2, meet.Week) {
+          IsComplete = meet.IsComplete
+        };
+        context.Meets.Add(newmeet);
+        newDivision.Meets.Add(newmeet);
+        context.SaveChanges();
+        ImportMatches(meet, newmeet, context);
+      }
+      output("Finished importing meets");
+      //output("Finished importing meets, saving");
+      //context.SaveChanges();
+      //output("Saved");
+    }
+
+    private void ImportMatches(Core.Meet oldMeet, Models.Meet newMeet, ClubPoolContext context) {
+      output("Importing matches for meet " + oldMeet.Id);
+      foreach (var match in oldMeet.Matches) {
+        var oldMatchPlayer1 = match.Players.ElementAt(0);
+        var oldMatchPlayer2 = match.Players.ElementAt(1);
+        var newmatch = new Models.Match(newMeet,
+          new Models.MatchPlayer(context.Users.Single(u => u.Username == oldMatchPlayer1.Player.Username),
+            context.Teams.Single(t => t.Division.Id == newMeet.Division.Id && t.Name == oldMatchPlayer1.Team.Name)),
+          new Models.MatchPlayer(context.Users.Single(u => u.Username == oldMatchPlayer2.Player.Username),
+            context.Teams.Single(t => t.Division.Id == newMeet.Division.Id && t.Name == oldMatchPlayer2.Team.Name)));
+        newmatch.DatePlayed = match.DatePlayed;
+        newmatch.IsComplete = match.IsComplete;
+        newmatch.IsForfeit = match.IsForfeit;
+        if (newmatch.IsComplete) {
+          newmatch.Winner = context.Users.Single(u => u.Username == match.Winner.Username);
+        }
+        newMeet.AddMatch(newmatch);
+        context.Matches.Add(newmatch);
+        context.SaveChanges();
+        ImportMatchResults(match, newmatch, context);
+      }
+      output("Finished importing matches");
+      //output("Finished importing matches, saving");
+      //context.SaveChanges();
+      //output("Saved");
+    }
+
+    private void ImportMatchResults(Core.Match oldMatch, Models.Match newMatch, ClubPoolContext context) {
+      output("Importing match results for match " + oldMatch.Id);
+      foreach (var result in oldMatch.Results) {
+        var newresult = new Models.MatchResult(context.Users.Single(u => u.Username == result.Player.Username),
+          result.Innings, result.DefensiveShots, result.Wins);
+        newMatch.AddResult(newresult);
+        context.MatchResults.Add(newresult);
+      }
+      output("Finished importing match results, saving");
+      context.SaveChanges();
+      output("Saved");
+    }
+
+    private void ImportTeams(Core.Division oldDivision, Models.Division newDivision, ClubPoolContext context) {
+      output("Importing teams for division " + newDivision.Name);
+      foreach (var team in oldDivision.Teams) {
+        var newteam = new Models.Team(team.Name, newDivision) {
+          SchedulePriority = team.SchedulePriority
+        };
+        foreach (var player in team.Players) {
+          newteam.AddPlayer(context.Users.Single(u => u.Username == player.Username));
+        }
+        newDivision.AddTeam(newteam);
+        context.Teams.Add(newteam);
+      }
+      output("Finished importing teams, saving");
+      context.SaveChanges();
+      output("Saved");
     }
 
 //    private void ImportIPDataSQL() {

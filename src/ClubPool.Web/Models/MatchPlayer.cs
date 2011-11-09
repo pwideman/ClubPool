@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using ClubPool.Web.Infrastructure;
+﻿using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Models
 {

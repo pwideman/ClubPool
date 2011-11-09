@@ -20,7 +20,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Users;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Web.Infrastructure;
+//using ClubPool.Web.Infrastructure;
 using ClubPool.Testing.Services.Authentication;
 using ClubPool.Testing;
 

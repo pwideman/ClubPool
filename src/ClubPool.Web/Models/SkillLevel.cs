@@ -1,5 +1,4 @@
 ﻿using ClubPool.Web.Infrastructure;
-using ClubPool.Core;
 
 namespace ClubPool.Web.Models
 {

@@ -12,7 +12,7 @@ using SharpArch.Web.NHibernate;
 using SharpArch.Core;
 using xVal.ServerSide;
 
-using ClubPool.Web.Infrastructure;
+//using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
 using ClubPool.Core;

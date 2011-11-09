@@ -17,7 +17,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Web.Infrastructure;
+//using ClubPool.Web.Infrastructure;
 using ClubPool.Testing;
 
 namespace ClubPool.MSpecTests.ClubPool.Web.Controllers.Seasons

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ClubPool.Web.Infrastructure;
-using ClubPool.Core;
 
 namespace ClubPool.Web.Models
 {

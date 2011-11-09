@@ -4,21 +4,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using ClubPool.Web.Infrastructure;
-using ClubPool.Core;
 
 namespace ClubPool.Web.Models
 {
   public class Division : VersionedEntity
   {
     private static readonly object scheduleLock = new object();
-    private IList<Meet> meets;
-    private IList<Team> teams;
 
     public virtual DateTime StartingDate { get; set; }
     public virtual string Name { get; set; }
     public virtual Season Season { get; set; }
-    public virtual IEnumerable<Meet> Meets { get { return meets; } }
-    public virtual IEnumerable<Team> Teams { get { return teams; } }
+    public virtual ICollection<Meet> Meets { get; private set; }
+    public virtual ICollection<Team> Teams { get; private set; }
 
     protected Division() {
       InitMembers();
@@ -35,8 +32,8 @@ namespace ClubPool.Web.Models
     }
 
     private void InitMembers() {
-      teams = new List<Team>();
-      meets = new List<Meet>();
+      Teams = new HashSet<Team>();
+      Meets = new HashSet<Meet>();
     }
 
     public virtual bool CanDelete() {
@@ -54,8 +51,8 @@ namespace ClubPool.Web.Models
         throw new Exception("This division already has a schedule, teams cannot be added or removed");
       }
 
-      if (!teams.Contains(team)) {
-        teams.Add(team);
+      if (!Teams.Contains(team)) {
+        Teams.Add(team);
         team.Division = this;
       }
     }
@@ -67,8 +64,8 @@ namespace ClubPool.Web.Models
         throw new Exception("This division already has a schedule, teams cannot be added or removed");
       }
 
-      if (teams.Contains(team)) {
-        teams.Remove(team);
+      if (Teams.Contains(team)) {
+        Teams.Remove(team);
         team.Division = null;
       }
     }
@@ -78,10 +75,10 @@ namespace ClubPool.Web.Models
         throw new Exception("This division already has a schedule, teams cannot be added or removed");
       }
 
-      foreach (var team in teams) {
+      foreach (var team in Teams) {
         team.Division = null;
       }
-      teams.Clear();
+      Teams.Clear();
     }
 
     public virtual bool TeamNameIsInUse(string name) {
@@ -90,7 +87,7 @@ namespace ClubPool.Web.Models
 
     public virtual void ClearSchedule() {
       if (!HasCompletedMatches()) {
-        meets.Clear();
+        Meets.Clear();
       }
       else {
         throw new Exception("There are already completed matches in this division, the schedule cannot be cleared");
@@ -102,16 +99,16 @@ namespace ClubPool.Web.Models
       Arg.Require(numberOfByes >= 0, "numberOfByes must be >= 0");
 
       repository.Refresh(this);
-      if (meets.Any()) {
+      if (Meets.Any()) {
         throw new CreateScheduleException("A schedule for this division already exists");
       }
       lock (scheduleLock) {
         repository.Refresh(this);
-        if (meets.Any()) {
+        if (Meets.Any()) {
           throw new CreateScheduleException("A schedule for this division already exists");
         }
 
-        var numTeams = teams.Count;
+        var numTeams = Teams.Count;
         var realNumberOfTeams = numTeams - 1;
         if (numTeams < 2) {
           throw new ArgumentException("division must have 2 or more teams to create a schedule", "division");
@@ -124,7 +121,7 @@ namespace ClubPool.Web.Models
         numTeams += numberOfByes;
         var numWeeks = numTeams - 1;
         var opponent = -1;
-        var scheduleTeams = teams.OrderBy(t => t.SchedulePriority).ToArray();
+        var scheduleTeams = Teams.OrderBy(t => t.SchedulePriority).ToArray();
 
         for (int i = 0; i < numWeeks; i++) {
           for (int j = 0; j < numTeams; j++) {
@@ -145,9 +142,9 @@ namespace ClubPool.Web.Models
               }
             }
             if (opponent != j && opponent <= realNumberOfTeams && j <= realNumberOfTeams) {
-              if (!meets.Where(m => m.Teams.Contains(scheduleTeams[j]) && m.Teams.Contains(scheduleTeams[opponent])).Any()) {
+              if (!Meets.Where(m => m.Teams.Contains(scheduleTeams[j]) && m.Teams.Contains(scheduleTeams[opponent])).Any()) {
                 Meet m = new Meet(scheduleTeams[j], scheduleTeams[opponent], i);
-                meets.Add(m);
+                Meets.Add(m);
               }
             }
           }

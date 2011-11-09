@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 using ClubPool.Web.Infrastructure;
-using ClubPool.Core;
 
 namespace ClubPool.Web.Models
 {
   public class Season : VersionedEntity
   {
-    protected IList<Division> divisions;
-
     public virtual string Name { get; set; }
     public virtual bool IsActive { get; set; }
-    public virtual IEnumerable<Division> Divisions { get { return divisions; } }
+    public virtual ICollection<Division> Divisions { get; private set; }
     public virtual GameType GameType { get; set; }
 
     protected Season() {
@@ -31,30 +26,30 @@ namespace ClubPool.Web.Models
     }
 
     protected virtual void InitMembers() {
-      divisions = new List<Division>();
+      Divisions = new HashSet<Division>();
     }
 
     public virtual void RemoveDivision(Division division) {
       Arg.NotNull(division, "division");
 
-      if (divisions.Contains(division)) {
-        divisions.Remove(division);
+      if (Divisions.Contains(division)) {
+        Divisions.Remove(division);
         division.Season = null;
       }
     }
 
     public virtual void RemoveAllDivisions() {
-      foreach (var division in divisions) {
+      foreach (var division in Divisions) {
         division.Season = null;
       }
-      divisions.Clear();
+      Divisions.Clear();
     }
 
     public virtual void AddDivision(Division division) {
       Arg.NotNull(division, "division");
 
-      if (!divisions.Contains(division)) {
-        divisions.Add(division);
+      if (!Divisions.Contains(division)) {
+        Divisions.Add(division);
         division.Season = this;
       }
     }
@@ -65,7 +60,7 @@ namespace ClubPool.Web.Models
     }
 
     public virtual bool DivisionNameIsInUse(string name) {
-      return divisions.Where(d => d.Name.Equals(name)).Any();
+      return Divisions.Where(d => d.Name.Equals(name)).Any();
     }
   }
 }

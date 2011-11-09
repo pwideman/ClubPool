@@ -170,7 +170,7 @@
     <Compile Include="Infrastructure\Arg.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
-    <None Include="Infrastructure\CreateScheduleException.cs" />
+    <Compile Include="Infrastructure\CreateScheduleException.cs" />
     <Compile Include="Infrastructure\EntityFramework\ClubPoolContext.cs" />
     <Compile Include="Infrastructure\EntityFramework\Repository.cs" />
     <Compile Include="Infrastructure\IDbContext.cs" />
@@ -178,13 +178,13 @@
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Entity.cs" />
-    <None Include="Infrastructure\GameType.cs" />
+    <Compile Include="Infrastructure\GameType.cs" />
     <Compile Include="Models\Match.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\MatchResult.cs" />
     <Compile Include="Models\Meet.cs" />
     <Compile Include="Models\Role.cs" />
-    <None Include="Infrastructure\Roles.cs" />
+    <Compile Include="Infrastructure\Roles.cs" />
     <Compile Include="Models\Season.cs" />
     <Compile Include="Models\SkillLevel.cs" />
     <Compile Include="Models\Team.cs" />

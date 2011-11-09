@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 using ClubPool.Web.Infrastructure;
 
@@ -9,12 +8,10 @@ namespace ClubPool.Web.Models
 {
   public class Team : VersionedEntity
   {
-    private IList<User> players;
-
     public virtual string Name { get; set; }
     public virtual Division Division { get; set; }
     public virtual int SchedulePriority { get; set; }
-    public virtual IEnumerable<User> Players { get { return players; } }
+    public virtual ICollection<User> Players { get; private set; }
 
     protected Team() {
       InitMembers();
@@ -29,7 +26,7 @@ namespace ClubPool.Web.Models
     }
 
     private void InitMembers() {
-      players = new List<User>();
+      Players = new HashSet<User>();
     }
 
     public virtual int[] GetWinsAndLosses() {
@@ -41,7 +38,7 @@ namespace ClubPool.Web.Models
       int wins = 0;
       int losses = 0;
       foreach (var match in matches) {
-        if (players.Contains(match.Winner)) {
+        if (Players.Contains(match.Winner)) {
           wins++;
         }
         else {
@@ -84,7 +81,7 @@ namespace ClubPool.Web.Models
     }
 
     public virtual void RemoveAllPlayers() {
-      var tempPlayers = players.ToArray();
+      var tempPlayers = Players.ToArray();
       foreach (var player in tempPlayers) {
         RemovePlayer(player);
       }
@@ -93,8 +90,8 @@ namespace ClubPool.Web.Models
     public virtual void RemovePlayer(User player) {
       Arg.NotNull(player, "player");
 
-      if (players.Contains(player)) {
-        players.Remove(player);
+      if (Players.Contains(player)) {
+        Players.Remove(player);
         // remove the player from any incomplete matches
         var meets = Division.Meets.Where(m => m.Teams.Contains(this));
         foreach (var meet in meets) {
@@ -112,8 +109,8 @@ namespace ClubPool.Web.Models
     public virtual void AddPlayer(User player) {
       Arg.NotNull(player, "player");
 
-      if (!players.Contains(player)) {
-        players.Add(player);
+      if (!Players.Contains(player)) {
+        Players.Add(player);
         // add this player to meets
         var meets = Division.Meets.Where(m => m.Teams.Contains(this));
         foreach (var meet in meets) {
@@ -125,7 +122,7 @@ namespace ClubPool.Web.Models
             // because it's possible that some matches were played ahead of time
             // and one of the players in the match was removed from their team and
             // replaced by another player. In this case, the completed match stands.
-            if (meet.Matches.Where(m => m.Players.Where(p => p.Player == opponent).Any()).Count() < players.Count) {
+            if (meet.Matches.Where(m => m.Players.Where(p => p.Player == opponent).Any()).Count() < Players.Count) {
               meet.AddMatch(new Match(meet, new MatchPlayer(player, this), new MatchPlayer(opponent, opposingTeam)));
             }
           }

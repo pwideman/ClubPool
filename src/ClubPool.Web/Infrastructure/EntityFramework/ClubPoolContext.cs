@@ -28,6 +28,7 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
     protected override void OnModelCreating(DbModelBuilder modelBuilder) {
       base.OnModelCreating(modelBuilder);
 
+      modelBuilder.Entity<Team>().HasMany(t => t.Players).WithMany();
     }
 
     public void CommitTransaction() {
