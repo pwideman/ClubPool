@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -8,10 +9,20 @@ namespace ClubPool.Web.Models
 {
   public class Season : VersionedEntity
   {
-    public virtual string Name { get; set; }
-    public virtual bool IsActive { get; set; }
+    [Required]
+    public string Name { get; set; }
+    public bool IsActive { get; set; }
     public virtual ICollection<Division> Divisions { get; private set; }
-    public virtual GameType GameType { get; set; }
+    public int GameTypeValue { get; set; }
+
+    public GameType GameType {
+      get {
+        return (GameType)GameTypeValue;
+      }
+      set {
+        GameTypeValue = (int)value;
+      }
+    }
 
     protected Season() {
       InitMembers();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -8,13 +9,14 @@ namespace ClubPool.Web.Models
 {
   public class Match : Entity
   {
+    [Required]
     public virtual Meet Meet { get; set; }
-    public virtual bool IsComplete { get; set; }
-    public virtual bool IsForfeit { get; set; }
+    public bool IsComplete { get; set; }
+    public bool IsForfeit { get; set; }
     public virtual ICollection<MatchPlayer> Players { get; private set; }
     public virtual User Winner { get; set; }
     public virtual ICollection<MatchResult> Results { get; private set; }
-    public virtual DateTime DatePlayed { get; set; }
+    public virtual DateTime? DatePlayed { get; set; }
 
     protected Match() {
       InitMembers();

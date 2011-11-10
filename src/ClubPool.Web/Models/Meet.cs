@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -8,9 +9,10 @@ namespace ClubPool.Web.Models
 {
   public class Meet : Entity
   {
-    public virtual int Week { get; protected set; }
+    public int Week { get; protected set; }
+    [Required]
     public virtual Division Division { get; protected set; }
-    public virtual bool IsComplete { get; set; }
+    public bool IsComplete { get; set; }
     public virtual ICollection<Team> Teams { get; private set; }
     public virtual ICollection<Match> Matches { get; private set; }
 
@@ -29,7 +31,6 @@ namespace ClubPool.Web.Models
 
       Teams.Add(team1);
       Teams.Add(team2);
-      //createMatches();
     }
 
     protected void InitMembers() {
@@ -37,7 +38,7 @@ namespace ClubPool.Web.Models
       Teams = new HashSet<Team>();
     }
 
-    protected void createMatches() {
+    public void CreateMatches() {
       var team1 = Teams.ElementAt(0);
       var team2 = Teams.ElementAt(1);
       foreach (var team1Player in team1.Players) {

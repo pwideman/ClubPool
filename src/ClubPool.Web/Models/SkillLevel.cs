@@ -1,12 +1,23 @@
-﻿using ClubPool.Web.Infrastructure;
+﻿using System.ComponentModel.DataAnnotations;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Models
 {
   public class SkillLevel : VersionedEntity
   {
-    public virtual GameType GameType { get; set; }
-    public virtual int Value { get; set; }
+    public int GameTypeValue { get; set; }
+    public int Value { get; set; }
+    [Required]
     public virtual User User { get; set; }
+
+    public GameType GameType {
+      get {
+        return (GameType)GameTypeValue;
+      }
+      set {
+        GameTypeValue = (int)value;
+      }
+    }
 
     protected SkillLevel() {
     }

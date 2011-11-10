@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -9,14 +10,20 @@ namespace ClubPool.Web.Models
   public class User : VersionedEntity
   {
     // mapped properties
-    public virtual string Username { get; set; }
-    public virtual string FirstName { get; set; }
-    public virtual string LastName { get; set; }
-    public virtual string Password { get; set; }
-    public virtual string PasswordSalt { get; set; }
-    public virtual string Email { get; set; }
-    public virtual bool IsApproved { get; set; }
-    public virtual bool IsLocked { get; set; }
+    [Required]
+    public string Username { get; set; }
+    [Required]
+    public string FirstName { get; set; }
+    [Required]
+    public string LastName { get; set; }
+    [Required]
+    public string Password { get; set; }
+    [Required]
+    public string PasswordSalt { get; set; }
+    [Required]
+    public string Email { get; set; }
+    public bool IsApproved { get; set; }
+    public bool IsLocked { get; set; }
     public virtual ICollection<Role> Roles { get; private set; }
     public virtual ICollection<SkillLevel> SkillLevels { get; private set; }
 

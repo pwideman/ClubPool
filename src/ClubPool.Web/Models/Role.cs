@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -7,7 +8,8 @@ namespace ClubPool.Web.Models
 {
   public class Role : Entity
   {
-    public virtual string Name { get; set; }
+    [Required]
+    public string Name { get; set; }
     public virtual ICollection<User> Users { get; private set; }
     
     protected Role() {

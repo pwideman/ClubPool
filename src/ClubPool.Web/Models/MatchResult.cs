@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -6,11 +7,13 @@ namespace ClubPool.Web.Models
 {
   public class MatchResult : VersionedEntity
   {
+    [Required]
     public virtual Match Match { get; set; }
+    [Required]
     public virtual User Player { get; set; }
-    public virtual int Innings { get; set; }
-    public virtual int DefensiveShots { get; set; }
-    public virtual int Wins { get; set; }
+    public int Innings { get; set; }
+    public int DefensiveShots { get; set; }
+    public int Wins { get; set; }
 
     protected MatchResult() {
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -11,8 +11,11 @@ namespace ClubPool.Web.Models
   {
     private static readonly object scheduleLock = new object();
 
-    public virtual DateTime StartingDate { get; set; }
-    public virtual string Name { get; set; }
+    [Required]
+    public DateTime StartingDate { get; set; }
+    [Required]
+    public string Name { get; set; }
+    [Required]
     public virtual Season Season { get; set; }
     public virtual ICollection<Meet> Meets { get; private set; }
     public virtual ICollection<Team> Teams { get; private set; }
@@ -144,6 +147,7 @@ namespace ClubPool.Web.Models
             if (opponent != j && opponent <= realNumberOfTeams && j <= realNumberOfTeams) {
               if (!Meets.Where(m => m.Teams.Contains(scheduleTeams[j]) && m.Teams.Contains(scheduleTeams[opponent])).Any()) {
                 Meet m = new Meet(scheduleTeams[j], scheduleTeams[opponent], i);
+                m.CreateMatches();
                 Meets.Add(m);
               }
             }

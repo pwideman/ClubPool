@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Infrastructure;
 
@@ -8,9 +9,12 @@ namespace ClubPool.Web.Models
 {
   public class Team : VersionedEntity
   {
-    public virtual string Name { get; set; }
+    [Required]
+    public string Name { get; set; }
+    // Division should be required, but SqlServerCe complains about a cyclical reference
+    //[Required]
     public virtual Division Division { get; set; }
-    public virtual int SchedulePriority { get; set; }
+    public int SchedulePriority { get; set; }
     public virtual ICollection<User> Players { get; private set; }
 
     protected Team() {

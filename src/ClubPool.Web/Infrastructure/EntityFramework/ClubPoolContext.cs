@@ -29,6 +29,7 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
       base.OnModelCreating(modelBuilder);
 
       modelBuilder.Entity<Team>().HasMany(t => t.Players).WithMany();
+      modelBuilder.Entity<Meet>().HasMany(m => m.Teams).WithMany();
     }
 
     public void CommitTransaction() {
