@@ -12,29 +12,20 @@ using Castle.Windsor;
 using Castle.Windsor.Installer;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
-using NHibernate;
-using NHibernate.Cfg;
 using NHibernate.Validator.Cfg.Loquacious;
 using NHibernate.Validator.Event;
 using SharpArch.Core;
-using SharpArch.Data.NHibernate;
-using SharpArch.Web.NHibernate;
 using SharpArch.Web.Castle;
-using SharpArch.Web.Areas;
-using SharpArch.Web.CommonValidator;
-using SharpArch.Web.ModelBinder;
 using log4net;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Core.Queries;
-using ClubPool.Framework.NHibernate;
 using ClubPool.Framework.Validation;
+using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Infrastructure.EntityFramework;
 using ClubPool.Web.Controllers;
-using ClubPool.Data.NHibernateMaps;
 using ClubPool.Web.CastleWindsor;
 using ClubPool.Web.Binders;
 using ClubPool.Web.Services.Authentication;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web
 {
@@ -43,14 +34,12 @@ namespace ClubPool.Web
 
   public class MvcApplication : HttpApplication
   {
-    private WebSessionStorage webSessionStorage;
     protected static readonly ILog logger = LogManager.GetLogger(typeof(MvcApplication));
 
     protected void Application_Start() {
       
       log4net.Config.XmlConfigurator.Configure();
 
-      //ModelBinders.Binders.DefaultBinder = new SharpModelBinder();
       ModelBinders.Binders.DefaultBinder = new ModelBinder();
 
       // NHV shared engine provider
@@ -59,8 +48,7 @@ namespace ClubPool.Web
       var provider = new NHibernateSharedEngineProvider();
       NHibernate.Validator.Cfg.Environment.SharedEngineProvider = provider;
       var cfg = new FluentConfiguration();
-      cfg.Register(typeof(ClubPool.Core.User).Assembly.ValidationDefinitions())
-         .Register(typeof(ClubPool.Web.Controllers.Home.HomeController).Assembly.ValidationDefinitions())
+      cfg.Register(typeof(ClubPool.Web.Controllers.Home.HomeController).Assembly.ValidationDefinitions())
          .SetDefaultValidatorMode(NHibernate.Validator.Engine.ValidatorMode.OverrideAttributeWithExternal);
       NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine().Configure(cfg);
       // xVal & the NHValidatorRulesProvider
@@ -84,26 +72,11 @@ namespace ClubPool.Web
       ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
       ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
 
+      container.Register(Component.For<ClubPoolContext>().LifeStyle.PerWebRequest);
+      container.Register(Component.For<IRepository>().ImplementedBy<Repository>().LifeStyle.Transient);
       container.RegisterControllers(typeof(BaseController).Assembly);
       container.Install(FromAssembly.This());
 
-    }
-
-    public override void Init() {
-      base.Init();
-
-      // The WebSessionStorage must be created during the Init() to tie in HttpApplication events
-      webSessionStorage = new WebSessionStorage(this);
-    }
-
-    /// <summary>
-    /// Due to issues on IIS7, the NHibernate initialization cannot reside in Init() but
-    /// must only be called once.  Consequently, we invoke a thread-safe singleton class to 
-    /// ensure it's only initialized once.
-    /// </summary>
-    protected void Application_BeginRequest(object sender, EventArgs e) {
-        NHibernateInitializer.Instance().InitializeNHibernateOnce(
-          () => InitializeNHibernateSession());
     }
 
     protected void Application_AuthenticateRequest(object sender, EventArgs e) {
@@ -141,8 +114,8 @@ namespace ClubPool.Web
       // Create an Identity object
       FormsIdentity identity = new FormsIdentity(authTicket);
 
-      var userRepository = SafeServiceLocator<IUserRepository>.GetService();
-      var user = userRepository.FindOne(u => u.Username.Equals(identity.Name));
+      var repository = SafeServiceLocator<IRepository>.GetService();
+      var user = repository.All<User>().Single(u => u.Username.Equals(identity.Name));
       // This principal will flow throughout the request.
       ClubPoolPrincipal principal = new ClubPoolPrincipal(user, identity);
       // Attach the new principal object to the current HttpContext object
@@ -153,23 +126,12 @@ namespace ClubPool.Web
       Context.User = ClubPoolPrincipal.CreateUnauthorizedPrincipal();
     }
 
-    /// <summary>
-    /// If you need to communicate to multiple databases, you'd add a line to this method to
-    /// initialize the other database as well.
-    /// </summary>
-    private void InitializeNHibernateSession() {
-      NHibernateSession.Init(
-          webSessionStorage,
-          new string[] { Server.MapPath("~/bin/ClubPool.Data.dll") },
-          new AutoPersistenceModelGenerator().Generate());
-      NHibernateSession.ValidatorEngine = NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine();
-    }
-
     protected void Application_Error() {
       var exception = Server.GetLastError();
-      if (exception is StaleObjectStateException) {
-        this.Response.Redirect("~/home/staleobjectstateerror");
-      }
+      // TODO: Version exceptions in EF?
+      //if (exception is StaleObjectStateException) {
+      //  this.Response.Redirect("~/home/staleobjectstateerror");
+      //}
     }
 
   }

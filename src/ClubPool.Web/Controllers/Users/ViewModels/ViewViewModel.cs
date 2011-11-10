@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
 using ClubPool.Web.Controllers.Shared.ViewModels;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
@@ -26,7 +26,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
       Roles = new string[0];
     }
 
-    public ViewViewModel(User user, IMatchResultRepository matchResultRepository)
+    public ViewViewModel(User user, IRepository repository)
       : this() {
 
       Id = user.Id;
@@ -37,7 +37,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
       IsLocked = user.IsLocked;
       Roles = user.Roles.Select(r => r.Name).ToArray();
       SkillLevel = user.SkillLevels.Where(sl => sl.GameType == GameType.EightBall).Select(sl => sl.Value).FirstOrDefault();
-      SkillLevelCalculation = new SkillLevelCalculationViewModel(user, matchResultRepository);
+      SkillLevelCalculation = new SkillLevelCalculationViewModel(user, repository);
     }
 
   }

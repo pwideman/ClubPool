@@ -190,8 +190,8 @@
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Services\ServicesInstaller.cs" />
-    <Compile Include="CastleWindsor\CustomRepositoriesInstaller.cs" />
-    <Compile Include="CastleWindsor\GenericRepositoriesInstaller.cs" />
+    <None Include="CastleWindsor\CustomRepositoriesInstaller.cs" />
+    <None Include="CastleWindsor\GenericRepositoriesInstaller.cs" />
     <Compile Include="CastleWindsor\ValidatorInstaller.cs" />
     <Compile Include="Controllers\Attributes\ConfigRescueAttribute.cs" />
     <Compile Include="Controllers\Attributes\ElmahRescueAttribute.cs" />
@@ -422,6 +422,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
   </ItemGroup>
   <ItemGroup>

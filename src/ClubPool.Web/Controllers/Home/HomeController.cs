@@ -4,14 +4,11 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Web;
 
-using SharpArch.Core.PersistenceSupport;
-using SharpArch.Core;
-
-using ClubPool.Core;
 using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Home
 {
@@ -21,8 +18,8 @@ namespace ClubPool.Web.Controllers.Home
     protected IConfigurationService configService;
 
     public HomeController(IAuthenticationService authSvc, IConfigurationService configService) {
-      Check.Require(null != authSvc, "authSvc cannot be null");
-      Check.Require(null != configService, "configService cannot be null");
+      Arg.NotNull(authSvc, "authSvc");
+      Arg.NotNull(configService, "configService");
 
       authenticationService = authSvc;
       this.configService = configService;

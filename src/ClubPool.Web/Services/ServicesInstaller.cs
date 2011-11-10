@@ -14,7 +14,7 @@ namespace ClubPool.Web.Services
     public void Install(IWindsorContainer container, IConfigurationStore store) {
       container.Register(
           AllTypes.FromThisAssembly()
-          .Pick().WithService.DefaultInterface());
+          .Pick().WithService.DefaultInterface().Configure(c => c.LifeStyle.Transient));
     }
   }
 }

@@ -6,8 +6,8 @@ using System.ComponentModel;
 
 using NHibernate.Validator.Constraints;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
@@ -17,18 +17,18 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       : base() {
     }
 
-    public EditTeamViewModel(IUserRepository userRepository, Team team)
-      : base(userRepository, team) {
+    public EditTeamViewModel(IRepository repository, Team team)
+      : base(repository, team) {
       Id = team.Id;
       Version = team.Version;
     }
 
     // hide the base method
-    private new void ReInitialize(IUserRepository userRepository, Season season) {
+    private new void ReInitialize(IRepository repository, Season season) {
     }
 
-    public void ReInitialize(IUserRepository userRepository, Team team) {
-      base.ReInitialize(userRepository, team.Division.Season);
+    public void ReInitialize(IRepository repository, Team team) {
+      base.ReInitialize(repository, team.Division.Season);
       // add the team's players to the available players if they aren't in my players
       foreach(var player in team.Players.Select(p => new PlayerViewModel(p))) {
         if (!Players.Contains(player)) {

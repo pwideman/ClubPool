@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Security;
 
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Services.Membership
 {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Shared.ViewModels
 {
@@ -24,11 +23,11 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
     public double CulledIG { get; set; }
     public int EightBallSkillLevel { get; set; }
 
-    public SkillLevelCalculationViewModel(User player, IMatchResultRepository matchResultRepository) {
+    public SkillLevelCalculationViewModel(User player, IRepository repository) {
       var sl = player.SkillLevels.Where(s => s.GameType == GameType.EightBall).SingleOrDefault();
       if (null != sl) {
         EightBallSkillLevel = sl.Value;
-        var matchResults = player.GetMatchResultsUsedInSkillLevelCalculation(GameType.EightBall, matchResultRepository);
+        var matchResults = player.GetMatchResultsUsedInSkillLevelCalculation(GameType.EightBall, repository);
         HasSkillLevel = true;
         var culledMatchResults = player.CullTopMatchResults(matchResults);
         var results = new List<SkillLevelMatchResultViewModel>();
@@ -64,7 +63,7 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
     public SkillLevelMatchResultViewModel(MatchResult matchResult, User player)
       : base(matchResult) {
       var match = matchResult.Match;
-      Date = match.DatePlayed;
+      Date = match.DatePlayed.Value;
       Team = match.Meet.Teams.Where(t => !t.Players.Contains(player)).Single().Name;
       NetInnings = Innings - DefensiveShots;
       // for this we display our opponent

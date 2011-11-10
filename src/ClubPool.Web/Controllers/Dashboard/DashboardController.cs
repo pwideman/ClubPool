@@ -4,12 +4,8 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web;
 
-using SharpArch.Core;
-using SharpArch.Web.NHibernate;
-
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Framework.NHibernate;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
@@ -20,42 +16,26 @@ namespace ClubPool.Web.Controllers.Dashboard
   public class DashboardController : BaseController
   {
     protected IAuthenticationService authenticationService;
-    protected IUserRepository userRepository;
-    protected ISeasonRepository seasonRepository;
-    protected IMeetRepository meetRepository;
-    protected ITeamRepository teamRepository;
-    protected IMatchResultRepository matchResultRepository;
+    protected IRepository repository;
 
     public DashboardController(IAuthenticationService authSvc,
-      IUserRepository userRepository,
-      ISeasonRepository seasonRepository,
-      IMeetRepository meetRepository,
-      ITeamRepository teamRepository,
-      IMatchResultRepository matchResultRepository) {
+      IRepository repository) {
 
-      Check.Require(null != authSvc, "authSvc cannot be null");
-      Check.Require(null != userRepository, "userRepository cannot be null");
-      Check.Require(null != seasonRepository, "seasonRepository cannot be null");
-      Check.Require(null != meetRepository, "meetRepository cannot be null");
-      Check.Require(null != teamRepository, "teamRepository cannot be null");
-      Check.Require(null != matchResultRepository, "matchResultRepository cannot be null");
+      Arg.NotNull(authSvc, "authSvc");
+      Arg.NotNull(repository, "repository");
 
       authenticationService = authSvc;
-      this.userRepository = userRepository;
-      this.seasonRepository = seasonRepository;
-      this.meetRepository = meetRepository;
-      this.teamRepository = teamRepository;
-      this.matchResultRepository = matchResultRepository;
+      this.repository = repository;
     }
 
     [Authorize]
-    [Transaction]
+    // needs transaction
     public ActionResult Index() {
       var principal = authenticationService.GetCurrentPrincipal();
-      var user = userRepository.FindOne(u => u.Username.Equals(principal.Identity.Name));
-      var currentSeason = seasonRepository.FindOne(s => s.IsActive);
-      var team = teamRepository.FindOne(t => t.Division.Season == currentSeason && t.Players.Contains(user));
-      var viewModel = new IndexViewModel(user, team, matchResultRepository);
+      var user = repository.All<User>().Single(u => u.Username.Equals(principal.Identity.Name));
+      var currentSeason = repository.All<Season>().Single(s => s.IsActive);
+      var team = repository.All<Team>().Single(t => t.Division.Season.Id == currentSeason.Id && t.Players.Select(p => p.Id).Contains(user.Id));
+      var viewModel = new IndexViewModel(user, team, repository);
 
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
@@ -75,13 +55,13 @@ namespace ClubPool.Web.Controllers.Dashboard
       var hasAlerts = false;
       // unapproved users alert
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
-        hasAlerts |= userRepository.GetAll().Where(u => !u.IsApproved).Any();
+        hasAlerts |= repository.All<User>().Any(u => !u.IsApproved);
       }
       return hasAlerts;
     }
 
     [Authorize]
-    [Transaction]
+    // needs transaction
     public ActionResult AlertsGadget() {
       return PartialView(GetAlertsViewModel());
     }
@@ -92,7 +72,7 @@ namespace ClubPool.Web.Controllers.Dashboard
       var notifications = new List<Alert>();
       // add unapproved users warning
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
-        var unapprovedQuery = userRepository.GetAll().Where(u => !u.IsApproved);
+        var unapprovedQuery = repository.All<User>().Where(u => !u.IsApproved);
         if (unapprovedQuery.Any()) {
           var url = BuildUrlFromExpression<Users.UsersController>(u => u.Unapproved(), null);
           warnings.Add(new Alert(string.Format("There are {0} users awaiting approval", unapprovedQuery.Count()), url, AlertType.Warning));

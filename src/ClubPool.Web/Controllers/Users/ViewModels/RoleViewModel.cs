@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
@@ -12,9 +9,15 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public RoleViewModel() {
     }
 
+    public Role Role {
+      set {
+        Id = value.Id;
+        Name = value.Name;
+      }
+    }
+
     public RoleViewModel(Role role) {
-      Id = role.Id;
-      Name = role.Name;
+      Role = role;
     }
 
     public int Id { get; set; }

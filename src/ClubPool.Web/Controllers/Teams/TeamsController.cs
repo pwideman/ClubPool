@@ -8,75 +8,61 @@ using System.Collections.Generic;
 
 using MvcContrib;
 using MvcContrib.Pagination;
-using SharpArch.Web.NHibernate;
-using SharpArch.Core;
 using xVal.ServerSide;
 
-//using ClubPool.Web.Infrastructure;
-using ClubPool.Framework.Validation;
-using ClubPool.Framework.NHibernate;
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Core.Queries;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Attributes;
 using ClubPool.Web.Controllers.Shared.ViewModels;
 using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Teams
 {
   public class TeamsController : BaseController
   {
-    protected ITeamRepository teamRepository;
-    protected IDivisionRepository divisionRepository;
-    protected IUserRepository userRepository;
+    protected IRepository repository;
     protected IAuthenticationService authService;
 
-    public TeamsController(ITeamRepository teamRepo,
-      IDivisionRepository divisionRepo,
-      IUserRepository userRepo,
+    public TeamsController(IRepository repo,
       IAuthenticationService authService) {
 
-      Check.Require(null != teamRepo, "teamRepo cannot be null");
-      Check.Require(null != divisionRepo, "divisionRepo cannot be null");
-      Check.Require(null != userRepo, "userRepo cannot be null");
-      Check.Require(null != authService, "authService cannot be null");
+      Arg.NotNull(repo, "repo");
+      Arg.NotNull(authService, "authService");
 
-      teamRepository = teamRepo;
-      divisionRepository = divisionRepo;
-      userRepository = userRepo;
+      repository = repo;
       this.authService = authService;
     }
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
+    //[Transaction]
     public ActionResult Create(int divisionId) {
-      var division = divisionRepository.Get(divisionId);
+      var division = repository.Get<Division>(divisionId);
       if (null == division) {
         return HttpNotFound();
       }
-      var viewModel = new CreateTeamViewModel(userRepository, division);
+      var viewModel = new CreateTeamViewModel(repository, division);
       return View(viewModel);
     }
 
     [HttpPost]
     [Authorize(Roles=Roles.Administrators)]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateTeamViewModel viewModel) {
-      var division = divisionRepository.Get(viewModel.DivisionId);
+      var division = repository.Get<Division>(viewModel.DivisionId);
 
       if (!ValidateViewModel(viewModel)) {
-        viewModel.ReInitialize(userRepository, division.Season);
+        viewModel.ReInitialize(repository, division.Season);
         return View(viewModel);
       }
 
       // verify that the team name is not already used
       if (division.TeamNameIsInUse(viewModel.Name)) {
         ModelState.AddModelErrorFor<CreateTeamViewModel>(m => m.Name, "This name is already in use");
-        viewModel.ReInitialize(userRepository, division.Season);
+        viewModel.ReInitialize(repository, division.Season);
         return View(viewModel);
       }
 
@@ -85,11 +71,11 @@ namespace ClubPool.Web.Controllers.Teams
 
       if (viewModel.Players.Any()) {
         foreach (var playerViewModel in viewModel.Players) {
-          var player = userRepository.Get(playerViewModel.Id);
+          var player = repository.Get<User>(playerViewModel.Id);
           team.AddPlayer(player);
         }
       }
-      teamRepository.SaveOrUpdate(team);
+      repository.SaveOrUpdate(team);
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was created successfully";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
@@ -97,10 +83,10 @@ namespace ClubPool.Web.Controllers.Teams
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Delete(int id) {
-      var team = teamRepository.Get(id);
+      var team = repository.Get<Team>(id);
       if (null == team) {
         return HttpNotFound();
       }
@@ -110,7 +96,7 @@ namespace ClubPool.Web.Controllers.Teams
       }
       else {
         division.RemoveTeam(team);
-        teamRepository.Delete(team);
+        repository.Delete(team);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was deleted";
       }
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
@@ -118,22 +104,22 @@ namespace ClubPool.Web.Controllers.Teams
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
+    //[Transaction]
     public ActionResult Edit(int id) {
-      var team = teamRepository.Get(id);
+      var team = repository.Get<Team>(id);
       if (null == team) {
         return HttpNotFound();
       }
-      var viewModel = new EditTeamViewModel(userRepository, team);
+      var viewModel = new EditTeamViewModel(repository, team);
       return View(viewModel);
     }
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditTeamViewModel viewModel) {
-      var team = teamRepository.Get(viewModel.Id);
+      var team = repository.Get<Team>(viewModel.Id);
 
       if (null == team) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The team you were editing was deleted by another user";
@@ -147,14 +133,14 @@ namespace ClubPool.Web.Controllers.Teams
       }
       
       if (!ValidateViewModel(viewModel)) {
-        viewModel.ReInitialize(userRepository, team);
+        viewModel.ReInitialize(repository, team);
         return View(viewModel);
       }
 
       if (team.Name != viewModel.Name) {
         if (team.Division.TeamNameIsInUse(viewModel.Name)) {
           ModelState.AddModelErrorFor<EditTeamViewModel>(m => m.Name, "Name is already in use");
-          viewModel.ReInitialize(userRepository, team);
+          viewModel.ReInitialize(repository, team);
           return View(viewModel);
         }
         team.Name = viewModel.Name;
@@ -165,7 +151,7 @@ namespace ClubPool.Web.Controllers.Teams
       if (null != viewModel.Players && viewModel.Players.Any()) {
         var newPlayers = new List<User>();
         foreach (var playerViewModel in viewModel.Players) {
-          var player = userRepository.Get(playerViewModel.Id);
+          var player = repository.Get<User>(playerViewModel.Id);
           newPlayers.Add(player);
         }
         // first remove all players that aren't in the view model's players list
@@ -191,10 +177,10 @@ namespace ClubPool.Web.Controllers.Teams
     }
 
     [Authorize]
-    [Transaction]
+    //[Transaction]
     public ActionResult Details(int id) {
-      var user = userRepository.Get(authService.GetCurrentPrincipal().UserId);
-      var team = teamRepository.Get(id);
+      var user = repository.Get<User>(authService.GetCurrentPrincipal().UserId);
+      var team = repository.Get<Team>(id);
       if (null == team) {
         return HttpNotFound();
       }
@@ -208,18 +194,18 @@ namespace ClubPool.Web.Controllers.Teams
     }
 
     [Authorize]
-    [Transaction]
+    //[Transaction]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult UpdateName(UpdateNameViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return AjaxUpdate(false, "Invalid name");
       }
-      var team = teamRepository.Get(viewModel.Id);
+      var team = repository.Get<Team>(viewModel.Id);
       if (null == team) {
         return HttpNotFound();
       }
-      var user = userRepository.Get(authService.GetCurrentPrincipal().UserId);
+      var user = repository.Get<User>(authService.GetCurrentPrincipal().UserId);
       if (!UserCanUpdateTeamName(user, team)) {
         return AjaxUpdate(false, "You do not have permission to update this team's name");
       }

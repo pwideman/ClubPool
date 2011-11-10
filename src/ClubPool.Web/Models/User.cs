@@ -109,7 +109,7 @@ namespace ClubPool.Web.Models
 
     public virtual List<MatchResult> GetMatchResultsUsedInSkillLevelCalculation(GameType gameType, IRepository repository) {
       var matchResults = (from result in repository.All<MatchResult>()
-                          where result.Player == this && result.Match.Meet.Division.Season.GameType == gameType && !result.Match.IsForfeit
+                          where result.Player.Id == Id && result.Match.Meet.Division.Season.GameTypeValue == (int)gameType && !result.Match.IsForfeit
                           orderby result.Match.DatePlayed descending,
                           result.Wins > 0 ? (result.Innings - result.DefensiveShots) / result.Wins : 0 ascending,
                           result.Innings ascending

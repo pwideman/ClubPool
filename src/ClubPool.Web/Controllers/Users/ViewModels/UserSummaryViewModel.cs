@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using ClubPool.Core;
-using ClubPool.Core.Queries;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
@@ -22,16 +21,23 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
       InitMembers();
     }
 
-    public UserSummaryViewModel(User user) : this() {
-      Id = user.Id;
-      Name = user.FullName;
-      Username = user.Username;
-      Email = user.Email;
-      IsApproved = user.IsApproved;
-      IsLocked = user.IsLocked;
-      if (user.Roles.Any()) {
-        Roles = user.Roles.Select(RoleQueries.SelectName).ToArray();
+    public User User {
+      set {
+        Id = value.Id;
+        Name = value.FullName;
+        Username = value.Username;
+        Email = value.Email;
+        IsApproved = value.IsApproved;
+        IsLocked = value.IsLocked;
+        if (value.Roles.Any()) {
+          Roles = value.Roles.Select(r => r.Name).ToArray();
+        }
+
       }
+    }
+
+    public UserSummaryViewModel(User user) : this() {
+      User = user;
     }
 
     protected void InitMembers() {

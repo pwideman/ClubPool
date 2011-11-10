@@ -9,17 +9,10 @@ using System.Web;
 using Microsoft.Web.Mvc;
 using MvcContrib.ActionResults;
 using MvcContrib.Pagination;
-using SharpArch.Web.NHibernate;
-using SharpArch.Core;
 using xVal.ServerSide;
 using Elmah;
 
-using ClubPool.Framework;
-//using ClubPool.Web.Infrastructure;
-using ClubPool.Framework.Validation;
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Core.Queries;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.Configuration;
 using ClubPool.Web.Controls.Captcha;
 using ClubPool.Web.Services.Configuration;
@@ -28,6 +21,7 @@ using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Messaging;
 using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Users
 {
@@ -35,48 +29,35 @@ namespace ClubPool.Web.Controllers.Users
   {
     protected IAuthenticationService authenticationService;
     protected IMembershipService membershipService;
-    protected IRoleRepository roleRepository;
+    protected IRepository repository;
     protected IEmailService emailService;
-    protected IUserRepository userRepository;
     protected IConfigurationService configService;
-    protected IMatchResultRepository matchResultRepository;
 
     public UsersController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
       IEmailService emailSvc,
-      IUserRepository userRepo,
-      IRoleRepository roleRepo,
       IConfigurationService configService,
-      IMatchResultRepository matchResultRepository)
+      IRepository repository)
     {
 
-      Check.Require(null != authSvc, "authSvc cannot be null");
-      Check.Require(null != membershipSvc, "membershipSvc cannot be null");
-      Check.Require(null != userRepo, "userRepo cannot be null");
-      Check.Require(null != roleRepo, "roleRepo cannot be null");
-      Check.Require(null != emailSvc, "emailSvc cannot be null");
-      Check.Require(null != configService, "configService cannot be null");
-      Check.Require(null != matchResultRepository, "matchResultRepository cannot be null");
+      Arg.NotNull(authSvc, "authSvc");
+      Arg.NotNull(membershipSvc, "membershipSvc");
+      Arg.NotNull(emailSvc, "emailSvc");
+      Arg.NotNull(configService, "configService");
+      Arg.NotNull(repository, "repository");
 
       authenticationService = authSvc;
       membershipService = membershipSvc;
       emailService = emailSvc;
-      userRepository = userRepo;
-      roleRepository = roleRepo;
       this.configService = configService;
-      this.matchResultRepository = matchResultRepository;
-    }
-
-    protected void RollbackUserTransaction() {
-      userRepository.DbContext.RollbackTransaction();
+      this.repository = repository;
     }
 
     [Authorize(Roles=Roles.Administrators)]
-    [Transaction]
+    //[Transaction]
     public ActionResult Index(int? page, string q) {
       int pageSize = 10;
-      var userQuery = from u in userRepository.GetAll()
-                      select u;
+      var userQuery = repository.All<User>();
       if (!string.IsNullOrEmpty(q)) {
         q = HttpUtility.UrlDecode(q);
         var pieces = q.Split(' ').Where(s => !string.IsNullOrEmpty(s));
@@ -94,7 +75,7 @@ namespace ClubPool.Web.Controllers.Users
       }
       var query = from u in userQuery
                   orderby u.LastName, u.FirstName
-                  select new UserSummaryViewModel(u);
+                  select new UserSummaryViewModel { User = u };
       var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
       if (!string.IsNullOrEmpty(q)) {
         viewModel.SearchQuery = q;
@@ -160,7 +141,7 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpPost]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     [CaptchaValidation("captcha")]
     public ActionResult ResetPassword(ResetPasswordViewModel viewModel, bool captchaValid) {
@@ -178,10 +159,10 @@ namespace ClubPool.Web.Controllers.Users
       User user = null;
 
       if (!string.IsNullOrEmpty(viewModel.Username)) {
-        user = userRepository.FindOne(u => u.Username.Equals(viewModel.Username));
+        user = repository.All<User>().Single(u => u.Username.Equals(viewModel.Username));
       }
       else if (!string.IsNullOrEmpty(viewModel.Email)) {
-        user = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Email)).FirstOrDefault();
+        user = repository.All<User>().FirstOrDefault(u => u.Email.Equals(viewModel.Email));
       }
 
       if (null != user) {
@@ -202,9 +183,9 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpGet]
-    [Transaction]
+    //[Transaction]
     public ActionResult ValidatePasswordResetToken(string token) {
-      var users = userRepository.GetAll();
+      var users = repository.All<User>();
       foreach (var user in users) {
         if (membershipService.ValidatePasswordResetToken(token, user)) {
           authenticationService.LogIn(user.Username, false);
@@ -230,7 +211,7 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Transaction]
+    //[Transaction]
     [CaptchaValidation("captcha")]
     public ActionResult SignUp(SignUpViewModel viewModel, bool captchaValid) {
       if (!captchaValid) {
@@ -256,7 +237,7 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected void SendNewUserAwaitingApprovalEmail(User newUser) {
-      var administrators = roleRepository.FindOne(r => r.Name.Equals(Roles.Administrators)).Users;
+      var administrators = repository.All<Role>().Single(r => r.Name.Equals(Roles.Administrators)).Users;
       if (administrators.Any()) {
         var adminEmailAddresses = administrators.Select(u => u.Email).ToList();
         var siteName = configService.GetConfig().SiteName;
@@ -270,15 +251,15 @@ namespace ClubPool.Web.Controllers.Users
 
     [Authorize(Roles=Roles.Administrators)]
     [HttpPost]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, int page, string q) {
-      User userToDelete = userRepository.Get(id);
+      User userToDelete = repository.Get<User>(id);
       if (null == userToDelete) {
         return HttpNotFound();
       }
-      if (CanDeleteUser(userToDelete, matchResultRepository)) {
-        userRepository.Delete(userToDelete);
+      if (CanDeleteUser(userToDelete, repository)) {
+        repository.Delete(userToDelete);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was deleted successfully.";
       }
       else {
@@ -287,8 +268,8 @@ namespace ClubPool.Web.Controllers.Users
       return this.RedirectToAction(c => c.Index(page, q));
     }
 
-    protected bool CanDeleteUser(User user, IMatchResultRepository matchResultRepository) {
-      var results = matchResultRepository.GetAll().Where(r => r.Player == user).Any();
+    protected bool CanDeleteUser(User user, IRepository repository) {
+      var results = repository.All<MatchResult>().Any(r => r.Player == user);
       return !results;
     }
 
@@ -296,17 +277,17 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize(Roles=Roles.Administrators)]
     public ActionResult Unapproved() {
       var viewModel = new UnapprovedViewModel();
-      viewModel.UnapprovedUsers = userRepository.GetAll().WhereUnapproved().ToList()
+      viewModel.UnapprovedUsers = repository.All<User>().Where(u => !u.IsApproved).ToList()
         .Select(u => new UnapprovedUser(u));
       return View(viewModel);
     }
 
     [HttpPost]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     [Authorize(Roles=Roles.Administrators)]
     public ActionResult Approve(int[] userIds) {
-      var users = userRepository.GetAll().WhereIdIn(userIds);
+      var users = repository.All<User>().Where(u => userIds.Contains(u.Id));
       if (users.Any()) {
         var siteName = configService.GetConfig().SiteName;
         var emailSubject = string.Format("{0} account approved", siteName);
@@ -336,7 +317,7 @@ namespace ClubPool.Web.Controllers.Users
     [HttpGet]
     [Authorize]
     public ActionResult Edit(int id) {
-      var user = userRepository.Get(id);
+      var user = repository.Get<User>(id);
       var currentPrincipal = authenticationService.GetCurrentPrincipal();
       var canEditUser = CanEditUser(currentPrincipal, user);
       if (!canEditUser) {
@@ -350,7 +331,7 @@ namespace ClubPool.Web.Controllers.Users
       viewModel.ShowRoles = canEditRoles;
       viewModel.ShowPassword = canEditPassword;
       if (canEditRoles) {
-        viewModel.LoadAvailableRoles(roleRepository);
+        viewModel.LoadAvailableRoles(repository);
       }
       return View(viewModel);
     }
@@ -399,7 +380,7 @@ namespace ClubPool.Web.Controllers.Users
 
 
     [HttpPost]
-    [Transaction]
+    //[Transaction]
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
@@ -407,7 +388,7 @@ namespace ClubPool.Web.Controllers.Users
       var authTicketChanged = false;
       var previousUsername = "";
       try {
-        var user = userRepository.Get(viewModel.Id);
+        var user = repository.Get<User>(viewModel.Id);
         if (null == user) {
           return ErrorView("The user you were editing was deleted by another user");
         }
@@ -425,7 +406,7 @@ namespace ClubPool.Web.Controllers.Users
         viewModel.ShowStatus = canEditStatus;
         viewModel.ShowRoles = canEditRoles;
         viewModel.ShowPassword = canEditPassword;
-        viewModel.LoadAvailableRoles(roleRepository);
+        viewModel.LoadAvailableRoles(repository);
 
         if (!ValidateViewModel(viewModel)) {
           return View(viewModel);
@@ -441,7 +422,7 @@ namespace ClubPool.Web.Controllers.Users
           // verify that the new username is not in use
           if (membershipService.UsernameIsInUse(viewModel.Username)) {
             ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
-            RollbackUserTransaction();
+            repository.DbContext.RollbackTransaction();
             return View(viewModel);
           }
           previousUsername = user.Username;
@@ -452,7 +433,7 @@ namespace ClubPool.Web.Controllers.Users
           // verify that the new email is not in use
           if (membershipService.EmailIsInUse(viewModel.Email)) {
             ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
-            RollbackUserTransaction();
+            repository.DbContext.RollbackTransaction();
             return View(viewModel);
           }
           user.Email = viewModel.Email;
@@ -467,7 +448,7 @@ namespace ClubPool.Web.Controllers.Users
           user.RemoveAllRoles();
           if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
             foreach (int roleId in viewModel.Roles) {
-              user.AddRole(roleRepository.Get(roleId));
+              user.AddRole(repository.Get<Role>(roleId));
             }
           }
         }
@@ -503,7 +484,7 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpPost]
     [Authorize(Roles=Roles.Administrators)]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateViewModel viewModel) {
       var user = CreateUser(viewModel, true, false);
@@ -541,14 +522,14 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpGet]
     [Authorize]
-    [Transaction]
+    //[Transaction]
     public ActionResult View(int id) {
-      var user = userRepository.Get(id);
+      var user = repository.Get<User>(id);
       if (null == user) {
         return HttpNotFound();
       }
 
-      var viewModel = new ViewViewModel(user, matchResultRepository);
+      var viewModel = new ViewViewModel(user, repository);
       var principal = authenticationService.GetCurrentPrincipal();
       viewModel.ShowAdminProperties = principal.IsInRole(Roles.Administrators);
       return View(viewModel);
@@ -560,7 +541,7 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpPost]
-    [Transaction]
+    //[Transaction]
     [ValidateAntiForgeryToken]
     [CaptchaValidation("captcha")]
     public ActionResult RecoverUsername(RecoverUsernameViewModel viewModel, bool captchaValid) {
@@ -573,7 +554,7 @@ namespace ClubPool.Web.Controllers.Users
         return View(viewModel);
       }
 
-      var usernames = userRepository.GetAll().Where(u => u.Email.Equals(viewModel.Email)).Select(u => u.Username).ToList();
+      var usernames = repository.All<User>().Where(u => u.Email.Equals(viewModel.Email)).Select(u => u.Username).ToList();
       string body = "";
       if (!usernames.Any()) {
         body = string.Format("There are no usernames registered for the email address '{0}'.", viewModel.Email);

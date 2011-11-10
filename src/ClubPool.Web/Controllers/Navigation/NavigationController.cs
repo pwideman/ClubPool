@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 
-using SharpArch.Core;
-
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Navigation.ViewModels;
@@ -17,20 +15,16 @@ namespace ClubPool.Web.Controllers.Navigation
   public class NavigationController : BaseController
   {
     protected IAuthenticationService authenticationService;
-    protected ISeasonRepository seasonRepository;
-    protected ITeamRepository teamRepository;
+    protected IRepository repository;
 
     public NavigationController(IAuthenticationService authSvc,
-      ISeasonRepository seasonRepository,
-      ITeamRepository teamRepository) {
+      IRepository repository) {
 
-      Check.Require(null != authSvc, "authSvc cannot be null");
-      Check.Require(null != seasonRepository, "seasonRepository cannot be null");
-      Check.Require(null != teamRepository, "teamRepository cannot be null");
+      Arg.NotNull(authSvc, "authSvc");
+      Arg.NotNull(repository, "repository");
 
       authenticationService = authSvc;
-      this.seasonRepository = seasonRepository;
-      this.teamRepository = teamRepository;
+      this.repository = repository;
     }
 
     public ActionResult Menu() {
@@ -45,13 +39,13 @@ namespace ClubPool.Web.Controllers.Navigation
         viewModel.DisplayAdminMenu = false;
         viewModel.UserIsLoggedIn = false;
       }
-      if (seasonRepository.FindAll(s => s.IsActive).Any()) {
+      var season = repository.All<Season>().SingleOrDefault(s => s.IsActive);
+      if (null != season) {
         viewModel.HasActiveSeason = true;
-        var season = seasonRepository.FindOne(s => s.IsActive);
         viewModel.ActiveSeasonId = season.Id;
         viewModel.ActiveSeasonName = season.Name;
         if (viewModel.UserIsLoggedIn) {
-          var team = teamRepository.FindOne(t => t.Division.Season == season && t.Players.Where(p => p.Id == viewModel.UserId).Any());
+          var team = repository.All<Team>().SingleOrDefault(t => t.Division.Season.Id == season.Id && t.Players.Where(p => p.Id == viewModel.UserId).Any());
           if (null != team) {
             viewModel.HasCurrentTeam = true;
             viewModel.CurrentTeamId = team.Id;

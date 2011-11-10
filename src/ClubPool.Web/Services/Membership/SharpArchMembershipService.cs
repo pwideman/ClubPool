@@ -5,50 +5,45 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Web.Security;
 
-using SharpArch.Core;
-using SharpArch.Core.DomainModel;
-
 using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Core;
-using ClubPool.Core.Queries;
-using ClubPool.Core.Contracts;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Services.Membership
 {
   public class SharpArchMembershipService : IMembershipService
   {
-    protected IUserRepository userRepository;
+    protected IRepository repository;
     protected const int SALT_SIZE = 16; // same size as the SqlMembershipProvider
     protected bool allowDuplicateEmail;
     protected bool allowEmptyEmail;
 
-    public SharpArchMembershipService(IUserRepository userRepo) {
-      Check.Require(null != userRepo, "The user repository cannot be null");
+    public SharpArchMembershipService(IRepository repo) {
+      Arg.NotNull(repo, "repo");
 
-      userRepository = userRepo;
+      repository = repo;
       allowDuplicateEmail = false;
       allowEmptyEmail = false;
     }
 
-    public SharpArchMembershipService(IUserRepository userRepo, bool allowDuplicateEmail, bool allowEmptyEmail)
-      : this(userRepo) {
+    public SharpArchMembershipService(IRepository repo, bool allowDuplicateEmail, bool allowEmptyEmail)
+      : this(repo) {
       this.allowDuplicateEmail = allowDuplicateEmail;
       this.allowEmptyEmail = allowEmptyEmail;
     }
 
     public bool UsernameIsInUse(string username) {
-      Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
-      return userRepository.GetAll().WithUsername(username).Any();
+      Arg.NotNull(username, "username");
+      return repository.All<User>().Any(u => u.Username.Equals(username));
     }
 
     public bool EmailIsInUse(string email) {
-      Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
-      return userRepository.GetAll().WithEmail(email).Any();
+      Arg.NotNull(email, "email");
+      return repository.All<User>().Any(u => u.Email.Equals(email));
     }
 
     public bool ValidateUser(string username, string password) {
-      User user = userRepository.FindOne(UserQueries.UserByUsername(username));
+      User user = repository.All<User>().SingleOrDefault(u => u.Username.Equals(username));
       if (null != user && user.IsApproved && !user.IsLocked) {
         return VerifyPassword(user.Password, password, user.PasswordSalt);
       }
@@ -63,8 +58,8 @@ namespace ClubPool.Web.Services.Membership
     }
 
     public string EncodePassword(string password, string salt) {
-      Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
-      Check.Require(!string.IsNullOrEmpty(salt), "Hashed passwords require a salt value");
+      Arg.NotNull(password, "password");
+      Arg.NotNull(salt, "Hashed passwords require a salt value");
 
       byte[] bIn = Encoding.Unicode.GetBytes(password);
       byte[] bSalt = Convert.FromBase64String(salt);
@@ -87,13 +82,13 @@ namespace ClubPool.Web.Services.Membership
       bool isApproved,
       bool isLocked) {
 
-      Check.Require(!string.IsNullOrEmpty(username), "username cannot be null or empty");
-      Check.Require(!string.IsNullOrEmpty(password), "password cannot be null or empty");
+      Arg.NotNull(username, "username");
+      Arg.NotNull(password, "password");
       if (!allowEmptyEmail) {
-        Check.Require(!string.IsNullOrEmpty(email), "email cannot be null or empty");
+        Arg.NotNull(email, "email");
       }
-      Check.Require(!string.IsNullOrEmpty(firstName), "firstName cannot be null or empty");
-      Check.Require(!string.IsNullOrEmpty(lastName), "lastName cannot be null or empty");
+      Arg.NotNull(firstName, "firstName");
+      Arg.NotNull(lastName, "lastName");
 
       User user = null;
 
@@ -121,7 +116,7 @@ namespace ClubPool.Web.Services.Membership
       user.IsLocked = isLocked;
       user.FirstName = firstName;
       user.LastName = lastName;
-      user = userRepository.SaveOrUpdate(user);
+      user = repository.SaveOrUpdate(user);
       return user;
     }
 

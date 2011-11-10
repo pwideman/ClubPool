@@ -6,8 +6,8 @@ using System.ComponentModel;
 
 using NHibernate.Validator.Constraints;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
@@ -19,12 +19,12 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       InitMembers();
     }
 
-    protected TeamViewModel(IUserRepository userRepository, Season season) : this() {
-      LoadAvailablePlayers(userRepository, season);
+    protected TeamViewModel(IRepository repository, Season season) : this() {
+      LoadAvailablePlayers(repository, season);
     }
 
-    protected TeamViewModel(IUserRepository userRepository, Team team)
-      : this(userRepository, team.Division.Season) {
+    protected TeamViewModel(IRepository repository, Team team)
+      : this(repository, team.Division.Season) {
       Name = team.Name;
       Players = team.Players.Select(p => new PlayerViewModel(p)).ToList();
       SchedulePriority = team.SchedulePriority;
@@ -35,15 +35,25 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       availablePlayers = new List<PlayerViewModel>();
     }
 
-    private void LoadAvailablePlayers(IUserRepository userRepository, Season season) {
-      availablePlayers = (from u in userRepository.GetUnassignedUsersForSeason(season)
-                         orderby u.LastName, u.FirstName
-                         select new PlayerViewModel(u)).ToList();
+    private void LoadAvailablePlayers(IRepository repository, Season season) {
+      var unavailableUsersQuery = from s in repository.All<Season>()
+                                  from d in s.Divisions
+                                  from t in d.Teams
+                                  from u in t.Players
+                                  select u;
+
+      var availablePlayersQuery = (from u in repository.All<User>().Except(unavailableUsersQuery)
+                                   orderby u.LastName, u.FirstName
+                                   select new PlayerViewModel(u)).ToList();
+
+      //availablePlayers = (from u in repository.GetUnassignedUsersForSeason(season)
+      //                   orderby u.LastName, u.FirstName
+      //                   select new PlayerViewModel(u)).ToList();
     }
 
-    private void RefreshPlayers(IUserRepository userRepository) {
+    private void RefreshPlayers(IRepository repository) {
       foreach (var player in Players) {
-        var user = userRepository.Get(player.Id);
+        var user = repository.Get<User>(player.Id);
         player.Name = user.FullName;
         player.Username = user.Username;
         player.Email = user.Email;
@@ -55,9 +65,9 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     /// </summary>
     /// <param name="userRepository"></param>
     /// <param name="season"></param>
-    public void ReInitialize(IUserRepository userRepository, Season season) {
-      LoadAvailablePlayers(userRepository, season);
-      RefreshPlayers(userRepository);
+    public void ReInitialize(IRepository repository, Season season) {
+      LoadAvailablePlayers(repository, season);
+      RefreshPlayers(repository);
       // remove my players from available players
       foreach (var player in Players) {
         if (availablePlayers.Contains(player)) {

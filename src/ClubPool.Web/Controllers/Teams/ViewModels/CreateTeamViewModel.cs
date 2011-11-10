@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 using NHibernate.Validator.Constraints;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
@@ -17,7 +13,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       : base() {
     }
 
-    public CreateTeamViewModel(IUserRepository userRepository, Division division) : base(userRepository, division.Season) {
+    public CreateTeamViewModel(IRepository repository, Division division) : base(repository, division.Season) {
       DivisionId = division.Id;
       DivisionName = division.Name;
     }

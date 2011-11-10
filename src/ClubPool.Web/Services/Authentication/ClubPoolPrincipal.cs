@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Security.Principal;
 
-using SharpArch.Core;
-using ClubPool.Core;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Services.Authentication
 {
@@ -26,8 +26,8 @@ namespace ClubPool.Web.Services.Authentication
     /// <param name="id">This principal's identity</param>
     /// <param name="roleSvc">The role service</param>
     public ClubPoolPrincipal(User user, IIdentity identity) {
-      Check.Require(null != user, "user cannot be null");
-      Check.Require(null != identity, "identity cannot be null");
+      Arg.NotNull(user, "user");
+      Arg.NotNull(identity, "identity");
 
       Identity = identity;
       UserId = user.Id;

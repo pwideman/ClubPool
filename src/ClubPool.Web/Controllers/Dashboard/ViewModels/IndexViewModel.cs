@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Dashboard.ViewModels
@@ -21,10 +20,10 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
     public IEnumerable<SeasonResultViewModel> SeasonResults { get; set; }
     public SkillLevelCalculationViewModel SkillLevelCalculation { get; set; }
 
-    public IndexViewModel(User user, Team team, IMatchResultRepository matchResultRepository) {
+    public IndexViewModel(User user, Team team, IRepository repository) {
       UserIsAdmin = user.IsInRole(Roles.Administrators);
       UserFullName = user.FullName;
-      SkillLevelCalculation = new SkillLevelCalculationViewModel(user, matchResultRepository);
+      SkillLevelCalculation = new SkillLevelCalculationViewModel(user, repository);
       if (null != team) {
         CurrentSeasonStats = GetCurrentSeasonStatsViewModel(user, team);
         HasCurrentSeasonStats = CurrentSeasonStats != null;
@@ -135,7 +134,7 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
     public IEnumerable<MatchResultViewModel> Results { get; set; }
 
     public LastMatchViewModel(Match match) {
-      DatePlayed = string.Format("{0} {1}", match.DatePlayed.ToShortDateString(), match.DatePlayed.ToShortTimeString());
+      DatePlayed = string.Format("{0} {1}", match.DatePlayed.Value.ToShortDateString(), match.DatePlayed.Value.ToShortTimeString());
       var results = new List<MatchResultViewModel>();
       foreach (var result in match.Results) {
         var resultvm = new MatchResultViewModel(result);

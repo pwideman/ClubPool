@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
+using ClubPool.Web.Models;
+
 using NHibernate.Validator.Constraints;
-using SharpArch.Core.DomainModel;
 
 namespace ClubPool.Web.Controllers
 {
