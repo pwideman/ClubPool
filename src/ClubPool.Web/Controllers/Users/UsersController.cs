@@ -159,7 +159,7 @@ namespace ClubPool.Web.Controllers.Users
       User user = null;
 
       if (!string.IsNullOrEmpty(viewModel.Username)) {
-        user = repository.All<User>().Single(u => u.Username.Equals(viewModel.Username));
+        user = repository.All<User>().SingleOrDefault(u => u.Username.Equals(viewModel.Username));
       }
       else if (!string.IsNullOrEmpty(viewModel.Email)) {
         user = repository.All<User>().FirstOrDefault(u => u.Email.Equals(viewModel.Email));
