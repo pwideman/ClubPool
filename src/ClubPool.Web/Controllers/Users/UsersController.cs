@@ -464,6 +464,7 @@ namespace ClubPool.Web.Controllers.Users
           authenticationService.LogIn(user.Username, false);
           authTicketChanged = true;
         }
+        repository.DbContext.SaveChanges();
         return this.RedirectToAction(c => c.Edit(viewModel.Id));
       }
       catch (Exception) {
