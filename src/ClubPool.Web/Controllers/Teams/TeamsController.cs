@@ -127,9 +127,7 @@ namespace ClubPool.Web.Controllers.Teams
       }
 
       if (viewModel.Version != team.EncodedVersion) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] =
-          "This team was updated by another user while you were viewing this page. Enter your changes again.";
-        return this.RedirectToAction(c => c.Edit(viewModel.Id));
+        return EditRedirectForConcurrency(viewModel.Id);
       }
       
       if (!ValidateViewModel(viewModel)) {
@@ -172,8 +170,20 @@ namespace ClubPool.Web.Controllers.Teams
         team.RemoveAllPlayers();
       }
 
+      try {
+        repository.SaveChanges();
+      }
+      catch (UpdateConcurrencyException) {
+        return EditRedirectForConcurrency(viewModel.Id);
+      }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(team.Division.Season.Id));
+    }
+
+    private ActionResult EditRedirectForConcurrency(int id) {
+      TempData[GlobalViewDataProperty.PageErrorMessage] =
+        "This team was updated by another user while you were viewing this page. Enter your changes again.";
+      return this.RedirectToAction(c => c.Edit(id));
     }
 
     [Authorize]
@@ -214,6 +224,12 @@ namespace ClubPool.Web.Controllers.Teams
       }
       else {
         team.Name = viewModel.Name;
+        try {
+          repository.SaveChanges();
+        }
+        catch (UpdateConcurrencyException) {
+          return AjaxUpdate(false, "The team was updated by another user while your request was pending, try again.");
+        }
       }
       return AjaxUpdate();
     }
