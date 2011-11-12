@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using System.Data;
-using System.Data.Entity.ModelConfiguration.Configuration;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
