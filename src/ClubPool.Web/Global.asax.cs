@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Reflection;
 using System.Web.Security;
+using System.Data.Entity;
 
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
@@ -75,8 +76,8 @@ namespace ClubPool.Web
 
       container.AddFacility<FactorySupportFacility>()
         .Register(
-        Component.For<Lazy<ClubPoolContext>>()
-        .UsingFactoryMethod(() => new Lazy<ClubPoolContext>(() => new ClubPoolContext()))
+        Component.For<Lazy<DbContext>>()
+        .UsingFactoryMethod(() => new Lazy<DbContext>(() => new ClubPoolContext()))
         .LifeStyle.PerWebRequest);
       //container.Register(Component.For<ClubPoolContext>().LifeStyle.PerWebRequest);
       container.Register(Component.For<IRepository>().ImplementedBy<Repository>().LifeStyle.Transient);

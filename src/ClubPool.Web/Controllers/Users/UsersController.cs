@@ -233,7 +233,7 @@ namespace ClubPool.Web.Controllers.Users
         // log mail exception but don't let it interrupt the process
         ErrorSignal.FromCurrentContext().Raise(e);
       }
-      repository.Commit();
+      repository.SaveChanges();
       return View("SignUpComplete");
     }
 
@@ -270,7 +270,7 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected bool CanDeleteUser(User user, IRepository repository) {
-      var results = repository.All<MatchResult>().Any(r => r.Player == user);
+      var results = repository.All<MatchResult>().Any(r => r.Player.Id == user.Id);
       return !results;
     }
 
@@ -312,6 +312,7 @@ namespace ClubPool.Web.Controllers.Users
         }
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The selected users have been approved.";
       }
+      repository.SaveChanges();
       return this.RedirectToAction(c => c.Unapproved());
     }
 
@@ -456,6 +457,7 @@ namespace ClubPool.Web.Controllers.Users
         if (canEditPassword && null != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password.Trim())) {
           user.Password = membershipService.EncodePassword(viewModel.Password, user.PasswordSalt);
         }
+        repository.SaveChanges();
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
         if (editingSelf && usernameChanged) {
           // we must update the auth ticket
@@ -465,7 +467,6 @@ namespace ClubPool.Web.Controllers.Users
           authenticationService.LogIn(user.Username, false);
           authTicketChanged = true;
         }
-        repository.Commit();
         return this.RedirectToAction(c => c.Edit(viewModel.Id));
       }
       catch (Exception) {
@@ -497,6 +498,7 @@ namespace ClubPool.Web.Controllers.Users
         return View(viewModel);
       }
 
+      repository.SaveChanges();
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was created successfully";
       return this.RedirectToAction(c => c.Index(null, null));
     }

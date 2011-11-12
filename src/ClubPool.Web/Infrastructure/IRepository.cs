@@ -15,6 +15,6 @@ namespace ClubPool.Web.Infrastructure
     T SaveOrUpdate<T>(T entity) where T : Entity;
     void Delete<T>(T entity) where T : Entity;
     void Refresh(Entity entity);
-    void Commit();
+    void SaveChanges();
   }
 }

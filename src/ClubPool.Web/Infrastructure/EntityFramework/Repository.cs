@@ -11,9 +11,9 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
 {
   public class Repository : IRepository
   {
-    private Lazy<ClubPoolContext> dbContext;
+    private Lazy<DbContext> dbContext;
 
-    public Repository(Lazy<ClubPoolContext> dbContext) {
+    public Repository(Lazy<DbContext> dbContext) {
       this.dbContext = dbContext;
     }
 
@@ -48,7 +48,7 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
       DbContext.Entry(entity).Reload();
     }
 
-    public void Commit() {
+    public void SaveChanges() {
       DbContext.SaveChanges();
     }
   }
