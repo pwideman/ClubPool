@@ -443,7 +443,6 @@ namespace ClubPool.Web.Controllers.Users
           // verify that the new username is not in use
           if (membershipService.UsernameIsInUse(viewModel.Username)) {
             ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
-            // TODO: Resolve - repository.DbContext.RollbackTransaction();
             return View(viewModel);
           }
           previousUsername = user.Username;
@@ -454,7 +453,6 @@ namespace ClubPool.Web.Controllers.Users
           // verify that the new email is not in use
           if (membershipService.EmailIsInUse(viewModel.Email)) {
             ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
-            // TODO: Resolve - repository.DbContext.RollbackTransaction();
             return View(viewModel);
           }
           user.Email = viewModel.Email;
