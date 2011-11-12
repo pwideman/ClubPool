@@ -126,7 +126,7 @@ namespace ClubPool.Web.Controllers.Teams
         return this.RedirectToAction<Seasons.SeasonsController>(c => c.Index(null));
       }
 
-      if (viewModel.Version != team.Version) {
+      if (viewModel.Version != team.EncodedVersion) {
         TempData[GlobalViewDataProperty.PageErrorMessage] =
           "This team was updated by another user while you were viewing this page. Enter your changes again.";
         return this.RedirectToAction(c => c.Edit(viewModel.Id));

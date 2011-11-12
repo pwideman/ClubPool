@@ -133,13 +133,13 @@ namespace ClubPool.Web
       Context.User = ClubPoolPrincipal.CreateUnauthorizedPrincipal();
     }
 
-    protected void Application_Error() {
-      var exception = Server.GetLastError();
-      // TODO: Version exceptions in EF?
-      //if (exception is StaleObjectStateException) {
-      //  this.Response.Redirect("~/home/staleobjectstateerror");
-      //}
-    }
+    //protected void Application_Error() {
+    //  var exception = Server.GetLastError();
+    //  // TODO: Version exceptions in EF?
+    //  if (exception is StaleObjectStateException) {
+    //    this.Response.Redirect("~/home/staleobjectstateerror");
+    //  }
+    //}
 
   }
 }

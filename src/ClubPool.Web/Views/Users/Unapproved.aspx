@@ -41,11 +41,11 @@
       Html.RenderPartial("NotificationMessage");
     }
     if (TempData.ContainsKey("FailedEmails")) {
-      var failedEmails = TempData["FailedEmails"] as List<ClubPool.Core.User>; %>
+      var failedEmails = TempData["FailedEmails"] as List<Tuple<string, string>>; %>
     <p>The system failed to send email notification to the following users:
       <ul>
         <% foreach(var user in failedEmails) { %>
-        <li><%= Html.Encode(string.Format("{0} ({1})", user.FullName, user.Email)) %></li>
+        <li><%= Html.Encode(string.Format("{0} ({1})", user.Item1, user.Item2)) %></li>
         <% } %>
       </ul>
     </p>

@@ -170,7 +170,7 @@
     <Compile Include="Infrastructure\Arg.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
-    <Compile Include="Infrastructure\CreateScheduleException.cs" />
+    <Compile Include="Infrastructure\CustomExceptions.cs" />
     <Compile Include="Infrastructure\EntityFramework\ClubPoolContext.cs" />
     <Compile Include="Infrastructure\EntityFramework\Repository.cs" />
     <Compile Include="Infrastructure\IDbContext.cs" />

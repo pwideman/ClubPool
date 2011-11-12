@@ -20,7 +20,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public EditTeamViewModel(IRepository repository, Team team)
       : base(repository, team) {
       Id = team.Id;
-      Version = team.Version;
+      Version = team.EncodedVersion;
     }
 
     // hide the base method
@@ -37,8 +37,8 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       }
     }
 
-    [Min(1)]
-    public int Version { get; set; }
+    [NotNullNotEmpty]
+    public string Version { get; set; }
 
     [Min(1)]
     public int Id { get; set; }

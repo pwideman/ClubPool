@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Models;
@@ -41,7 +42,7 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
 
     public void Delete<T>(T entity) where T : Entity {
       DbContext.Set<T>().Remove(entity);
-      DbContext.SaveChanges();
+      SaveChanges();
     }
 
     public void Refresh(Models.Entity entity) {
@@ -49,7 +50,12 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
     }
 
     public void SaveChanges() {
-      DbContext.SaveChanges();
+      try {
+        DbContext.SaveChanges();
+      }
+      catch (DbUpdateConcurrencyException e) {
+        throw new UpdateConcurrencyException(e.Message);
+      }
     }
   }
 }

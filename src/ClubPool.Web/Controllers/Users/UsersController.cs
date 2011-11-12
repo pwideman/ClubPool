@@ -290,30 +290,51 @@ namespace ClubPool.Web.Controllers.Users
     public ActionResult Approve(int[] userIds) {
       var users = repository.All<User>().Where(u => userIds.Contains(u.Id));
       if (users.Any()) {
+        bool saveComplete = false;
         var siteName = configService.GetConfig().SiteName;
         var emailSubject = string.Format("{0} account approved", siteName);
         var helper = new UrlHelper(((MvcHandler)HttpContext.CurrentHandler).RequestContext);
         var url = helper.Action("Login", "Users", null, HttpContext.Request.Url.Scheme);
-        var failedEmails = new List<User>();
+        var emailsToSend = new List<Tuple<string, string, string, string>>();
         foreach (var user in users) {
           user.IsApproved = true;
           var body = string.Format("Your {0} user account has been approved.{1}{1}Username: {2}{1}{1}Login here: {3}",
             siteName, Environment.NewLine, user.Username, url);
-          try {
-            emailService.SendSystemEmail(user.Email, emailSubject, body);
+          emailsToSend.Add(new Tuple<string, string, string, string>(user.Email, emailSubject, body, user.FullName));
+        }
+        try {
+          repository.SaveChanges();
+          saveComplete = true;
+        }
+        catch (UpdateConcurrencyException) {
+          TempData[GlobalViewDataProperty.PageErrorMessage] = "One or more of the selected users were updated by another user while you " +
+            "were viewing this page. Enter your changes again.";
+        }
+        if (saveComplete) {
+          var failedEmails = SendApprovedEmails(emailsToSend);
+          if (failedEmails.Any()) {
+            TempData["FailedEmails"] = failedEmails;
           }
-          catch (System.Net.Mail.SmtpException e) {
-            ErrorSignal.FromCurrentContext().Raise(e);
-            failedEmails.Add(user);
+          if (failedEmails.Count != emailsToSend.Count) {
+            TempData[GlobalViewDataProperty.PageNotificationMessage] = "The selected users have been approved.";
           }
         }
-        if (failedEmails.Any()) {
-          TempData["FailedEmails"] = failedEmails;
-        }
-        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The selected users have been approved.";
       }
-      repository.SaveChanges();
       return this.RedirectToAction(c => c.Unapproved());
+    }
+
+    private List<Tuple<string, string>> SendApprovedEmails(List<Tuple<string, string, string, string>> emails) {
+      var failedEmails = new List<Tuple<string, string>>();
+      foreach (var email in emails) {
+        try {
+          emailService.SendSystemEmail(email.Item1, email.Item2, email.Item3);
+        }
+        catch (System.Net.Mail.SmtpException e) {
+          ErrorSignal.FromCurrentContext().Raise(e);
+          failedEmails.Add(new Tuple<string, string>(email.Item4, email.Item1));
+        }
+      }
+      return failedEmails;
     }
 
     [HttpGet]
@@ -414,10 +435,8 @@ namespace ClubPool.Web.Controllers.Users
           return View(viewModel);
         }
 
-        if (viewModel.Version != user.Version) {
-          TempData[GlobalViewDataProperty.PageErrorMessage] =
-            "This user was updated by another user while you were viewing this page. Enter your changes again.";
-          return this.RedirectToAction(c => c.Edit(viewModel.Id));
+        if (viewModel.Version != user.EncodedVersion) {
+          return EditRedirectForConcurrency(viewModel.Id);
         }
 
         if (!user.Username.Equals(viewModel.Username)) {
@@ -457,7 +476,14 @@ namespace ClubPool.Web.Controllers.Users
         if (canEditPassword && null != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password.Trim())) {
           user.Password = membershipService.EncodePassword(viewModel.Password, user.PasswordSalt);
         }
-        repository.SaveChanges();
+
+        try {
+          repository.SaveChanges();
+        }
+        catch (UpdateConcurrencyException) {
+          return EditRedirectForConcurrency(viewModel.Id);
+        }
+
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
         if (editingSelf && usernameChanged) {
           // we must update the auth ticket
@@ -476,6 +502,12 @@ namespace ClubPool.Web.Controllers.Users
         }
         throw;
       }
+    }
+
+    private ActionResult EditRedirectForConcurrency(int id) {
+      TempData[GlobalViewDataProperty.PageErrorMessage] =
+        "This user was updated by another user while you were viewing this page. Enter your changes again.";
+      return this.RedirectToAction(c => c.Edit(id));
     }
 
     [HttpGet]

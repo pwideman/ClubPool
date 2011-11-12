@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 // heavily based on SharpArchitecture's Entity classes
 namespace ClubPool.Web.Models
 {
   public class Entity
   {
-    public virtual int Id { get; protected set; }
+    public int Id { get; protected set; }
 
     public bool IsTransient() {
       return Id.Equals(default(int));
@@ -50,6 +52,11 @@ namespace ClubPool.Web.Models
 
   public class VersionedEntity : Entity
   {
-    public virtual int Version { get; protected set; }
+    [Timestamp]
+    [ConcurrencyCheck]
+    public Byte[] Version { get; protected set; }
+
+    [NotMapped]
+    public string EncodedVersion { get { return Convert.ToBase64String(Version); } }
   }
 }

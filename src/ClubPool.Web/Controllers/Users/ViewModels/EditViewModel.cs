@@ -33,8 +33,8 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     [DisplayName("Confirm password:")]
     public string ConfirmPassword { get; set; }
 
-    [Min(1)]
-    public int Version { get; set; }
+    [NotNullNotEmpty]
+    public string Version { get; set; }
 
     public int[] Roles { get; set; }
 
@@ -59,7 +59,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
       IsApproved = user.IsApproved;
       IsLocked = user.IsLocked;
       Username = user.Username;
-      Version = user.Version;
+      Version = user.EncodedVersion;
       Roles = user.Roles.Select(r => r.Id).ToArray();
     }
 
