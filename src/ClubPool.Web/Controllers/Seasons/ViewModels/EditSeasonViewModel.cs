@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 using NHibernate.Validator.Constraints;
 
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Seasons.ViewModels
 {
@@ -18,13 +14,13 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
     public EditSeasonViewModel(Season season) {
       Id = season.Id;
       Name = season.Name;
-      Version = season.Version;
+      Version = season.EncodedVersion;
     }
 
     [Min(1)]
     public int Id { get; set; }
 
-    [Min(1)]
-    public int Version { get; set; }
+    [NotNullNotEmpty]
+    public string Version { get; set; }
   }
 }

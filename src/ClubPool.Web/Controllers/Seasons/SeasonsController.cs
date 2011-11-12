@@ -7,42 +7,33 @@ using System.Collections.Generic;
 
 using MvcContrib;
 using MvcContrib.Pagination;
-using SharpArch.Web.NHibernate;
-using SharpArch.Core;
 using xVal.ServerSide;
 
+using ClubPool.Web.Models;
 using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
-//using ClubPool.Web.Infrastructure;
-using ClubPool.Framework.Validation;
-using ClubPool.Framework.NHibernate;
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Core.Queries;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers.Attributes;
+using ClubPool.Framework.Validation;
 
 namespace ClubPool.Web.Controllers.Seasons
 {
   public class SeasonsController : BaseController
   {
-    protected ISeasonRepository seasonRepository;
-    protected IDivisionRepository divisionRepository;
+    protected IRepository repository;
 
-    public SeasonsController(ISeasonRepository seasonRepo, IDivisionRepository divisionRepo) {
-      Check.Require(null != seasonRepo, "seasonRepo cannot be null");
-      Check.Require(null != divisionRepo, "divisionRepo cannot be null");
+    public SeasonsController(IRepository repo) {
+      Arg.NotNull(repo, "repo");
 
-      seasonRepository = seasonRepo;
-      divisionRepository = divisionRepo;
+      repository = repo;
     }
 
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     public ActionResult Index(int? page) {
       int pageSize = 10;
-      var query = from s in seasonRepository.GetAll()
+      var query = from s in repository.All<Season>()
                   orderby s.IsActive descending, s.Name descending
-                  select new SeasonSummaryViewModel(s);
+                  select new SeasonSummaryViewModel { Season = s };
       var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
       return View(viewModel);
     }
@@ -56,7 +47,6 @@ namespace ClubPool.Web.Controllers.Seasons
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateSeasonViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
@@ -64,17 +54,16 @@ namespace ClubPool.Web.Controllers.Seasons
       }
 
       var season = new Season(viewModel.Name, GameType.EightBall);
-      seasonRepository.SaveOrUpdate(season);
-      
+      repository.SaveOrUpdate(season);
+      repository.SaveChanges();
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was created successfully";
       return this.RedirectToAction(c => c.Index(null));
     }
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     public ActionResult Edit(int id) {
-      var season = seasonRepository.Get(id);
+      var season = repository.Get<Season>(id);
       if (null == season) {
         return HttpNotFound();
       }
@@ -83,7 +72,6 @@ namespace ClubPool.Web.Controllers.Seasons
     }
 
     [HttpPost]
-    [Transaction]
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditSeasonViewModel viewModel) {
@@ -91,45 +79,55 @@ namespace ClubPool.Web.Controllers.Seasons
         return View(viewModel);
       }
 
-      var season = seasonRepository.Get(viewModel.Id);
+      var season = repository.Get<Season>(viewModel.Id);
 
       if (null == season) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The season you were editing was deleted by another user";
         return this.RedirectToAction(c => c.Index(null));
       }
 
-      if (viewModel.Version != season.Version) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] =
-          "This season was updated by another user while you were viewing this page. Enter your changes again.";
-        return this.RedirectToAction(c => c.Edit(viewModel.Id));
+      if (viewModel.Version != season.EncodedVersion) {
+        return EditRedirectForConcurrency(viewModel.Id);
       }
 
       if (!season.Name.Equals(viewModel.Name)) {
         // verify that the new name is not in use
-        if (seasonRepository.GetAll().WithName(viewModel.Name).Any()) {
+        if (repository.All<Season>().Any(s => s.Name.Equals(viewModel.Name))) {
           ModelState.AddModelErrorFor<EditSeasonViewModel>(m => m.Name, "The name is already in use");
           return View(viewModel);
         }
         season.Name = viewModel.Name;
       }
 
+      try {
+        repository.SaveChanges();
+      }
+      catch (UpdateConcurrencyException) {
+        return EditRedirectForConcurrency(viewModel.Id);
+      }
+
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was updated successfully";
       return this.RedirectToAction(c => c.Index(null));
     }
 
+    private ActionResult EditRedirectForConcurrency(int id) {
+      TempData[GlobalViewDataProperty.PageErrorMessage] =
+        "This season was updated by another user while you were viewing this page. Enter your changes again.";
+      return this.RedirectToAction(c => c.Edit(id));
+    }
+
     [Authorize(Roles = Roles.Administrators)]
     [HttpPost]
-    [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, int? page) {
-      var seasonToDelete = seasonRepository.Get(id);
+      var seasonToDelete = repository.Get<Season>(id);
 
       if (null == seasonToDelete) {
         return HttpNotFound();
       }
 
       if (seasonToDelete.CanDelete()) {
-        seasonRepository.Delete(seasonToDelete);
+        repository.Delete(seasonToDelete);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was deleted successfully.";
       }
       else {
@@ -142,42 +140,46 @@ namespace ClubPool.Web.Controllers.Seasons
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     public ActionResult ChangeActive() {
       var viewModel = new ChangeActiveViewModel();
-      var activeSeason = seasonRepository.GetAll().WhereActive().SingleOrDefault();
+      var activeSeason = repository.All<Season>().SingleOrDefault(s => s.IsActive);
       if (null != activeSeason) {
         viewModel.CurrentActiveSeasonName = activeSeason.Name;
       }
-      viewModel.InactiveSeasons = seasonRepository.GetAll().WhereInactive().Select(s => new SeasonSummaryViewModel(s)).ToList();
+      viewModel.InactiveSeasons = repository.All<Season>().Where(s => !s.IsActive).Select(s => new SeasonSummaryViewModel { Season = s }).ToList();
       return View(viewModel);
     }
 
     [HttpPost]
-    [Transaction]
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult ChangeActive(int id) {
-      var newActiveSeason = seasonRepository.Get(id);
+      var newActiveSeason = repository.Get<Season>(id);
       
       if (null == newActiveSeason) {
         return HttpNotFound();
       }
 
-      var activeSeasons = seasonRepository.GetAll().WhereActive();
+      var activeSeasons = repository.All<Season>().Where(s => s.IsActive);
       foreach (var season in activeSeasons) {
         season.IsActive = false;
       }
       newActiveSeason.IsActive = true;
+      try {
+        repository.SaveChanges();
+      }
+      catch (UpdateConcurrencyException) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "One or more of the seasons were updated by another user, make your changes again.";
+        return this.RedirectToAction(c => c.ChangeActive());
+      }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The active season has been changed";
       return this.RedirectToAction(c => c.Index(null));
     }
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     public ActionResult View(int id) {
-      var season = seasonRepository.Get(id);
+      var season = repository.Get<Season>(id);
       if (null == season) {
         return HttpNotFound();
       }
