@@ -13,6 +13,7 @@ using System.Configuration;
 using System.Security.Cryptography;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Transactions;
 
 using SharpArch.Data.NHibernate;
 using MySql.Data.MySqlClient;
@@ -42,12 +43,16 @@ namespace ClubPool.SchemaGen
 
     public SchemaGen() {
       Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
-      Database.SetInitializer<ClubPoolContext>(new DropCreateDatabaseAlways<ClubPoolContext>());
+      //Database.SetInitializer<ClubPoolContext>(new DropCreateDatabaseAlways<ClubPoolContext>());
       InitializeComponent();
     }
 
     private void importIPDataSQLButton_Click(object sender, EventArgs e) {
       startBackgroundWorker(() => ImportIPData());
+    }
+
+    private void testButton_Click(object sender, EventArgs e) {
+      startBackgroundWorker(() => Test());
     }
 
     private void startBackgroundWorker(Action action) {
@@ -117,6 +122,17 @@ namespace ClubPool.SchemaGen
         OutputTextBox.SelectionStart = OutputTextBox.Text.Length;
         OutputTextBox.ScrollToCaret();
         OutputTextBox.Update();
+      }
+    }
+
+    private void Test() {
+      output("Opening EF connection");
+      using (var context = new ClubPoolContext()) {
+        output("Starting transaction");
+        context.BeginTransaction();
+        var r = new Models.Role("TestRole");
+        context.Roles.Add(r);
+        context.SaveChanges();
       }
     }
 
@@ -272,6 +288,7 @@ namespace ClubPool.SchemaGen
         initializeNH();
       }
     }
+
 
   }
 

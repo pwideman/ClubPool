@@ -9,6 +9,7 @@ using System.Web.Security;
 
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using Castle.Facilities.FactorySupport;
 using Castle.Windsor.Installer;
 using CommonServiceLocator.WindsorAdapter;
 using Microsoft.Practices.ServiceLocation;
@@ -72,7 +73,12 @@ namespace ClubPool.Web
       ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
       ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
 
-      container.Register(Component.For<ClubPoolContext>().LifeStyle.PerWebRequest);
+      container.AddFacility<FactorySupportFacility>()
+        .Register(
+        Component.For<Lazy<ClubPoolContext>>()
+        .UsingFactoryMethod(() => new Lazy<ClubPoolContext>(() => new ClubPoolContext()))
+        .LifeStyle.PerWebRequest);
+      //container.Register(Component.For<ClubPoolContext>().LifeStyle.PerWebRequest);
       container.Register(Component.For<IRepository>().ImplementedBy<Repository>().LifeStyle.Transient);
       container.RegisterControllers(typeof(BaseController).Assembly);
       container.Install(FromAssembly.This());

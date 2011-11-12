@@ -18,16 +18,13 @@ namespace ClubPool.Web.Services.Membership
     protected bool allowDuplicateEmail;
     protected bool allowEmptyEmail;
 
-    public SharpArchMembershipService(IRepository repo) {
+    public SharpArchMembershipService(IRepository repo) : this(repo, false, false) {
+    }
+
+    public SharpArchMembershipService(IRepository repo, bool allowDuplicateEmail, bool allowEmptyEmail) {
       Arg.NotNull(repo, "repo");
 
       repository = repo;
-      allowDuplicateEmail = false;
-      allowEmptyEmail = false;
-    }
-
-    public SharpArchMembershipService(IRepository repo, bool allowDuplicateEmail, bool allowEmptyEmail)
-      : this(repo) {
       this.allowDuplicateEmail = allowDuplicateEmail;
       this.allowEmptyEmail = allowEmptyEmail;
     }

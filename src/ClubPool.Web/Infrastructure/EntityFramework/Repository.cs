@@ -11,37 +11,45 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
 {
   public class Repository : IRepository
   {
-    private ClubPoolContext dbContext;
+    private Lazy<ClubPoolContext> dbContext;
 
-    public Repository(ClubPoolContext dbContext) {
+    public Repository(Lazy<ClubPoolContext> dbContext) {
       this.dbContext = dbContext;
     }
 
-    public IDbContext DbContext { get { return dbContext; } }
+    private DbContext DbContext { 
+      get { 
+        return dbContext.Value; 
+      } 
+    }
 
     public T Get<T>(int id) where T : Entity {
-      return dbContext.Set<T>().Find(id);
+      return DbContext.Set<T>().Find(id);
     }
 
     public IQueryable<T> All<T>() where T : Entity {
-      return dbContext.Set<T>();
+      return DbContext.Set<T>();
     }
 
     public T SaveOrUpdate<T>(T entity) where T : Entity {
       if (null == entity) return null;
       if (entity.IsTransient()) {
-        dbContext.Set<T>().Add(entity);
+        DbContext.Set<T>().Add(entity);
       }
       return entity;
     }
 
     public void Delete<T>(T entity) where T : Entity {
-      dbContext.Set<T>().Remove(entity);
-      dbContext.SaveChanges();
+      DbContext.Set<T>().Remove(entity);
+      DbContext.SaveChanges();
     }
 
     public void Refresh(Models.Entity entity) {
-      dbContext.Entry(entity).Reload();
+      DbContext.Entry(entity).Reload();
+    }
+
+    public void Commit() {
+      DbContext.SaveChanges();
     }
   }
 }

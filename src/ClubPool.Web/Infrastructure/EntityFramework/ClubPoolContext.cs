@@ -43,6 +43,9 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
     }
 
     public IDisposable BeginTransaction() {
+      if (Database.Connection.State != ConnectionState.Open) {
+        Database.Connection.Open();
+      }
       transaction = Database.Connection.BeginTransaction();
       return transaction;
     }
