@@ -7,7 +7,9 @@
 <div id="tabs" class="userinfo-tabs">
   <ul>
     <li><a href="#details-tab">Details</a></li>
+    <% if (Model.HasSkillLevel) { %>
     <li><a href="#slc-tab">Skill Level Calculation</a></li>
+    <% } %>
   </ul>
 
   <div id="details-tab" class="userinfo-tab">
@@ -28,7 +30,7 @@
     </div>
     <div class="details-row">
       <div class="details-label">8-ball skill level:</div>
-      <div class="details-data"><%= Model.SkillLevel > 0 ? Model.SkillLevel.ToString() : "None" %></div>
+      <div class="details-data"><%= Model.HasSkillLevel ? Model.SkillLevel.ToString() : "None" %></div>
     </div>
     <% if (Model.ShowAdminProperties) { %>
     <fieldset>
@@ -40,9 +42,11 @@
     <% } %>
   </div>
 
+  <% if (Model.HasSkillLevel) { %>
   <div id="slc-tab" class="userinfo-tab">
     <% Html.RenderPartial("SkillLevelCalculationView", Model.SkillLevelCalculation); %>
   </div>
+  <% } %>
 </div>
 
 </asp:Content>

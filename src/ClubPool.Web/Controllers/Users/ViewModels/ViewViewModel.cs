@@ -18,6 +18,7 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public bool IsApproved { get; set; }
     public bool IsLocked { get; set; }
     public int SkillLevel { get; set; }
+    public bool HasSkillLevel { get; set; }
     public bool ShowAdminProperties { get; set; }
     public int Id { get; set; }
     public SkillLevelCalculationViewModel SkillLevelCalculation { get; set; }
@@ -36,8 +37,14 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
       IsApproved = user.IsApproved;
       IsLocked = user.IsLocked;
       Roles = user.Roles.Select(r => r.Name).ToArray();
-      SkillLevel = user.SkillLevels.Where(sl => sl.GameType == GameType.EightBall).Select(sl => sl.Value).FirstOrDefault();
-      SkillLevelCalculation = new SkillLevelCalculationViewModel(user, repository);
+      if (user.SkillLevels.Any()) {
+        SkillLevel = user.SkillLevels.Single(sl => sl.GameType == GameType.EightBall).Value;
+        SkillLevelCalculation = new SkillLevelCalculationViewModel(user, repository);
+        HasSkillLevel = true;
+      }
+      else {
+        HasSkillLevel = false;
+      }
     }
 
   }
