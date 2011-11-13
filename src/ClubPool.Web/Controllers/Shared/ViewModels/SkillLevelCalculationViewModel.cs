@@ -24,13 +24,13 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
     public int EightBallSkillLevel { get; set; }
 
     public SkillLevelCalculationViewModel(User player, IRepository repository) {
+      var results = new List<SkillLevelMatchResultViewModel>();
       var sl = player.SkillLevels.Where(s => s.GameType == GameType.EightBall).SingleOrDefault();
       if (null != sl) {
         EightBallSkillLevel = sl.Value;
         var matchResults = player.GetMatchResultsUsedInSkillLevelCalculation(GameType.EightBall, repository);
         HasSkillLevel = true;
         var culledMatchResults = player.CullTopMatchResults(matchResults);
-        var results = new List<SkillLevelMatchResultViewModel>();
         foreach (var result in matchResults) {
           var resultvm = new SkillLevelMatchResultViewModel(result, player);
           results.Add(resultvm);
@@ -46,10 +46,10 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
           TotalNetInnings += resultvm.NetInnings;
           TotalWins += resultvm.Wins;
         }
-        SkillLevelMatchResults = results.OrderByDescending(r => r.Date);
         TotalIG = (double)TotalNetInnings / (double)TotalWins;
         CulledIG = (double)TotalCulledNetInnings / (double)TotalCulledWins;
       }
+      SkillLevelMatchResults = results.OrderByDescending(r => r.Date);
     }
   }
 
@@ -64,7 +64,14 @@ namespace ClubPool.Web.Controllers.Shared.ViewModels
       : base(matchResult) {
       var match = matchResult.Match;
       Date = match.DatePlayed.Value;
-      Team = match.Meet.Teams.Where(t => !t.Players.Contains(player)).Single().Name;
+      var myTeam = match.Players.Single(p => p.Player.Id == player.Id).Team;
+      var opponentTeam = match.Meet.Teams.SingleOrDefault(t => t.Id != myTeam.Id);
+      if (null != opponentTeam) {
+        Team = opponentTeam.Name;
+      }
+      else {
+        Team = "Historical";
+      }
       NetInnings = Innings - DefensiveShots;
       // for this we display our opponent
       Player = match.Players.Where(p => p.Player != player).Single().Player.FullName;
