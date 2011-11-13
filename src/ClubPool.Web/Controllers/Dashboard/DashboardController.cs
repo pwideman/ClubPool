@@ -34,7 +34,7 @@ namespace ClubPool.Web.Controllers.Dashboard
       var principal = authenticationService.GetCurrentPrincipal();
       var user = repository.All<User>().Single(u => u.Username.Equals(principal.Identity.Name));
       var currentSeason = repository.All<Season>().Single(s => s.IsActive);
-      var team = repository.All<Team>().Single(t => t.Division.Season.Id == currentSeason.Id && t.Players.Select(p => p.Id).Contains(user.Id));
+      var team = repository.All<Team>().SingleOrDefault(t => t.Division.Season.Id == currentSeason.Id && t.Players.Select(p => p.Id).Contains(user.Id));
       var viewModel = new IndexViewModel(user, team, repository);
 
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
