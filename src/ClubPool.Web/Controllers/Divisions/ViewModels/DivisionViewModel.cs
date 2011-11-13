@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 using NHibernate.Validator.Constraints;
 
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Divisions.ViewModels
 {

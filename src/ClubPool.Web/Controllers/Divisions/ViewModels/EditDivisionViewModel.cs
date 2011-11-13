@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 using NHibernate.Validator.Constraints;
 
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Divisions.ViewModels
 {
@@ -15,8 +15,8 @@ namespace ClubPool.Web.Controllers.Divisions.ViewModels
     [Min(1)]
     public int Id { get; set; }
 
-    [Min(1)]
-    public int Version { get; set; }
+    [NotNullNotEmpty]
+    public string Version { get; set; }
 
     public EditDivisionViewModel()
       : base() {
@@ -25,7 +25,7 @@ namespace ClubPool.Web.Controllers.Divisions.ViewModels
     public EditDivisionViewModel(Division division)
       : base(division) {
       Id = division.Id;
-      Version = division.Version;
+      Version = division.EncodedVersion;
     }
   }
 }

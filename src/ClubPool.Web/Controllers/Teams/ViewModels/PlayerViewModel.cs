@@ -11,12 +11,13 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       : base() {
     }
 
-    public PlayerViewModel(User player)
-      : base(player) {
-
-      Name = player.FullName;
-      Username = player.Username;
-      Email = player.Email;
+    public User Player {
+      set {
+        Id = value.Id;
+        Name = value.FullName;
+        Username = value.Username;
+        Email = value.Email;
+      }
     }
 
     public string Name { get; set; }

@@ -76,7 +76,7 @@ namespace ClubPool.Web.Controllers.Teams
         }
       }
       repository.SaveOrUpdate(team);
-
+      repository.SaveChanges();
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was created successfully";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }

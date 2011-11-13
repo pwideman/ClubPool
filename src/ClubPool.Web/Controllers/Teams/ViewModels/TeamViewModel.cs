@@ -26,7 +26,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     protected TeamViewModel(IRepository repository, Team team)
       : this(repository, team.Division.Season) {
       Name = team.Name;
-      Players = team.Players.Select(p => new PlayerViewModel(p)).ToList();
+      Players = team.Players.Select(p => new PlayerViewModel { Player = p }).ToList();
       SchedulePriority = team.SchedulePriority;
     }
 
@@ -36,19 +36,15 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     }
 
     private void LoadAvailablePlayers(IRepository repository, Season season) {
-      var unavailableUsersQuery = from s in repository.All<Season>()
-                                  from d in s.Divisions
+      var unavailableUsersQuery = from d in season.Divisions
                                   from t in d.Teams
                                   from u in t.Players
-                                  select u;
+                                  select u.Id;
 
-      var availablePlayersQuery = (from u in repository.All<User>().Except(unavailableUsersQuery)
-                                   orderby u.LastName, u.FirstName
-                                   select new PlayerViewModel(u)).ToList();
 
-      //availablePlayers = (from u in repository.GetUnassignedUsersForSeason(season)
-      //                   orderby u.LastName, u.FirstName
-      //                   select new PlayerViewModel(u)).ToList();
+      availablePlayers = (from u in repository.All<User>().Where(u => !unavailableUsersQuery.Contains(u.Id))
+                          orderby u.LastName, u.FirstName
+                          select new PlayerViewModel { Player = u }).ToList();
     }
 
     private void RefreshPlayers(IRepository repository) {

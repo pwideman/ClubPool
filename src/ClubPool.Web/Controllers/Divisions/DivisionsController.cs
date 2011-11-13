@@ -8,18 +8,14 @@ using System.Collections.Generic;
 
 using MvcContrib;
 using MvcContrib.Pagination;
-using SharpArch.Web.NHibernate;
-using SharpArch.Core;
 using xVal.ServerSide;
 
+using ClubPool.Web.Models;
 using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
-//using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.Validation;
 using ClubPool.Framework.NHibernate;
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Core.Queries;
 using ClubPool.Web.Controllers.Attributes;
 
 namespace ClubPool.Web.Controllers.Divisions
@@ -27,22 +23,18 @@ namespace ClubPool.Web.Controllers.Divisions
 
   public class DivisionsController : BaseController
   {
-    protected ISeasonRepository seasonRepository;
-    protected IDivisionRepository divisionRepository;
+    protected IRepository repository;
 
-    public DivisionsController(IDivisionRepository divisionRepository, ISeasonRepository seasonRepository) {
-      Check.Require(null != seasonRepository, "seasonRepository cannot be null");
-      Check.Require(null != divisionRepository, "divisionRepository cannot be null");
+    public DivisionsController(IRepository repository) {
+      Arg.NotNull(repository, "repository");
 
-      this.seasonRepository = seasonRepository;
-      this.divisionRepository = divisionRepository;
+      this.repository = repository;
     }
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     public ActionResult Create(int seasonId) {
-      var season = seasonRepository.Get(seasonId);
+      var season = repository.Get<Season>(seasonId);
       if (null == season) {
         return HttpNotFound();
       }
@@ -56,7 +48,6 @@ namespace ClubPool.Web.Controllers.Divisions
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
-    [Transaction]
     public ActionResult Create(CreateDivisionViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
@@ -67,7 +58,7 @@ namespace ClubPool.Web.Controllers.Divisions
         return View(viewModel);
       }
 
-      Season season = seasonRepository.Get(viewModel.SeasonId);
+      Season season = repository.Get<Season>(viewModel.SeasonId);
       if (null == season) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid/missing season, cannot create division";
         return View(viewModel);
@@ -79,8 +70,9 @@ namespace ClubPool.Web.Controllers.Divisions
       }
 
       Division division = new Division(viewModel.Name, startingDate, season);
-      divisionRepository.SaveOrUpdate(division);
+      repository.SaveOrUpdate(division);
       season.AddDivision(division);
+      repository.SaveChanges();
 
       // I hate doing this here because theoretically /divisions/create could be called
       // from anywhere, but I don't know what else to do now. Same comment applies for all
@@ -90,10 +82,9 @@ namespace ClubPool.Web.Controllers.Divisions
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Delete(int id) {
-      var division = divisionRepository.Get(id);
+      var division = repository.Get<Division>(id);
       if (null == division) {
         return HttpNotFound();
       }
@@ -102,17 +93,36 @@ namespace ClubPool.Web.Controllers.Divisions
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The division cannot be deleted";
       }
       else {
-        divisionRepository.Delete(division);
+        DeleteDivision(division);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was deleted";
       }
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(seasonId));
     }
 
+    private void DeleteDivision(Division division) {
+      DeleteDivisionMeets(division);
+      DeleteDivisionTeams(division);
+      repository.Delete(division);
+    }
+
+    private void DeleteDivisionMeets(Division division) {
+      var meetsToDelete = repository.All<Meet>().Where(m => m.Division.Id == division.Id);
+      foreach (var meet in meetsToDelete) {
+        repository.Delete(meet);
+      }
+    }
+
+    private void DeleteDivisionTeams(Division division) {
+      var teamsToDelete = repository.All<Team>().Where(t => t.Division.Id == division.Id);
+      foreach (var team in teamsToDelete) {
+        repository.Delete(team);
+      }
+    }
+
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     public ActionResult Edit(int id) {
-      var division = divisionRepository.Get(id);
+      var division = repository.Get<Division>(id);
       if (null == division) {
         return HttpNotFound();
       }
@@ -122,7 +132,6 @@ namespace ClubPool.Web.Controllers.Divisions
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditDivisionViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
@@ -134,17 +143,15 @@ namespace ClubPool.Web.Controllers.Divisions
         return View(viewModel);
       }
 
-      var division = divisionRepository.Get(viewModel.Id);
+      var division = repository.Get<Division>(viewModel.Id);
 
       if (null == division) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The division you were editing was deleted by another user";
         return this.RedirectToAction<Seasons.SeasonsController>(c => c.Index(null));
       }
 
-      if (viewModel.Version != division.Version) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] =
-          "This division was updated by another user while you were viewing this page. Enter your changes again.";
-        return this.RedirectToAction(c => c.Edit(viewModel.Id));
+      if (viewModel.Version != division.EncodedVersion) {
+        return EditRedirectForConcurrency(viewModel.Id);
       }
       
       if (!division.Name.Equals(viewModel.Name)) {
@@ -157,46 +164,48 @@ namespace ClubPool.Web.Controllers.Divisions
       }
       division.StartingDate = startingDate;
 
+      try {
+        repository.SaveChanges();
+      }
+      catch (UpdateConcurrencyException) {
+        return EditRedirectForConcurrency(viewModel.Id);
+      }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was updated";
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
 
+    private ActionResult EditRedirectForConcurrency(int id) {
+      TempData[GlobalViewDataProperty.PageErrorMessage] =
+        "This division was updated by another user while you were viewing this page. Enter your changes again.";
+      return this.RedirectToAction(c => c.Edit(id));
+    }
+
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult CreateSchedule(int id, int? byes) {
       if (null == byes) {
         byes = 0;
       }
-      var division = divisionRepository.Get(id);
+      var division = repository.Get<Division>(id);
       try {
-        division.CreateSchedule(divisionRepository, (int)byes);
+        division.CreateSchedule(repository, (int)byes);
       }
       catch (CreateScheduleException e) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = e.Message;
       }
+      repository.SaveChanges();
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
 
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult ClearSchedule(int id) {
-      var division = divisionRepository.Get(id);
-      division.ClearSchedule();
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
-    }
-
-    [HttpPost]
-    [Authorize(Roles = Roles.Administrators)]
-    [Transaction]
-    [ValidateAntiForgeryToken]
-    public ActionResult RecreateSchedule(int id) {
-      var division = divisionRepository.Get(id);
-      division.ClearSchedule();
-      division.CreateSchedule(divisionRepository);
+      var division = repository.Get<Division>(id);
+      if (!division.HasCompletedMatches()) {
+        DeleteDivisionMeets(division);
+      }
       return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
     }
   }
