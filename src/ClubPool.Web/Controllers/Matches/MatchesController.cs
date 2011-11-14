@@ -5,15 +5,9 @@ using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
 
-using SharpArch.Core;
-using SharpArch.Web.NHibernate;
-
-using ClubPool.Framework;
-using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.Validation;
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Core.Queries;
+using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Models;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Matches.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
@@ -22,46 +16,35 @@ namespace ClubPool.Web.Controllers.Matches
 {
   public class MatchesController : BaseController
   {
-    protected IMatchRepository matchRepository;
-    protected IUserRepository userRepository;
-    protected IMatchResultRepository matchResultRepository;
+    protected IRepository repository;
     protected IAuthenticationService authService;
 
-    public MatchesController(IMatchRepository matchRepository,
-      IUserRepository userRepository,
-      IMatchResultRepository matchResultRepository,
+    public MatchesController(IRepository repository,
       IAuthenticationService authService) {
 
-      Check.Require(null != matchRepository, "matchRepository cannot be null");
-      Check.Require(null != userRepository, "userRepository cannot be null");
-      Check.Require(null != matchResultRepository, "matchResultRepository cannot be null");
-      Check.Require(null != authService, "authService cannot be null");
+      Arg.NotNull(repository, "repository");
+      Arg.NotNull(authService, "authService");
 
-      this.matchRepository = matchRepository;
-      this.userRepository = userRepository;
-      this.matchResultRepository = matchResultRepository;
+      this.repository = repository;
       this.authService = authService;
     }
 
     [HttpGet]
-    [Transaction]
     [Authorize]
     public ActionResult UserHistory(int id, int? page) {
-      var user = userRepository.Get(id);
+      var user = repository.Get<User>(id);
       if (null == user) {
         return HttpNotFound();
       }
 
-      var userMatches = from match in matchRepository.GetAll()
-                        where (match.Players.Where(p => p.Player == user).Any()) && match.IsComplete
-                        orderby match.DatePlayed descending
-                        select new UserHistoryMatchViewModel(match);
-      var viewModel = new UserHistoryViewModel(user, userMatches, page.GetValueOrDefault(1), 15);
+      // doing this with EF is extremely slow
+      var sql = "select * from matches where id in (select m.Id from matches m, matchplayers p where p.Player_Id = ? and p.Match_Id = m.Id) order by DatePlayed desc";
+      var userMatchesQuery = repository.SqlQuery<Match>(sql, user.Id);
+      var viewModel = new UserHistoryViewModel(user, userMatchesQuery.Select(m => new UserHistoryMatchViewModel { Match = m }), page.GetValueOrDefault(1), 15);
       return View(viewModel);
     }
 
     [HttpPost]
-    [Transaction]
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditMatchViewModel viewModel) {
@@ -98,23 +81,23 @@ namespace ClubPool.Web.Controllers.Matches
         }
       }
 
-      var match = matchRepository.Get(viewModel.Id);
+      var match = repository.Get<Match>(viewModel.Id);
       if (null == match) {
         return HttpNotFound();
       }
 
       // authorize only admins, officers, and players involved in this meet
       var currentPrincipal = authService.GetCurrentPrincipal();
-      var loggedInUser = userRepository.FindOne(u => u.Username.Equals(currentPrincipal.Identity.Name));
+      var loggedInUser = repository.All<User>().Single(u => u.Username.Equals(currentPrincipal.Identity.Name));
       if (!match.Meet.UserCanEnterMatchResults(loggedInUser)) {
         return Json(new EditMatchResponseViewModel(false, "You do not have permission to enter results for this match"));
       }
 
-      var player1 = userRepository.Get(viewModel.Player1Id);
+      var player1 = repository.Get<User>(viewModel.Player1Id);
       if (null == player1 || !match.Players.Where(p => p.Player == player1).Any()) {
         return Json(new EditMatchResponseViewModel(false, "Player 1 is not a valid player for this match"));
       }
-      var player2 = userRepository.Get(viewModel.Player2Id);
+      var player2 = repository.Get<User>(viewModel.Player2Id);
       if (null == player2 || !match.Players.Where(p => p.Player == player2).Any()) {
         return Json(new EditMatchResponseViewModel(false, "Player 2 is not a valid player for this match"));
       }
@@ -141,11 +124,12 @@ namespace ClubPool.Web.Controllers.Matches
         match.AddResult(matchResult);
       }
       var gameType = match.Meet.Division.Season.GameType;
-      player1.UpdateSkillLevel(gameType, matchResultRepository);
-      player2.UpdateSkillLevel(gameType, matchResultRepository);
+      player1.UpdateSkillLevel(gameType, repository);
+      player2.UpdateSkillLevel(gameType, repository);
       // set meet to complete if all matches are complete
       var meet = match.Meet;
       meet.IsComplete = !meet.Matches.Where(m => !m.IsComplete).Any();
+      repository.SaveChanges();
       return Json(new EditMatchResponseViewModel(true));
     }
   }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Meets.ViewModels
 {
@@ -124,8 +123,8 @@ namespace ClubPool.Web.Controllers.Meets.ViewModels
       Player2 = new MatchPlayerViewModel(players[1].Player, match);
       if (match.IsComplete) {
         if (!match.IsForfeit) {
-          DatePlayed = match.DatePlayed.ToShortDateString();
-          TimePlayed = match.DatePlayed.ToShortTimeString();
+          DatePlayed = match.DatePlayed.Value.ToShortDateString();
+          TimePlayed = match.DatePlayed.Value.ToShortTimeString();
           Status = string.Format("Played on {0} {1}", DatePlayed, TimePlayed);
         }
         else {

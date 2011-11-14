@@ -4,15 +4,9 @@ using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
 
-using SharpArch.Core;
-using SharpArch.Web.NHibernate;
-
-using ClubPool.Framework;
-using ClubPool.Web.Infrastructure;
 using ClubPool.Framework.Validation;
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Core.Queries;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Meets.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
@@ -21,38 +15,34 @@ namespace ClubPool.Web.Controllers.Meets
 {
   public class MeetsController : BaseController
   {
-    protected IMeetRepository meetRepository;
+    protected IRepository repository;
     protected IAuthenticationService authService;
-    protected IUserRepository userRepository;
 
-    public MeetsController(IMeetRepository meetRepository, IAuthenticationService authSvc, IUserRepository userRepository) {
-      Check.Require(null != meetRepository, "meetRepository cannot be null");
-      Check.Require(null != authSvc, "authSvc cannot be null");
-      Check.Require(null != userRepository, "userRepository cannot be null");
+    public MeetsController(IRepository repository, IAuthenticationService authSvc) {
+      Arg.NotNull(repository, "repository");
+      Arg.NotNull(authSvc, "authSvc");
 
-      this.meetRepository = meetRepository;
+      this.repository = repository;
       this.authService = authSvc;
-      this.userRepository = userRepository;
     }
 
     [Authorize]
-    [Transaction]
     public ActionResult View(int id) {
-      var meet = meetRepository.Get(id);
+      var meet = repository.Get<Meet>(id);
       if (null == meet) {
         return HttpNotFound();
       }
 
       var viewModel = new MeetViewModel(meet);
-      var loggedInUser = userRepository.FindOne(u => u.Username.Equals(authService.GetCurrentPrincipal().Identity.Name));
+      var username = authService.GetCurrentPrincipal().Identity.Name;
+      var loggedInUser = repository.All<User>().Single(u => u.Username.Equals(username));
       viewModel.AllowUserToEnterResults = meet.UserCanEnterMatchResults(loggedInUser);
       return View(viewModel);
     }
 
     [Authorize]
-    [Transaction]
     public ActionResult Scoresheet(int id) {
-      var meet = meetRepository.Get(id);
+      var meet = repository.Get<Meet>(id);
       var viewModel = new ScoresheetViewModel(meet);
       return View(viewModel);
     }

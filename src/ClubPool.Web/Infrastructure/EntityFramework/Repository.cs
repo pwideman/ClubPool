@@ -32,6 +32,10 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
       return DbContext.Set<T>();
     }
 
+    public IQueryable<T> SqlQuery<T>(string sql, params object[] parameters) where T : Entity {
+      return DbContext.Set<T>().SqlQuery(sql, parameters).AsQueryable();
+    }
+
     public T SaveOrUpdate<T>(T entity) where T : Entity {
       if (null == entity) return null;
       if (entity.IsTransient()) {

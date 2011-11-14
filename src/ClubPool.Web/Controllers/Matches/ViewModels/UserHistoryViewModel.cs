@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Matches.ViewModels
 {
@@ -39,28 +38,30 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
     public int Player2Wins { get; set; }
     public DateTime Date { get; set; }
 
-    public UserHistoryMatchViewModel(Match match) {
-      Season = match.Meet.Division.Season.Name;
-      var teams = match.Meet.Teams.ToArray();
-      var team1 = teams[0];
-      var team2 = teams[1];
-      Team1 = team1.Name;
-      Team2 = team2.Name;
-      var players = match.Players.ToArray();
-      Player1 = players[0].Player.FullName;
-      Player2 = players[1].Player.FullName;
-      if (match.IsComplete) {
-        Winner = match.Winner.FullName;
-        if (!match.IsForfeit) {
-          Date = match.DatePlayed;
-          var results = match.Results.Where(r => r.Player == players[0].Player).Single();
-          Player1Innings = results.Innings;
-          Player1DefensiveShots = results.DefensiveShots;
-          Player1Wins = results.Wins;
-          results = match.Results.Where(r => r.Player == players[1].Player).Single();
-          Player2Innings = results.Innings;
-          Player2DefensiveShots = results.DefensiveShots;
-          Player2Wins = results.Wins;
+    public Match Match {
+      set {
+        Season = value.Meet.Division.Season.Name;
+        var teams = value.Meet.Teams.ToArray();
+        Team1 = teams[0].Name;
+        if (teams.Count() > 1) {
+          Team2 = teams[1].Name;
+        }
+        var players = value.Players.ToArray();
+        Player1 = players[0].Player.FullName;
+        Player2 = players[1].Player.FullName;
+        if (value.IsComplete) {
+          Winner = value.Winner.FullName;
+          if (!value.IsForfeit) {
+            Date = value.DatePlayed.Value;
+            var results = value.Results.Where(r => r.Player == players[0].Player).Single();
+            Player1Innings = results.Innings;
+            Player1DefensiveShots = results.DefensiveShots;
+            Player1Wins = results.Wins;
+            results = value.Results.Where(r => r.Player == players[1].Player).Single();
+            Player2Innings = results.Innings;
+            Player2DefensiveShots = results.DefensiveShots;
+            Player2Wins = results.Wins;
+          }
         }
       }
     }
