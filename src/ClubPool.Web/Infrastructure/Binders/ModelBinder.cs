@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.ComponentModel;
 
-using Iesi.Collections.Generic;
-
-using ClubPool.Core;
 using ClubPool.Web.Controllers;
 
-namespace ClubPool.Web.Binders
+namespace ClubPool.Web.Infrastructure.Binders
 {
   /// <summary>
   /// This custom model binder supports binding EntityViewModelBase collections, using only the id integers. It and
@@ -36,7 +32,7 @@ namespace ClubPool.Web.Binders
           propertyType.IsGenericType &&
           (propertyType.GetGenericTypeDefinition() == typeof(IList<>) ||
            propertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-           propertyType.GetGenericTypeDefinition() == typeof(Iesi.Collections.Generic.ISet<>) ||
+           propertyType.GetGenericTypeDefinition() == typeof(ISet<>) ||
            propertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
       bool isSimpleGenericBindableEntityViewModelCollection =

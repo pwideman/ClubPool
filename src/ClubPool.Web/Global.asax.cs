@@ -22,10 +22,10 @@ using log4net;
 
 using ClubPool.Framework.Validation;
 using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Infrastructure.Binders;
 using ClubPool.Web.Infrastructure.EntityFramework;
 using ClubPool.Web.Controllers;
 using ClubPool.Web.CastleWindsor;
-using ClubPool.Web.Binders;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Models;
 
