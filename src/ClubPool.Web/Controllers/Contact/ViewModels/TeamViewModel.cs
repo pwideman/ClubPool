@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using NHibernate.Validator.Constraints;
-
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Contact.ViewModels
 {

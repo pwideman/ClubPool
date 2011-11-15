@@ -5,11 +5,8 @@ using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
 
-using SharpArch.Core;
-using SharpArch.Web.NHibernate;
-
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Messaging;
 using ClubPool.Web.Controllers.Contact.ViewModels;
@@ -18,49 +15,43 @@ namespace ClubPool.Web.Controllers.Contact
 {
   public class ContactController : BaseController
   {
-    protected ITeamRepository teamRepository;
-    protected IUserRepository userRepository;
+    protected IRepository repository;
     protected IAuthenticationService authenticationService;
     protected IEmailService emailService;
 
-    public ContactController(IUserRepository userRepository,
-      ITeamRepository teamRepository, 
+    public ContactController(IRepository repository,
       IAuthenticationService authenticationService,
       IEmailService emailService) {
 
-      Check.Require(userRepository != null, "userRepository cannot be null");
-      Check.Require(teamRepository != null, "teamRepository cannot be null");
-      Check.Require(authenticationService != null, "authenticationService cannot be null");
-      Check.Require(emailService != null, "emailService cannot be null");
+      Arg.NotNull(repository, "repository");
+      Arg.NotNull(authenticationService, "authenticationService");
+      Arg.NotNull(emailService, "emailService");
 
-      this.userRepository = userRepository;
+      this.repository = repository;
       this.authenticationService = authenticationService;
-      this.teamRepository = teamRepository;
       this.emailService = emailService;
     }
 
     [HttpGet]
     [Authorize]
-    [Transaction]
     public ActionResult Team(int id) {
-      var team = teamRepository.Get(id);
+      var team = repository.Get<Team>(id);
       if (null == team) {
         return HttpNotFound();
       }
-      var sender = userRepository.Get(authenticationService.GetCurrentPrincipal().UserId);
+      var sender = repository.Get<User>(authenticationService.GetCurrentPrincipal().UserId);
       var viewModel = new TeamViewModel(team, sender);
       return View(viewModel);
     }
 
     [HttpPost]
     [Authorize]
-    [Transaction]
     public ActionResult Team(TeamViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
 
-      var team = teamRepository.Get(viewModel.Id);
+      var team = repository.Get<Team>(viewModel.Id);
       if (null == team) {
         return HttpNotFound();
       }
@@ -78,26 +69,24 @@ namespace ClubPool.Web.Controllers.Contact
 
     [HttpGet]
     [Authorize]
-    [Transaction]
     public ActionResult Player(int id) {
-      var player = userRepository.Get(id);
+      var player = repository.Get<User>(id);
       if (null == player) {
         return HttpNotFound();
       }
-      var sender = userRepository.Get(authenticationService.GetCurrentPrincipal().UserId);
+      var sender = repository.Get<User>(authenticationService.GetCurrentPrincipal().UserId);
       var viewModel = new PlayerViewModel(player, sender);
       return View(viewModel);
     }
 
     [HttpPost]
     [Authorize]
-    [Transaction]
     public ActionResult Player(PlayerViewModel viewModel) {
       if (!ValidateViewModel(viewModel)) {
         return View(viewModel);
       }
 
-      var player = userRepository.Get(viewModel.Id);
+      var player = repository.Get<User>(viewModel.Id);
       if (null == player) {
         return HttpNotFound();
       }
