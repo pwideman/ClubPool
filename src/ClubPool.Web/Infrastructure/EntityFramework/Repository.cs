@@ -41,6 +41,9 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
       if (entity.IsTransient()) {
         DbContext.Set<T>().Add(entity);
       }
+      else {
+        DbContext.Entry(entity).State = System.Data.EntityState.Modified;
+      }
       return entity;
     }
 
