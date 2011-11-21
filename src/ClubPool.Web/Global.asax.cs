@@ -8,16 +8,11 @@ using System.Reflection;
 using System.Web.Security;
 using System.Data.Entity;
 
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
-using Castle.Facilities.FactorySupport;
-using Castle.Windsor.Installer;
-using CommonServiceLocator.WindsorAdapter;
+using Autofac;
+using Autofac.Integration.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate.Validator.Cfg.Loquacious;
 using NHibernate.Validator.Event;
-using SharpArch.Core;
-using SharpArch.Web.Castle;
 using log4net;
 
 using ClubPool.Framework.Validation;
@@ -25,9 +20,11 @@ using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.Binders;
 using ClubPool.Web.Infrastructure.EntityFramework;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.CastleWindsor;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Models;
+
+using SharpArch.Core.CommonValidator;
+using SharpArch.Core.NHibernateValidator.CommonValidatorAdapter;
 
 namespace ClubPool.Web
 {
@@ -68,22 +65,23 @@ namespace ClubPool.Web
     /// with the WindsorContainer ControllerFactory.
     /// </summary>
     protected virtual void InitializeServiceLocator() {
-      IWindsorContainer container = new WindsorContainer();
+      var builder = new ContainerBuilder();
       // set up the ServiceLocator earlier so that we can use it in
       // ComponentRegistrar
-      ServiceLocator.SetLocatorProvider(() => new WindsorServiceLocator(container));
-      ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(container));
 
-      container.AddFacility<FactorySupportFacility>()
-        .Register(
-        Component.For<Lazy<DbContext>>()
-        .UsingFactoryMethod(() => new Lazy<DbContext>(() => new ClubPoolContext()))
-        .LifeStyle.PerWebRequest);
-      //container.Register(Component.For<ClubPoolContext>().LifeStyle.PerWebRequest);
-      container.Register(Component.For<IRepository>().ImplementedBy<Repository>().LifeStyle.Transient);
-      container.RegisterControllers(typeof(BaseController).Assembly);
-      container.Install(FromAssembly.This());
+      builder.RegisterType<Validator>().As<IValidator>();
+      builder.RegisterType<Repository>().As<IRepository>();
+      builder.Register<Lazy<DbContext>>(c => new Lazy<DbContext>(() => new ClubPoolContext())).InstancePerHttpRequest();
 
+      var assembly = typeof(MvcApplication).Assembly;
+      builder.RegisterAssemblyTypes(assembly)
+        .Where(t => t.Namespace.Contains("Services"))
+        .AsImplementedInterfaces();
+
+      builder.RegisterControllers(assembly);
+
+      var container = builder.Build();
+      DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
     }
 
     protected void Application_AuthenticateRequest(object sender, EventArgs e) {
@@ -121,7 +119,7 @@ namespace ClubPool.Web
       // Create an Identity object
       FormsIdentity identity = new FormsIdentity(authTicket);
 
-      var repository = SafeServiceLocator<IRepository>.GetService();
+      var repository = DependencyResolver.Current.GetService<IRepository>();
       var user = repository.All<User>().Single(u => u.Username.Equals(identity.Name));
       // This principal will flow throughout the request.
       ClubPoolPrincipal principal = new ClubPoolPrincipal(user, identity);

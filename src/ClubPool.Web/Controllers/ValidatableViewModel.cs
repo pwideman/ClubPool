@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Web.Mvc;
 
 using SharpArch.Core.CommonValidator;
-using SharpArch.Core;
 
 namespace ClubPool.Web.Controllers
 {
@@ -13,7 +12,7 @@ namespace ClubPool.Web.Controllers
   public class ValidatableViewModel : ViewModelBase, IValidatable
   {
     protected IValidator Validator {
-      get { return SafeServiceLocator<IValidator>.GetService(); }
+      get { return DependencyResolver.Current.GetService<IValidator>(); }
     }
 
     public virtual bool IsValid() {
