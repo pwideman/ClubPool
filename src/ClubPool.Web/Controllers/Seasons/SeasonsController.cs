@@ -75,7 +75,7 @@ namespace ClubPool.Web.Controllers.Seasons
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditSeasonViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         return View(viewModel);
       }
 

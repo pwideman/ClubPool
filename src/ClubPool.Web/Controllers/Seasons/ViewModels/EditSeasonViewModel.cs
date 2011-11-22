@@ -1,6 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-using NHibernate.Validator.Constraints;
+using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 
@@ -20,7 +21,7 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
     [Min(1)]
     public int Id { get; set; }
 
-    [NotNullNotEmpty]
+    [Required]
     public string Version { get; set; }
   }
 }
