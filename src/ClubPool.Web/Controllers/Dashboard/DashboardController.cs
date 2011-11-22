@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
-using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
 using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
