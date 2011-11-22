@@ -19,7 +19,6 @@
       </div>
     </fieldset>
     <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Seasons.ViewModels.EditSeasonViewModel>()%>
   </div>
 </asp:Content>
 
