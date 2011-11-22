@@ -14,7 +14,6 @@
             FormMethod.Post, new { @class = "normal", id = "loginForm" })) { %>
         <% Html.RenderPartial("LoginControl"); %>
       <% } %>
-      <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel>().DisableMessages() %>
     </div>
   </div>
 </asp:Content>

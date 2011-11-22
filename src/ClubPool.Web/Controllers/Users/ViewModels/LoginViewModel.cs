@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class LoginViewModel : ValidatableViewModel
+  public class LoginViewModel
   {
     [DisplayName("Username:")]
-    [NotNullNotEmpty(Message="Enter your username")]
+    [Required(ErrorMessage="Enter your username")]
     public string Username { get; set; }
 
     [DisplayName("Password:")]
-    [NotNullNotEmpty(Message="Enter your password")]
+    [Required(ErrorMessage="Enter your password")]
     public string Password { get; set; }
 
     public string ReturnUrl { get; set; }

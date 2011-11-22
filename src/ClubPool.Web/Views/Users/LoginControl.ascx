@@ -4,13 +4,13 @@
   <div class="form-row">
     <span class="form-label-left"><%= Html.LabelFor(m => m.Username) %></span>
     <div class="form-input">
-      <%= Html.TextBoxFor(m => m.Username, new { @class="required"}) %>
+      <%= Html.TextBoxFor(m => m.Username) %>
     </div>
   </div>
   <div class="form-row">
     <span class="form-label-left"><%= Html.LabelFor(m => m.Password) %></span>
     <div class="form-input">
-      <%= Html.PasswordFor(m => m.Password, new { @class = "required" })%>
+      <%= Html.PasswordFor(m => m.Password)%>
     </div>
   </div>
   <div class="form-row-span">

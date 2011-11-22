@@ -31,7 +31,6 @@
         </div>
       </fieldset>
     <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel>() %>
   </div>
   
 </asp:Content>

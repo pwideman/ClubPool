@@ -20,7 +20,6 @@
       </div>
     </fieldset>
     <%  } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.CreateViewModel>() %>
   </div>
 </asp:Content>
 

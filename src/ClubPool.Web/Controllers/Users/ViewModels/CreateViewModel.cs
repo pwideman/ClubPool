@@ -1,27 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using NHibernate.Validator.Constraints;
-
-using ClubPool.Framework.Validation;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  [Compare(Message = "Passwords do not match",
-    PrimaryPropertyName = "ConfirmPassword",
-    PropertyToCompare = "Password",
-    Operator = xVal.Rules.ComparisonRule.Operator.Equals)]
   public class CreateViewModel : UserViewModelBase
   {
     [DisplayName("Password:")]
-    [NotNullNotEmpty(Message = "Required")]
+    [Required(ErrorMessage = "Required")]
     public string Password { get; set; }
 
     [DisplayName("Confirm password:")]
-    [NotNullNotEmpty(Message = "Required")]
+    [Required(ErrorMessage = "Required")]
+    [Compare("Password")]
     public string ConfirmPassword { get; set; }
   }
 }

@@ -98,7 +98,6 @@
         </div>
       </fieldset>
     <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.EditViewModel>() %>
   </div>
 
   <% if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) { %>

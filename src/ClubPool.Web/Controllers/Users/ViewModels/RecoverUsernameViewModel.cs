@@ -1,11 +1,13 @@
-﻿using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel.DataAnnotations;
+
+using DataAnnotationsExtensions;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class RecoverUsernameViewModel : ValidatableViewModel
+  public class RecoverUsernameViewModel
   {
     [Email]
-    [NotNullNotEmpty]
+    [Required]
     public string Email { get; set; }
   }
 }

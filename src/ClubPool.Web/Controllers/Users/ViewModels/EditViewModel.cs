@@ -2,20 +2,16 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
-using NHibernate.Validator.Constraints;
-
-using ClubPool.Framework.Validation;
+using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  [Compare(Message = "Passwords do not match",
-    PrimaryPropertyName = "ConfirmPassword",
-    PropertyToCompare = "Password",
-    Operator = xVal.Rules.ComparisonRule.Operator.Equals)]
   public class EditViewModel : UserViewModelBase
   {
     [Min(1)]
@@ -31,9 +27,10 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public string Password { get; set; }
 
     [DisplayName("Confirm password:")]
+    [Compare("Password")]
     public string ConfirmPassword { get; set; }
 
-    [NotNullNotEmpty]
+    [Required]
     public string Version { get; set; }
 
     public int[] Roles { get; set; }

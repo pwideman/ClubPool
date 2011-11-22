@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 using ClubPool.Web.Models;
 
@@ -32,7 +29,6 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
         if (value.Roles.Any()) {
           Roles = value.Roles.Select(r => r.Name).ToArray();
         }
-
       }
     }
 

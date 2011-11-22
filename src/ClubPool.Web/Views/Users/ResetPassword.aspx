@@ -16,7 +16,6 @@ the username (or to the supplied email address).</p>
   </p>
   <div><%= Html.SubmitButton("submit", "Reset Password") %></div>
 <% } %>
-<%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.ResetPasswordViewModel>().DisableMessages() %>
 <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) { 
        Html.RenderPartial("ErrorMessage");
    } %>

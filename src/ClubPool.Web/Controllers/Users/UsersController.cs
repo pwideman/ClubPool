@@ -3,17 +3,12 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Text;
 using System.Collections.Generic;
-using System.Web.Routing;
 using System.Web;
 
 using Microsoft.Web.Mvc;
-using MvcContrib.ActionResults;
-using MvcContrib.Pagination;
-using xVal.ServerSide;
 using Elmah;
 
 using ClubPool.Web.Infrastructure;
-using ClubPool.Web.Infrastructure.Configuration;
 using ClubPool.Web.Controls.Captcha;
 using ClubPool.Web.Services.Configuration;
 using ClubPool.Web.Services.Membership;
@@ -54,7 +49,6 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [Authorize(Roles=Roles.Administrators)]
-    //[Transaction]
     public ActionResult Index(int? page, string q) {
       int pageSize = 10;
       var userQuery = repository.All<User>();
@@ -141,7 +135,6 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpPost]
-    //[Transaction]
     [ValidateAntiForgeryToken]
     [CaptchaValidation("captcha")]
     public ActionResult ResetPassword(ResetPasswordViewModel viewModel, bool captchaValid) {
@@ -183,7 +176,6 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpGet]
-    //[Transaction]
     public ActionResult ValidatePasswordResetToken(string token) {
       var users = repository.All<User>();
       foreach (var user in users) {
@@ -211,7 +203,6 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    //[Transaction]
     [CaptchaValidation("captcha")]
     public ActionResult SignUp(SignUpViewModel viewModel, bool captchaValid) {
       if (!captchaValid) {
@@ -252,7 +243,6 @@ namespace ClubPool.Web.Controllers.Users
 
     [Authorize(Roles=Roles.Administrators)]
     [HttpPost]
-    //[Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Delete(int id, int page, string q) {
       User userToDelete = repository.Get<User>(id);
@@ -284,7 +274,6 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpPost]
-    //[Transaction]
     [ValidateAntiForgeryToken]
     [Authorize(Roles=Roles.Administrators)]
     public ActionResult Approve(int[] userIds) {
@@ -401,9 +390,7 @@ namespace ClubPool.Web.Controllers.Users
       return principal.IsInRole(Roles.Administrators) || principal.UserId == user.Id;
     }
 
-
     [HttpPost]
-    //[Transaction]
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
@@ -415,6 +402,11 @@ namespace ClubPool.Web.Controllers.Users
         if (null == user) {
           return ErrorView("The user you were editing was deleted by another user");
         }
+
+        if (viewModel.Version != user.EncodedVersion) {
+          return EditRedirectForConcurrency(viewModel.Id);
+        }
+
         var currentPrincipal = authenticationService.GetCurrentPrincipal();
         var canEditUser = CanEditUser(currentPrincipal, user);
         if (!canEditUser) {
@@ -431,12 +423,9 @@ namespace ClubPool.Web.Controllers.Users
         viewModel.ShowPassword = canEditPassword;
         viewModel.LoadAvailableRoles(repository);
 
-        if (!ValidateViewModel(viewModel)) {
-          return View(viewModel);
-        }
 
-        if (viewModel.Version != user.EncodedVersion) {
-          return EditRedirectForConcurrency(viewModel.Id);
+        if (!ModelState.IsValid) {
+          return View(viewModel);
         }
 
         if (!user.Username.Equals(viewModel.Username)) {
@@ -517,7 +506,6 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpPost]
     [Authorize(Roles=Roles.Administrators)]
-    //[Transaction]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateViewModel viewModel) {
       var user = CreateUser(viewModel, true, false);
@@ -534,7 +522,7 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     protected User CreateUser(CreateViewModel viewModel, bool approved, bool locked) {
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         return null;
       }
 
@@ -556,7 +544,6 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpGet]
     [Authorize]
-    //[Transaction]
     public ActionResult View(int id) {
       var user = repository.Get<User>(id);
       if (null == user) {
@@ -575,11 +562,10 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpPost]
-    //[Transaction]
     [ValidateAntiForgeryToken]
     [CaptchaValidation("captcha")]
     public ActionResult RecoverUsername(RecoverUsernameViewModel viewModel, bool captchaValid) {
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         return View(viewModel);
       }
       

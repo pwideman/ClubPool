@@ -15,7 +15,6 @@ address will be sent.</p>
   </p>
   <p><%= Html.SubmitButton("submit", "Recover Username") %></p>
 <% } %>
-<%= Html.ClientSideValidation<ClubPool.Web.Controllers.Users.ViewModels.RecoverUsernameViewModel>().DisableMessages() %>
 <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) { 
        Html.RenderPartial("ErrorMessage");
    } %>
