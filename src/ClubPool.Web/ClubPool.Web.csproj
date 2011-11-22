@@ -250,9 +250,7 @@
     <Compile Include="Services\Configuration\IConfigurationService.cs" />
     <Compile Include="Services\Membership\IMembershipService.cs" />
     <Content Include="packages.config" />
-    <None Include="Services\Membership\IRoleService.cs" />
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
-    <None Include="Services\Membership\SharpArchRoleService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
