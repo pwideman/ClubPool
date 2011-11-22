@@ -1,15 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
-using System.Text;
-using System.Collections.Generic;
 
-using ClubPool.Framework.Validation;
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Meets.ViewModels;
-using ClubPool.Web.Controllers.Extensions;
 
 namespace ClubPool.Web.Controllers.Meets
 {
