@@ -177,7 +177,6 @@
     <Compile Include="Controllers\Home\ViewModels\IndexViewModel.cs" />
     <Compile Include="Controllers\Home\ViewModels\RegulationsViewModel.cs" />
     <Compile Include="Controllers\Home\ViewModels\RulesViewModel.cs" />
-    <None Include="Controllers\HttpNotFoundResult.cs" />
     <Compile Include="Controllers\Matches\MatchesController.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchResponseViewModel.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchViewModel.cs" />
