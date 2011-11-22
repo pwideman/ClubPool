@@ -5,7 +5,7 @@ using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Divisions.ViewModels
 {
-  public abstract class DivisionViewModel : ValidatableViewModel
+  public abstract class DivisionViewModel
   {
     public string SeasonName { get; set; }
 
