@@ -10,12 +10,8 @@ using System.Data.Entity;
 
 using Autofac;
 using Autofac.Integration.Mvc;
-using Microsoft.Practices.ServiceLocation;
-using NHibernate.Validator.Cfg.Loquacious;
-using NHibernate.Validator.Event;
 using log4net;
 
-using ClubPool.Framework.Validation;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.Binders;
 using ClubPool.Web.Infrastructure.EntityFramework;
@@ -32,8 +28,22 @@ namespace ClubPool.Web
   {
     protected static readonly ILog logger = LogManager.GetLogger(typeof(MvcApplication));
 
+    public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+    {
+      filters.Add(new HandleErrorAttribute());
+    }
+
+    public static void RegisterRoutes(RouteCollection routes)
+    {
+      routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+      routes.MapRoute(
+        "Default", // Route name
+        "{controller}/{action}/{id}", // URL with parameters
+        new { controller = "Home", action = "Index", id = UrlParameter.Optional }  // Parameter defaults
+      );
+    }
+
     protected void Application_Start() {
-      
       log4net.Config.XmlConfigurator.Configure();
 
       ModelBinders.Binders.DefaultBinder = new ModelBinder();
@@ -41,7 +51,10 @@ namespace ClubPool.Web
       InitializeServiceLocator();
 
       AreaRegistration.RegisterAllAreas();
-      RouteRegistrar.RegisterRoutesTo(RouteTable.Routes);
+
+      // TODO: uncomment this once we figure out elmah with the new filters
+      //RegisterGlobalFilters(GlobalFilters.Filters);
+      RegisterRoutes(RouteTable.Routes);
     }
 
     /// <summary>
