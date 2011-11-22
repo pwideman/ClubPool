@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
-using System.Web.Security;
 
 using ClubPool.Web.Infrastructure;
-using ClubPool.Framework.NHibernate;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Services.Membership
 {
-  public class SharpArchMembershipService : IMembershipService
+  public class ClubPoolMembershipService : IMembershipService
   {
     protected IRepository repository;
     protected const int SALT_SIZE = 16; // same size as the SqlMembershipProvider
     protected bool allowDuplicateEmail;
     protected bool allowEmptyEmail;
 
-    public SharpArchMembershipService(IRepository repo) : this(repo, false, false) {
+    public ClubPoolMembershipService(IRepository repo) : this(repo, false, false) {
     }
 
-    public SharpArchMembershipService(IRepository repo, bool allowDuplicateEmail, bool allowEmptyEmail) {
+    public ClubPoolMembershipService(IRepository repo, bool allowDuplicateEmail, bool allowEmptyEmail)
+    {
       Arg.NotNull(repo, "repo");
 
       repository = repo;
