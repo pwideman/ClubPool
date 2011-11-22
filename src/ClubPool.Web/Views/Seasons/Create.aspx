@@ -1,4 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Seasons.ViewModels.CreateSeasonViewModel>" %>
+<%@ Import Namespace="MvcContrib.UI.Html" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">
     <span>Add Season</span>
@@ -18,8 +20,10 @@
       </div>
     </fieldset>
     <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Seasons.ViewModels.CreateSeasonViewModel>() %>
   </div>
+
+  <%= Html.ScriptInclude("jquery.validate.min.js") %>
+  <%= Html.ScriptInclude("jquery.validate.unobtrusive.min.js") %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Add Season</asp:Content>

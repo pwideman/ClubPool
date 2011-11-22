@@ -40,14 +40,14 @@ namespace ClubPool.Web.Controllers.Contact
         return HttpNotFound();
       }
       var sender = repository.Get<User>(authenticationService.GetCurrentPrincipal().UserId);
-      var viewModel = new TeamViewModel(team, sender);
+      var viewModel = new ContactViewModel(team, sender);
       return View(viewModel);
     }
 
     [HttpPost]
     [Authorize]
-    public ActionResult Team(TeamViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
+    public ActionResult Team(ContactViewModel viewModel) {
+      if (!ModelState.IsValid) {
         return View(viewModel);
       }
 
@@ -75,14 +75,14 @@ namespace ClubPool.Web.Controllers.Contact
         return HttpNotFound();
       }
       var sender = repository.Get<User>(authenticationService.GetCurrentPrincipal().UserId);
-      var viewModel = new PlayerViewModel(player, sender);
+      var viewModel = new ContactViewModel(player, sender);
       return View(viewModel);
     }
 
     [HttpPost]
     [Authorize]
-    public ActionResult Player(PlayerViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
+    public ActionResult Player(ContactViewModel viewModel) {
+      if (!ModelState.IsValid) {
         return View(viewModel);
       }
 

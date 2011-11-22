@@ -23,9 +23,6 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Models;
 
-using SharpArch.Core.CommonValidator;
-using SharpArch.Core.NHibernateValidator.CommonValidatorAdapter;
-
 namespace ClubPool.Web
 {
   // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
@@ -40,18 +37,6 @@ namespace ClubPool.Web
       log4net.Config.XmlConfigurator.Configure();
 
       ModelBinders.Binders.DefaultBinder = new ModelBinder();
-
-      // NHV shared engine provider
-      // I added this to experiment with the fluent NHV config (loquacious),
-      // which I'm no longer using. I'll leave it in place for now.
-      var provider = new NHibernateSharedEngineProvider();
-      NHibernate.Validator.Cfg.Environment.SharedEngineProvider = provider;
-      var cfg = new FluentConfiguration();
-      cfg.Register(typeof(ClubPool.Web.Controllers.Home.HomeController).Assembly.ValidationDefinitions())
-         .SetDefaultValidatorMode(NHibernate.Validator.Engine.ValidatorMode.OverrideAttributeWithExternal);
-      NHibernate.Validator.Cfg.Environment.SharedEngineProvider.GetEngine().Configure(cfg);
-      // xVal & the NHValidatorRulesProvider
-      xVal.ActiveRuleProviders.Providers.Add(new NHValidatorRulesProvider());
 
       InitializeServiceLocator();
 
@@ -69,7 +54,6 @@ namespace ClubPool.Web
       // set up the ServiceLocator earlier so that we can use it in
       // ComponentRegistrar
 
-      builder.RegisterType<Validator>().As<IValidator>();
       builder.RegisterType<Repository>().As<IRepository>();
       builder.Register<Lazy<DbContext>>(c => new Lazy<DbContext>(() => new ClubPoolContext())).InstancePerHttpRequest();
 

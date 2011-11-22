@@ -49,7 +49,7 @@ namespace ClubPool.Web.Controllers.Seasons
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateSeasonViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         return View(viewModel);
       }
 

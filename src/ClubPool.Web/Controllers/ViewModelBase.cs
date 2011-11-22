@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Models;
-
-using NHibernate.Validator.Constraints;
 
 namespace ClubPool.Web.Controllers
 {
@@ -37,7 +36,7 @@ namespace ClubPool.Web.Controllers
       }
     }
 
-    [Min(1)]
+    [Range(1, Int32.MaxValue)]
     public int Id { get; set; }
   }
 }
