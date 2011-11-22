@@ -1,18 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
-using System.Text;
 using System.Collections.Generic;
 
 using MvcContrib;
-using MvcContrib.Pagination;
-using xVal.ServerSide;
 
 using ClubPool.Web.Services.Authentication;
-using ClubPool.Web.Controllers.Attributes;
-using ClubPool.Web.Controllers.Shared.ViewModels;
 using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Web.Models;
