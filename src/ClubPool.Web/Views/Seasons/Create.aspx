@@ -21,9 +21,6 @@
     </fieldset>
     <% } %>
   </div>
-
-  <%= Html.ScriptInclude("jquery.validate.min.js") %>
-  <%= Html.ScriptInclude("jquery.validate.unobtrusive.min.js") %>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Add Season</asp:Content>

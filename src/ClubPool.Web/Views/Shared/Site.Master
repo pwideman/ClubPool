@@ -13,6 +13,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
     <%= Html.ScriptInclude("jquery.validate.min.js") %>
+    <%= Html.ScriptInclude("jquery.validate.unobtrusive.min.js") %>
     <%= Html.ScriptInclude("jquery.event.hover-1.0.js") %>
     <%= Html.ScriptInclude("supersubs.js") %>
     <%= Html.ScriptInclude("superfish.js") %>
