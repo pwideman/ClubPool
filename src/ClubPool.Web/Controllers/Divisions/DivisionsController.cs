@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using System.Text;
-using System.Collections.Generic;
 
 using MvcContrib;
-using MvcContrib.Pagination;
-using xVal.ServerSide;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Web.Infrastructure;
-using ClubPool.Framework.Validation;
-using ClubPool.Framework.NHibernate;
-using ClubPool.Web.Controllers.Attributes;
 
 namespace ClubPool.Web.Controllers.Divisions
 {
@@ -49,7 +40,7 @@ namespace ClubPool.Web.Controllers.Divisions
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Create(CreateDivisionViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         return View(viewModel);
       }
       DateTime startingDate;
@@ -134,7 +125,7 @@ namespace ClubPool.Web.Controllers.Divisions
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditDivisionViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         return View(viewModel);
       }
       DateTime startingDate;

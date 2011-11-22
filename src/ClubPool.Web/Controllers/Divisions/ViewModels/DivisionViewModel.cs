@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using NHibernate.Validator.Constraints;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 using ClubPool.Web.Models;
 
@@ -15,11 +10,11 @@ namespace ClubPool.Web.Controllers.Divisions.ViewModels
     public string SeasonName { get; set; }
 
     [DisplayName("Name:")]
-    [NotNullNotEmpty(Message = "Required")]
+    [Required(ErrorMessage = "Required")]
     public string Name { get; set; }
 
     [DisplayName("Starting date:")]
-    [NotNullNotEmpty(Message = "Required")]
+    [Required(ErrorMessage = "Required")]
     public string StartingDate { get; set; }
 
     public DivisionViewModel() {

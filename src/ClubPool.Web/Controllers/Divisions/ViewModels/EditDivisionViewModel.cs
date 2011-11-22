@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+﻿using System.ComponentModel.DataAnnotations;
 
-using NHibernate.Validator.Constraints;
+using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 
@@ -15,7 +11,7 @@ namespace ClubPool.Web.Controllers.Divisions.ViewModels
     [Min(1)]
     public int Id { get; set; }
 
-    [NotNullNotEmpty]
+    [Required]
     public string Version { get; set; }
 
     public EditDivisionViewModel()

@@ -1,7 +1,6 @@
 ﻿using System;
 
-using NHibernate.Validator.Constraints;
-
+using DataAnnotationsExtensions;
 
 namespace ClubPool.Web.Controllers.Divisions.ViewModels
 {
