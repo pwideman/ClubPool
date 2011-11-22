@@ -6,10 +6,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Configuration;
 
-using SharpArch.Core;
-
+using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.Configuration;
-
 using ClubPool.Web.Services.Configuration;
 
 namespace ClubPool.Web.Services.Messaging
@@ -21,7 +19,7 @@ namespace ClubPool.Web.Services.Messaging
     protected string systemEmailPassword;
 
     public EmailService(IConfigurationService configService) {
-      Check.Require(null != configService, "configService cannot be null");
+      Arg.NotNull(configService, "configService");
 
       var config = configService.GetConfig();
       smtpHost = config.SmtpHost;
@@ -51,8 +49,8 @@ namespace ClubPool.Web.Services.Messaging
     }
 
     public void SendEmail(string from, IList<String> to, IList<string> cc, IList<string> bcc, string subject, string body) {
-      Check.Require(!string.IsNullOrEmpty(from), "from cannot be null or empty");
-      Check.Require(null != to && to.Count > 0, "to cannot be null or zero length");
+      Arg.NotNull(from, "from");
+      Arg.Require(null != to && to.Count > 0, "to cannot be null or zero length");
 
       using(var mm = new MailMessage()) {
         mm.From = new MailAddress(SystemEmailAddress);
