@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+
+using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 
@@ -36,7 +33,7 @@ namespace ClubPool.Web.Controllers
       }
     }
 
-    [Range(1, Int32.MaxValue)]
+    [Min(1)]
     public int Id { get; set; }
   }
 }
