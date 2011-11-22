@@ -9,10 +9,6 @@ namespace ClubPool.Web.Controllers
 {
   public abstract class BaseController : Controller
   {
-    protected bool ValidateViewModel(object viewModel) {
-      return false;
-    }
-
     protected string BuildUrlFromExpression<T>(Expression<Action<T>> action, RouteValueDictionary values) where T : Controller {
       var rvd = Microsoft.Web.Mvc.Internal.ExpressionHelper.GetRouteValuesFromExpression(action);
       foreach (var entry in RouteData.Values) {
