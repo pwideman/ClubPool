@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-using NHibernate.Validator.Constraints;
+using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
-  public abstract class TeamViewModel : ValidatableViewModel
+  public abstract class TeamViewModel
   {
     protected List<PlayerViewModel> availablePlayers;
 
@@ -77,7 +76,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public IEnumerable<PlayerViewModel> AvailablePlayers { get { return availablePlayers; } }
 
     [DisplayName("Name:")]
-    [NotNullNotEmpty]
+    [Required(ErrorMessage="Required")]
     public string Name { get; set; }
 
     [DisplayName("Schedule priority:")]

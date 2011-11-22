@@ -52,7 +52,7 @@ namespace ClubPool.Web.Controllers.Teams
     public ActionResult Create(CreateTeamViewModel viewModel) {
       var division = repository.Get<Division>(viewModel.DivisionId);
 
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         viewModel.ReInitialize(repository, division.Season);
         return View(viewModel);
       }
@@ -125,7 +125,7 @@ namespace ClubPool.Web.Controllers.Teams
         return EditRedirectForConcurrency(viewModel.Id);
       }
       
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         viewModel.ReInitialize(repository, team);
         return View(viewModel);
       }
@@ -249,7 +249,7 @@ namespace ClubPool.Web.Controllers.Teams
     [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult UpdateName(UpdateNameViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
+      if (!ModelState.IsValid) {
         return AjaxUpdate(false, "Invalid name");
       }
       var team = repository.Get<Team>(viewModel.Id);

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
-using NHibernate.Validator.Constraints;
+using DataAnnotationsExtensions;
 
 namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
-  public class UpdateNameViewModel : ValidatableViewModel
+  public class UpdateNameViewModel
   {
     [Min(1)]
     public int Id { get; set; }
 
-    [NotNullNotEmpty]
+    [Required]
     public string Name { get; set; }
   }
 }

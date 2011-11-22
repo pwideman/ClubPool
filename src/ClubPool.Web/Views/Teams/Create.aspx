@@ -24,7 +24,6 @@
       </div>
     </fieldset>
     <% } %>
-    <%= Html.ClientSideValidation<ClubPool.Web.Controllers.Teams.ViewModels.CreateTeamViewModel>() %>
   </div>
 </asp:Content>
 

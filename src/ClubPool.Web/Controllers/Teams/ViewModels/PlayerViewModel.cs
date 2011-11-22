@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Teams.ViewModels

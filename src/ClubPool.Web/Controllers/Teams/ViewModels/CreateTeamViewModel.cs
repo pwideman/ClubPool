@@ -1,6 +1,6 @@
 ﻿using System;
 
-using NHibernate.Validator.Constraints;
+using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+﻿using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
-using NHibernate.Validator.Constraints;
+using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
@@ -37,7 +34,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       }
     }
 
-    [NotNullNotEmpty]
+    [Required]
     public string Version { get; set; }
 
     [Min(1)]
