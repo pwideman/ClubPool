@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Reflection;
 using System.Web.Security;
 using System.Data.Entity;
 
@@ -15,7 +13,6 @@ using log4net;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.Binders;
 using ClubPool.Web.Infrastructure.EntityFramework;
-using ClubPool.Web.Controllers;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Models;
 
@@ -30,6 +27,7 @@ namespace ClubPool.Web
 
     public static void RegisterGlobalFilters(GlobalFilterCollection filters)
     {
+      filters.Add(new ElmahHandleErrorLoggerFilter());
       filters.Add(new HandleErrorAttribute());
     }
 
@@ -52,8 +50,7 @@ namespace ClubPool.Web
 
       AreaRegistration.RegisterAllAreas();
 
-      // TODO: uncomment this once we figure out elmah with the new filters
-      //RegisterGlobalFilters(GlobalFilters.Filters);
+      RegisterGlobalFilters(GlobalFilters.Filters);
       RegisterRoutes(RouteTable.Routes);
     }
 

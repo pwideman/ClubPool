@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Net;
 
-using ClubPool.Web.Controllers.Attributes;
 using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers
 {
-  [ElmahRescue("DefaultError")]
   public abstract class BaseController : Controller
   {
     protected bool ValidateViewModel(object viewModel) {

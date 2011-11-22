@@ -57,9 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\dotless.1.2.1.0\lib\dotless.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Elmah, Version=1.1.11517.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Elmah, Version=1.2.13605.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Elmah.dll</HintPath>
+      <HintPath>..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -137,6 +137,7 @@
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
     <Compile Include="Infrastructure\CustomExceptions.cs" />
+    <Compile Include="Infrastructure\ElmahHandleErrorLoggerFilter.cs" />
     <Compile Include="Infrastructure\EntityFramework\ClubPoolContext.cs" />
     <Compile Include="Infrastructure\EntityFramework\Repository.cs" />
     <Compile Include="Infrastructure\IDbContext.cs" />
@@ -155,8 +156,6 @@
     <Compile Include="Models\SkillLevel.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Controllers\Attributes\ConfigRescueAttribute.cs" />
-    <Compile Include="Controllers\Attributes\ElmahRescueAttribute.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Contact\ContactController.cs" />
     <Compile Include="Controllers\Contact\ViewModels\ContactViewModelBase.cs" />
@@ -172,7 +171,6 @@
     <Compile Include="Controllers\Divisions\ViewModels\CreateDivisionViewModel.cs" />
     <Compile Include="Controllers\Divisions\ViewModels\DivisionViewModel.cs" />
     <Compile Include="Controllers\Divisions\ViewModels\EditDivisionViewModel.cs" />
-    <Compile Include="Controllers\Error\ErrorController.cs" />
     <Compile Include="Controllers\Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Home\ViewModels\AboutViewModel.cs" />
@@ -332,7 +330,6 @@
     <Content Include="Views\CurrentSeason\StandingsPlayer.ascx" />
     <Content Include="Views\Dashboard\Index.aspx" />
     <Content Include="Views\Dashboard\AlertsGadget.aspx" />
-    <Content Include="Views\Error\NotFound.aspx" />
     <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Home\Rules.aspx" />
@@ -369,7 +366,6 @@
     <Content Include="Views\Users\CreateUserControl.ascx" />
     <Content Include="Views\Users\Edit.aspx" />
     <Content Include="Views\Users\LoginControl.ascx" />
-    <Content Include="Views\Shared\Rescues\DefaultError.aspx" />
     <Content Include="Views\Users\AccountHelp.aspx" />
     <Content Include="Views\Users\Index.aspx" />
     <Content Include="Views\Users\Login.aspx" />
@@ -400,7 +396,9 @@
     <Content Include="Config\connectionstrings.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\clubpool.config" />
+    <Content Include="Config\clubpool.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\machinekey.config" />
