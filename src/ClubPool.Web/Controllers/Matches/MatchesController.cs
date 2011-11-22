@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
-using System.Text;
-using System.Collections.Generic;
 
-using ClubPool.Framework.Validation;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Models;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Matches.ViewModels;
-using ClubPool.Web.Controllers.Extensions;
 
 namespace ClubPool.Web.Controllers.Matches
 {
@@ -48,8 +43,8 @@ namespace ClubPool.Web.Controllers.Matches
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditMatchViewModel viewModel) {
-      if (!ValidateViewModel(viewModel)) {
-        return Json(new EditMatchResponseViewModel(false, "Validation errors", viewModel.ValidationResults()));
+      if (!ModelState.IsValid) {
+        return Json(new EditMatchResponseViewModel(false, "Validation errors", ModelState));
       }
       else {
         // we must perform some manual validation as well

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Linq;
-using System.Text;
-
-using SharpArch.Core.CommonValidator;
 
 using ClubPool.Web.Controllers.Shared.ViewModels;
 
@@ -27,10 +24,10 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
       Message = message;
     }
 
-    public EditMatchResponseViewModel(bool success, string message, IEnumerable<IValidationResult> validationResults)
+    public EditMatchResponseViewModel(bool success, string message, ModelStateDictionary modelState)
       : this(success, message) {
       var results = new List<ValidationResultViewModel>();
-      foreach (var result in validationResults) {
+      foreach (var result in modelState.Where(kvp => kvp.Value.Errors.Count > 0)) {
         results.Add(new ValidationResultViewModel(result));
       }
       ValidationResults = results;
@@ -43,10 +40,12 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
     public string Message { get; set; }
     public string PropertyName { get; set; }
 
-    public ValidationResultViewModel(IValidationResult result) {
-      AttemptedValue = result.AttemptedValue;
-      Message = result.Message;
-      PropertyName = result.PropertyName;
+    public ValidationResultViewModel(KeyValuePair<string, ModelState> result) {
+      if (null != result.Value.Value) {
+        AttemptedValue = result.Value.Value.AttemptedValue;
+      }
+      Message = result.Value.Errors.First().ErrorMessage;
+      PropertyName = result.Key;
     }
   }
 
