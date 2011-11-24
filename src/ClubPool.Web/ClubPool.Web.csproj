@@ -77,10 +77,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="MvcContrib, Version=0.0.1.913, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\MvcContrib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration.Install" />
@@ -158,7 +154,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Contact\ContactController.cs" />
-    <Compile Include="Controllers\Contact\ViewModels\ContactViewModelBase.cs" />
+    <Compile Include="Controllers\Contact\ViewModels\ContactViewModel.cs" />
     <Compile Include="Controllers\ControllerEnums.cs" />
     <Compile Include="Controllers\CurrentSeason\CurrentSeasonController.cs" />
     <Compile Include="Controllers\CurrentSeason\ViewModels\CurrentSeasonScheduleViewModel.cs" />
@@ -338,7 +334,6 @@
     <Content Include="Views\Matches\UserHistory.aspx" />
     <Content Include="Views\Meets\Scoresheet.aspx" />
     <Content Include="Views\Meets\View.aspx" />
-    <Content Include="Views\Meets\PlayerCard.ascx" />
     <Content Include="Views\Navigation\Menu.ascx" />
     <Content Include="Views\Divisions\Create.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
@@ -346,7 +341,6 @@
     <Content Include="Views\Shared\SkillLevelCalculationView.ascx" />
     <Content Include="Views\Teams\Details.aspx" />
     <Content Include="Views\Teams\PlayerListView.ascx" />
-    <Content Include="Views\Seasons\TeamView.ascx" />
     <Content Include="Views\Teams\Create.aspx" />
     <Content Include="Views\Seasons\ChangeActive.aspx" />
     <Content Include="Views\Seasons\Create.aspx" />
@@ -357,7 +351,6 @@
     <Content Include="Views\Seasons\SeasonEditControl.ascx" />
     <Content Include="Views\Seasons\View.aspx" />
     <Content Include="Views\Shared\ErrorMessage.ascx" />
-    <Content Include="Views\Shared\FormError.ascx" />
     <Content Include="Views\Shared\NotificationMessage.ascx" />
     <Content Include="Views\Shared\Pager.ascx" />
     <Content Include="Views\Teams\Edit.aspx" />

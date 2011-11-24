@@ -1,12 +1,11 @@
 ﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Meets.ViewModels.ScoresheetViewModel>" %>
-<%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <!DOCTYPE html>
 
 <html>
   <head>
     <title>Scoresheet</title>
-    <%= Html.Stylesheet("scoresheet.less") %>
+    <link href="<%= Url.Content("~/content/css/scoresheet.less")%>" type="text/css" rel="Stylesheet" />
   </head>
   <body>
     <div class="noprint notification-container">

@@ -1,7 +1,4 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Users.ViewModels.IndexViewModel>" %>
-<%@ Import Namespace="MvcContrib.UI.Pager"%>
-<%@ Import Namespace="MvcContrib.UI.Grid"%>
-<%@ Import Namespace="MvcContrib.Pagination"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">

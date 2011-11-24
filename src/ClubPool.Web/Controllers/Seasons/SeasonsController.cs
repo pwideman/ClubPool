@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 
-using MvcContrib;
-
 using ClubPool.Web.Models;
 using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
@@ -49,7 +47,7 @@ namespace ClubPool.Web.Controllers.Seasons
       repository.SaveOrUpdate(season);
       repository.SaveChanges();
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was created successfully";
-      return this.RedirectToAction(c => c.Index(null));
+      return RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -75,7 +73,7 @@ namespace ClubPool.Web.Controllers.Seasons
 
       if (null == season) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The season you were editing was deleted by another user";
-        return this.RedirectToAction(c => c.Index(null));
+        return RedirectToAction("Index");
       }
 
       if (viewModel.Version != season.EncodedVersion) {
@@ -99,13 +97,13 @@ namespace ClubPool.Web.Controllers.Seasons
       }
 
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was updated successfully";
-      return this.RedirectToAction(c => c.Index(null));
+      return RedirectToAction("Index");
     }
 
     private ActionResult EditRedirectForConcurrency(int id) {
       TempData[GlobalViewDataProperty.PageErrorMessage] =
         "This season was updated by another user while you were viewing this page. Enter your changes again.";
-      return this.RedirectToAction(c => c.Edit(id));
+      return RedirectToAction("Edit", new { id = id });
     }
 
     [Authorize(Roles = Roles.Administrators)]
@@ -127,7 +125,7 @@ namespace ClubPool.Web.Controllers.Seasons
           "There are completed matches in this season, it cannot be deleted.";
       }
 
-      return this.RedirectToAction(c => c.Index(page));
+      return RedirectToAction("Index", new { page = page });
     }
 
     [HttpGet]
@@ -162,10 +160,10 @@ namespace ClubPool.Web.Controllers.Seasons
       }
       catch (UpdateConcurrencyException) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "One or more of the seasons were updated by another user, make your changes again.";
-        return this.RedirectToAction(c => c.ChangeActive());
+        return RedirectToAction("ChangeActive");
       }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The active season has been changed";
-      return this.RedirectToAction(c => c.Index(null));
+      return RedirectToAction("Index");
     }
 
     [HttpGet]

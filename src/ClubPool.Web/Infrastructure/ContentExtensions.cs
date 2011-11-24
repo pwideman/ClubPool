@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Web.Routing;
 using System.Web.Mvc;
+
 using Microsoft.Web.Mvc;
 
 namespace ClubPool.Web.Infrastructure
@@ -23,6 +24,21 @@ namespace ClubPool.Web.Infrastructure
 
     public static string ContentImageUrl(this UrlHelper helper, string image) {
       return helper.Content("~/content/images/" + image);
+    }
+
+    public static MvcHtmlString Stylesheet(this HtmlHelper helper, string cssFile) {
+      return new MvcHtmlString(string.Format("<link rel=\"Stylesheet\" type=\"text/css\" href=\"{0}\"/>", 
+        GetContentUrl(helper.ViewContext.RequestContext, "~/content/css/" + cssFile)));
+    }
+
+    public static MvcHtmlString ScriptInclude(this HtmlHelper helper, string jsFile) {
+      return new MvcHtmlString(string.Format("<script type=\"text/javascript\" src=\"{0}\" ></script>\n", 
+        GetContentUrl(helper.ViewContext.RequestContext, "~/scripts/" + jsFile)));
+    }
+
+    private static string GetContentUrl(RequestContext context, string path) {
+      var url = new UrlHelper(context);
+      return url.Content(path);
     }
   }
 }

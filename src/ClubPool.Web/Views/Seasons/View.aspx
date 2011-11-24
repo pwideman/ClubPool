@@ -3,7 +3,6 @@
 <%@ Import Namespace="ClubPool.Web.Controllers.Teams" %>
 <%@ Import Namespace="ClubPool.Web.Controllers.Seasons" %>
 <%@ Import Namespace="ClubPool.Web.Infrastructure" %>
-<%@ Import Namespace="MvcContrib.UI.Html" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
   <div class="heading">

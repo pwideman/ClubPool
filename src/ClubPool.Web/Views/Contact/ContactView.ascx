@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Contact.ViewModels.ContactViewModelBase>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Contact.ViewModels.ContactViewModel>" %>
 
 <h4>Send email to <%= Model.Name %></h4>
 

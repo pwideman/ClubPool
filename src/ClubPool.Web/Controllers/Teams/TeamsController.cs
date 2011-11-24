@@ -2,8 +2,6 @@
 using System.Web.Mvc;
 using System.Collections.Generic;
 
-using MvcContrib;
-
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
@@ -68,7 +66,7 @@ namespace ClubPool.Web.Controllers.Teams
       repository.SaveOrUpdate(team);
       repository.SaveChanges();
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was created successfully";
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
+      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
     }
 
     [HttpPost]
@@ -88,7 +86,7 @@ namespace ClubPool.Web.Controllers.Teams
         repository.Delete(team);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was deleted";
       }
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
+      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
     }
 
     [HttpGet]
@@ -110,7 +108,7 @@ namespace ClubPool.Web.Controllers.Teams
 
       if (null == team) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The team you were editing was deleted by another user";
-        return this.RedirectToAction<Seasons.SeasonsController>(c => c.Index(null));
+        return RedirectToAction("Index", "Seasons");
       }
 
       if (viewModel.Version != team.EncodedVersion) {
@@ -165,7 +163,7 @@ namespace ClubPool.Web.Controllers.Teams
         return EditRedirectForConcurrency(viewModel.Id);
       }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(team.Division.Season.Id));
+      return RedirectToAction("View", "Seasons", new { id = team.Division.Season.Id });
     }
 
     public virtual void AddPlayer(Team team, User player) {
@@ -218,7 +216,7 @@ namespace ClubPool.Web.Controllers.Teams
     private ActionResult EditRedirectForConcurrency(int id) {
       TempData[GlobalViewDataProperty.PageErrorMessage] =
         "This team was updated by another user while you were viewing this page. Enter your changes again.";
-      return this.RedirectToAction(c => c.Edit(id));
+      return RedirectToAction("Edit", new { id = id });
     }
 
     [Authorize]

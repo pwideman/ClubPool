@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 
-using MvcContrib;
-
 using ClubPool.Web.Models;
 using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
@@ -68,7 +66,7 @@ namespace ClubPool.Web.Controllers.Divisions
       // I hate doing this here because theoretically /divisions/create could be called
       // from anywhere, but I don't know what else to do now. Same comment applies for all
       // redirects in this controller
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(season.Id));
+      return RedirectToAction("View", "Seasons", new { id = season.Id });
     }
 
     [HttpPost]
@@ -87,7 +85,7 @@ namespace ClubPool.Web.Controllers.Divisions
         DeleteDivision(division);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was deleted";
       }
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(seasonId));
+      return RedirectToAction("View", "Seasons", new { id = seasonId });
     }
 
     private void DeleteDivision(Division division) {
@@ -138,7 +136,7 @@ namespace ClubPool.Web.Controllers.Divisions
 
       if (null == division) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The division you were editing was deleted by another user";
-        return this.RedirectToAction<Seasons.SeasonsController>(c => c.Index(null));
+        return RedirectToAction("Index", "Seasons");
       }
 
       if (viewModel.Version != division.EncodedVersion) {
@@ -162,13 +160,13 @@ namespace ClubPool.Web.Controllers.Divisions
         return EditRedirectForConcurrency(viewModel.Id);
       }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was updated";
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
+      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
     }
 
     private ActionResult EditRedirectForConcurrency(int id) {
       TempData[GlobalViewDataProperty.PageErrorMessage] =
         "This division was updated by another user while you were viewing this page. Enter your changes again.";
-      return this.RedirectToAction(c => c.Edit(id));
+      return RedirectToAction("Edit", new { id = id });
     }
 
     [HttpPost]
@@ -186,7 +184,7 @@ namespace ClubPool.Web.Controllers.Divisions
         TempData[GlobalViewDataProperty.PageErrorMessage] = e.Message;
       }
       repository.SaveChanges();
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
+      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
     }
 
     [HttpPost]
@@ -197,7 +195,7 @@ namespace ClubPool.Web.Controllers.Divisions
       if (!division.HasCompletedMatches()) {
         DeleteDivisionMeets(division);
       }
-      return this.RedirectToAction<Seasons.SeasonsController>(c => c.View(division.Season.Id));
+      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
     }
   }
 
