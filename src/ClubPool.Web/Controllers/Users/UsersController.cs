@@ -5,7 +5,6 @@ using System.Text;
 using System.Collections.Generic;
 using System.Web;
 
-using Microsoft.Web.Mvc;
 using Elmah;
 
 using ClubPool.Web.Infrastructure;
@@ -84,7 +83,7 @@ namespace ClubPool.Web.Controllers.Users
           return Redirect(returnUrl);
         }
         else {
-          return this.RedirectToAction<Dashboard.DashboardController>(c => c.Index());
+          return RedirectToAction("Index", "Dashboard");
         }
       }
       else {
@@ -100,7 +99,7 @@ namespace ClubPool.Web.Controllers.Users
           return this.Redirect(viewModel.ReturnUrl);
         }
         else {
-          return this.RedirectToAction<Dashboard.DashboardController>(x => x.Index());
+          return RedirectToAction("Index", "Dashboard");
         }
       }
       else {
@@ -181,17 +180,17 @@ namespace ClubPool.Web.Controllers.Users
       foreach (var user in users) {
         if (membershipService.ValidatePasswordResetToken(token, user)) {
           authenticationService.LogIn(user.Username, false);
-          return this.RedirectToAction(c => c.Edit(user.Id));
+          return RedirectToAction("Edit", new { id = user.Id });
         }
       }
       // if we got here, the token is not valid
       TempData[GlobalViewDataProperty.PageErrorMessage] = "The reset password link that you clicked on is invalid, enter your information again";
-      return this.RedirectToAction(c => c.ResetPassword());
+      return RedirectToAction("ResetPassword");
     }
 
     public ActionResult Logout() {
       authenticationService.LogOut();
-      return this.RedirectToAction<Home.HomeController>(x => x.Index());
+      return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -256,7 +255,7 @@ namespace ClubPool.Web.Controllers.Users
       else {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "There is data in the system referencing this user, the user cannot be deleted.";
       }
-      return this.RedirectToAction(c => c.Index(page, q));
+      return RedirectToAction("Index", new { page = page, q = q });
     }
 
     protected bool CanDeleteUser(User user, IRepository repository) {
@@ -309,7 +308,7 @@ namespace ClubPool.Web.Controllers.Users
           }
         }
       }
-      return this.RedirectToAction(c => c.Unapproved());
+      return RedirectToAction("Unapproved");
     }
 
     private List<Tuple<string, string>> SendApprovedEmails(List<Tuple<string, string, string, string>> emails) {
@@ -480,7 +479,7 @@ namespace ClubPool.Web.Controllers.Users
           authenticationService.LogIn(user.Username, false);
           authTicketChanged = true;
         }
-        return this.RedirectToAction(c => c.Edit(viewModel.Id));
+        return RedirectToAction("Edit", new { id = viewModel.Id });
       }
       catch (Exception) {
         // revert new auth ticket, if set
@@ -494,7 +493,7 @@ namespace ClubPool.Web.Controllers.Users
     private ActionResult EditRedirectForConcurrency(int id) {
       TempData[GlobalViewDataProperty.PageErrorMessage] =
         "This user was updated by another user while you were viewing this page. Enter your changes again.";
-      return this.RedirectToAction(c => c.Edit(id));
+      return RedirectToAction("Edit", new { id = id });
     }
 
     [HttpGet]
@@ -518,7 +517,7 @@ namespace ClubPool.Web.Controllers.Users
 
       repository.SaveChanges();
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was created successfully";
-      return this.RedirectToAction(c => c.Index(null, null));
+      return RedirectToAction("Index");
     }
 
     protected User CreateUser(CreateViewModel viewModel, bool approved, bool locked) {

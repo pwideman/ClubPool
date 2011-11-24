@@ -73,9 +73,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Web.Mvc, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Microsoft.Web.Mvc.dll</HintPath>
+      <HintPath>..\packages\Mvc3Futures.3.0.20105.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -173,7 +173,6 @@
     <Compile Include="Controllers\Home\ViewModels\IndexViewModel.cs" />
     <Compile Include="Controllers\Home\ViewModels\RegulationsViewModel.cs" />
     <Compile Include="Controllers\Home\ViewModels\RulesViewModel.cs" />
-    <None Include="Controllers\HttpNotFoundResult.cs" />
     <Compile Include="Controllers\Matches\MatchesController.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchResponseViewModel.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchViewModel.cs" />
@@ -247,9 +246,7 @@
     <Compile Include="Services\Configuration\IConfigurationService.cs" />
     <Compile Include="Services\Membership\IMembershipService.cs" />
     <Content Include="packages.config" />
-    <None Include="Services\Membership\IRoleService.cs" />
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
-    <None Include="Services\Membership\SharpArchRoleService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
