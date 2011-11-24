@@ -2,7 +2,7 @@
 
 namespace ClubPool.Web.Infrastructure
 {
-  public static class IQueryableExtensions
+  public static class PagingExtensions
   {
     public static IQueryable<T> Page<T>(this IQueryable<T> query, int index, int size) {
       Arg.NotNull(query, "query");

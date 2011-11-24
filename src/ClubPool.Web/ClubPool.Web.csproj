@@ -137,7 +137,7 @@
     <Compile Include="Infrastructure\EntityFramework\ClubPoolContext.cs" />
     <Compile Include="Infrastructure\EntityFramework\Repository.cs" />
     <Compile Include="Infrastructure\IDbContext.cs" />
-    <Compile Include="Infrastructure\IQueryableExtensions.cs" />
+    <Compile Include="Infrastructure\PagingExtensions.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Entity.cs" />
