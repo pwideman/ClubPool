@@ -8,7 +8,6 @@ using System.Data.Entity;
 
 using Autofac;
 using Autofac.Integration.Mvc;
-using log4net;
 
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.Binders;
@@ -23,8 +22,6 @@ namespace ClubPool.Web
 
   public class MvcApplication : HttpApplication
   {
-    protected static readonly ILog logger = LogManager.GetLogger(typeof(MvcApplication));
-
     public static void RegisterGlobalFilters(GlobalFilterCollection filters)
     {
       filters.Add(new ElmahHandleErrorLoggerFilter());
@@ -42,8 +39,6 @@ namespace ClubPool.Web
     }
 
     protected void Application_Start() {
-      log4net.Config.XmlConfigurator.Configure();
-
       ModelBinders.Binders.DefaultBinder = new ModelBinder();
 
       InitializeServiceLocator();
@@ -99,7 +94,6 @@ namespace ClubPool.Web
         authTicket = FormsAuthentication.Decrypt(authCookie.Value);
       }
       catch (Exception ex) {
-        logger.Error("Forms authentication ticket could not be decrypted", ex);
         SetUnauthorizedPrincipal();
         return;
       }
