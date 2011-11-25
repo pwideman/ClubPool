@@ -9,7 +9,7 @@
        Html.RenderPartial("ErrorMessage");
      } %>
   <div class="form-content edit-user-form">
-    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
+    <% using (var form = Html.BeginForm("Edit", "Users", null, FormMethod.Post, new { @class = "normal" })) { %>
       <fieldset>
         <%= Html.AntiForgeryToken()%>
         <%= Html.HiddenFor(m => m.Id) %>

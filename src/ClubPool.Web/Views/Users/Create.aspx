@@ -9,7 +9,7 @@
     <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
           Html.RenderPartial("ErrorMessage");
         } 
-        using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Create(null), FormMethod.Post, new { @class = "normal" })) {
+        using (var form = Html.BeginForm("Create", "Users", FormMethod.Post, new { @class = "normal" })) {
     %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>

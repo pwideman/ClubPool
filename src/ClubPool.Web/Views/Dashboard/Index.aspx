@@ -78,8 +78,8 @@
           <ul>
             <li>Skill Level: <%= Model.CurrentSeasonStats.SkillLevel %></li>
             <li>My Record: <%= Model.CurrentSeasonStats.PersonalRecord %></li>
-            <li>Team Name: <%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.CurrentSeasonStats.TeamId), Model.CurrentSeasonStats.TeamName) %></li>
-            <li>Teammate: <%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(Model.CurrentSeasonStats.TeammateId), Model.CurrentSeasonStats.TeammateName) %></li>
+            <li>Team Name: <%= Html.ActionLink(Model.CurrentSeasonStats.TeamName, "Details", "Teams", new { id = Model.CurrentSeasonStats.TeamId }, null)%></li>
+            <li>Teammate: <%= Html.ActionLink(Model.CurrentSeasonStats.TeammateName, "View", "Users", new { id = Model.CurrentSeasonStats.TeammateId}, null) %></li>
             <li>Team Record: <%= Model.CurrentSeasonStats.TeamRecord %></li>
           </ul>
         </div>

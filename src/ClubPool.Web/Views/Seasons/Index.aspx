@@ -7,11 +7,11 @@
   <div class="action-button-row">
     <div class="action-button">
       <%= Html.ContentImage("add-medium.png", "Add a new season") %>
-      <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Create(), "Add a new season") %>
+      <%= Html.ActionLink("Add a new season", "Create") %>
     </div>
     <div class="action-button">
       <%= Html.ContentImage("check-medium.png", "Change active season") %>
-      <%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.ChangeActive(), "Change the active season") %>
+      <%= Html.ActionLink("Change the active season", "ChangeActive") %>
     </div>
   </div>
   <div>
@@ -29,20 +29,20 @@
     <% foreach (var item in Model.Items) { %>
         <tr>
           <td><%= item.Id %></td>
-          <td><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.View(item.Id), item.Name) %></td>
+          <td><%= Html.ActionLink(item.Name, "View", "Seasons", new { id = item.Id }, null)%></td>
           <td>
             <% if (item.IsActive) { %>
             <%= Html.ContentImage("check-medium.png", "Current")%>
             <% } %>
           </td>
           <td class="action-column">
-            <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Edit(item.Id)) %>">
+            <a href="<%= Url.Action("Edit", "Seasons", new { id = item.Id })%>">
             <%= Html.ContentImage("edit-medium.png", "Edit") %>
             </a>
           </td>
           <td class="action-column">
             <% if (item.CanDelete) {
-                 using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Delete(item.Id, Model.CurrentPage), FormMethod.Post)) { %>
+                 using (var form = Html.BeginForm("Delete", "Seasons", new { id = item.Id, page = Model.CurrentPage }, FormMethod.Post, null)) { %>
               <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
               <%= Html.AntiForgeryToken()%>
             <%   }
@@ -71,7 +71,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Seasons</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
-<%= Html.Script("jquery.query.js") %>
+<%= Html.ScriptInclude("jquery.query.js") %>
 <script type="text/javascript">
   $(function () {
     $("tbody.content tr:odd").addClass("alt");

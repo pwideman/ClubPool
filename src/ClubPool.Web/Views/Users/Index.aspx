@@ -8,17 +8,17 @@
   <div class="action-button-row">
     <div class="action-button">
       <%= Html.ContentImage("adduser-medium.png", "Add a new user") %>
-      <%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(u => u.Create(), "Add a new user") %>
+      <%= Html.ActionLink("Add a new user", "Create", "Users") %>
     </div>
     <div class="action-button">
       <%= Html.ContentImage("unapproveduser-medium.png", "Unapproved users") %>
-      <%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(u => u.Unapproved(), "Unapproved users") %>
+      <%= Html.ActionLink("Unapproved users", "Unapproved", "Users") %>
     </div>
   </div>
   <div>
     <div class="users-search-container">
       <input value="<%= Html.Encode(Model.SearchQuery) %>" type="text" name="q" id="q" placeholder="Search" title="Enter all or part of a username, first or last name to search" class="users-search-input"/>
-      <%= Html.ContentImage("search-medium.png", "Search", new { id = "users-search-icon", @class = "users-search-icon" })%>
+      <%= Html.ContentImage("search-medium.png", "Search", "users-search-icon", "users-search-icon")%>
     </div>
     <div class="users-list-container">
       <% if (Model.Items.Any()) { %>
@@ -39,7 +39,7 @@
       <% foreach (var item in Model.Items) { %>
           <tr>
             <td><%= item.Id%></td>
-            <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(item.Id), item.Username)%></td>
+            <td><%= Html.ActionLink(item.Username, "View", "Users", new { id = item.Id })%></td>
             <td><%= Html.Encode(item.Name)%></td>
             <td><%= Html.Encode(item.Email)%></td>
             <td>
@@ -52,12 +52,12 @@
             </td>
             <td><%= string.Join(", ", item.Roles)%></td>
             <td class="action-column">
-              <a href="<%= Html.BuildUrlFromExpression<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(item.Id)) %>">
+              <a href="<%= Url.Action("Edit", "Users", new { id = item.Id }) %>">
               <%= Html.ContentImage("edit-medium.png", "Edit")%>
               </a>
             </td>
             <td class="action-column">
-              <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Delete(item.Id, Model.CurrentPage, Model.SearchQuery), FormMethod.Post)) { %>
+              <% using (var form = Html.BeginForm("Delete", "Users", new { id = item.Id, page = Model.CurrentPage, q = Model.SearchQuery }, FormMethod.Post)) { %>
                 <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
                 <%= Html.AntiForgeryToken()%>
               <% } %>
@@ -91,8 +91,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Users</asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
-<%= Html.Script("jquery.placeholder.js") %>
-<%= Html.Script("jquery.query.js") %>
+<%= Html.ScriptInclude("jquery.placeholder.js") %>
+<%= Html.ScriptInclude("jquery.query.js") %>
 
 <script type="text/javascript">
   var prevQuery = "";

@@ -21,14 +21,14 @@ Match Details
     <span>Match Details</span>
   </div>
   <p>
-    <strong><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.Team1Id), Model.Team1Name) %></strong> vs. 
-    <strong><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.Team2Id), Model.Team2Name) %></strong>, 
+    <strong><%= Html.ActionLink(Model.Team1Name, "Details", "Teams", new { id = Model.Team1Id }, null)%></strong> vs. 
+    <strong><%= Html.ActionLink(Model.Team2Name, "Details", "Teams", new { id = Model.Team2Id }, null)%></strong>, 
     scheduled for week <%= Model.ScheduledWeek %> (<%= Model.ScheduledDate%>)
   </p>
   <div class="action-button-row">
     <div class="action-button">
       <%= Html.ContentImage("printer-medium.png", "Print a soresheet") %>
-      <%= Html.ActionLink<ClubPool.Web.Controllers.Meets.MeetsController>(u => u.Scoresheet(Model.Id), "Print a scoresheet") %>
+      <%= Html.ActionLink("Print a scoresheet", "Scoresheet", "Meets", new { id = Model.Id }, null)%>
     </div>
   </div>
   <table id="match_details" class="match-details" cellpadding="0" cellspacing="0">
@@ -60,7 +60,7 @@ Match Details
            %>
           <tr class="first<%= firstWinnerClass%>" id="<%= match.Id%>_1">
             <td><%= matchIndex %></td>
-            <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(match.Player1.Id), match.Player1.Name)%></td>
+            <td><%= Html.ActionLink(match.Player1.Name, "View", "Users", new { id = match.Player1.Id }, null)%></td>
             <td id="<%=match.Id%>_p1innings"><%= match.Player1.Innings%></td>
             <td id="<%=match.Id%>_p1defshots"><%= match.Player1.DefensiveShots%></td>
             <td id="<%=match.Id%>_p1wins"><%= match.Player1.Wins%></td>
@@ -68,7 +68,7 @@ Match Details
           </tr>
           <tr class="second<%= secondWinnerClass%>" id="<%= match.Id%>_2">
             <td></td>
-            <td><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(match.Player2.Id), match.Player2.Name)%></td>
+            <td><%= Html.ActionLink(match.Player2.Name, "View", "Users", new { id = match.Player2.Id }, null)%></td>
             <td id="<%=match.Id%>_p2innings"><%= match.Player2.Innings%></td>
             <td id="<%=match.Id%>_p2defshots"><%= match.Player2.DefensiveShots%></td>
             <td id="<%=match.Id%>_p2wins"><%= match.Player2.Wins%></td>
@@ -95,7 +95,7 @@ Match Details
   </table>
 
   <div id="enter_results_window">
-    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Matches.MatchesController>(c => c.Edit(null), FormMethod.Post, new { id = "enter_results_form" })) { %>
+    <% using (var form = Html.BeginForm("Edit", "Matches", FormMethod.Post, new { id = "enter_results_form" })) { %>
     <%= Html.AntiForgeryToken() %>
     <input type="hidden" name="Id" id="match_id" />
     <input type="hidden" name="Player1Id" id="Player1Id" />

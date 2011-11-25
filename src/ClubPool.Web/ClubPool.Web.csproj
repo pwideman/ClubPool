@@ -73,10 +73,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Mvc, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Mvc3Futures.3.0.20105.0\lib\Microsoft.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration.Install" />
@@ -184,7 +180,6 @@
     <Compile Include="Controllers\Navigation\NavigationController.cs" />
     <Compile Include="Controllers\Navigation\ViewModels\MenuViewModel.cs" />
     <Compile Include="Controllers\PagedListViewModelBase.cs" />
-    <Compile Include="Controllers\PartialRequest.cs" />
     <Compile Include="Controllers\Seasons\SeasonsController.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\ChangeActiveViewModel.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\CreateSeasonViewModel.cs" />

@@ -13,7 +13,7 @@
 
 <% if (Model.InactiveSeasons.Any()) { %>
 <p>
-<% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.ChangeActive(), FormMethod.Post, new { @class = "normal" })) { %>
+<% using (var form = Html.BeginForm("ChangeActive", "Seasons", FormMethod.Post, new { @class = "normal" })) { %>
   <%= Html.AntiForgeryToken()%>
   Select a new active season:
   <select name="id">

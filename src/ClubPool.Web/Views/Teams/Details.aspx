@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
 <% if (Model.CanUpdateName) {
-     using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.UpdateName(null), FormMethod.Post, new { id = "update_name_form" })) { %>
+     using (var form = Html.BeginForm("UpdateName", "Teams", FormMethod.Post, new { id = "update_name_form" })) { %>
 <%= Html.AntiForgeryToken()%>
 <%= Html.HiddenFor(m => m.Id) %>
 <p><input type="text" id="name" name="name" class="team-name required" size="30" value="<%= Html.Encode(Model.Name) %>" title="Click to edit team name, enter or tab out to save"/></p>
@@ -22,7 +22,7 @@
         Players:
         <ul>
           <% foreach (var player in Model.Players) { %>
-          <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.View(player.Id), string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel)) %></li>
+          <li><%= Html.ActionLink(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel), "View", "Users", new { id = player.Id}, null) %></li>
           <% } %>
         </ul>
       </li>

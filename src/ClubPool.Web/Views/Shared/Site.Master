@@ -29,10 +29,10 @@
     <div id="header">
       <%= Html.ContentImage("HeaderLogo.png", "Logo") %>
       <div class="loginStatusPanel">
-        <% Html.RenderAction<ClubPool.Web.Controllers.Users.UsersController>(c => c.LoginStatus()); %>
+        <% Html.RenderAction("LoginStatus", "Users"); %>
       </div>
       <div id="menucontainer">
-        <% Html.RenderAction<ClubPool.Web.Controllers.Navigation.NavigationController>(c => c.Menu()); %>
+        <% Html.RenderAction("Menu", "Navigation"); %>
       </div>
     </div>
     <div id="container">
@@ -47,8 +47,8 @@
           <div class="column sidebar-container">
             <div class="sidebar sidebar-corner">
               <%
-              foreach (var sidebar in sidebarGadgetCollection.Values) {
-                sidebar.Action.Invoke(ViewContext);
+              foreach (var gadget in sidebarGadgetCollection.Values) {
+                Html.RenderAction(gadget.Action, gadget.Controller, gadget.RouteValues);
               }
               %>
             </div>

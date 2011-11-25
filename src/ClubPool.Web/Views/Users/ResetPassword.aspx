@@ -5,7 +5,7 @@
 <h5>Reset Password</h5>
 <p>Enter your username or email address below to have an email containing password reset instructions sent to the email address registered with
 the username (or to the supplied email address).</p>
-<% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.ResetPassword(), FormMethod.Post)) { %>
+<% using (var form = Html.BeginForm("ResetPassword", "Users", FormMethod.Post)) { %>
   <%= Html.AntiForgeryToken() %>
   <div><span class="resetpassword-label">Username:</span><%= Html.TextBoxFor(m => m.Username, new { @class = "resetpassword-field" })%></div>
   <div><span class="resetpassword-label">Email:</span><%= Html.TextBoxFor(m => m.Email, new { @class="resetpassword-field"}) %></div>
@@ -14,7 +14,7 @@ the username (or to the supplied email address).</p>
     <div><label for="captcha">Enter the text from the image above:</label></div>
     <div><%= Html.CaptchaTextBox("captcha")%><%= Html.ValidationMessage("captcha")%></div>
   </p>
-  <div><%= Html.SubmitButton("submit", "Reset Password") %></div>
+  <div><input type="submit" value="Reset Password" /></div>
 <% } %>
 <% if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) { 
        Html.RenderPartial("ErrorMessage");

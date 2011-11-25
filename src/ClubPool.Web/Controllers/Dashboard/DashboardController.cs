@@ -71,7 +71,7 @@ namespace ClubPool.Web.Controllers.Dashboard
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
         var unapprovedQuery = repository.All<User>().Where(u => !u.IsApproved);
         if (unapprovedQuery.Any()) {
-          var url = BuildUrlFromExpression<Users.UsersController>(u => u.Unapproved(), null);
+          var url = Url.Action("Unapproved", "Users");
           warnings.Add(new Alert(string.Format("There are {0} users awaiting approval", unapprovedQuery.Count()), url, AlertType.Warning));
         }
       }

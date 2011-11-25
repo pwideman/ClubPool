@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
-
-using Microsoft.Web.Mvc;
+using System.Text;
 
 namespace ClubPool.Web.Infrastructure
 {
@@ -10,12 +9,16 @@ namespace ClubPool.Web.Infrastructure
   /// </summary>
   public static class ContentExtensions
   {
-    public static MvcHtmlString ContentImage(this HtmlHelper helper, string image, string alt) {
-      return helper.Image("~/content/images/" + image, alt);
-    }
-
-    public static MvcHtmlString ContentImage(this HtmlHelper helper, string image, string alt, object htmlAttributes) {
-      return helper.Image("~/content/images/" + image, alt, htmlAttributes);
+    public static MvcHtmlString ContentImage(this HtmlHelper helper, string image, string alt = null, string id = null, string @class = null) {
+      var tag = new StringBuilder("<img src=\"{0}\" alt=\"{1}\" title=\"{1}\"");
+      if (null != id) {
+        tag.Append(" id=\"{2}\"");
+      }
+      if (null != @class) {
+        tag.Append(" class=\"{3}\"");
+      }
+      tag.Append("/>");
+      return new MvcHtmlString(string.Format(tag.ToString(), GetContentUrl(helper.ViewContext.RequestContext, "~/content/images/" + image), alt, id, @class));
     }
 
     public static string ContentImageUrl(this UrlHelper helper, string image) {

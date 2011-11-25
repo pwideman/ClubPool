@@ -21,9 +21,9 @@
     <button type="submit">Login</button>
   </div>
   <div class="form-row-span">
-    <%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.AccountHelp(), "Can't access your account?") %>
+    <%= Html.ActionLink("Can't access your account?", "AccountHelp", "Users") %>
   </div>
   <div class="form-row-span">
-    <%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), "Not a member? Sign up here") %>
+    <%= Html.ActionLink("Not a member? Sign up here", "SignUp", "Users") %>
   </div>
 </fieldset>

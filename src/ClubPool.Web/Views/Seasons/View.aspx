@@ -12,7 +12,7 @@
   <div class="action-button-row">
     <div class="action-button">
       <%= Html.ContentImage("add-medium.png", "Add Division") %>
-      <%= Html.ActionLink<DivisionsController>(c => c.Create(Model.Id), "Add a new division to this season") %>
+      <%= Html.ActionLink("Add a new division to this season", "Create", "Divisions", new { seasonId = Model.Id }, null)%>
     </div>
   </div>
 
@@ -30,17 +30,17 @@
       <div class="action-button-row">
         <div class="action-button">
           <%= Html.ContentImage("edit-medium.png", "Edit Division") %>
-          <%= Html.ActionLink<DivisionsController>(c => c.Edit(division.Id), "Edit this division") %>
+          <%= Html.ActionLink("Edit this division", "Edit", "Divisions", new { id = division.Id }, null)%>
         </div>
         <% if (!division.HasSchedule) { %>
         <div class="action-button">
           <%= Html.ContentImage("add-medium.png", "Add Team")%>
-          <%= Html.ActionLink<TeamsController>(c => c.Create(division.Id), "Add a new team to this division")%>
+          <%= Html.ActionLink("Add a new team to this division", "Create", "Teams", new { divisionId = division.Id }, null)%>
         </div>
         <% }
            if (division.CanDelete) { %>
         <div class="action-button">
-          <% using (var form = Html.BeginForm<DivisionsController>(c => c.Delete(division.Id), FormMethod.Post)) { %>
+          <% using (var form = Html.BeginForm("Delete", "Divisions", new { id = division.Id }, FormMethod.Post, null)) { %>
           <%= Html.AntiForgeryToken()%>
           <%= Html.ContentImage("delete-medium.png", "Delete Division") %>
           <a href="#" class="submit-form-link">Delete this division</a>
@@ -69,7 +69,7 @@
               <% foreach (var team in division.Teams) { %>
                 <tr>
                   <td><%= team.Id%></td>
-                  <td><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(team.Id), team.Name) %></td>
+                  <td><%= Html.ActionLink(team.Name, "Details", "Teams", new { id = team.Id }, null)%></td>
                   <td>
                   <% if (team.Players.Any()) { %>
                     <div class="season-view-player-list">
@@ -82,13 +82,13 @@
                   <% } %>
                   </td>
                   <td class="action-column">
-                    <a href="<%= Html.BuildUrlFromExpression<TeamsController>(c => c.Edit(team.Id)) %>">
+                    <a href="<%= Url.Action("Edit", "Teams", new { id = team.Id })%>">
                     <%= Html.ContentImage("edit-medium.png", "Edit")%>
                     </a>
                   </td>
                   <td class="action-column">
                     <% if (!division.HasSchedule) {
-                          using (var form = Html.BeginForm<TeamsController>(c => c.Delete(team.Id), FormMethod.Post, new { @class = "invisible" })) { %>
+                         using (var form = Html.BeginForm("Delete", "Teams", new { id = team.Id }, FormMethod.Post, new { @class = "invisible" })) { %>
                       <input type="image" value="Delete" alt="Delete" src="<%= Url.ContentImageUrl("delete-medium.png")%>"/>
                       <%= Html.AntiForgeryToken()%>
                     <%    }
@@ -107,7 +107,7 @@
             <% if (division.HasSchedule) { %>
               <div class="action-button-row">
                 <% if (!division.HasCompletedMatches) {
-                   using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.ClearSchedule(division.Id), FormMethod.Post, new { @class = "inline" })) { %>
+                     using (var form = Html.BeginForm("ClearSchedule", "Divisions", new { id = division.Id }, FormMethod.Post, new { @class = "inline" })) { %>
                 <%= Html.AntiForgeryToken()%>
                 <div class="action-button">
                   <%= Html.ContentImage("delete-medium.png", "Clear Schedule")%>
@@ -120,7 +120,7 @@
               <% }
                else { %>
               <p>This division does not have a schedule.</p>
-              <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Divisions.DivisionsController>(c => c.CreateSchedule(division.Id, null))) { %>
+              <% using (var form = Html.BeginForm("CreateSchedule", "Divisions", new { id = division.Id }, FormMethod.Post, null)) { %>
                 <%= Html.AntiForgeryToken()%>
                 <div class="schedule-byes-container">
                   <label for="byes">Number of byes:</label>

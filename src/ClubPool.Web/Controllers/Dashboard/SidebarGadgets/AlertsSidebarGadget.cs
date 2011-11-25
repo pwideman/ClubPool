@@ -7,9 +7,8 @@ namespace ClubPool.Web.Controllers.Dashboard.SidebarGadgets
     public static string Name = "Alerts";
 
     public AlertsSidebarGadget() {
-      var request = new PartialRequest();
-      request.SetAction<ClubPool.Web.Controllers.Dashboard.DashboardController>(c => c.AlertsGadget());
-      Action = request;
+      Action = "AlertsGadget";
+      Controller = "Dashboard";
     }
   }
 }

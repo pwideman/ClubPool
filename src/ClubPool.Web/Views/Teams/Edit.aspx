@@ -11,7 +11,7 @@
     <div class="form-header">
       All fields are required
     </div>
-    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Edit(null), FormMethod.Post, new { @class = "normal" })) { %>
+    <% using (var form = Html.BeginForm("Edit", "Teams", FormMethod.Post, new { @class = "normal" })) { %>
     <fieldset>
       <%= Html.AntiForgeryToken()%>
       <%= Html.HiddenFor(m => m.Id) %>

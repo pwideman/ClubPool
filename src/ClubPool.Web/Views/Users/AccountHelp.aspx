@@ -5,8 +5,8 @@
 <p>Choose one of the options below:</p>
 <div class="account-help-options">
   <ul>
-    <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.ResetPassword(), "I forgot my password")%></li>
-    <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.RecoverUsername(), "I forgot my username") %></li>
+    <li><%= Html.ActionLink("I forgot my password", "ResetPassword", "Users")%></li>
+    <li><%= Html.ActionLink("I forgot my username", "RecoverUsername", "Users")%></li>
   </ul>
 </div>
 </asp:Content>

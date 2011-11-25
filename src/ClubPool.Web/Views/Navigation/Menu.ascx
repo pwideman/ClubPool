@@ -1,13 +1,13 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ClubPool.Web.Controllers.Navigation.ViewModels.MenuViewModel>" %>
 
 <ul class="sf-menu">
-	<li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Index(), "Home") %></li>
-  <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(x => x.Login(string.Empty), "Login")%></li>
+  <li><%= Html.ActionLink("Home", "Index", "Home") %></li>
+  <li><%= Html.ActionLink("Login", "Login", "Users")%></li>
   <% if (Model.UserIsLoggedIn) { %>
   <li><a href="#">League</a>
     <ul>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Rules(), "Rules")%></li>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.Regulations(), "Regulations")%></li>
+      <li><%= Html.ActionLink("Rules", "Rules", "Home")%></li>
+      <li><%= Html.ActionLink("Regulations", "Regulations", "Home")%></li>
     </ul>
   </li>
   <% } %>
@@ -15,19 +15,19 @@
   <li><a href="#"><%= Html.Encode(Model.ActiveSeasonName) %></a>
     <ul>
       <% if (Model.HasCurrentTeam) { %>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(Model.CurrentTeamId), "My Team")%></li>
+      <li><%= Html.ActionLink("My Team", "Details", "Teams", new { id = Model.CurrentTeamId }, null)%></li>
       <% } %>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.CurrentSeason.CurrentSeasonController>(c => c.Schedule(), "Schedule")%></li>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.CurrentSeason.CurrentSeasonController>(c => c.Standings(), "Standings") %></li>
+      <li><%= Html.ActionLink("Schedule", "Schedule", "CurrentSeason")%></li>
+      <li><%= Html.ActionLink("Standings", "Standings", "CurrentSeason") %></li>
     </ul>
   </li>
   <% } %>
   <% if (Model.UserIsLoggedIn) { %>
   <li><a href="#">My</a>
     <ul>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Dashboard.DashboardController>(c => c.Index(), "Home") %></li>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Matches.MatchesController>(c => c.UserHistory(Model.UserId, null), "Match History")%></li>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Edit(Model.UserId), "Member Info") %></li>
+      <li><%= Html.ActionLink("Home", "Index", "Dashboard") %></li>
+      <li><%= Html.ActionLink("Match History", "UserHistory", "Matches", new { id = Model.UserId }, null)%></li>
+      <li><%= Html.ActionLink("Member Info", "Edit", "Users", new { id = Model.UserId }, null)%></li>
     </ul>
   </li>
   <% } 
@@ -35,13 +35,13 @@
   <li><a href="#">Admin</a>
     <ul>
       <% if (Model.HasActiveSeason) { %>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.View(Model.ActiveSeasonId), "Active Season")%></li>
+      <li><%= Html.ActionLink("Active Season", "View", "Seasons", new { id = Model.ActiveSeasonId }, null)%></li>
       <% } %>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Users.UsersController>(c => c.Index(null, null), "Users") %></li>
-      <li><%= Html.ActionLink<ClubPool.Web.Controllers.Seasons.SeasonsController>(c => c.Index(null), "Seasons") %></li>
+      <li><%= Html.ActionLink("Users", "Index", "Users") %></li>
+      <li><%= Html.ActionLink("Seasons", "Index", "Seasons") %></li>
       <li><a href="<%= Url.Content("~/elmah.axd")%>">Error Log</a></li>
     </ul>
   </li>
   <% } %>
-  <li><%= Html.ActionLink<ClubPool.Web.Controllers.Home.HomeController>(c => c.About(), "About") %></li>
+  <li><%= Html.ActionLink("About", "About", "Home") %></li>
 </ul>

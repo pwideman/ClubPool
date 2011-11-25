@@ -12,7 +12,7 @@
        Html.RenderPartial("ErrorMessage");
      } %>
   <div class="form-content">
-    <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.SignUp(), FormMethod.Post, new { @class = "normal" })) { %>
+    <% using (var form = Html.BeginForm("SignUp", "Users", FormMethod.Post, new { @class = "normal" })) { %>
       <fieldset>
         <%= Html.AntiForgeryToken()%>
         <% Html.RenderPartial("CreateUserControl"); %>

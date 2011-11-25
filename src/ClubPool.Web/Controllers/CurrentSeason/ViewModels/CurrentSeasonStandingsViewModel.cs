@@ -23,7 +23,9 @@ namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
         Divisions = divisions;
         var players = new List<StandingsPlayerViewModel>();
         foreach (var division in Divisions) {
-          players.AddRange(division.Players);
+          if (null != division.Players && division.Players.Any()) {
+            players.AddRange(division.Players);
+          }
         }
         AllPlayers = players.OrderByDescending(p => p.WinPercentage).ThenByDescending(p => p.Wins).ThenByDescending(p => p.SkillLevel);
       }

@@ -20,6 +20,6 @@
   </div>
   <div class="contact-view-row">
     <div class="contact-view-label">&nbsp;</div>
-    <div class="contact-view-field"><%= Html.SubmitButton("Send") %></div>
+    <div class="contact-view-field"><input type="submit" value="Send" /></div>
   </div>
 </div>

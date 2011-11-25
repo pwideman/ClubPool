@@ -10,8 +10,7 @@
      } %>
   <div>
     <div class="form-content login-form corner">
-      <% using (var form = Html.BeginForm<ClubPool.Web.Controllers.Users.UsersController>(c => c.Login(string.Empty), 
-            FormMethod.Post, new { @class = "normal", id = "loginForm" })) { %>
+      <% using (var form = Html.BeginForm("Login", "Users", FormMethod.Post, new { @class = "normal", id = "loginForm" })) { %>
         <% Html.RenderPartial("LoginControl"); %>
       <% } %>
     </div>

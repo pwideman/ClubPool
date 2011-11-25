@@ -38,11 +38,11 @@
           <% foreach (var team in division.Teams) { %>
             <tr <%= team.Highlight ? @"class=""highlight""" : "" %>>
               <td><%= team.Rank %></td>
-              <td><%= Html.ActionLink<ClubPool.Web.Controllers.Teams.TeamsController>(c => c.Details(team.Id), team.Name) %></td>
+              <td><%= Html.ActionLink(team.Name, "Details", "Teams", new { id = team.Id }, null)%></td>
               <td><%= string.Format("{0} - {1}", team.Wins, team.Losses) %></td>
               <td><%= string.Format("{0:0.00}", team.WinPercentage) %></td>
-              <% Html.RenderPartial("StandingsPlayer", team.Player1); %>
-              <% Html.RenderPartial("StandingsPlayer", team.Player2); %>
+              <% if (null != team.Player1) Html.RenderPartial("StandingsPlayer", team.Player1); %>
+              <% if (null != team.Player2) Html.RenderPartial("StandingsPlayer", team.Player2); %>
             </tr>
           <% } %>
           </tbody>
@@ -84,7 +84,7 @@
     <div class="action-button-row">
       <div class="action-button">
         <%= Html.ContentImage("download-medium.png", "Download CSV") %>
-        <%= Html.ActionLink<ClubPool.Web.Controllers.CurrentSeason.CurrentSeasonController>(c => c.DownloadAllPlayersStandings(), "Download CSV")%>
+        <%= Html.ActionLink("Download CSV", "DownloadAllPlayersStandings", "CurrentSeason")%>
       </div>
     </div>
     <table class="standings-table player-standings-table">
