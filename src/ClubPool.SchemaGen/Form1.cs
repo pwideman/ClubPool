@@ -42,8 +42,8 @@ namespace ClubPool.SchemaGen
     protected static readonly ILog logger = LogManager.GetLogger(typeof(SchemaGen));
 
     public SchemaGen() {
-      Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
-      //Database.SetInitializer<ClubPoolContext>(new DropCreateDatabaseAlways<ClubPoolContext>());
+      //Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
+      Database.SetInitializer<ClubPoolContext>(new DropCreateDatabaseAlways<ClubPoolContext>());
       InitializeComponent();
     }
 

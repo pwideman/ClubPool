@@ -39,6 +39,8 @@ namespace ClubPool.Web
     }
 
     protected void Application_Start() {
+      Database.SetInitializer<ClubPoolContext>(null);
+
       ModelBinders.Binders.DefaultBinder = new ModelBinder();
 
       InitializeServiceLocator();

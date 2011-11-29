@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Data;
 
 using ClubPool.Web.Models;
@@ -25,10 +26,24 @@ namespace ClubPool.Web.Infrastructure.EntityFramework
     private IDbTransaction transaction;
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder) {
-      base.OnModelCreating(modelBuilder);
+      var schema = "clubpool";
+      modelBuilder.Entity<Division>().ToTable("Divisions", schema);
+      modelBuilder.Entity<Match>().ToTable("Matches", schema);
+      modelBuilder.Entity<MatchPlayer>().ToTable("MatchPlayers", schema);
+      modelBuilder.Entity<MatchResult>().ToTable("MatchResults", schema);
 
-      modelBuilder.Entity<Team>().HasMany(t => t.Players).WithMany();
-      modelBuilder.Entity<Meet>().HasMany(m => m.Teams).WithMany();
+      modelBuilder.Entity<Meet>().ToTable("Meets", schema);
+      modelBuilder.Entity<Meet>().HasMany(m => m.Teams).WithMany().Map(cfg => cfg.ToTable("MeetsTeams", schema));
+
+      modelBuilder.Entity<Role>().ToTable("Roles", schema);
+      modelBuilder.Entity<Season>().ToTable("Seasons", schema);
+      modelBuilder.Entity<SkillLevel>().ToTable("SkillLevels", schema);
+
+      modelBuilder.Entity<Team>().ToTable("Teams", schema);
+      modelBuilder.Entity<Team>().HasMany(t => t.Players).WithMany().Map(cfg => cfg.ToTable("TeamsUsers", schema));
+
+      modelBuilder.Entity<User>().ToTable("Users", schema);
+      modelBuilder.Entity<User>().HasMany(u => u.Roles).WithMany(r => r.Users).Map(cfg => cfg.ToTable("RolesUsers", schema));
     }
 
     public void CommitTransaction() {
