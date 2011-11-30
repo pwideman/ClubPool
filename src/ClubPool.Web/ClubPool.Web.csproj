@@ -227,6 +227,48 @@
     <Compile Include="Services\Configuration\ConfigurationService.cs" />
     <Compile Include="Services\Configuration\IConfigurationService.cs" />
     <Compile Include="Services\Membership\IMembershipService.cs" />
+    <Content Include="Content\Images\add-medium.png" />
+    <Content Include="Content\Images\add-small.png" />
+    <Content Include="Content\Images\adduser-large.png" />
+    <Content Include="Content\Images\adduser-medium.png" />
+    <Content Include="Content\Images\arrows-ffffff.png" />
+    <Content Include="Content\Images\block-medium.png" />
+    <Content Include="Content\Images\block-small.png" />
+    <Content Include="Content\Images\calendar.gif" />
+    <Content Include="Content\Images\check-medium.png" />
+    <Content Include="Content\Images\check-small.png" />
+    <Content Include="Content\Images\delete-medium.png" />
+    <Content Include="Content\Images\delete-small.png" />
+    <Content Include="Content\Images\download-medium.png" />
+    <Content Include="Content\Images\edit-medium.png" />
+    <Content Include="Content\Images\edituser-large.png" />
+    <Content Include="Content\Images\enterresults-medium.png" />
+    <Content Include="Content\Images\error-medium.png" />
+    <Content Include="Content\Images\HeaderLogo.png" />
+    <Content Include="Content\Images\home.png" />
+    <Content Include="Content\Images\jump1.jpg" />
+    <Content Include="Content\Images\jump2.jpg" />
+    <Content Include="Content\Images\loading-medium.gif" />
+    <Content Include="Content\Images\loading-small.gif" />
+    <Content Include="Content\Images\lock-medium.png" />
+    <Content Include="Content\Images\LogOff.png" />
+    <Content Include="Content\Images\mail-medium.png" />
+    <Content Include="Content\Images\notification-medium.png" />
+    <Content Include="Content\Images\printer-medium.png" />
+    <Content Include="Content\Images\rack.jpg" />
+    <Content Include="Content\Images\refresh-medium.png" />
+    <Content Include="Content\Images\search-medium.png" />
+    <Content Include="Content\Images\shadow.png" />
+    <Content Include="Content\Images\sharp_arch.jpg" />
+    <Content Include="Content\Images\sharp_arch_small.gif" />
+    <Content Include="Content\Images\spinnerDefault.png" />
+    <Content Include="Content\Images\unapproveduser-large.png" />
+    <Content Include="Content\Images\unapproveduser-medium.png" />
+    <Content Include="Content\Images\user-small.png" />
+    <Content Include="Content\Images\users-large.png" />
+    <Content Include="Content\Images\viewresults-medium.png" />
+    <Content Include="Content\Images\viewresults-small.png" />
+    <Content Include="Content\Images\warning-medium.png" />
     <Content Include="packages.config" />
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
@@ -360,10 +402,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Content\css\jqueryui.css" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Content\Images\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Config\connectionstrings.config" />
   </ItemGroup>
