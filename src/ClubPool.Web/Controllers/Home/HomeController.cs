@@ -31,11 +31,6 @@ namespace ClubPool.Web.Controllers.Home
       return View(viewModel);
     }
 
-    [HttpGet]
-    public ActionResult StaleObjectStateError() {
-      return View();
-    }
-
     protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
       if (!authenticationService.IsLoggedIn()) {
