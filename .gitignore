@@ -31,3 +31,4 @@ _ReSharper*/
 src/app/ClubPool.Web/ClubPool.Web.Publish.xml
 src/ClubPool.sln.docstates
 src/ClubPool.Web/App_Data/*
+src/ClubPool.Web/ClubPool.Web.Publish.xml
