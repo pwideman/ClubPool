@@ -11,15 +11,8 @@ Firefox, Chrome, Safari, etc. IE6 and below will not work at all.</p>
 http://github.com/pwideman/clubpool/</a>. ClubPool is built with the following components:</p>
 <ul>
   <li><a href="http://www.asp.net/mvc">ASP.NET MVC</a></li>
-  <li><a href="http://mvccontrib.codeplex.com/">MvcContrib</a></li>
-  <li><a href="http://sharparchitecture.net">Sharp Architecture</a></li>
-  <li><a href="http://nhforge.org">NHibernate</a></li>
-  <li><a href="http://fluentnhibernate.org/">Fluent NHibernate</a></li>
-  <li><a href="http://nhforge.org/wikis/validator/default.aspx">NHibernate Validator</a></li>
   <li><a href="http://www.dotlesscss.org/">.Less Css</a></li>
-  <li><a href="http://castleproject.org/">Castle Windsor</a></li>
   <li><a href="http://code.google.com/p/elmah/">Elmah</a></li>
-  <li><a href="http://xval.codeplex.com/">xVal</a></li>
   <li><a href="http://jquery.com/">jQuery</a></li>
   <li><a href="http://jqueryui.com/">jQuery UI</a></li>
   <li>jQuery plugins:
@@ -34,8 +27,6 @@ http://github.com/pwideman/clubpool/</a>. ClubPool is built with the following c
     </ul>
   </li>
 </ul>
-
-<p>Special thanks to the team behind the <a href="http://whocanhelpme.codeplex.com/">Who Can Help Me?</a> sample application for all of the great ideas.</p>
 
 <p>Icons used:
   <ul>
