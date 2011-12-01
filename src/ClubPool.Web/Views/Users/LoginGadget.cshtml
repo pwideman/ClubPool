@@ -1,0 +1,7 @@
+﻿@model ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel
+
+<div class="sidebar-form-gadget">
+  @using (var form = Html.BeginForm("Login", "Users", FormMethod.Post)) {
+    @Html.Partial("_LoginControl")
+  }
+</div>

@@ -1,0 +1,55 @@
+@using ClubPool.Web.Controllers.Shared.SidebarGadgets
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8" />
+    @Html.Stylesheet("site.less")
+    @Html.Stylesheet("jqueryui.css")
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+    @Html.ScriptInclude("jquery.validate.min.js")
+    @Html.ScriptInclude("jquery.validate.unobtrusive.min.js")
+    @Html.ScriptInclude("jquery.event.hover-1.0.js")
+    @Html.ScriptInclude("supersubs.js")
+    @Html.ScriptInclude("superfish.js")
+    @Html.ScriptInclude("jquery.cookie.js")
+    @Html.ScriptInclude("xVal.jquery.validate.js")
+    @Html.ScriptInclude("clubpool.js")
+
+    
+    @* At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded *@
+    @RenderSection("Head", false)
+  </head>
+  <body>
+    <div id="header">
+      @Html.ContentImage("HeaderLogo.png", "Logo")
+      <div class="loginStatusPanel">
+        @{Html.RenderAction("LoginStatus", "Users");}
+      </div>
+      <div id="menucontainer">
+        @{Html.RenderAction("Menu", "Navigation");}
+      </div>
+    </div>
+    <div id="container">
+      <div id="maincontent" class="column">
+        @RenderBody()
+      </div>
+      @if (ViewData.ContainsKey(GlobalViewDataProperty.SidebarGadgetCollection)) {
+        SidebarGadgetCollection sidebarGadgetCollection =
+          ViewData[GlobalViewDataProperty.SidebarGadgetCollection] as SidebarGadgetCollection;
+        if (sidebarGadgetCollection.Count > 0) {
+          <div class="column sidebar-container">
+            <div class="sidebar sidebar-corner">
+              @foreach (var gadget in sidebarGadgetCollection.Values) {
+                Html.RenderAction(gadget.Action, gadget.Controller, gadget.RouteValues);
+              }
+            </div>
+          </div>
+        }
+      }
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>

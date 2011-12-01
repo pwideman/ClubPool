@@ -1,0 +1,20 @@
+﻿@model ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="heading">
+  @Html.ContentImage("logoff.png", "Login")
+  <span>Login</span>
+</div>
+@if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+  Html.Partial("ErrorMessage");
+}
+<div>
+  <div class="form-content login-form corner">
+    @using (var form = Html.BeginForm("Login", "Users", FormMethod.Post, new { @class = "normal", id = "loginForm" })) {
+      @Html.Partial("_LoginControl")
+    }
+  </div>
+</div>
