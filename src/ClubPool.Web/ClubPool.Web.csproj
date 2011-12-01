@@ -348,7 +348,6 @@
     <Content Include="Views\Dashboard\Index.aspx" />
     <Content Include="Views\Dashboard\AlertsGadget.aspx" />
     <Content Include="Views\Home\About.aspx" />
-    <Content Include="Views\Home\Index2.aspx" />
     <Content Include="Views\Home\Rules.aspx" />
     <Content Include="Views\Home\StaleObjectStateError.aspx" />
     <Content Include="Views\Home\Regulations.aspx" />
@@ -356,7 +355,6 @@
     <Content Include="Views\Meets\Scoresheet.aspx" />
     <Content Include="Views\Meets\View.aspx" />
     <Content Include="Views\Divisions\Create.aspx" />
-    <Content Include="Views\Navigation\Menu2.ascx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\ScheduleView.ascx" />
     <Content Include="Views\Shared\SkillLevelCalculationView.ascx" />
@@ -381,10 +379,6 @@
     <Content Include="Views\Users\Edit.aspx" />
     <Content Include="Views\Users\AccountHelp.aspx" />
     <Content Include="Views\Users\Index.aspx" />
-    <Content Include="Views\Users\Login2.aspx" />
-    <Content Include="Views\Users\LoginControl2.ascx" />
-    <Content Include="Views\Users\LoginGadget2.aspx" />
-    <Content Include="Views\Users\LoginStatus2.ascx" />
     <Content Include="Views\Users\RecoverUsername.aspx" />
     <Content Include="Views\Users\RecoverUsernameComplete.aspx" />
     <Content Include="Views\Users\ResetPassword.aspx" />
