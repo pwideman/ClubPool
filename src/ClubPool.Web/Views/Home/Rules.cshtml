@@ -1,9 +1,12 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Home.ViewModels.RulesViewModel>" %>
+﻿@model ClubPool.Web.Controllers.Home.ViewModels.RulesViewModel
 
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-<h4><%= Model.SiteName %> 8-Ball Rules of Play</h4>
+@{
+  ViewBag.Title = "Rules";
+}
+
+<h4>@Model.SiteName 8-Ball Rules of Play</h4>
 <p>Revised: 4 January 2010</p>
-<p>All players participating in the <%= Model.SiteName %> agree to abide by the modified 
+<p>All players participating in the @Model.SiteName agree to abide by the modified 
   <a href="http://www.bca-pool.com/"> BCA (Billiards Congress of America)</a> 
   <a href="http://www.billiards.com/article/official-bca-8-ball-rules">General Rules</a>
   as described below:</p>
@@ -32,7 +35,7 @@
     <p>The balls are racked in a triangle at the foot of the table with the 8-ball in the center 
     of the triangle, the first ball of the rack on the foot spot, a stripe ball in one corner of 
     the rack and a solid ball in the other corner.</p>
-    <p><%= Html.ContentImage("rack.jpg", "rack") %></p>
+    <p>@Html.ContentImage("rack.jpg", "rack")</p>
   </li>
   <li>
     <span class="title">Order of break</span>
@@ -172,8 +175,8 @@
     surface so that it rebounds from the cloth. Scooping under the cue ball to 
     fling it into the air is deemed a foul.</p>
     <p>
-      <%= Html.ContentImage("jump1.jpg", "Jump") %>
-      <%= Html.ContentImage("jump2.jpg", "Jump") %>
+      @Html.ContentImage("jump1.jpg", "Jump")
+      @Html.ContentImage("jump2.jpg", "Jump")
     </p>
   </li>
   <li>
@@ -208,9 +211,3 @@
     of the number of balls on the table.</p>
   </li>
 </ol>
-</asp:Content>
-
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">Rules</asp:Content>
-
-<asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
-</asp:Content>
