@@ -1,5 +1,3 @@
-#ignore web logs
-src/app/ClubPool.Web/logs/*
 #ignore thumbnails created by windows
 Thumbs.db
 #Ignore files build by Visual Studio
@@ -28,7 +26,6 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
-src/app/ClubPool.Web/ClubPool.Web.Publish.xml
 src/ClubPool.sln.docstates
 src/ClubPool.Web/App_Data/*
 src/ClubPool.Web/ClubPool.Web.Publish.xml
