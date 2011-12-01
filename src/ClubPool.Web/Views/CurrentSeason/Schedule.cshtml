@@ -1,0 +1,35 @@
+﻿@model ClubPool.Web.Controllers.CurrentSeason.ViewModels.CurrentSeasonScheduleViewModel
+
+@{
+    ViewBag.Title = "Schedule";
+}
+
+<h4>@Model.Name Schedule</h4>
+
+@if (!Model.HasDivisions) {
+<p>This season has no divisions.</p>
+} else {
+<div id="divisiontabs">
+  <ul>
+  @foreach (var division in Model.Divisions) {
+    <li><a href="#division-@division.Id">@division.Name</a></li>
+  }
+  </ul>
+  @foreach (var division in Model.Divisions) {
+  <div id="division-@division.Id">
+    @if (division.HasSchedule) {
+      Html.RenderPartial("ScheduleView", division.Schedule);
+    }
+    else {
+    <p>This division has no schedule.</p>
+    }
+  </div>
+  }
+</div>
+}
+
+<script type="text/javascript">
+  $(function () {
+    $("#divisiontabs").tabs();
+  });
+</script>
