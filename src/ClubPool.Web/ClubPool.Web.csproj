@@ -338,7 +338,6 @@
     <Content Include="Scripts\superfish.js" />
     <Content Include="Scripts\supersubs.js" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
-    <Content Include="Views\Home\About.aspx" />
     <Content Include="Views\Home\Rules.aspx" />
     <Content Include="Views\Home\StaleObjectStateError.aspx" />
     <Content Include="Views\Home\Regulations.aspx" />
@@ -458,6 +457,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Contact\Player.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

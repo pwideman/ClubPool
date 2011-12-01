@@ -1,7 +1,10 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Home.ViewModels.AboutViewModel>" %>
+﻿@model ClubPool.Web.Controllers.Home.ViewModels.AboutViewModel
 
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-<h5>About <%= Model.SiteName %></h5>
+@{
+  ViewBag.Title = "About " + Model.SiteName;
+}
+
+<h5>About @Model.SiteName</h5>
 
 <h5>About this website</h5>
 <p>This website is best viewed in anything other than IE. The site will work in
@@ -34,11 +37,3 @@ http://github.com/pwideman/clubpool/</a>. ClubPool is built with the following c
     <li><a href="http://kyo-tux.deviantart.com/">Phuzion by kyo-tux</a></li>
   </ul>
 </p>
-</asp:Content>
-
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-About <%= Model.SiteName %>
-</asp:Content>
-
-<asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
-</asp:Content>
