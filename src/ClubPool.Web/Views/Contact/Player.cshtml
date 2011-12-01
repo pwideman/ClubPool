@@ -1,0 +1,9 @@
+﻿@model ClubPool.Web.Controllers.Contact.ViewModels.ContactViewModel
+
+@{
+    ViewBag.Title = "Send Email";
+}
+
+@using (var form = Html.BeginForm("Player", "Contact", FormMethod.Post)) {
+  @Html.Partial("_ContactView")
+}

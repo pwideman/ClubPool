@@ -1,0 +1,25 @@
+﻿@model ClubPool.Web.Controllers.Contact.ViewModels.ContactViewModel
+
+<h4>Send email to @Model.Name</h4>
+
+@Html.HiddenFor(m => m.Id)
+@Html.AntiForgeryToken()
+
+<div class="contact-view">
+  <div class="contact-view-row">
+    <div class="contact-view-label">@Html.LabelFor(m => m.ReplyToAddress)</div>
+    <div class="contact-view-field">@Html.TextBoxFor(m => m.ReplyToAddress)</div>
+  </div>
+  <div class="contact-view-row">
+    <div class="contact-view-label">@Html.LabelFor(m => m.Subject)</div>
+    <div class="contact-view-field">@Html.TextBoxFor(m => m.Subject)</div>
+  </div>
+  <div class="contact-view-row">
+    <div class="contact-view-label">@Html.LabelFor(m => m.Body)</div>
+    <div class="contact-view-field">@Html.TextAreaFor(m => m.Body)</div>
+  </div>
+  <div class="contact-view-row">
+    <div class="contact-view-label">&nbsp;</div>
+    <div class="contact-view-field"><input type="submit" value="Send" /></div>
+  </div>
+</div>
