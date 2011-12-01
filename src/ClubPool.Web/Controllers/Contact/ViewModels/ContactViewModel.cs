@@ -28,6 +28,10 @@ namespace ClubPool.Web.Controllers.Contact.ViewModels
     [DisplayName("Body:")]
     public string Body { get; set; }
 
+    public ContactViewModel() {
+
+    }
+
     public ContactViewModel(User player, User sender) {
       Id = player.Id;
       Name = player.FullName;
