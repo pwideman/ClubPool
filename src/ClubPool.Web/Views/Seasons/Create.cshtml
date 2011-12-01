@@ -1,0 +1,22 @@
+﻿@model ClubPool.Web.Controllers.Seasons.ViewModels.CreateSeasonViewModel
+
+@{
+    ViewBag.Title = "Add Season";
+}
+
+<div class="heading">
+  <span>Add Season</span>
+</div>
+<div class="form-content">
+  @if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+    Html.RenderPartial("_ErrorMessage");
+  } 
+  @using (var form = Html.BeginForm("Create", "Seasons", FormMethod.Post, new { @class = "normal" })) {
+    @Html.AntiForgeryToken()
+    @Html.Partial("_SeasonEdit")
+    <div class="spacer">&nbsp;</div>
+    <div class="form-row-span">
+      <input class="submit-button" type="submit" value="Create Season" />
+    </div>
+  }
+</div>
