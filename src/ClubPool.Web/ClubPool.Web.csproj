@@ -350,9 +350,7 @@
     <Content Include="Views\Teams\Create.aspx" />
     <Content Include="Views\Seasons\ChangeActive.aspx" />
     <Content Include="Views\Divisions\DivisionEditControl.ascx" />
-    <Content Include="Views\Seasons\Edit.aspx" />
     <Content Include="Views\Divisions\Edit.aspx" />
-    <Content Include="Views\Seasons\SeasonEditControl.ascx" />
     <Content Include="Views\Seasons\View.aspx" />
     <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\NotificationMessage.ascx" />
@@ -479,6 +477,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Seasons\_SeasonEdit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Seasons\Edit.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
