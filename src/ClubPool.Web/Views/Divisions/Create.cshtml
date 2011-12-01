@@ -1,0 +1,23 @@
+﻿@model ClubPool.Web.Controllers.Divisions.ViewModels.CreateDivisionViewModel
+
+@{
+    ViewBag.Title = "Add Division";
+}
+
+<div class="heading">
+  <span>Add Division to @Model.SeasonName</span>
+</div>
+<div class="form-content">
+  @if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+     Html.RenderPartial("_ErrorMessage");
+   }
+   @using (var form = Html.BeginForm("Create", "Divisions", FormMethod.Post, new { @class = "normal" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.SeasonId)
+    @Html.Partial("_EditDivision")
+    <div class="spacer">&nbsp;</div>
+    <div class="form-row-span">
+      <input class="submit-button" type="submit" value="Create Division" />
+    </div>
+   }
+</div>

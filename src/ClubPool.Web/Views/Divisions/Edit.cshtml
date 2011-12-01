@@ -1,0 +1,24 @@
+﻿@model ClubPool.Web.Controllers.Divisions.ViewModels.EditDivisionViewModel
+
+@{
+    ViewBag.Title = "Edit Division";
+}
+
+<div class="heading">
+  <span>Edit division @Model.Name (@Model.SeasonName))</span>
+</div>
+@if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+  Html.RenderPartial("_ErrorMessage");
+}
+<div class="form-content">
+  @using (var form = Html.BeginForm("Edit", "Divisions", FormMethod.Post, new { @class = "normal" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Version)
+    @Html.Partial("_EditDivision")
+    <div class="spacer">&nbsp;</div>
+    <div class="form-row-span">
+      <input class="submit-button" type="submit" value="Save" />
+    </div>
+  }
+</div>
