@@ -339,7 +339,6 @@
     <Content Include="Scripts\supersubs.js" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
     <Content Include="Views\Matches\UserHistory.aspx" />
-    <Content Include="Views\Meets\Scoresheet.aspx" />
     <Content Include="Views\Meets\View.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\ScheduleView.ascx" />
@@ -503,6 +502,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Teams\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Meets\Scoresheet.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
