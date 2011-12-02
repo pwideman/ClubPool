@@ -345,7 +345,6 @@
     <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\NotificationMessage.ascx" />
     <Content Include="Views\Shared\Pager.ascx" />
-    <Content Include="Views\Users\CreateUserControl.ascx" />
     <Content Include="Views\Users\View.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
