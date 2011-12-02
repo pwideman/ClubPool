@@ -98,7 +98,11 @@ namespace ClubPool.Web.Controllers.Matches
       }
 
       if (match.IsComplete) {
-        match.RemoveAllResults();
+        var results = match.Results.ToList();
+        foreach (var result in results) {
+          repository.Delete(result);
+        }
+        match.Results.Clear();
       }
       match.Winner = viewModel.Winner == player1.Id ? player1 : player2;
       match.IsComplete = true;
