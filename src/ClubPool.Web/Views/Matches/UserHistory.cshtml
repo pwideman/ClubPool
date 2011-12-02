@@ -1,0 +1,61 @@
+﻿@model ClubPool.Web.Controllers.Matches.ViewModels.UserHistoryViewModel
+
+@{
+    ViewBag.Title = "User History";
+}
+
+<h4>Match History for @Model.Name</h4>
+@if (Model.HasMatches) {
+<div>
+  <table class="domain-list match-history">
+    <thead>
+      <tr>
+        <th>Season</th>
+        <th>Team 1</th>
+        <th>Player 1</th>
+        <th>I</th>
+        <th>D</th>
+        <th>W</th>
+        <th>Team 2</th>
+        <th>Player 2</th>
+        <th>I</th>
+        <th>D</th>
+        <th>W</th>
+        <th>Winner</th>
+      </tr>
+    </thead>
+    <tbody class="content">
+    @foreach (var item in Model.Items) {
+      <tr>
+        <td>@item.Season</td>
+        <td>@item.Team1</td>
+        <td>@item.Player1</td>
+        <td>@item.Player1Innings</td>
+        <td>@item.Player1DefensiveShots</td>
+        <td>@item.Player1Wins</td>
+        <td>@item.Team2</td>
+        <td>@item.Player2</td>
+        <td>@item.Player2Innings</td>
+        <td>@item.Player2DefensiveShots</td>
+        <td>@item.Player2Wins</td>
+        <td>@item.Winner</td>
+      </tr>
+    }
+    </tbody>
+    <tr class="pager">
+      <td colspan="99">
+        @Html.Partial("_Pager")
+      </td>
+    </tr>
+  </table>
+</div>
+} else {
+<p>This user has no match history.</p>
+}
+
+@Html.ScriptInclude("jquery.query.js")
+<script type="text/javascript">
+  $(function () {
+    $("tbody.content tr:odd").addClass("alt");
+  });
+</script>
