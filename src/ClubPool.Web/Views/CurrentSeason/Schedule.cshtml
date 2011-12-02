@@ -18,7 +18,7 @@
   @foreach (var division in Model.Divisions) {
   <div id="division-@division.Id">
     @if (division.HasSchedule) {
-      Html.RenderPartial("ScheduleView", division.Schedule);
+      Html.RenderPartial("_ScheduleView", division.Schedule);
     }
     else {
     <p>This division has no schedule.</p>
