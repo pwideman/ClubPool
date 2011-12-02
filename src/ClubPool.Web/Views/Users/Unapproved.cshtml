@@ -1,0 +1,64 @@
+﻿@model ClubPool.Web.Controllers.Users.ViewModels.UnapprovedViewModel
+
+@{
+    ViewBag.Title = "Users Awaiting Approval";
+}
+
+<div class="heading">
+  @Html.ContentImage("unapproveduser-large.png", "Unapproved Users")
+  <span>Users Awaiting Approval</span>
+</div>
+@if (Model.UnapprovedUsers.Any()) {
+  <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
+  using (var form = Html.BeginForm("Approve", "Users")) {
+    @Html.AntiForgeryToken()
+    <table style="width: 600px;" class="domain-list" id="unapproved_users">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th><input type="checkbox" id="approveall" /></th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td colspan="2" />
+          <td><input class="submit-button" type="submit" value="Approve" /></td>
+        </tr>
+      </tfoot>
+      <tbody class="content">
+        @foreach (var user in Model.UnapprovedUsers) {
+          <tr>
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+            <td><input type="checkbox" value="@user.Id" name="userids" /></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+} else {
+  <p>There are no users awaiting approval.</p>
+} 
+@if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) {
+  Html.RenderPartial("_NotificationMessage");
+}
+@if (TempData.ContainsKey("FailedEmails")) {
+  var failedEmails = TempData["FailedEmails"] as List<Tuple<string, string>>;
+  <p>The system failed to send email notification to the following users:</p>
+  <ul>
+    @foreach(var user in failedEmails) {
+      <li>@user.Item1 (@user.Item2)</li>
+    }
+  </ul>
+}
+
+<script type="text/javascript">
+  $(function () {
+    $("#approveall").click(function () {
+      var approved = $(this).attr("checked");
+      $("input[name=userids]").attr("checked", approved);
+    });
+    $("#unapproved_users tbody.content tr:odd").addClass("alt");
+  });
+</script>
