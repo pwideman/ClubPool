@@ -50,25 +50,32 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize(Roles=Roles.Administrators)]
     public ActionResult Index(int? page, string q) {
       int pageSize = 10;
-      var userQuery = repository.All<User>();
+      IQueryable<User> userQuery;
       if (!string.IsNullOrEmpty(q)) {
         q = HttpUtility.UrlDecode(q);
         var pieces = q.Split(' ').Where(s => !string.IsNullOrEmpty(s));
-        // this is horribly inefficient, poorly designed client side searching,
-        // but we'll only have a couple hundred users so the performance is not
-        // a huge concern.
-        var searchQuery = new List<User>();
+        var clause = " (username like '%{0}%' or firstname like '%{0}%' or lastname like '%{0}%' or " +
+          "'{0}' like '%' + username + '%' or '{0}' like '%' + firstname + '%' or '{0}' like '%' + lastname + '%')";
+        var sqlquery = new StringBuilder("select * from clubpool.users where");
+        var first = true;
         foreach (var piece in pieces) {
-          var tempQuery = userQuery.Where(u => u.Username.Contains(piece) || piece.Contains(u.Username) ||
-                                               u.FirstName.Contains(piece) || piece.Contains(u.FirstName) ||
-                                               u.LastName.Contains(piece) || piece.Contains(u.LastName)).ToList();
-          searchQuery = searchQuery.Union(tempQuery).ToList();
+          if (!first) {
+            sqlquery.Append(" or");
+          }
+          else {
+            first = false;
+          }
+          sqlquery.Append(string.Format(clause, piece));
         }
-        userQuery = searchQuery.AsQueryable();
+        sqlquery.Append(" order by LastName, FirstName");
+        userQuery = repository.SqlQuery<User>(sqlquery.ToString());
       }
-      var query = from u in userQuery
-                  orderby u.LastName, u.FirstName
-                  select new UserSummaryViewModel { User = u };
+      else {
+        // for some reason EF will not lazy load the roles when the users are 
+        // retrieved through repository.All<User>(), so we have to use the sql query here
+        userQuery = repository.SqlQuery<User>("Select * from clubpool.users order by lastname, firstname");
+      }
+      var query = userQuery.Select(u => new UserSummaryViewModel { User = u });
       var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
       if (!string.IsNullOrEmpty(q)) {
         viewModel.SearchQuery = q;

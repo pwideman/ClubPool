@@ -35,10 +35,10 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     }
 
     private void LoadAvailablePlayers(IRepository repository, Season season) {
-      var sql = "select * from Users where IsApproved = 1 and id not in " +
-        "(select distinct u.id from Users u, TeamsUsers tp, Teams t, Divisions d, Seasons s where " +
-        "u.Id = tp.User_Id and s.id in (select Season_Id from Divisions where Id in " +
-        "(select Division_Id from Teams where id = tp.Team_Id)) and s.Id = @p0)" +
+      var sql = "select * from clubpool.Users where IsApproved = 1 and id not in " +
+        "(select distinct u.id from clubpool.Users u, clubpool.TeamsUsers tp, clubpool.Teams t, clubpool.Divisions d, clubpool.Seasons s where " +
+        "u.Id = tp.User_Id and s.id in (select Season_Id from clubpool.Divisions where Id in " +
+        "(select Division_Id from clubpool.Teams where id = tp.Team_Id)) and s.Id = @p0)" +
         "order by LastName, FirstName";
 
       availablePlayers = repository.SqlQuery<User>(sql, season.Id).Select(u => new PlayerViewModel { Player = u }).ToList();
