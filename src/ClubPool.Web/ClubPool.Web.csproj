@@ -343,7 +343,6 @@
     </Content>
     <Content Include="Content\css\scoresheet.less" />
     <Content Include="Content\css\site.less" />
-    <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
     <Content Include="Content\css\jqueryui.css" />
   </ItemGroup>
@@ -540,8 +539,8 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
-    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)\..\$(ProjectName)" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'" DependsOnTargets="CleanWebsitesPackage;CleanWebsitesPackageTempDir;CleanWebsitesTransformParametersFiles;">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>
