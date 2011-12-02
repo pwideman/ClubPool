@@ -1,18 +1,21 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<ClubPool.Web.Controllers.Teams.ViewModels.DetailsViewModel>" %>
+﻿@model ClubPool.Web.Controllers.Teams.ViewModels.DetailsViewModel
 
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContentPlaceHolder" runat="server">
-<% if (Model.CanUpdateName) {
-     using (var form = Html.BeginForm("UpdateName", "Teams", FormMethod.Post, new { id = "update_name_form" })) { %>
-<%= Html.AntiForgeryToken()%>
-<%= Html.HiddenFor(m => m.Id) %>
-<p><input type="text" id="name" name="name" class="team-name required" size="30" value="<%= Html.Encode(Model.Name) %>" title="Click to edit team name, enter or tab out to save"/></p>
-<%   }
-   } else { %>
-<h4><%= Html.Encode(Model.Name)%></h4>
-<% } %>
+@{
+    ViewBag.Title = "Team Details";
+}
+
+@if (Model.CanUpdateName) {
+  using (var form = Html.BeginForm("UpdateName", "Teams", FormMethod.Post, new { id = "update_name_form" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    <p><input type="text" id="name" name="name" class="team-name required" size="30" value="@Model.Name" title="Click to edit team name, enter or tab out to save"/></p>
+  }
+} else {
+  <h4>@Model.Name</h4>
+}
 <p class="team-details-email">
-  <%= Html.ContentImage("mail-medium.png", "Email " + Model.Name) %>
-  <a href="mailto:<%= Model.Email%>"><%= Html.Encode(string.Format("Send {0} an email", Model.Name)) %></a>
+  @Html.ContentImage("mail-medium.png", "Email " + Model.Name)
+  <a href="mailto:@Model.Email">Send @Model.Name an email</a>
 </p>
 <div class="container">
   <div class="header">Details</div>
@@ -21,18 +24,18 @@
       <li>
         Players:
         <ul>
-          <% foreach (var player in Model.Players) { %>
-          <li><%= Html.ActionLink(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel), "View", "Users", new { id = player.Id}, null) %></li>
-          <% } %>
+          @foreach (var player in Model.Players) {
+            <li>@Html.ActionLink(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel), "View", "Users", new { id = player.Id}, null)</li>
+          }
         </ul>
       </li>
-      <li>Record: <%= Html.Encode(Model.Record) %></li>
-      <li>Division Ranking: <%= Html.Encode(Model.Rank) %></li>
+      <li>Record: @Model.Record</li>
+      <li>Division Ranking: @Model.Rank</li>
     </ul>
   </div>
 </div>
 <br/>
-<% if (Model.HasSeasonResults) { %>
+@if (Model.HasSeasonResults) {
 <div class="container">
   <div class="header">Season Results</div>
   <div class="content">
@@ -47,37 +50,30 @@
           <th>Result</th>
         </tr>
       </thead>
-        <% foreach (var meet in Model.SeasonResults) { %>
-        <tbody class="meet">        
-        <%   foreach (var match in meet.Matches) { %>
-          <tr <%= match.Win ? @"class=""winner""" : "" %>>
-            <td><%= Html.Encode(meet.Opponent)%></td>
-            <td><%= Html.Encode(match.OpponentPlayerName)%></td>
-            <td><%= match.OpponentPlayerWins%></td>
-            <td><%= Html.Encode(match.TeamPlayerName)%></td>
-            <td><%= match.TeamPlayerWins%></td>
-            <td><%= match.Win ? "W" : "L"%></td>
-          </tr>
-        <%   } %>
-        </tbody>
-        <% } %>
+      <tbody class="meet">        
+      @foreach (var meet in Model.SeasonResults) {
+        foreach (var match in meet.Matches) {
+        <tr @Html.Raw(match.Win ? "class=\"winner\"" : "")>
+          <td>@meet.Opponent</td>
+          <td>@match.OpponentPlayerName</td>
+          <td>@match.OpponentPlayerWins</td>
+          <td>@match.TeamPlayerName</td>
+          <td>@match.TeamPlayerWins</td>
+          <td>@(match.Win ? "W" : "L")</td>
+        </tr>
+        }
+      }
       </tbody>
     </table>
   </div>
 </div>
-<% } %>
-</asp:Content>
+}
 
-<asp:Content ID="Content2" ContentPlaceHolderID="TitleContentPlaceHolder" runat="server">
-Team Details
-</asp:Content>
-
-<asp:Content ID="Content3" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
-<% if (Model.CanUpdateName) { %>
-<%= Html.ScriptInclude("jquery.form.js") %>
+@if (Model.CanUpdateName) {
+@Html.ScriptInclude("jquery.form.js")
 
 <script type="text/javascript">
-  var currentTeamName = "<%= Model.Name %>";
+  var currentTeamName = "@Model.Name";
   // declare formOpts explicitly, since we need to use it in two different places
   var formOpts = {
     success: function (response, status, xhr, form) {
@@ -126,12 +122,11 @@ Team Details
     $("#update_name_form").ajaxSubmit(formOpts);
   }
 </script>
-<% } %>
+}
 
 <script type="text/javascript">
-  $(function() {
+  $(function () {
     // style table
     $("#season-results-table tbody:last").removeClass("meet").find("tr:last").addClass("last");
   });
 </script>
-</asp:Content>
