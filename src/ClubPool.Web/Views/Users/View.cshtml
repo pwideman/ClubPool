@@ -1,0 +1,60 @@
+﻿@model ClubPool.Web.Controllers.Users.ViewModels.ViewViewModel
+
+@{
+    ViewBag.Title = "User Details";
+}
+
+<h4>User Information</h4>
+
+<div id="tabs" class="userinfo-tabs">
+  <ul>
+    <li><a href="#details-tab">Details</a></li>
+    @if (Model.HasSkillLevel) {
+    <li><a href="#slc-tab">Skill Level Calculation</a></li>
+    }
+  </ul>
+
+  <div id="details-tab" class="userinfo-tab">
+    <div class="details-row">
+      <div class="details-label">Username:</div>
+      <div class="details-data">@Model.Username</div>
+    </div>
+    <div class="details-row">
+      <div class="details-label">Name:</div>
+      <div class="details-data">@Model.Name</div>
+    </div>
+    <div class="details-row">
+      <div class="details-label">Email:</div>
+      <div class="details-data email">
+        <a href="mailto:@Model.Email">@Model.Email</a>
+        @Html.ContentImage("mail-medium.png", "Email " + Model.Name)
+      </div>
+    </div>
+    <div class="details-row">
+      <div class="details-label">8-ball skill level:</div>
+      <div class="details-data">@(Model.HasSkillLevel ? Model.SkillLevel.ToString() : "None")</div>
+    </div>
+    @if (Model.ShowAdminProperties) {
+    <fieldset>
+      <legend>Admin</legend>
+      <div>Roles: @(Model.Roles.Length > 0 ? string.Join(", ", Model.Roles) : "None")</div>
+      <div>User is @(Model.IsApproved ? "approved" : "unapproved")</div>
+      <div>User is @(Model.IsLocked ? "locked" : "unlocked")</div>
+    </fieldset>
+    }
+  </div>
+
+  @if (Model.HasSkillLevel) {
+  <div id="slc-tab" class="userinfo-tab">
+    @Html.Partial("_SkillLevelCalculationView", Model.SkillLevelCalculation)
+  </div>
+  }
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#tabs").tabs();
+  });
+  $("#skill_level_calc tr:last").addClass("last");
+</script>
+

@@ -341,11 +341,9 @@
     <Content Include="Views\Matches\UserHistory.aspx" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\ScheduleView.ascx" />
-    <Content Include="Views\Shared\SkillLevelCalculationView.ascx" />
     <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\NotificationMessage.ascx" />
     <Content Include="Views\Shared\Pager.ascx" />
-    <Content Include="Views\Users\View.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -531,6 +529,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Users\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Users\View.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_SkillLevelCalculationView.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
