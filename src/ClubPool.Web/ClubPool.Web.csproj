@@ -338,9 +338,6 @@
     <Content Include="Scripts\superfish.js" />
     <Content Include="Scripts\supersubs.js" />
     <Content Include="Scripts\xVal.jquery.validate.js" />
-    <Content Include="Views\Shared\ScheduleView.ascx" />
-    <Content Include="Views\Shared\NotificationMessage.ascx" />
-    <Content Include="Views\Shared\Pager.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
