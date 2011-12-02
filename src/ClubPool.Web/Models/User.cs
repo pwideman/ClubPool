@@ -44,7 +44,7 @@ namespace ClubPool.Web.Models
       Arg.NotNull(password, "password");
       Arg.NotNull(firstName, "firstName");
       Arg.NotNull(lastName, "lastName");
-      //Arg.NotNull(email, "email");
+      Arg.NotNull(email, "email");
 
       Username = username;
       Password = password;
