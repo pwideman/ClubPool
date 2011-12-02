@@ -1,0 +1,35 @@
+﻿@model ClubPool.Web.Controllers.Users.ViewModels.SignUpViewModel
+@using ClubPool.Web.Controls.Captcha
+
+@{
+    ViewBag.Title = "Sign Up";
+}
+
+<strong>Sign up for a new @Model.SiteName account</strong>
+
+<p>Complete the form below to sign up for a new league account. A site administrator will
+need to verify your account information before you will be able to log in. You will receive
+an email once an administrator has verified your information.</p>
+  
+@if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+  Html.RenderPartial("_ErrorMessage");
+}
+<div class="form-content">
+  @using (var form = Html.BeginForm("SignUp", "Users", FormMethod.Post, new { @class = "normal" })) {
+    @Html.AntiForgeryToken()
+    @Html.Partial("_CreateUser")
+    <div class="spacer">&nbsp;</div>
+    <div class="form-row">
+      <span class="form-label-left">@Html.CaptchaImage(50, 180)</span>
+      <div class="form-input">
+        <span class="form-sublabel"><label for="captcha">Enter the text from the image below:</label></span><br />
+        @Html.CaptchaTextBox("captcha")
+        @Html.ValidationMessage("captcha")
+      </div>
+    </div>
+    <div class="spacer">&nbsp;</div>
+    <div class="form-row-span">
+      <input class="submit-button" type="submit" value="Sign Up" />
+    </div>
+  }
+</div>
