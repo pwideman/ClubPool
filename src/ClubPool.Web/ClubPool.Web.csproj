@@ -346,7 +346,6 @@
     <Content Include="Views\Shared\SkillLevelCalculationView.ascx" />
     <Content Include="Views\Teams\Details.aspx" />
     <Content Include="Views\Teams\PlayerListView.ascx" />
-    <Content Include="Views\Teams\Create.aspx" />
     <Content Include="Views\Shared\ErrorMessage.ascx" />
     <Content Include="Views\Shared\NotificationMessage.ascx" />
     <Content Include="Views\Shared\Pager.ascx" />
@@ -493,6 +492,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Divisions\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Teams\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Teams\_EditTeam.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Teams\_PlayerListView.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
