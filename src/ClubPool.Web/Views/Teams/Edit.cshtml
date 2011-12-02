@@ -1,0 +1,28 @@
+﻿@model ClubPool.Web.Controllers.Teams.ViewModels.EditTeamViewModel
+
+@{
+    ViewBag.Title = "Edit Team";
+}
+
+<div class="heading">
+  <span>Edit team @Html.Encode(Model.Name)</span>
+</div>
+@if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+  Html.RenderPartial("ErrorMessage");
+}
+<div class="form-content">
+  <div class="form-header">
+    All fields are required
+  </div>
+  @using (var form = Html.BeginForm("Edit", "Teams", FormMethod.Post, new { @class = "normal" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Version)
+    @Html.Partial("_EditTeam");
+    <div class="spacer">&nbsp;</div>
+    <div class="form-row-span">
+      <input class="submit-button" type="submit" value="Save" />
+    </div>
+  }
+</div>
+@Html.ScriptInclude("jquery.alphanumeric.js")
