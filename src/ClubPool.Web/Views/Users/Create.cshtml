@@ -1,0 +1,23 @@
+﻿@model ClubPool.Web.Controllers.Users.ViewModels.CreateViewModel
+
+@{
+    ViewBag.Title = "Add User";
+}
+
+<div class="heading">
+  @Html.ContentImage("adduser-large.png", "Add User")
+  <span>Add User</span>
+</div>
+<div class="form-content add-user-form">
+  @if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
+    Html.RenderPartial("_ErrorMessage");
+  } 
+  @using (var form = Html.BeginForm("Create", "Users", FormMethod.Post, new { @class = "normal" })) {
+    @Html.AntiForgeryToken()
+    @Html.Partial("_CreateUser")
+    <div class="spacer">&nbsp;</div>
+    <div class="form-row-span">
+      <input class="submit-button" type="submit" value="Create User" />
+    </div>
+  }
+</div>
