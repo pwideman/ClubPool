@@ -1,0 +1,32 @@
+﻿@model ClubPool.Web.Controllers.Users.ViewModels.RecoverUsernameViewModel
+@using ClubPool.Web.Controls.Captcha
+
+@{
+    ViewBag.Title = "Recover Username";
+}
+
+@section Head {
+<style type="text/css">
+  input.email
+  {
+    width: 200px;
+  }
+</style>
+}
+
+<h5>Recover Username</h5>
+<p>Enter the email address registered for the lost username below. An email containing all registered usernames for that
+address will be sent.</p>
+@using (var form = Html.BeginForm("RecoverUsername", "Users", FormMethod.Post)) {
+  @Html.AntiForgeryToken()
+  <div>Email: @Html.TextBoxFor(m => m.Email, new { @class = "email" })</div>
+  <div style="padding: 10px 0px;">
+    <p>@Html.CaptchaImage(50, 180)</p>
+    <p><label for="captcha">Enter the text from the image above:</label></p>
+    <p>@Html.CaptchaTextBox("captcha") @Html.ValidationMessage("captcha")</p>
+  </div>
+  <input type="submit" value="Recover Username" />
+}
+@if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) { 
+  Html.RenderPartial("_ErrorMessage");
+}

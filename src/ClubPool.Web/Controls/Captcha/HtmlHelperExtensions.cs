@@ -21,11 +21,11 @@ namespace ClubPool.Web.Controls.Captcha
     /// <param name="helper">The helper.</param>
     /// <param name="name">The name.</param>
     /// <returns></returns>
-    public static string CaptchaTextBox(this HtmlHelper helper, string name)
+    public static MvcHtmlString CaptchaTextBox(this HtmlHelper helper, string name)
     {
-      return String.Format(@"<input type=""text"" id=""{0}"" name=""{0}"" value="""" maxlength=""{1}"" autocomplete=""off"" />",
+      return new MvcHtmlString(string.Format(@"<input type=""text"" id=""{0}"" name=""{0}"" value="""" maxlength=""{1}"" autocomplete=""off"" />",
           name,
-          ClubPool.Web.Controls.Captcha.CaptchaImage.TextLength);
+          ClubPool.Web.Controls.Captcha.CaptchaImage.TextLength));
 
     }
 
@@ -38,7 +38,7 @@ namespace ClubPool.Web.Controls.Captcha
     /// <returns>
     /// Returns the <see cref="Uri"/> for the generated <see cref="CaptchaImage"/>.
     /// </returns>
-    public static string CaptchaImage(this HtmlHelper helper, int height, int width)
+    public static MvcHtmlString CaptchaImage(this HtmlHelper helper, int height, int width)
     {
       CaptchaImage image = new CaptchaImage {
         Height = height,
@@ -68,7 +68,7 @@ namespace ClubPool.Web.Controls.Captcha
       stringBuilder.Append(height);
       stringBuilder.Append("\" />");
 
-      return stringBuilder.ToString();
+      return new MvcHtmlString(stringBuilder.ToString());
     }
   }
 }

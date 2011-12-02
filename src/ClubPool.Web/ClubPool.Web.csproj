@@ -349,8 +349,6 @@
     <Content Include="Views\Users\CreateUserControl.ascx" />
     <Content Include="Views\Users\Edit.aspx" />
     <Content Include="Views\Users\Index.aspx" />
-    <Content Include="Views\Users\RecoverUsername.aspx" />
-    <Content Include="Views\Users\RecoverUsernameComplete.aspx" />
     <Content Include="Views\Users\ResetPassword.aspx" />
     <Content Include="Views\Users\ResetPasswordComplete.aspx" />
     <Content Include="Views\Users\SignUp.aspx" />
@@ -509,6 +507,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Users\AccountHelp.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Users\RecoverUsername.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Users\RecoverUsernameComplete.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
