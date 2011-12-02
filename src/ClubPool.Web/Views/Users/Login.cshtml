@@ -9,7 +9,7 @@
   <span>Login</span>
 </div>
 @if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-  Html.Partial("ErrorMessage");
+  Html.Partial("_ErrorMessage");
 }
 <div>
   <div class="form-content login-form corner">

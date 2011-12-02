@@ -8,7 +8,7 @@
   <span>Edit team @Html.Encode(Model.Name)</span>
 </div>
 @if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-  Html.RenderPartial("ErrorMessage");
+  Html.RenderPartial("_ErrorMessage");
 }
 <div class="form-content">
   <div class="form-header">
