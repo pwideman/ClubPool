@@ -14,30 +14,19 @@ namespace ClubPool.Web.Controllers.Users.ViewModels
     public bool IsLocked { get; set; }
     public string[] Roles { get; set; }
 
-    public UserSummaryViewModel() {
-      InitMembers();
-    }
-
-    public User User {
-      set {
-        Id = value.Id;
-        Name = value.FullName;
-        Username = value.Username;
-        Email = value.Email;
-        IsApproved = value.IsApproved;
-        IsLocked = value.IsLocked;
-        if (value.Roles.Any()) {
-          Roles = value.Roles.Select(r => r.Name).ToArray();
-        }
+    public UserSummaryViewModel(User user) {// : this() {
+      Id = user.Id;
+      Name = user.FullName;
+      Username = user.Username;
+      Email = user.Email;
+      IsApproved = user.IsApproved;
+      IsLocked = user.IsLocked;
+      if (user.Roles.Any()) {
+        Roles = user.Roles.Select(r => r.Name).ToArray();
       }
-    }
-
-    public UserSummaryViewModel(User user) : this() {
-      User = user;
-    }
-
-    protected void InitMembers() {
-      Roles = new string[0];
+      else {
+        Roles = new string[0];
+      }
     }
   }
 }

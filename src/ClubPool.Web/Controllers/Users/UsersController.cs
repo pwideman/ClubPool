@@ -71,12 +71,9 @@ namespace ClubPool.Web.Controllers.Users
         userQuery = repository.SqlQuery<User>(sqlquery.ToString());
       }
       else {
-        // for some reason EF will not lazy load the roles when the users are 
-        // retrieved through repository.All<User>(), so we have to use the sql query here
-        userQuery = repository.SqlQuery<User>("Select * from clubpool.users order by lastname, firstname");
+        userQuery = repository.All<User>().OrderBy(u => u.LastName).ThenBy(u => u.FirstName);
       }
-      var query = userQuery.Select(u => new UserSummaryViewModel { User = u });
-      var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
+      var viewModel = new IndexViewModel(userQuery, page.GetValueOrDefault(1), pageSize, (u) => new UserSummaryViewModel(u));
       if (!string.IsNullOrEmpty(q)) {
         viewModel.SearchQuery = q;
       }

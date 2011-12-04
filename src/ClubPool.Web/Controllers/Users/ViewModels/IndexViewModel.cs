@@ -1,13 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+
+using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Users.ViewModels
 {
-  public class IndexViewModel : PagedListViewModelBase<UserSummaryViewModel>
+  public class IndexViewModel : PagedListViewModelBase<User, UserSummaryViewModel>
   {
     public string SearchQuery { get; set; }
 
-    public IndexViewModel(IQueryable<UserSummaryViewModel> users, int page, int pageSize)
-      : base(users, page, pageSize) {
+    public IndexViewModel(IQueryable<User> users, int page, int pageSize, Func<User, UserSummaryViewModel> converter)
+      : base(users, page, pageSize, converter) {
     }
   }
 

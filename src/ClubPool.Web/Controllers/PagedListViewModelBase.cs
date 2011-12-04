@@ -6,14 +6,14 @@ using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers
 {
-  public abstract class PagedListViewModelBase<T> : PagedListViewModelBase
+  public abstract class PagedListViewModelBase<TSource, TResult> : PagedListViewModelBase
   {
-    public PagedListViewModelBase(IQueryable<T> source, int page, int pageSize) {
+    public PagedListViewModelBase(IQueryable<TSource> source, int page, int pageSize, Func<TSource, TResult> converter) {
       Total = source.Count();
       TotalPages = (int)Math.Ceiling((double)Total / (double)pageSize);
       CurrentPage = Math.Min(page, TotalPages);
       var index = Math.Max(CurrentPage - 1, 0);
-      Items = source.Page(index, pageSize).ToList();
+      Items = source.Page(index, pageSize).ToList().Select(i => converter(i));
       First = index * pageSize + 1;
       Last = First + Items.Count() - 1;
       if (TotalPages > 2) {
@@ -35,7 +35,7 @@ namespace ClubPool.Web.Controllers
       }
     }
 
-    public IEnumerable<T> Items { get; set; }
+    public IEnumerable<TResult> Items { get; set; }
   }
 
   public abstract class PagedListViewModelBase : ViewModelBase

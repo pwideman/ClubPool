@@ -6,12 +6,13 @@ using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Matches.ViewModels
 {
-  public class UserHistoryViewModel : PagedListViewModelBase<UserHistoryMatchViewModel>
+  public class UserHistoryViewModel : PagedListViewModelBase<Match, UserHistoryMatchViewModel>
   {
     public bool HasMatches { get; set; }
     public string Name { get; set; }
 
-    public UserHistoryViewModel(User user, IQueryable<UserHistoryMatchViewModel> matches, int page, int pageSize) : base(matches, page, pageSize) {
+    public UserHistoryViewModel(User user, IQueryable<Match> matches, int page, int pageSize, Func<Match, UserHistoryMatchViewModel> converter)
+      : base(matches, page, pageSize, converter) {
       Name = user.FullName;
       if (null == matches || matches.Count() == 0) {
         HasMatches = false;
@@ -38,30 +39,28 @@ namespace ClubPool.Web.Controllers.Matches.ViewModels
     public int Player2Wins { get; set; }
     public DateTime Date { get; set; }
 
-    public Match Match {
-      set {
-        Season = value.Meet.Division.Season.Name;
-        var teams = value.Meet.Teams.ToArray();
-        Team1 = teams[0].Name;
-        if (teams.Count() > 1) {
-          Team2 = teams[1].Name;
-        }
-        var players = value.Players.ToArray();
-        Player1 = players[0].Player.FullName;
-        Player2 = players[1].Player.FullName;
-        if (value.IsComplete) {
-          Winner = value.Winner.FullName;
-          if (!value.IsForfeit) {
-            Date = value.DatePlayed.Value;
-            var results = value.Results.Where(r => r.Player == players[0].Player).Single();
-            Player1Innings = results.Innings;
-            Player1DefensiveShots = results.DefensiveShots;
-            Player1Wins = results.Wins;
-            results = value.Results.Where(r => r.Player == players[1].Player).Single();
-            Player2Innings = results.Innings;
-            Player2DefensiveShots = results.DefensiveShots;
-            Player2Wins = results.Wins;
-          }
+    public UserHistoryMatchViewModel(Match match) {
+      Season = match.Meet.Division.Season.Name;
+      var teams = match.Meet.Teams.ToArray();
+      Team1 = teams[0].Name;
+      if (teams.Count() > 1) {
+        Team2 = teams[1].Name;
+      }
+      var players = match.Players.ToArray();
+      Player1 = players[0].Player.FullName;
+      Player2 = players[1].Player.FullName;
+      if (match.IsComplete) {
+        Winner = match.Winner.FullName;
+        if (!match.IsForfeit) {
+          Date = match.DatePlayed.Value;
+          var results = match.Results.Where(r => r.Player == players[0].Player).Single();
+          Player1Innings = results.Innings;
+          Player1DefensiveShots = results.DefensiveShots;
+          Player1Wins = results.Wins;
+          results = match.Results.Where(r => r.Player == players[1].Player).Single();
+          Player2Innings = results.Innings;
+          Player2DefensiveShots = results.DefensiveShots;
+          Player2Wins = results.Wins;
         }
       }
     }

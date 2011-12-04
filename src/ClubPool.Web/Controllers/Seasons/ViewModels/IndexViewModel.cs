@@ -5,10 +5,10 @@ using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.Seasons.ViewModels
 {
-  public class IndexViewModel : PagedListViewModelBase<SeasonSummaryViewModel>
+  public class IndexViewModel : PagedListViewModelBase<Season, SeasonSummaryViewModel>
   {
-    public IndexViewModel(IQueryable<SeasonSummaryViewModel> seasons, int page, int pageSize)
-      : base(seasons, page, pageSize) {
+    public IndexViewModel(IQueryable<Season> seasons, int page, int pageSize, Func<Season, SeasonSummaryViewModel> converter)
+      : base(seasons, page, pageSize, converter) {
     }
   }
 }

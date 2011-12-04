@@ -35,7 +35,7 @@ namespace ClubPool.Web.Controllers.Matches
       // doing this with EF is extremely slow
       var sql = "select * from clubpool.matches where id in (select m.Id from clubpool.matches m, clubpool.matchplayers p where p.Player_Id = @p0 and p.Match_Id = m.Id) order by DatePlayed desc";
       var userMatchesQuery = repository.SqlQuery<Match>(sql, user.Id);
-      var viewModel = new UserHistoryViewModel(user, userMatchesQuery.Select(m => new UserHistoryMatchViewModel { Match = m }), page.GetValueOrDefault(1), 15);
+      var viewModel = new UserHistoryViewModel(user, userMatchesQuery, page.GetValueOrDefault(1), 15, (m) => new UserHistoryMatchViewModel(m));
       return View(viewModel);
     }
 

@@ -21,10 +21,10 @@ namespace ClubPool.Web.Controllers.Seasons
     [Authorize(Roles = Roles.Administrators)]
     public ActionResult Index(int? page) {
       int pageSize = 10;
-      var query = from s in repository.All<Season>()
-                  orderby s.IsActive descending, s.Name descending
-                  select new SeasonSummaryViewModel { Season = s };
-      var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize);
+      var query = repository.All<Season>().OrderByDescending(s => s.IsActive).ThenByDescending(s => s.Name);
+                  //orderby s.IsActive descending, s.Name descending;
+                  //select new SeasonSummaryViewModel { Season = s };
+      var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize, (s) => new SeasonSummaryViewModel(s));
       return View(viewModel);
     }
 
@@ -136,7 +136,7 @@ namespace ClubPool.Web.Controllers.Seasons
       if (null != activeSeason) {
         viewModel.CurrentActiveSeasonName = activeSeason.Name;
       }
-      viewModel.InactiveSeasons = repository.All<Season>().Where(s => !s.IsActive).Select(s => new SeasonSummaryViewModel { Season = s }).ToList();
+      viewModel.InactiveSeasons = repository.All<Season>().Where(s => !s.IsActive).ToList().Select(s => new SeasonSummaryViewModel(s));
       return View(viewModel);
     }
 
