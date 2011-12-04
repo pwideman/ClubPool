@@ -128,15 +128,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClubPool.Core\ClubPool.Core.csproj">
+    <ProjectReference Include="..\Legacy\ClubPool.Core\ClubPool.Core.csproj">
       <Project>{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}</Project>
       <Name>ClubPool.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClubPool.Data\ClubPool.Data.csproj">
+    <ProjectReference Include="..\Legacy\ClubPool.Data\ClubPool.Data.csproj">
       <Project>{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}</Project>
       <Name>ClubPool.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClubPool.Framework\ClubPool.Framework.csproj">
+    <ProjectReference Include="..\Legacy\ClubPool.Framework\ClubPool.Framework.csproj">
       <Project>{B0659B70-C931-4E5B-B56C-32223414252C}</Project>
       <Name>ClubPool.Framework</Name>
     </ProjectReference>

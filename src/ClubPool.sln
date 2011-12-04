@@ -5,15 +5,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MigrateDb", "MigrateDb", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FA163A84-D8B8-414D-BE32-E780A473CB09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Core", "ClubPool.Core\ClubPool.Core.csproj", "{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Core", "Legacy\ClubPool.Core\ClubPool.Core.csproj", "{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Data", "ClubPool.Data\ClubPool.Data.csproj", "{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Data", "Legacy\ClubPool.Data\ClubPool.Data.csproj", "{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Web", "ClubPool.Web\ClubPool.Web.csproj", "{4230FBF1-9D6D-4F42-8040-7519F25251AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.MigrateDb", "ClubPool.SchemaGen\ClubPool.MigrateDb.csproj", "{CCEA23AA-F37D-4C51-8E63-214D4185C996}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.MigrateDb", "ClubPool.MigrateDb\ClubPool.MigrateDb.csproj", "{CCEA23AA-F37D-4C51-8E63-214D4185C996}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Framework", "ClubPool.Framework\ClubPool.Framework.csproj", "{B0659B70-C931-4E5B-B56C-32223414252C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Framework", "Legacy\ClubPool.Framework\ClubPool.Framework.csproj", "{B0659B70-C931-4E5B-B56C-32223414252C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.MSpecTests", "ClubPool.MSpecTests\ClubPool.MSpecTests.csproj", "{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}"
 EndProject
