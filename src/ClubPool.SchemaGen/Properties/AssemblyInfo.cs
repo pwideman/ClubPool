@@ -6,12 +6,11 @@ using log4net;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ClubPool.SchemaGen")]
+[assembly: AssemblyTitle("ClubPool.MigrateDb")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ClubPool.SchemaGen")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2009")]
+[assembly: AssemblyProduct("ClubPool.MigrateDb")]
+[assembly: AssemblyCopyright("Copyright © Paul Wideman 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

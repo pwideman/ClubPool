@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace ClubPool.SchemaGen
+namespace ClubPool.MigrateDb
 {
   static class Program
   {
@@ -14,7 +14,7 @@ namespace ClubPool.SchemaGen
     static void Main() {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new SchemaGen());
+      Application.Run(new MigrateDb());
     }
   }
 }

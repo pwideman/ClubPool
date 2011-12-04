@@ -8,8 +8,8 @@
     <ProjectGuid>{CCEA23AA-F37D-4C51-8E63-214D4185C996}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClubPool.SchemaGen</RootNamespace>
-    <AssemblyName>ClubPool.SchemaGen</AssemblyName>
+    <RootNamespace>ClubPool.MigrateDb</RootNamespace>
+    <AssemblyName>ClubPool.MigrateDb</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

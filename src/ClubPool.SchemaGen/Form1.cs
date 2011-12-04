@@ -32,16 +32,16 @@ using ClubPool.Framework.NHibernate;
 using ClubPool.Web.Infrastructure.EntityFramework;
 using Models=ClubPool.Web.Models;
 
-namespace ClubPool.SchemaGen
+namespace ClubPool.MigrateDb
 {
-  public partial class SchemaGen : Form
+  public partial class MigrateDb : Form
   {
     protected long beginTicks = 0;
     protected nhconfig.Configuration nhConfig;
     protected Action workerAction = null;
-    protected static readonly ILog logger = LogManager.GetLogger(typeof(SchemaGen));
+    protected static readonly ILog logger = LogManager.GetLogger(typeof(MigrateDb));
 
-    public SchemaGen() {
+    public MigrateDb() {
       //Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
       Database.SetInitializer<ClubPoolContext>(new DropCreateDatabaseAlways<ClubPoolContext>());
       InitializeComponent();

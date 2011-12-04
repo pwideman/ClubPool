@@ -1,6 +1,6 @@
-﻿namespace ClubPool.SchemaGen
+﻿namespace ClubPool.MigrateDb
 {
-  partial class SchemaGen
+  partial class MigrateDb
   {
     /// <summary>
     /// Required designer variable.
@@ -65,7 +65,7 @@
       this.testButton.UseVisualStyleBackColor = true;
       this.testButton.Click += new System.EventHandler(this.testButton_Click);
       // 
-      // SchemaGen
+      // MigrateDb
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -73,8 +73,8 @@
       this.Controls.Add(this.testButton);
       this.Controls.Add(this.importIPDataSQLButton);
       this.Controls.Add(this.OutputTextBox);
-      this.Name = "SchemaGen";
-      this.Text = "SchemaGen";
+      this.Name = "MigrateDb";
+      this.Text = "MigrateDb";
       this.ResumeLayout(false);
       this.PerformLayout();
 
