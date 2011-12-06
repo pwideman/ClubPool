@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Models

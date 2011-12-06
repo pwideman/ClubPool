@@ -125,13 +125,13 @@
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Entity.cs" />
-    <Compile Include="Infrastructure\GameType.cs" />
+    <Compile Include="Models\GameType.cs" />
     <Compile Include="Models\Match.cs" />
     <Compile Include="Models\MatchPlayer.cs" />
     <Compile Include="Models\MatchResult.cs" />
     <Compile Include="Models\Meet.cs" />
     <Compile Include="Models\Role.cs" />
-    <Compile Include="Infrastructure\Roles.cs" />
+    <Compile Include="Models\Roles.cs" />
     <Compile Include="Models\Season.cs" />
     <Compile Include="Models\SkillLevel.cs" />
     <Compile Include="Models\Team.cs" />

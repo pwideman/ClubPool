@@ -1,4 +1,4 @@
-﻿namespace ClubPool.Web.Infrastructure
+﻿namespace ClubPool.Web.Models
 {
   public static class Roles
   {
