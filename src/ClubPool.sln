@@ -16,26 +16,16 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		MigrateDbDebug|Any CPU = MigrateDbDebug|Any CPU
-		MigrateDbRelease|Any CPU = MigrateDbRelease|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.MigrateDbDebug|Any CPU.Build.0 = Debug|Any CPU
-		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.MigrateDbRelease|Any CPU.Build.0 = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
