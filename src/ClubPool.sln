@@ -1,27 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MigrateDb", "MigrateDb", "{5A1FF92A-9722-4044-86C2-85DA4063D4E3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FA163A84-D8B8-414D-BE32-E780A473CB09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Core", "Legacy\ClubPool.Core\ClubPool.Core.csproj", "{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Data", "Legacy\ClubPool.Data\ClubPool.Data.csproj", "{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Web", "ClubPool.Web\ClubPool.Web.csproj", "{4230FBF1-9D6D-4F42-8040-7519F25251AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.MigrateDb", "ClubPool.MigrateDb\ClubPool.MigrateDb.csproj", "{CCEA23AA-F37D-4C51-8E63-214D4185C996}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Framework", "Legacy\ClubPool.Framework\ClubPool.Framework.csproj", "{B0659B70-C931-4E5B-B56C-32223414252C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.MSpecTests", "ClubPool.MSpecTests\ClubPool.MSpecTests.csproj", "{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Testing", "ClubPool.Testing\ClubPool.Testing.csproj", "{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{5C5E4BBF-0368-48FE-A4C0-C258734EBD2F}"
-EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		MigrateDbDebug|Any CPU = MigrateDbDebug|Any CPU
@@ -29,18 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}.MigrateDbDebug|Any CPU.Build.0 = Debug|Any CPU
-		{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}.MigrateDbRelease|Any CPU.Build.0 = Release|Any CPU
-		{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}.MigrateDbDebug|Any CPU.Build.0 = Debug|Any CPU
-		{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}.MigrateDbRelease|Any CPU.Build.0 = Release|Any CPU
-		{07CF6E67-B5F0-4EEA-8DA8-677775B25F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -49,18 +29,6 @@ Global
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.MigrateDbRelease|Any CPU.Build.0 = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.MigrateDbDebug|Any CPU.Build.0 = Debug|Any CPU
-		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.MigrateDbRelease|Any CPU.Build.0 = Release|Any CPU
-		{CCEA23AA-F37D-4C51-8E63-214D4185C996}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0659B70-C931-4E5B-B56C-32223414252C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0659B70-C931-4E5B-B56C-32223414252C}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0659B70-C931-4E5B-B56C-32223414252C}.MigrateDbDebug|Any CPU.Build.0 = Debug|Any CPU
-		{B0659B70-C931-4E5B-B56C-32223414252C}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{B0659B70-C931-4E5B-B56C-32223414252C}.MigrateDbRelease|Any CPU.Build.0 = Release|Any CPU
-		{B0659B70-C931-4E5B-B56C-32223414252C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.MigrateDbDebug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.MigrateDbRelease|Any CPU.ActiveCfg = Release|Any CPU
@@ -74,16 +42,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CCEA23AA-F37D-4C51-8E63-214D4185C996} = {5A1FF92A-9722-4044-86C2-85DA4063D4E3}
-		{5C5E4BBF-0368-48FE-A4C0-C258734EBD2F} = {5A1FF92A-9722-4044-86C2-85DA4063D4E3}
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
-		{18847B4C-6AAC-4790-AB5E-AF1DC57EF6F7} = {5C5E4BBF-0368-48FE-A4C0-C258734EBD2F}
-		{07CF6E67-B5F0-4EEA-8DA8-677775B25F48} = {5C5E4BBF-0368-48FE-A4C0-C258734EBD2F}
-		{B0659B70-C931-4E5B-B56C-32223414252C} = {5C5E4BBF-0368-48FE-A4C0-C258734EBD2F}
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
