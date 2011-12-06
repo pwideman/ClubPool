@@ -1,25 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
-using SharpArch.Testing;
-using Rhino.Mocks;
-using SharpArch.Core.DomainModel;
+using Moq;
 
-using ClubPool.Core;
-using ClubPool.Core.Contracts;
-using ClubPool.Framework.NHibernate;
+using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
 
-namespace ClubPool.Testing.Core
+namespace ClubPool.Testing
 {
   public static class DomainModelHelper
   {
+    public static List<User> GetUsers(int startingId, int count)
+    {
+      var users = new List<User>();
+      for (var i = 0; i < count; i++)
+      {
+        var id = startingId + i;
+        var user = new User("user" + id.ToString(), "pass", "first" + id.ToString(), "last" + id.ToString(), "user" + id.ToString() + "@email.com");
+        user.SetIdTo(id);
+        user.SetVersionTo(1);
+        users.Add(user);
+      }
+      return users;
+    }
+
+    public static List<User> GetUsers(int count)
+    {
+      return GetUsers(1, count);
+    }
+
     public static Season CreateTestSeason(IList<User> users,
       IList<Division> divisions,
       IList<Team> teams,
       IList<Meet> meets,
-      IList<Match> matches,
+      IList<ClubPool.Web.Models.Match> matches,
       IList<MatchResult> matchResults) {
 
       // set up admin & officer users
@@ -59,8 +74,8 @@ namespace ClubPool.Testing.Core
         }
         userId += 2;
       }
-      var divisionRepository = MockRepository.GenerateStub<IDivisionRepository>();
-      division.CreateSchedule(divisionRepository);
+      var repository = new Mock<IRepository>().Object;
+      division.CreateSchedule(repository);
       var meetQuery = from m in division.Meets
                       group m by m.Week into g
                       select new { Week = g.Key, Meets = g };
@@ -97,16 +112,16 @@ namespace ClubPool.Testing.Core
       return season;
     }
 
-    public static void SetUpTestRepository<T>(ILinqRepository<T> repository, IEnumerable<T> list) where T : Entity {
-      repository.Stub(r => r.GetAll()).Return(list.AsQueryable());
-      repository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
-        var criteria = m.Arguments[0] as Expression<Func<T, bool>>;
-        m.ReturnValue = list.AsQueryable().Where(criteria).SingleOrDefault();
-      });
-      foreach (var item in list) {
-        repository.Stub(r => r.Get(item.Id)).Return(item);
-      }
-    }
+    //public static void SetUpTestRepository<T>(ILinqRepository<T> repository, IEnumerable<T> list) where T : Entity {
+    //  repository.Stub(r => r.GetAll()).Return(list.AsQueryable());
+    //  repository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
+    //    var criteria = m.Arguments[0] as Expression<Func<T, bool>>;
+    //    m.ReturnValue = list.AsQueryable().Where(criteria).SingleOrDefault();
+    //  });
+    //  foreach (var item in list) {
+    //    repository.Stub(r => r.Get(item.Id)).Return(item);
+    //  }
+    //}
 
 
   }

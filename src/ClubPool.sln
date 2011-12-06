@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.MSpecTests", "Club
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Testing", "ClubPool.Testing\ClubPool.Testing.csproj", "{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Tests", "ClubPool.Tests\ClubPool.Tests.csproj", "{D8837A1D-1479-41DD-A3A3-32750205AA04}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -26,7 +28,13 @@ Global
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8837A1D-1479-41DD-A3A3-32750205AA04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8837A1D-1479-41DD-A3A3-32750205AA04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8837A1D-1479-41DD-A3A3-32750205AA04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8837A1D-1479-41DD-A3A3-32750205AA04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,5 +42,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
+		{D8837A1D-1479-41DD-A3A3-32750205AA04} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
 	EndGlobalSection
 EndGlobal

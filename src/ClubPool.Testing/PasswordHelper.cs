@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace ClubPool.Testing.Services.Membership
+namespace ClubPool.Testing
 {
   public static class PasswordHelper
   {

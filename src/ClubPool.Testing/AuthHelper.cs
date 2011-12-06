@@ -2,12 +2,10 @@
 using System.Security.Principal;
 using System.Linq;
 
-using Rhino.Mocks;
-
 using ClubPool.Web.Services.Authentication;
-using ClubPool.Core;
+using ClubPool.Web.Models;
 
-namespace ClubPool.Testing.Services.Authentication
+namespace ClubPool.Testing
 {
   public static class AuthHelper
   {
