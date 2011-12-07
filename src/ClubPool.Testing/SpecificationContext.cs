@@ -11,10 +11,12 @@ namespace ClubPool.Testing
   {
     [TestFixtureSetUp]
     public void Init() {
+      EstablishContext();
       Given();
       When();
     }
 
+    public virtual void EstablishContext() { }
     public virtual void Given() { }
     public virtual void When() { }
   }
