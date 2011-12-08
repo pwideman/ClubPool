@@ -75,13 +75,13 @@ namespace ClubPool.Testing
       }
     }
 
-    public void ShouldRedirectTo(string controller, string action) {
+    public void ShouldRedirectTo(string action, string controller) {
+      ShouldRedirectTo(action);
       Controller.ToLower().Should().Be(controller.ToLower());
-      Action.ToLower().Should().Be(action.ToLower());
     }
 
-    public void ShouldRedirectTo(string controller) {
-      ShouldRedirectTo(controller, "index");
+    public void ShouldRedirectTo(string action) {
+      Action.ToLower().Should().Be(action.ToLower());
     }
   }
 

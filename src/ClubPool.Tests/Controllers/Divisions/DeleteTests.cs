@@ -59,7 +59,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_delete_a_division
 
     [Test]
     public void it_should_redirect_to_the_view_season_view() {
-      resultHelper.ShouldRedirectTo("seasons", "view");
+      resultHelper.ShouldRedirectTo("view", "seasons");
     }
   }
 
