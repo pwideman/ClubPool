@@ -57,6 +57,6 @@ namespace ClubPool.Web.Models
     public Byte[] Version { get; protected set; }
 
     [NotMapped]
-    public string EncodedVersion { get { return Convert.ToBase64String(Version); } }
+    public string EncodedVersion { get { return null == Version ? null : Convert.ToBase64String(Version); } }
   }
 }
