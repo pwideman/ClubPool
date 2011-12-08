@@ -52,7 +52,9 @@
   <ItemGroup>
     <Compile Include="Controllers\DashboardControllerTests.cs" />
     <Compile Include="Controllers\Divisions\CreateTests.cs" />
+    <Compile Include="Controllers\Divisions\DeleteTests.cs" />
     <Compile Include="Controllers\Divisions\DivisionsControllerTest.cs" />
+    <Compile Include="Controllers\Divisions\EditTests.cs" />
     <Compile Include="Controllers\HomeControllerTests.cs" />
     <Compile Include="Models\UserTests\UserTests.cs" />
     <Compile Include="Models\UserTests\when_updating_skill_level\Tests.cs" />
