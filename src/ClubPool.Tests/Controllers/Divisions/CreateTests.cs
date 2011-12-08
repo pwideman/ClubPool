@@ -59,26 +59,34 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_for_the_create_view
 
 namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
 {
-  [TestFixture]
-  public class with_valid_data : DivisionsControllerTest
+  public abstract class CreatePostTest : DivisionsControllerTest
   {
-    private RedirectToRouteResultHelper resultHelper;
-    private CreateDivisionViewModel viewModel;
+    protected ViewResultHelper<CreateDivisionViewModel> resultHelper;
+    protected CreateDivisionViewModel viewModel;
+
+    public override void When() {
+      resultHelper = new ViewResultHelper<CreateDivisionViewModel>(controller.Create(viewModel));
+    }
+  }
+
+  [TestFixture]
+  public class with_valid_data : CreatePostTest
+  {
+    private new RedirectToRouteResultHelper resultHelper;
     private string name = "MyDivision";
     private DateTime startingDate = DateTime.Parse("11/30/2010");
-    private int seasonId = 1;
     private Division savedDivision;
 
     public override void Given() {
       viewModel = new CreateDivisionViewModel();
-      viewModel.Name = name;
-      viewModel.StartingDate = startingDate.ToShortDateString();
-      viewModel.SeasonId = seasonId;
+      viewModel.Name = "MyDivision";
+      viewModel.StartingDate = DateTime.Parse("11/30/2010").ToShortDateString();
+      viewModel.SeasonId = 1;
 
       var season = new Season("temp", GameType.EightBall);
-      season.SetIdTo(seasonId);
+      season.SetIdTo(viewModel.SeasonId);
 
-      repository.Setup(r => r.Get<Season>(seasonId)).Returns(season);
+      repository.Setup(r => r.Get<Season>(season.Id)).Returns(season);
       repository.Setup(r => r.All<Division>()).Returns(new List<Division>().AsQueryable());
       repository.Setup(r => r.SaveOrUpdate<Division>(It.IsAny<Division>())).Callback<Division>(d => savedDivision = d).Returns(savedDivision);
     }
@@ -109,20 +117,13 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
   }
 
   [TestFixture]
-  public class with_an_invalid_season : DivisionsControllerTest
+  public class with_an_invalid_season : CreatePostTest
   {
-    private ViewResultHelper<CreateDivisionViewModel> resultHelper;
-    private CreateDivisionViewModel viewModel;
-
     public override void Given() {
       viewModel = new CreateDivisionViewModel();
       viewModel.Name = "MyDivision";
       viewModel.StartingDate = DateTime.Parse("11/30/2010").ToShortDateString();
       viewModel.SeasonId = 999;
-    }
-
-    public override void When() {
-      resultHelper = new ViewResultHelper<CreateDivisionViewModel>(controller.Create(viewModel));
     }
 
     [Test]
@@ -142,20 +143,13 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
   }
 
   [TestFixture]
-  public class with_no_name : DivisionsControllerTest
+  public class with_no_name : CreatePostTest
   {
-    private ViewResultHelper<CreateDivisionViewModel> resultHelper;
-    private CreateDivisionViewModel viewModel;
-
     public override void Given() {
       viewModel = new CreateDivisionViewModel();
       viewModel.StartingDate = DateTime.Parse("11/30/2010").ToShortDateString();
       viewModel.SeasonId = 1;
-    }
-
-    public override void When() {
       controller.ModelState.AddModelError("Name", new Exception("Test"));
-      resultHelper = new ViewResultHelper<CreateDivisionViewModel>(controller.Create(viewModel));
     }
 
     [Test]
@@ -170,20 +164,13 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
   }
 
   [TestFixture]
-  public class with_an_invalid_starting_date : DivisionsControllerTest
+  public class with_an_invalid_starting_date : CreatePostTest
   {
-    private ViewResultHelper<CreateDivisionViewModel> resultHelper;
-    private CreateDivisionViewModel viewModel;
-
     public override void Given() {
       viewModel = new CreateDivisionViewModel();
       viewModel.Name = "Test";
       viewModel.StartingDate = "a bad date string";
       viewModel.SeasonId = 1;
-    }
-
-    public override void When() {
-      resultHelper = new ViewResultHelper<CreateDivisionViewModel>(controller.Create(viewModel));
     }
 
     [Test]
@@ -208,33 +195,22 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
   }
 
   [TestFixture]
-  public class with_a_duplicate_name : DivisionsControllerTest
+  public class with_a_duplicate_name : CreatePostTest
   {
-    private ViewResultHelper<CreateDivisionViewModel> resultHelper;
-    private CreateDivisionViewModel viewModel;
-    private DateTime startingDate = DateTime.Parse("11/30/2010");
-    private string name = "MyDivision";
-    private int seasonId = 1;
-
     public override void Given() {
       viewModel = new CreateDivisionViewModel();
-      viewModel.Name = name;
-      viewModel.StartingDate = startingDate.ToShortDateString();
-      viewModel.SeasonId = seasonId;
+      viewModel.Name = "MyDivision";
+      viewModel.StartingDate = DateTime.Parse("11/30/2010").ToShortDateString();
+      viewModel.SeasonId = 1;
 
       var season = new Season("temp", GameType.EightBall);
-      season.SetIdTo(seasonId);
-      season.AddDivision(new Division(name, DateTime.Now, season));
-      repository.Setup(r => r.Get<Season>(seasonId)).Returns(season);
+      var division = new Division(viewModel.Name, DateTime.Now, season);
+      season.SetIdTo(viewModel.SeasonId);
+      season.AddDivision(division);
+      repository.Setup(r => r.Get<Season>(season.Id)).Returns(season);
 
-      var division = new Division(name, DateTime.Now, season);
-      var divisions = new List<Division>();
-      divisions.Add(division);
+      var divisions = new List<Division> { division };
       repository.Setup(r => r.All<Division>()).Returns(divisions.AsQueryable());
-    }
-
-    public override void When() {
-      resultHelper = new ViewResultHelper<CreateDivisionViewModel>(controller.Create(viewModel));
     }
 
     [Test]
