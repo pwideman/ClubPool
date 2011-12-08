@@ -11,6 +11,56 @@ namespace ClubPool.Testing
 {
   public static class DomainModelHelper
   {
+    public static void Init<T>(this Mock<IRepository> repository, IQueryable<T> entities) where T : Entity {
+      if (null != entities && entities.Any()) {
+        repository.Setup(r => r.All<T>()).Returns(entities);
+        foreach (var entity in entities) {
+          repository.Setup(r => r.Get<T>(entity.Id)).Returns(entity);
+        }
+      }
+    }
+
+    public static void InitAll(this Mock<IRepository> repository, 
+      IQueryable<User> users = null,
+      IQueryable<Role> roles = null,
+      IQueryable<Season> seasons = null) {
+
+      repository.Init<User>(users);
+      repository.Init<Role>(roles);
+      repository.Init<Season>(seasons);
+
+      // get the rest of the data from the seasons object tree
+      var divisions = from s in seasons
+                      from d in s.Divisions
+                      select d;
+      repository.Init<Division>(divisions);
+
+      var teams = from d in divisions
+                  from t in d.Teams
+                  select t;
+      repository.Init<Team>(teams);
+
+      var meets = from d in divisions
+                  from m in d.Meets
+                  select m;
+      repository.Init<Meet>(meets);
+
+      var matches = from m in meets
+                    from match in m.Matches
+                    select match;
+      repository.Init<Web.Models.Match>(matches);
+
+      var matchResults = from m in matches
+                         from r in m.Results
+                         select r;
+      repository.Init<MatchResult>(matchResults);
+
+      var matchPlayers = from m in matches
+                         from p in m.Players
+                         select p;
+      repository.Init<MatchPlayer>(matchPlayers);
+    }
+
     public static List<User> GetUsers(int startingId, int count)
     {
       var users = new List<User>();
