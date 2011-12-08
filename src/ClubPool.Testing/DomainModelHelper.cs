@@ -11,6 +11,11 @@ namespace ClubPool.Testing
 {
   public static class DomainModelHelper
   {
+    public static string ConvertIntVersionToString(int version) {
+      byte[] versionBytes = BitConverter.GetBytes(version);
+      return Convert.ToBase64String(versionBytes);
+    }
+
     public static void Init<T>(this Mock<IRepository> repository, IQueryable<T> entities) where T : Entity {
       if (null != entities && entities.Any()) {
         repository.Setup(r => r.All<T>()).Returns(entities);
