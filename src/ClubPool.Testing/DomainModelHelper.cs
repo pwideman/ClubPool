@@ -14,9 +14,10 @@ namespace ClubPool.Testing
     public static void Init<T>(this Mock<IRepository> repository, IQueryable<T> entities) where T : Entity {
       if (null != entities && entities.Any()) {
         repository.Setup(r => r.All<T>()).Returns(entities);
-        foreach (var entity in entities) {
-          repository.Setup(r => r.Get<T>(entity.Id)).Returns(entity);
-        }
+        // this is really slow for large sets, comment out until needed
+        //foreach (var entity in entities) {
+        //  repository.Setup(r => r.Get<T>(entity.Id)).Returns(entity);
+        //}
       }
     }
 
