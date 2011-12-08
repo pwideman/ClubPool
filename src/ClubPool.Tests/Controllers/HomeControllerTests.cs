@@ -12,7 +12,7 @@ using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Configuration;
 using ClubPool.Web.Infrastructure.Configuration;
 
-namespace ClubPool.Tests.Controllers
+namespace ClubPool.Tests.Controllers.Home
 {
   public abstract class HomeControllerTest : SpecificationContext
   {

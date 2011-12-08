@@ -15,7 +15,7 @@ using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
 using ClubPool.Web.Models;
 
-namespace ClubPool.Tests.Controllers
+namespace ClubPool.Tests.Controllers.Dashboard
 {
   public abstract class DashboardControllerTest : SpecificationContext
   {
