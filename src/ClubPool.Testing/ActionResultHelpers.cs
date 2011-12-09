@@ -65,7 +65,7 @@ namespace ClubPool.Testing
 
     public string Controller {
       get {
-        return Result.RouteValues["Controller"].ToString();
+        return Result.RouteValues.ContainsKey("Controller") ? Result.RouteValues["Controller"].ToString() : null;
       }
     }
 
@@ -76,12 +76,13 @@ namespace ClubPool.Testing
     }
 
     public void ShouldRedirectTo(string action, string controller) {
-      ShouldRedirectTo(action);
+      Action.ToLower().Should().Be(action.ToLower());
       Controller.ToLower().Should().Be(controller.ToLower());
     }
 
     public void ShouldRedirectTo(string action) {
       Action.ToLower().Should().Be(action.ToLower());
+      Controller.Should().BeNull();
     }
   }
 
