@@ -58,6 +58,7 @@
     <Compile Include="Controllers\HomeControllerTests.cs" />
     <Compile Include="Controllers\MatchesControllerTests.cs" />
     <Compile Include="Controllers\MeetsControllerTests.cs" />
+    <Compile Include="Controllers\Seasons\Create.cs" />
     <Compile Include="Controllers\Seasons\Index.cs" />
     <Compile Include="Controllers\Seasons\SeasonsControllerTest.cs" />
     <Compile Include="Models\UserTests\UserTests.cs" />
