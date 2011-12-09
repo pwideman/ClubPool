@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using NUnit.Framework;
 using FluentAssertions;
 using Moq;
 
 using ClubPool.Testing;
-using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Web.Models;
 
