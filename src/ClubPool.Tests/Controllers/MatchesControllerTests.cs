@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using NUnit.Framework;
 using FluentAssertions;
@@ -9,8 +8,6 @@ using Moq;
 
 using ClubPool.Testing;
 using ClubPool.Web.Infrastructure;
-using ClubPool.Web.Services.Authentication;
-using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Matches;
 using ClubPool.Web.Controllers.Matches.ViewModels;
 using ClubPool.Web.Models;
