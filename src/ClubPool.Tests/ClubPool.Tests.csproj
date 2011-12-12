@@ -66,6 +66,7 @@
     <Compile Include="Controllers\Seasons\Index.cs" />
     <Compile Include="Controllers\Seasons\SeasonsControllerTest.cs" />
     <Compile Include="Controllers\Seasons\View.cs" />
+    <Compile Include="Controllers\Users\Delete.cs" />
     <Compile Include="Controllers\Users\Index.cs" />
     <Compile Include="Controllers\Users\Login.cs" />
     <Compile Include="Controllers\Users\SignUp.cs" />
