@@ -67,6 +67,9 @@
     <Compile Include="Controllers\Seasons\SeasonsControllerTest.cs" />
     <Compile Include="Controllers\Seasons\View.cs" />
     <Compile Include="Controllers\Users\Index.cs" />
+    <Compile Include="Controllers\Users\Login.cs" />
+    <Compile Include="Controllers\Users\SignUp.cs" />
+    <Compile Include="Controllers\Users\Unapproved.cs" />
     <Compile Include="Controllers\Users\UsersControllerTest.cs" />
     <Compile Include="Models\UserTests\UserTests.cs" />
     <Compile Include="Models\UserTests\when_updating_skill_level\Tests.cs" />
