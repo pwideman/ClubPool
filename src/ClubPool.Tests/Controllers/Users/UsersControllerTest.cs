@@ -13,7 +13,6 @@ using ClubPool.Web.Infrastructure.Configuration;
 
 namespace ClubPool.Tests.Controllers.Users
 {
-  [TestFixture]
   public class UsersControllerTest : SpecificationContext
   {
     protected UsersController controller;
