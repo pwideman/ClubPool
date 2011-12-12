@@ -70,6 +70,7 @@
     <Compile Include="Controllers\Users\Delete.cs" />
     <Compile Include="Controllers\Users\Index.cs" />
     <Compile Include="Controllers\Users\Login.cs" />
+    <Compile Include="Controllers\Users\RecoverUsername.cs" />
     <Compile Include="Controllers\Users\ResetPassword.cs" />
     <Compile Include="Controllers\Users\SignUp.cs" />
     <Compile Include="Controllers\Users\Unapproved.cs" />
