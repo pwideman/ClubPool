@@ -69,6 +69,7 @@
     <Compile Include="Controllers\Users\Create.cs" />
     <Compile Include="Controllers\Users\Delete.cs" />
     <Compile Include="Controllers\Users\EditGet.cs" />
+    <Compile Include="Controllers\Users\EditPost.cs" />
     <Compile Include="Controllers\Users\Index.cs" />
     <Compile Include="Controllers\Users\Login.cs" />
     <Compile Include="Controllers\Users\RecoverUsername.cs" />
