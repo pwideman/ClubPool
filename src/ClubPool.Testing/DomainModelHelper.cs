@@ -16,13 +16,13 @@ namespace ClubPool.Testing
       return Convert.ToBase64String(versionBytes);
     }
 
-    public static void Init<T>(this Mock<IRepository> repository, IQueryable<T> entities) where T : Entity {
+    public static void Init<T>(this Mock<IRepository> repository, IQueryable<T> entities, bool setupGet = false) where T : Entity {
       if (null != entities && entities.Any()) {
         repository.Setup(r => r.All<T>()).Returns(entities);
-        // this is really slow for large sets, comment out until needed
-        //foreach (var entity in entities) {
-        //  repository.Setup(r => r.Get<T>(entity.Id)).Returns(entity);
-        //}
+        if (setupGet)
+        foreach (var entity in entities) {
+          repository.Setup(r => r.Get<T>(entity.Id)).Returns(entity);
+        }
       }
     }
 
