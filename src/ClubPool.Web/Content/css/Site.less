@@ -935,12 +935,10 @@ div.dashboard {
   font-size: .9em;
 }
 div.dashboard-column-left {
-  min-width: 260px;
-  width: 39%;
+  width: 320px;
 }
 div.dashboard-column-right {
-  width: 60%;
-  min-width: 440px;
+  width: 500px;
 }
 div.dashboard-item-container {
   display: inline-block;
@@ -970,6 +968,14 @@ div.dashboard-item-container {
         text-align: left;
         list-style-type: none;
         padding: 0;
+      }
+      table {
+        tbody {
+          td {
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
       }
       table#lastmeet {
         tbody {

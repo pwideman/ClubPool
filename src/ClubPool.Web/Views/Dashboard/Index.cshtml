@@ -19,7 +19,6 @@
             <tr>
               <th>Player</th>
               <th>Innings</th>
-              <th>Defensive Shots</th>
               <th>Wins</th>
             </tr>
           </thead>
@@ -28,8 +27,7 @@
             foreach (var result in match.Results) {
             <tr @Html.Raw(result.Winner ? "class=\"winner\"" : "")>
               <td class="player">@result.Player</td>
-              <td>@result.Innings</td>
-              <td>@result.DefensiveShots</td>
+              <td>@result.Innings (@result.DefensiveShots)</td>
               <td>@result.Wins</td>
             </tr>
             }

@@ -6,21 +6,17 @@
       <th>Date</th>
       <th>Team</th>
       <th>Player</th>
-      <th>I</th>
-      <th>D</th>
-      <th>Net</th>
+      <th>Innings</th>
       <th>W</th>
     </tr>
   </thead>
   <tbody class="skill_level_matches">
   @foreach (var result in Model.SkillLevelMatchResults) {
     <tr @Html.Raw(result.Included ? "class=\"included\"" : "")>
-      <td>@result.Date.ToShortDateString() @result.Date.ToShortTimeString()</td>
+      <td>@result.Date.ToShortDateString()</td>
       <td class="team">@result.Team</td>
       <td class="player">@result.Player</td>
-      <td>@result.Innings</td>
-      <td>@result.DefensiveShots</td>
-      <td>@result.NetInnings</td>
+      <td>@result.Innings - @result.DefensiveShots = @result.NetInnings</td>
       <td>@result.Wins</td>
     </tr>
   }
@@ -29,17 +25,13 @@
     <tr>
       <td colspan="2">Totals</td>
       <td>@string.Format("I/G: {0:.000}", Model.TotalIG)</td>
-      <td>@Model.TotalInnings</td>
-      <td>@Model.TotalDefensiveShots</td>
-      <td>@Model.TotalNetInnings</td>
+      <td>@Model.TotalInnings - @Model.TotalDefensiveShots = @Model.TotalNetInnings</td>
       <td>@Model.TotalWins</td>
     </tr>
     <tr>
       <td colspan="2">Culled Totals</td>
       <td>@string.Format("I/G: {0:.000}", Model.CulledIG)</td>
-      <td>@Model.TotalCulledInnings</td>
-      <td>@Model.TotalCulledDefensiveShots</td>
-      <td>@Model.TotalCulledNetInnings</td>
+      <td>@Model.TotalCulledInnings - @Model.TotalCulledDefensiveShots = @Model.TotalCulledNetInnings</td>
       <td>@Model.TotalCulledWins</td>
     </tr>
     <tr>
