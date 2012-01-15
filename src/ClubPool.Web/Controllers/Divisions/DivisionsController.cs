@@ -95,7 +95,7 @@ namespace ClubPool.Web.Controllers.Divisions
     }
 
     private void DeleteDivisionMeets(Division division) {
-      var meetsToDelete = repository.All<Meet>().Where(m => m.Division.Id == division.Id);
+      var meetsToDelete = repository.All<Meet>().Where(m => m.Division.Id == division.Id).ToList();
       foreach (var meet in meetsToDelete) {
         repository.Delete(meet);
       }
