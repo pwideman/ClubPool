@@ -130,18 +130,29 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
 
   public class LastMatchViewModel
   {
-    public string DatePlayed { get; set; }
     public IEnumerable<MatchResultViewModel> Results { get; set; }
 
     public LastMatchViewModel(Match match) {
-      DatePlayed = string.Format("{0} {1}", match.DatePlayed.Value.ToShortDateString(), match.DatePlayed.Value.ToShortTimeString());
-      var results = new List<MatchResultViewModel>();
-      foreach (var result in match.Results) {
-        var resultvm = new MatchResultViewModel(result);
-        resultvm.Winner = match.Winner == result.Player;
-        results.Add(resultvm);
+      if (!match.IsForfeit) {
+        var results = new List<MatchResultViewModel>();
+        foreach (var result in match.Results) {
+          var resultvm = new MatchResultViewModel(result);
+          resultvm.Winner = match.Winner == result.Player;
+          results.Add(resultvm);
+        }
+        Results = results;
       }
-      Results = results;
+      else {
+        // this match was a forfeit, create results to display
+        var results = new List<MatchResultViewModel>();
+        foreach (var matchPlayer in match.Players) {
+          var result = new MatchResultViewModel();
+          result.Player = matchPlayer.Player.FullName;
+          result.Winner = match.Winner == matchPlayer.Player;
+          results.Add(result);
+        }
+        Results = results;
+      }
     }
   }
 
