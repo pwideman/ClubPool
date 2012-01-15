@@ -289,7 +289,7 @@ div.form-input
   vertical-align: top;
   .ie7fix;
 
-  input
+  input[type="text"]
   {
     width: 221px;
     border: 1px solid @standard_blue;
@@ -353,9 +353,9 @@ div.simple-user-list
   border: 1px solid lightgrey;
   background-color: white;
   padding: 8px;
-  max-width: 620px;
-  min-width: 200px;
-  min-height: 60px;
+  max-height: 300px;
+  width: 200px;
+  overflow: auto;
   .ie7fix;
 
   ul {
@@ -364,26 +364,9 @@ div.simple-user-list
     list-style: none;
     display: inline;
     li.simple-user-list-item {
-      font-size: 90%;
-      display: inline-block;
       margin: 4px;
-      border: 1px dashed lightgrey;
-      background-color: @light_green;
-      .corner(6px);
       padding: 4px;
-      width: 180px;
-      overflow: hidden;
       .ie7fix;
-
-      div.simple-user-list-item-heading {
-        background-image: url(../images/user-small.png);
-        background-repeat: no-repeat;
-        padding-left: 20px;
-      }
-
-      ul {
-        font-size: 90%;
-      }
     }
   }
 }

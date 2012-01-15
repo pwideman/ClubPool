@@ -12,8 +12,6 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
 {
   public abstract class TeamViewModel
   {
-    protected List<PlayerViewModel> availablePlayers;
-
     protected TeamViewModel() {
       InitMembers();
     }
@@ -22,16 +20,19 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       LoadAvailablePlayers(repository, season);
     }
 
-    protected TeamViewModel(IRepository repository, Team team)
+    protected TeamViewModel(IRepository repository, Team team, bool selectCurrentPlayers = true)
       : this(repository, team.Division.Season) {
       Name = team.Name;
-      Players = team.Players.Select(p => new PlayerViewModel { Player = p }).ToList();
+      // get team players and merge with available players
+      var teamPlayers = team.Players.Select(p => new PlayerViewModel { Player = p, IsSelected = selectCurrentPlayers }).ToList();
+      var players = Players.ToList();
+      players.InsertRange(0, teamPlayers);
+      Players = players;
       SchedulePriority = team.SchedulePriority;
     }
 
     protected void InitMembers() {
       Players = new List<PlayerViewModel>();
-      availablePlayers = new List<PlayerViewModel>();
     }
 
     private void LoadAvailablePlayers(IRepository repository, Season season) {
@@ -41,46 +42,19 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
         "(select Division_Id from clubpool.Teams where id = tp.Team_Id)) and s.Id = @p0)" +
         "order by LastName, FirstName";
 
-      availablePlayers = repository.SqlQuery<User>(sql, season.Id).Select(u => new PlayerViewModel { Player = u }).ToList();
-    }
-
-    private void RefreshPlayers(IRepository repository) {
-      foreach (var player in Players) {
-        var user = repository.Get<User>(player.Id);
-        player.Name = user.FullName;
-        player.Username = user.Username;
-        player.Email = user.Email;
-      }
-    }
-
-    /// <summary>
-    /// Refreshes a view model that has been posted back from a form
-    /// </summary>
-    /// <param name="userRepository"></param>
-    /// <param name="season"></param>
-    public void ReInitialize(IRepository repository, Season season) {
-      LoadAvailablePlayers(repository, season);
-      RefreshPlayers(repository);
-      // remove my players from available players
-      foreach (var player in Players) {
-        if (availablePlayers.Contains(player)) {
-          availablePlayers.Remove(player);
-        }
-      }
+      Players = repository.SqlQuery<User>(sql, season.Id).Select(u => new PlayerViewModel { Player = u }).ToList();
     }
 
     [DisplayName("Players:")]
     public IEnumerable<PlayerViewModel> Players { get; set; }
-
-    [DisplayName("Available players:")]
-    public IEnumerable<PlayerViewModel> AvailablePlayers { get { return availablePlayers; } }
 
     [DisplayName("Name:")]
     [Required(ErrorMessage="Required")]
     public string Name { get; set; }
 
     [DisplayName("Schedule priority:")]
-    [Min(0)]
+    [Required(ErrorMessage="Required")]
+    [Min(0, ErrorMessage="Schedule priority must be a number greater than or equal to zero")]
     public int SchedulePriority { get; set; }
 
   }

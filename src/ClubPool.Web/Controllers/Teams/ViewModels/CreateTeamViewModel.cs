@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 using DataAnnotationsExtensions;
 
@@ -23,4 +24,19 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
 
     public string DivisionName { get; set; }
   }
+
+  public class CreateTeamPostViewModel
+  {
+    [Min(1)]
+    public int DivisionId { get; set; }
+
+    [Required(ErrorMessage = "Required")]
+    public string Name { get; set; }
+
+    public int[] Players { get; set; }
+
+    [Min(0)]
+    public int SchedulePriority { get; set; }
+  }
+
 }

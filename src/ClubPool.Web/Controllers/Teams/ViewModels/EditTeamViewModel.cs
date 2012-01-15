@@ -14,24 +14,10 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
       : base() {
     }
 
-    public EditTeamViewModel(IRepository repository, Team team)
-      : base(repository, team) {
+    public EditTeamViewModel(IRepository repository, Team team, bool selectCurrentPlayers = true)
+      : base(repository, team, selectCurrentPlayers) {
       Id = team.Id;
       Version = team.EncodedVersion;
-    }
-
-    // hide the base method
-    private new void ReInitialize(IRepository repository, Season season) {
-    }
-
-    public void ReInitialize(IRepository repository, Team team) {
-      base.ReInitialize(repository, team.Division.Season);
-      // add the team's players to the available players if they aren't in my players
-      foreach (var player in team.Players.Select(p => new PlayerViewModel { Player = p })) {
-        if (!Players.Contains(player)) {
-          availablePlayers.Add(player);
-        }
-      }
     }
 
     [Required]

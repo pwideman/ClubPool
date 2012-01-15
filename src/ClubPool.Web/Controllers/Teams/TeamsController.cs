@@ -39,27 +39,39 @@ namespace ClubPool.Web.Controllers.Teams
     [HttpPost]
     [Authorize(Roles=Roles.Administrators)]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(CreateTeamViewModel viewModel) {
+    public ActionResult Create(CreateTeamPostViewModel viewModel) {
       var division = repository.Get<Division>(viewModel.DivisionId);
 
       if (!ModelState.IsValid) {
-        viewModel.ReInitialize(repository, division.Season);
-        return View(viewModel);
+        var newViewModel = new CreateTeamViewModel(repository, division);
+        newViewModel.Name = viewModel.Name;
+        newViewModel.SchedulePriority = viewModel.SchedulePriority;
+        foreach (var playerId in viewModel.Players) {
+          var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+          playerModel.IsSelected = true;
+        }
+        return View(newViewModel);
       }
 
       // verify that the team name is not already used
       if (division.TeamNameIsInUse(viewModel.Name)) {
         ModelState.AddModelErrorFor<CreateTeamViewModel>(m => m.Name, "This name is already in use");
-        viewModel.ReInitialize(repository, division.Season);
-        return View(viewModel);
+        var newViewModel = new CreateTeamViewModel(repository, division);
+        newViewModel.Name = viewModel.Name;
+        newViewModel.SchedulePriority = viewModel.SchedulePriority;
+        foreach (var playerId in viewModel.Players) {
+          var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+          playerModel.IsSelected = true;
+        }
+        return View(newViewModel);
       }
 
       var team = new Team(viewModel.Name, division);
       team.SchedulePriority = viewModel.SchedulePriority;
 
       if (viewModel.Players.Any()) {
-        foreach (var playerViewModel in viewModel.Players) {
-          var player = repository.Get<User>(playerViewModel.Id);
+        foreach (var playerId in viewModel.Players) {
+          var player = repository.Get<User>(playerId);
           team.AddPlayer(player);
         }
       }
@@ -103,7 +115,7 @@ namespace ClubPool.Web.Controllers.Teams
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(EditTeamViewModel viewModel) {
+    public ActionResult Edit(EditTeamPostViewModel viewModel) {
       var team = repository.Get<Team>(viewModel.Id);
 
       if (null == team) {
@@ -116,25 +128,37 @@ namespace ClubPool.Web.Controllers.Teams
       }
       
       if (!ModelState.IsValid) {
-        viewModel.ReInitialize(repository, team);
-        return View(viewModel);
+        var newViewModel = new EditTeamViewModel(repository, team, false);
+        newViewModel.Name = viewModel.Name;
+        newViewModel.SchedulePriority = viewModel.SchedulePriority;
+        foreach (var playerId in viewModel.Players) {
+          var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+          playerModel.IsSelected = true;
+        }
+        return View(newViewModel);
       }
 
       if (team.Name != viewModel.Name) {
         if (team.Division.TeamNameIsInUse(viewModel.Name)) {
           ModelState.AddModelErrorFor<EditTeamViewModel>(m => m.Name, "Name is already in use");
-          viewModel.ReInitialize(repository, team);
-          return View(viewModel);
+          var newViewModel = new EditTeamViewModel(repository, team, false);
+          newViewModel.Name = viewModel.Name;
+          newViewModel.SchedulePriority = viewModel.SchedulePriority;
+          foreach (var playerId in viewModel.Players) {
+            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+            playerModel.IsSelected = true;
+          }
+          return View(newViewModel);
         }
         team.Name = viewModel.Name;
       }
 
       team.SchedulePriority = viewModel.SchedulePriority;
 
-      if (null != viewModel.Players && viewModel.Players.Any()) {
+      if (null != viewModel.Players && viewModel.Players.Length > 0) {
         var newPlayers = new List<User>();
-        foreach (var playerViewModel in viewModel.Players) {
-          var player = repository.Get<User>(playerViewModel.Id);
+        foreach (var playerId in viewModel.Players) {
+          var player = repository.Get<User>(playerId);
           newPlayers.Add(player);
         }
         // first remove all players that aren't in the view model's players list

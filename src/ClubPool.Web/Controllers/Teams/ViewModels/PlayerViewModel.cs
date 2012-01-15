@@ -21,5 +21,6 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public string Name { get; set; }
     public string Email { get; set; }
     public string Username { get; set; }
+    public bool IsSelected { get; set; }
   }
 }
