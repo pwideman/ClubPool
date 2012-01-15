@@ -27,9 +27,22 @@ namespace ClubPool.Web.Controllers.Dashboard
 
     [Authorize]
     // needs transaction
-    public ActionResult Index() {
+    public ActionResult Index(int? id) {
       var principal = authenticationService.GetCurrentPrincipal();
-      var user = repository.All<User>().Single(u => u.Username.Equals(principal.Identity.Name));
+      User user = null;
+      if (id.HasValue) {
+        if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
+          user = repository.All<User>().Single(u => u.Id == id);
+        }
+        else {
+          // This should really be HttpUnauthorizedResult, but that results
+          // in an infinite login/redirect loop. Should fix later
+          return new HttpNotFoundResult();
+        }
+      }
+      else {
+        user = repository.All<User>().Single(u => u.Username.Equals(principal.Identity.Name));
+      }
       var currentSeason = repository.All<Season>().Single(s => s.IsActive);
       var team = repository.All<Team>().SingleOrDefault(t => t.Division.Season.Id == currentSeason.Id && t.Players.Select(p => p.Id).Contains(user.Id));
       var viewModel = new IndexViewModel(user, team, repository);

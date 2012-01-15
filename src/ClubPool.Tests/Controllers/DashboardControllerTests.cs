@@ -80,7 +80,7 @@ namespace ClubPool.Tests.Controllers.Dashboard
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
+      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(null));
     }
 
     [Test]
@@ -175,7 +175,7 @@ namespace ClubPool.Tests.Controllers.Dashboard
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
+      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(null));
     }
 
     [Test]
