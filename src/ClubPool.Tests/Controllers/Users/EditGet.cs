@@ -20,7 +20,6 @@ namespace ClubPool.Tests.Controllers.Users
     protected Role adminRole;
     protected Role officerRole;
     protected string password = "pass";
-    protected ViewResultHelper<EditViewModel> resultHelper;
 
     public override void EstablishContext() {
       base.EstablishContext();
@@ -38,17 +37,22 @@ namespace ClubPool.Tests.Controllers.Users
       repository.Init<Role>(roles.AsQueryable(), true);
     }
 
+  }
+
+  public abstract class EditGetTest : EditTest
+  {
+    protected ViewResultHelper<EditViewModel> resultHelper;
+
     public override void When() {
       resultHelper = new ViewResultHelper<EditViewModel>(controller.Edit(user.Id));
     }
-    
   }
 }
 
 namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_edit_view
 {
   [TestFixture]
-  public class by_an_admin_user : EditTest
+  public class by_an_admin_user : EditGetTest
   {
     public override void Given() {
       authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
@@ -111,7 +115,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_edit_view
   }
 
   [TestFixture]
-  public class for_a_normal_user_by_an_officer : EditTest
+  public class for_a_normal_user_by_an_officer : EditGetTest
   {
 
     public override void Given() {
@@ -165,7 +169,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_edit_view
   }
 
   [TestFixture]
-  public class for_an_officer_by_a_different_officer : EditTest
+  public class for_an_officer_by_a_different_officer : EditGetTest
   {
 
     public override void Given() {
@@ -220,7 +224,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_edit_view
   }
 
   [TestFixture]
-  public class for_an_officer_by_himself : EditTest
+  public class for_an_officer_by_himself : EditGetTest
   {
     public override void Given() {
       authenticationService.MockPrincipal.Roles = new string[1] { Roles.Officers };
@@ -265,7 +269,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_edit_view
   }
 
   [TestFixture]
-  public class for_normal_user_by_himself : EditTest
+  public class for_normal_user_by_himself : EditGetTest
   {
     public override void Given() {
       authenticationService.MockPrincipal.Roles = new string[0];
@@ -309,7 +313,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_edit_view
   }
 
   [TestFixture]
-  public class for_an_admin_user_by_an_officer : EditTest
+  public class for_an_admin_user_by_an_officer : EditGetTest
   {
     public override void Given() {
       authenticationService.MockPrincipal.Roles = new string[1] { Roles.Officers };
@@ -353,7 +357,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_edit_view
   }
 
   [TestFixture]
-  public class for_a_normal_user_by_a_different_normal_user : EditTest
+  public class for_a_normal_user_by_a_different_normal_user : EditGetTest
   {
     public override void Given() {
       authenticationService.MockPrincipal.Roles = new string[0];
