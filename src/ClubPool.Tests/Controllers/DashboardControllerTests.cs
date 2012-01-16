@@ -195,4 +195,49 @@ namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
     }
   }
 
+  [TestFixture]
+  public class for_a_different_user_by_nonadmin_user : DashboardControllerTest
+  {
+    private HttpNotFoundResultHelper resultHelper;
+
+    public override void Given() {
+      authenticationService.MockPrincipal.User = users.Skip(2).First();
+    }
+
+    public override void When() {
+      resultHelper = new HttpNotFoundResultHelper(controller.Index(users[0].Id));
+    }
+
+    [Test]
+    public void it_should_return_http_not_found() {
+      resultHelper.Result.Should().NotBeNull();
+    }
+  }
+
+  [TestFixture]
+  public class for_a_different_user_by_admin_user : DashboardControllerTest
+  {
+    private ViewResultHelper<IndexViewModel> resultHelper;
+    private User user;
+
+    public override void Given() {
+      user = users.Skip(2).First();
+      authenticationService.MockPrincipal.User = adminUser;
+    }
+
+    public override void When() {
+      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(user.Id));
+    }
+
+    [Test]
+    public void it_should_return_the_view() {
+      resultHelper.Result.Should().NotBeNull();
+    }
+
+    [Test]
+    public void it_should_return_the_desired_user_information() {
+      resultHelper.Model.UserFullName.Should().Be(user.FullName);
+    }
+  }
+
 }
