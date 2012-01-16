@@ -45,7 +45,7 @@ namespace ClubPool.Tests.Controllers.Users
   }
 }
 
-namespace ClubPool.Tests.Controllers.Users.when_the_edit_form_is_posted
+namespace ClubPool.Tests.Controllers.Users.when_asked_to_edit_a_user
 {
   [TestFixture]
   public class by_an_admin_user : EditPostTest
