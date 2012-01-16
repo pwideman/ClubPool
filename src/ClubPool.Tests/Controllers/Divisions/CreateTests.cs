@@ -72,7 +72,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
   [TestFixture]
   public class with_valid_data : CreatePostTest
   {
-    private new RedirectToRouteResultHelper resultHelper;
+    private RedirectToRouteResultHelper redirectResultHelper;
     private string name = "MyDivision";
     private DateTime startingDate = DateTime.Parse("11/30/2010");
     private Division savedDivision;
@@ -92,7 +92,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
     }
 
     public override void When() {
-      resultHelper = new RedirectToRouteResultHelper(controller.Create(viewModel));
+      redirectResultHelper = new RedirectToRouteResultHelper(controller.Create(viewModel));
     }
 
     [Test]
@@ -112,7 +112,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
 
     [Test]
     public void it_should_redirect_to_the_view_season_view() {
-      resultHelper.ShouldRedirectTo("view", "seasons");
+      redirectResultHelper.ShouldRedirectTo("view", "seasons");
     }
   }
 
