@@ -69,10 +69,10 @@ namespace ClubPool.Tests.Controllers.Seasons.when_asked_to_delete_a_season
   [TestFixture]
   public class that_cannot_be_deleted : SeasonsControllerTest
   {
-    static RedirectToRouteResultHelper resultHelper;
-    static int id = 1;
-    static int page = 2;
-    static KeyValuePair<string, object> pageRouteValue;
+    private RedirectToRouteResultHelper resultHelper;
+    private int id = 1;
+    private int page = 2;
+    private KeyValuePair<string, object> pageRouteValue;
 
     public override void Given() {
       var season = new Season("name", GameType.EightBall);
