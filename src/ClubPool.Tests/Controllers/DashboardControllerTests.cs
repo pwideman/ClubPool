@@ -21,43 +21,40 @@ namespace ClubPool.Tests.Controllers.Dashboard
   {
     protected DashboardController controller;
     protected MockAuthenticationService authenticationService;
-    protected Mock<IRepository> repository;
     protected Season season;
     protected IList<User> users;
     protected IList<Team> teams;
-    protected IList<MatchResult> matchResults;
-    protected IList<Web.Models.Match> matches;
     protected IList<Meet> meets;
-    protected IList<Division> divisions;
     protected User adminUser;
 
     public override void EstablishContext() {
       authenticationService = AuthHelper.CreateMockAuthenticationService();
-      repository = new Mock<IRepository>();
+      var repository = new Mock<IRepository>();
       controller = new DashboardController(authenticationService, repository.Object);
 
       teams = new List<Team>();
       users = new List<User>();
-      matchResults = new List<MatchResult>();
-      matches = new List<Web.Models.Match>();
+      var matchResults = new List<MatchResult>();
+      var matches = new List<Web.Models.Match>();
       meets = new List<Meet>();
-      divisions = new List<Division>();
+      var divisions = new List<Division>();
       season = DomainModelHelper.CreateTestSeason(users, divisions, teams, meets, matches, matchResults);
       repository.InitAll(users.AsQueryable(), null, new List<Season> { season }.AsQueryable());
       foreach (var user in users) {
         user.UpdateSkillLevel(season.GameType, repository.Object);
       }
       adminUser = users[0];
-
     }
   }
+}
 
+namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
+{
   [TestFixture]
-  public class when_asked_for_the_default_view_for_nonadmin_user_with_current_season_stats : DashboardControllerTest
+  public class for_nonadmin_user_with_current_season_stats : DashboardControllerTest
   {
     private ViewResultHelper<IndexViewModel> resultHelper;
     private User user;
-    private string username;
     private int skillLevel;
     private User teammate;
     private Meet lastMeet;
@@ -66,7 +63,6 @@ namespace ClubPool.Tests.Controllers.Dashboard
 
     public override void Given() {
       user = users.Skip(2).First();
-      username = user.Username;
       authenticationService.MockPrincipal.User = user;
       skillLevel = user.SkillLevels.Where(sl => sl.GameType == season.GameType).First().Value;
       team = teams.Where(t => t.Players.Contains(user)).Single();
@@ -166,7 +162,7 @@ namespace ClubPool.Tests.Controllers.Dashboard
   }
 
   [TestFixture]
-  public class when_asked_for_the_default_view_for_admin_user_who_is_not_in_current_season : DashboardControllerTest
+  public class for_admin_user_who_is_not_in_current_season : DashboardControllerTest
   {
     private ViewResultHelper<IndexViewModel> resultHelper;
 
