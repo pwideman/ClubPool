@@ -36,10 +36,10 @@ namespace ClubPool.Tests.Controllers.Teams
       season = DomainModelHelper.CreateTestSeason(users, divisions, teams, meets, matches, matchResults);
       adminUser = users[0];
       officerUser = users[1];
-      repository.Init<Division>(divisions.AsQueryable(), true);
+      repository.Init<Division>(divisions.AsQueryable());
       repository.Init<User>(users.AsQueryable(), true);
       repository.Init<Team>(teams.AsQueryable(), true);
-      repository.Init<MatchResult>(matchResults.AsQueryable(), true);
+      repository.Init<MatchResult>(matchResults.AsQueryable());
 
       foreach (var user in users) {
         user.UpdateSkillLevel(season.GameType, repository.Object);
