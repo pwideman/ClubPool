@@ -23,7 +23,6 @@ namespace ClubPool.Tests.Controllers.Teams
     protected IList<User> users;
     protected User adminUser;
     protected User officerUser;
-    protected ViewResultHelper<DetailsViewModel> resultHelper;
     protected Team team;
 
     public override void EstablishContext() {
@@ -42,12 +41,6 @@ namespace ClubPool.Tests.Controllers.Teams
       repository.Init<Team>(teams.AsQueryable(), true);
       repository.Init<MatchResult>(matchResults.AsQueryable(), true);
 
-      // set up skill levels
-      //repository.Setup(r => r.GetMatchResultsForPlayerAndGameType(null, GameType.EightBall)).IgnoreArguments().Return(null).WhenCalled(m => {
-      //  var user = m.Arguments[0] as User;
-      //  var gameType = (GameType)m.Arguments[1];
-      //  m.ReturnValue = matchResults.Where(r => r.Player == user && r.Match.Meet.Division.Season.GameType == gameType).AsQueryable();
-      //});
       foreach (var user in users) {
         user.UpdateSkillLevel(season.GameType, repository.Object);
       }
@@ -62,6 +55,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_details_view
   public class by_an_administrator : DetailsTest
   {
     private int numberOfSeasonResults;
+    private ViewResultHelper<DetailsViewModel> resultHelper;
 
     public override void Given() {
       authService.MockPrincipal.User = adminUser;
@@ -113,6 +107,8 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_details_view
   [TestFixture]
   public class by_an_officer : DetailsTest
   {
+    private ViewResultHelper<DetailsViewModel> resultHelper;
+
     public override void Given() {
       authService.MockPrincipal.User = officerUser;
     }
@@ -130,6 +126,8 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_details_view
   [TestFixture]
   public class by_a_team_member : DetailsTest
   {
+    private ViewResultHelper<DetailsViewModel> resultHelper;
+
     public override void Given() {
       var user = team.Players.First();
       authService.MockPrincipal.User = user;
@@ -148,6 +146,8 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_details_view
   [TestFixture]
   public class by_a_normal_user_not_on_this_team : DetailsTest
   {
+    private ViewResultHelper<DetailsViewModel> resultHelper;
+
     public override void Given() {
       var user = teams[1].Players.First();
       authService.MockPrincipal.User = user;
@@ -166,7 +166,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_details_view
   [TestFixture]
   public class for_a_nonexistent_team : DetailsTest
   {
-    private new HttpNotFoundResultHelper resultHelper;
+    private HttpNotFoundResultHelper resultHelper;
 
     public override void Given() {
       authService.MockPrincipal.User = adminUser;

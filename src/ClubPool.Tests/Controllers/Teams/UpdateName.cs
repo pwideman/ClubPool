@@ -15,7 +15,7 @@ namespace ClubPool.Tests.Controllers.Teams
 {
   public class UpdateNameTest : DetailsTest
   {
-    protected new JsonResultHelper<AjaxUpdateResponseViewModel> resultHelper;
+    protected JsonResultHelper<AjaxUpdateResponseViewModel> resultHelper;
     protected UpdateNameViewModel viewModel;
     protected string newName = "NewName";
 
@@ -165,7 +165,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_to_update_a_team_name
   [TestFixture]
   public class for_a_nonexistent_team : UpdateNameTest
   {
-    private new HttpNotFoundResultHelper resultHelper;
+    private HttpNotFoundResultHelper notFoundResultHelper;
 
     public override void Given() {
       viewModel.Id = 9999;
@@ -173,12 +173,12 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_to_update_a_team_name
     }
 
     public override void When() {
-      resultHelper = new HttpNotFoundResultHelper(controller.UpdateName(viewModel));
+      notFoundResultHelper = new HttpNotFoundResultHelper(controller.UpdateName(viewModel));
     }
 
     [Test]
     public void it_should_return_http_not_found() {
-      resultHelper.Result.Should().NotBeNull();
+      notFoundResultHelper.Result.Should().NotBeNull();
     }
   }
 
