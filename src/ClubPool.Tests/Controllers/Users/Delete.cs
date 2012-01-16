@@ -16,11 +16,11 @@ namespace ClubPool.Tests.Controllers.Users
   [TestFixture]
   public class when_asked_to_delete_a_user : UsersControllerTest
   {
-    static RedirectToRouteResultHelper resultHelper;
-    static User user;
-    static int page = 5;
-    static KeyValuePair<string, object> pageRouteValue;
-    static KeyValuePair<string, object> qRouteValue;
+    private RedirectToRouteResultHelper resultHelper;
+    private User user;
+    private int page = 5;
+    private KeyValuePair<string, object> pageRouteValue;
+    private KeyValuePair<string, object> qRouteValue;
 
     public override void Given() {
       user = new User("test", "test", "test", "test", "test");
