@@ -84,8 +84,7 @@
     <Compile Include="Controllers\Users\Unapproved.cs" />
     <Compile Include="Controllers\Users\UsersControllerTest.cs" />
     <Compile Include="Controllers\Users\View.cs" />
-    <Compile Include="Models\UserTests\UserTests.cs" />
-    <Compile Include="Models\UserTests\when_updating_skill_level\Tests.cs" />
+    <Compile Include="Models\UserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Membership\ClubPoolMembershipServiceSpecificationContext.cs" />
     <Compile Include="Services\Membership\CreateUserTests.cs" />

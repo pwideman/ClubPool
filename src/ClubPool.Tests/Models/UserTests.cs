@@ -10,7 +10,7 @@ using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Testing;
 
-namespace ClubPool.Tests.Models.UserTests.when_updating_skill_level
+namespace ClubPool.Tests.Models.UserTests.when_asked_to_update_skill_level
 {
   public abstract class when_updating_skill_level : SpecificationContext
   {
