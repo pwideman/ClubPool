@@ -57,15 +57,15 @@ namespace ClubPool.Tests.Controllers.Meets.when_asked_for_the_view_action
   [TestFixture]
   public class for_an_invalid_meet : MeetsControllerTest
   {
-    private new HttpNotFoundResultHelper resultHelper;
+    private HttpNotFoundResultHelper notFoundResultHelper;
 
     public override void When() {
-      resultHelper = new HttpNotFoundResultHelper(controller.View(0));
+      notFoundResultHelper = new HttpNotFoundResultHelper(controller.View(0));
     }
 
     [Test]
     public void it_should_return_http_not_found() {
-      resultHelper.Result.Should().NotBeNull();
+      notFoundResultHelper.Result.Should().NotBeNull();
     }
   }
 

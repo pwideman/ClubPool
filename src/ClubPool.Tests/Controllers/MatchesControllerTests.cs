@@ -217,19 +217,19 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   [TestFixture]
   public class for_a_nonexistant_match : MatchesControllerTest
   {
-    private new HttpNotFoundResultHelper resultHelper;
+    private HttpNotFoundResultHelper notFoundResultHelper;
 
     public override void Given() {
       viewModel.Id = 10;
     }
 
     public override void When() {
-      resultHelper = new HttpNotFoundResultHelper(controller.Edit(viewModel));
+      notFoundResultHelper = new HttpNotFoundResultHelper(controller.Edit(viewModel));
     }
 
     [Test]
     public void it_should_return_http_not_found() {
-      resultHelper.Result.Should().NotBeNull();
+      notFoundResultHelper.Result.Should().NotBeNull();
     }
   }
 
