@@ -17,14 +17,13 @@ namespace ClubPool.Tests.Controllers.Meets.when_asked_for_the_view_action
   public abstract class MeetsControllerTest : SpecificationContext
   {
     protected MeetsController controller;
-    protected Mock<IRepository> repository;
     protected MockAuthenticationService authenticationService;
     protected Meet meet;
     protected User loggedInUser;
     protected ViewResultHelper<MeetViewModel> resultHelper;
 
     public override void EstablishContext() {
-      repository = new Mock<IRepository>();
+      var repository = new Mock<IRepository>();
       authenticationService = AuthHelper.CreateMockAuthenticationService();
       controller = new MeetsController(repository.Object, authenticationService);
 
