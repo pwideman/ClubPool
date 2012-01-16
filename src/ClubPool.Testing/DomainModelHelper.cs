@@ -168,17 +168,5 @@ namespace ClubPool.Testing
       return season;
     }
 
-    //public static void SetUpTestRepository<T>(ILinqRepository<T> repository, IEnumerable<T> list) where T : Entity {
-    //  repository.Stub(r => r.GetAll()).Return(list.AsQueryable());
-    //  repository.Stub(r => r.FindOne(null)).IgnoreArguments().Return(null).WhenCalled(m => {
-    //    var criteria = m.Arguments[0] as Expression<Func<T, bool>>;
-    //    m.ReturnValue = list.AsQueryable().Where(criteria).SingleOrDefault();
-    //  });
-    //  foreach (var item in list) {
-    //    repository.Stub(r => r.Get(item.Id)).Return(item);
-    //  }
-    //}
-
-
   }
 }
