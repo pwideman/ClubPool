@@ -18,10 +18,7 @@ namespace ClubPool.Tests.Controllers.Teams
     public override void EstablishContext() {
       repository = new Mock<IRepository>();
       authService = AuthHelper.CreateMockAuthenticationService();
-
       controller = new TeamsController(repository.Object, authService);
-
-      //ControllerHelper.CreateMockControllerContext(controller);
     }
   }
 }
