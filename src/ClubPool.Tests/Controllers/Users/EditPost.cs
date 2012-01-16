@@ -431,10 +431,9 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_edit_a_user
   public class with_a_stale_version : EditPostTest
   {
     private RedirectToRouteResultHelper resultHelper;
-    private int version = 2;
 
     public override void Given() {
-      user.SetVersionTo(version);
+      user.SetVersionTo(2);
       authenticationService.MockPrincipal.Roles = new string[1] { Roles.Administrators };
     }
 
