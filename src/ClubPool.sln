@@ -1,11 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FA163A84-D8B8-414D-BE32-E780A473CB09}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Web", "ClubPool.Web\ClubPool.Web.csproj", "{4230FBF1-9D6D-4F42-8040-7519F25251AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.MSpecTests", "ClubPool.MSpecTests\ClubPool.MSpecTests.csproj", "{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClubPool.Testing", "ClubPool.Testing\ClubPool.Testing.csproj", "{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}"
 EndProject
@@ -25,8 +21,6 @@ Global
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4230FBF1-9D6D-4F42-8040-7519F25251AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,10 +32,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{BC9610CD-5151-43BB-9F63-7ED8ACD819CD} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
-		{3712C272-F0EC-4BAC-8DF1-48AF5F4EF818} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
-		{D8837A1D-1479-41DD-A3A3-32750205AA04} = {FA163A84-D8B8-414D-BE32-E780A473CB09}
 	EndGlobalSection
 EndGlobal
