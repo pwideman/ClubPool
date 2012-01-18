@@ -14,6 +14,7 @@ using ClubPool.Web.Infrastructure.Binders;
 using ClubPool.Web.Infrastructure.EntityFramework;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Models;
+using ClubPool.Web.Services.Configuration;
 
 namespace ClubPool.Web
 {
@@ -26,6 +27,7 @@ namespace ClubPool.Web
     {
       filters.Add(new ElmahHandleErrorLoggerFilter());
       filters.Add(new HandleErrorAttribute());
+      filters.Add(new GlobalViewBagFilter(DependencyResolver.Current.GetService<IConfigurationService>()));
     }
 
     public static void RegisterRoutes(RouteCollection routes)
@@ -51,11 +53,6 @@ namespace ClubPool.Web
       RegisterRoutes(RouteTable.Routes);
     }
 
-    /// <summary>
-    /// Instantiate the container and add all Controllers that derive from 
-    /// WindsorController to the container.  Also associate the Controller 
-    /// with the WindsorContainer ControllerFactory.
-    /// </summary>
     protected virtual void InitializeServiceLocator() {
       var builder = new ContainerBuilder();
       // set up the ServiceLocator earlier so that we can use it in

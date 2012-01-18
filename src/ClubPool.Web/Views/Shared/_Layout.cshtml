@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>@ViewBag.Title</title>
+    <title>@if (!string.IsNullOrWhiteSpace(ViewBag.Title)) { @(ViewBag.Title + " - ") } @ViewBag.SiteName</title>
     <meta charset="utf-8" />
     @Html.Stylesheet("site.less")
     @Html.Stylesheet("jqueryui.css")
