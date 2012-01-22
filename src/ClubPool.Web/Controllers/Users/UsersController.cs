@@ -129,6 +129,7 @@ namespace ClubPool.Web.Controllers.Users
       return PartialView(new LoginViewModel());
     }
 
+    [HttpGet]
     public ActionResult AccountHelp() {
       return View();
     }
@@ -193,6 +194,7 @@ namespace ClubPool.Web.Controllers.Users
       return RedirectToAction("ResetPassword");
     }
 
+    [HttpGet]
     public ActionResult Logout() {
       authenticationService.LogOut();
       return RedirectToAction("Index", "Home");
