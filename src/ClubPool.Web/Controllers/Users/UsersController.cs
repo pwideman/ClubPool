@@ -113,6 +113,7 @@ namespace ClubPool.Web.Controllers.Users
       }
     }
 
+    [HttpGet]
     public ActionResult LoginStatus() {
       var principal = authenticationService.GetCurrentPrincipal();
       var viewModel = new LoginStatusViewModel() {
