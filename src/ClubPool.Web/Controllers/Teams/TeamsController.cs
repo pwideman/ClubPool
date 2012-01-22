@@ -39,16 +39,18 @@ namespace ClubPool.Web.Controllers.Teams
     [HttpPost]
     [Authorize(Roles=Roles.Administrators)]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(CreateTeamPostViewModel viewModel) {
+    public ActionResult Create(CreateTeamViewModel viewModel) {
       var division = repository.Get<Division>(viewModel.DivisionId);
 
       if (!ModelState.IsValid) {
         var newViewModel = new CreateTeamViewModel(repository, division);
         newViewModel.Name = viewModel.Name;
         newViewModel.SchedulePriority = viewModel.SchedulePriority;
-        foreach (var playerId in viewModel.Players) {
-          var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-          playerModel.IsSelected = true;
+        if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
+          foreach (var playerId in viewModel.SelectedPlayers) {
+            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+            playerModel.IsSelected = true;
+          }
         }
         return View(newViewModel);
       }
@@ -59,9 +61,11 @@ namespace ClubPool.Web.Controllers.Teams
         var newViewModel = new CreateTeamViewModel(repository, division);
         newViewModel.Name = viewModel.Name;
         newViewModel.SchedulePriority = viewModel.SchedulePriority;
-        foreach (var playerId in viewModel.Players) {
-          var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-          playerModel.IsSelected = true;
+        if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
+          foreach (var playerId in viewModel.SelectedPlayers) {
+            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+            playerModel.IsSelected = true;
+          }
         }
         return View(newViewModel);
       }
@@ -69,8 +73,8 @@ namespace ClubPool.Web.Controllers.Teams
       var team = new Team(viewModel.Name, division);
       team.SchedulePriority = viewModel.SchedulePriority;
 
-      if (viewModel.Players.Any()) {
-        foreach (var playerId in viewModel.Players) {
+      if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
+        foreach (var playerId in viewModel.SelectedPlayers) {
           var player = repository.Get<User>(playerId);
           team.AddPlayer(player);
         }
@@ -115,7 +119,7 @@ namespace ClubPool.Web.Controllers.Teams
     [HttpPost]
     [Authorize(Roles = Roles.Administrators)]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(EditTeamPostViewModel viewModel) {
+    public ActionResult Edit(EditTeamViewModel viewModel) {
       var team = repository.Get<Team>(viewModel.Id);
 
       if (null == team) {
@@ -131,9 +135,11 @@ namespace ClubPool.Web.Controllers.Teams
         var newViewModel = new EditTeamViewModel(repository, team, false);
         newViewModel.Name = viewModel.Name;
         newViewModel.SchedulePriority = viewModel.SchedulePriority;
-        foreach (var playerId in viewModel.Players) {
-          var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-          playerModel.IsSelected = true;
+        if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
+          foreach (var playerId in viewModel.SelectedPlayers) {
+            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+            playerModel.IsSelected = true;
+          }
         }
         return View(newViewModel);
       }
@@ -144,9 +150,11 @@ namespace ClubPool.Web.Controllers.Teams
           var newViewModel = new EditTeamViewModel(repository, team, false);
           newViewModel.Name = viewModel.Name;
           newViewModel.SchedulePriority = viewModel.SchedulePriority;
-          foreach (var playerId in viewModel.Players) {
-            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-            playerModel.IsSelected = true;
+          if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
+            foreach (var playerId in viewModel.SelectedPlayers) {
+              var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
+              playerModel.IsSelected = true;
+            }
           }
           return View(newViewModel);
         }
@@ -155,9 +163,9 @@ namespace ClubPool.Web.Controllers.Teams
 
       team.SchedulePriority = viewModel.SchedulePriority;
 
-      if (null != viewModel.Players && viewModel.Players.Length > 0) {
+      if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
         var newPlayers = new List<User>();
-        foreach (var playerId in viewModel.Players) {
+        foreach (var playerId in viewModel.SelectedPlayers) {
           var player = repository.Get<User>(playerId);
           newPlayers.Add(player);
         }

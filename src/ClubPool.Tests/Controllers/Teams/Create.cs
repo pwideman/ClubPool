@@ -67,20 +67,20 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_create_view
 
 }
 
-namespace ClubPool.Tests.Controllers.Teams.when_to_create_a_team
+namespace ClubPool.Tests.Controllers.Teams.when_asked_to_create_a_team
 {
   [TestFixture]
   public class with_valid_data : TeamsControllerTest
   {
     private RedirectToRouteResultHelper resultHelper;
-    private CreateTeamPostViewModel viewModel;
+    private CreateTeamViewModel viewModel;
     private string name = "MyTeam";
     private int divisionId = 1;
     private Team savedTeam;
     private List<User> users;
 
     public override void Given() {
-      viewModel = new CreateTeamPostViewModel();
+      viewModel = new CreateTeamViewModel();
       viewModel.Name = name;
       viewModel.DivisionId = divisionId;
 
@@ -95,7 +95,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_to_create_a_team
       users = DomainModelHelper.GetUsers(5);
       repository.Init<User>(users.AsQueryable(), true);
 
-      viewModel.Players = new int[2] { users[0].Id, users[1].Id };
+      viewModel.SelectedPlayers = new int[2] { users[0].Id, users[1].Id };
     }
 
     public override void When() {
@@ -124,15 +124,67 @@ namespace ClubPool.Tests.Controllers.Teams.when_to_create_a_team
   }
 
   [TestFixture]
+  public class with_valid_data_and_no_players : TeamsControllerTest
+  {
+    private RedirectToRouteResultHelper resultHelper;
+    private CreateTeamViewModel viewModel;
+    private string name = "MyTeam";
+    private int divisionId = 1;
+    private Team savedTeam;
+    private List<User> users;
+
+    public override void Given() {
+      viewModel = new CreateTeamViewModel();
+      viewModel.Name = name;
+      viewModel.DivisionId = divisionId;
+
+      var season = new Season("temp", GameType.EightBall);
+      season.SetIdTo(1);
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(divisionId);
+
+      repository.Setup(r => r.Get<Division>(divisionId)).Returns(division);
+      repository.Setup(r => r.SaveOrUpdate<Team>(It.IsAny<Team>())).Callback<Team>(t => savedTeam = t).Returns(savedTeam);
+
+      users = DomainModelHelper.GetUsers(5);
+      repository.Init<User>(users.AsQueryable(), true);
+    }
+
+    public override void When() {
+      resultHelper = new RedirectToRouteResultHelper(controller.Create(viewModel));
+    }
+
+    [Test]
+    public void it_should_save_the_new_team() {
+      savedTeam.Should().NotBeNull();
+    }
+
+    [Test]
+    public void it_should_set_the_new_team_name() {
+      savedTeam.Name.Should().Be(name);
+    }
+
+    [Test]
+    public void it_should_set_the_new_team_players() {
+      savedTeam.Players.Should().BeEmpty();
+    }
+
+    [Test]
+    public void it_should_redirect_to_the_view_season_view() {
+      resultHelper.ShouldRedirectTo("view", "seasons");
+    }
+  }
+
+  [TestFixture]
   public class with_model_errors : TeamsControllerTest
   {
     private ViewResultHelper<CreateTeamViewModel> resultHelper;
-    private CreateTeamPostViewModel viewModel;
+    private CreateTeamViewModel viewModel;
     private int divisionId = 1;
     private List<User> users;
 
     public override void Given() {
-      viewModel = new CreateTeamPostViewModel();
+      viewModel = new CreateTeamViewModel();
       viewModel.DivisionId = divisionId;
 
       var season = new Season("temp", GameType.EightBall);
@@ -145,7 +197,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_to_create_a_team
       users = DomainModelHelper.GetUsers(5);
       repository.Setup(r => r.SqlQuery<User>(It.IsAny<string>(), division.Season.Id)).Returns(users.AsQueryable());
       repository.Init<User>(users.AsQueryable(), true);
-      viewModel.Players = new int[1] { users[0].Id };
+      viewModel.SelectedPlayers = new int[1] { users[0].Id };
 
       controller.ModelState.AddModelError("Name", new Exception("test"));
     }
@@ -176,16 +228,67 @@ namespace ClubPool.Tests.Controllers.Teams.when_to_create_a_team
   }
 
   [TestFixture]
+  public class with_model_errors_and_no_players_selected : TeamsControllerTest
+  {
+    private ViewResultHelper<CreateTeamViewModel> resultHelper;
+    private CreateTeamViewModel viewModel;
+    private int divisionId = 1;
+    private List<User> users;
+
+    public override void Given() {
+      viewModel = new CreateTeamViewModel();
+      viewModel.DivisionId = divisionId;
+
+      var season = new Season("temp", GameType.EightBall);
+      season.SetIdTo(1);
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(1);
+
+      repository.Setup(r => r.Get<Division>(divisionId)).Returns(division);
+
+      users = DomainModelHelper.GetUsers(5);
+      repository.Setup(r => r.SqlQuery<User>(It.IsAny<string>(), division.Season.Id)).Returns(users.AsQueryable());
+      repository.Init<User>(users.AsQueryable(), true);
+
+      controller.ModelState.AddModelError("Name", new Exception("test"));
+    }
+
+    public override void When() {
+      resultHelper = new ViewResultHelper<CreateTeamViewModel>(controller.Create(viewModel));
+    }
+
+    [Test]
+    public void it_should_return_the_default_view() {
+      resultHelper.Result.ViewName.Should().BeEmpty();
+    }
+
+    [Test]
+    public void it_should_retain_the_player_selection_by_the_user() {
+      resultHelper.Model.Players.Any(p => p.IsSelected).Should().BeFalse();
+    }
+
+    [Test]
+    public void it_should_indicate_an_error() {
+      resultHelper.Result.ViewData.ModelState.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void it_should_indicate_the_error_was_related_to_the_name_field() {
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Name").Should().BeTrue();
+    }
+  }
+
+  [TestFixture]
   public class with_a_duplicate_name : TeamsControllerTest
   {
     private ViewResultHelper<CreateTeamViewModel> resultHelper;
-    private CreateTeamPostViewModel viewModel;
+    private CreateTeamViewModel viewModel;
     private int divisionId = 1;
     private List<User> users;
     private string name = "MyTeam";
 
     public override void Given() {
-      viewModel = new CreateTeamPostViewModel();
+      viewModel = new CreateTeamViewModel();
       viewModel.Name = name;
       viewModel.DivisionId = divisionId;
 
@@ -199,7 +302,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_to_create_a_team
       users = DomainModelHelper.GetUsers(5);
       repository.Setup(r => r.SqlQuery<User>(It.IsAny<string>(), season.Id)).Returns(users.AsQueryable());
       repository.Init<User>(users.AsQueryable(), true);
-      viewModel.Players = new int[1] { users[0].Id };
+      viewModel.SelectedPlayers = new int[1] { users[0].Id };
     }
 
     public override void When() {
@@ -237,4 +340,65 @@ namespace ClubPool.Tests.Controllers.Teams.when_to_create_a_team
     }
   }
 
+
+  [TestFixture]
+  public class with_a_duplicate_name_and_no_players_selected : TeamsControllerTest
+  {
+    private ViewResultHelper<CreateTeamViewModel> resultHelper;
+    private CreateTeamViewModel viewModel;
+    private int divisionId = 1;
+    private List<User> users;
+    private string name = "MyTeam";
+
+    public override void Given() {
+      viewModel = new CreateTeamViewModel();
+      viewModel.Name = name;
+      viewModel.DivisionId = divisionId;
+
+      var season = new Season("temp", GameType.EightBall);
+      season.SetIdTo(1);
+      var division = new Division("temp", DateTime.Now, season);
+      division.SetIdTo(1);
+      division.AddTeam(new Team(name, division));
+      repository.Setup(r => r.Get<Division>(divisionId)).Returns(division);
+
+      users = DomainModelHelper.GetUsers(5);
+      repository.Setup(r => r.SqlQuery<User>(It.IsAny<string>(), season.Id)).Returns(users.AsQueryable());
+      repository.Init<User>(users.AsQueryable(), true);
+    }
+
+    public override void When() {
+      resultHelper = new ViewResultHelper<CreateTeamViewModel>(controller.Create(viewModel));
+    }
+
+    [Test]
+    public void it_should_return_the_default_view() {
+      resultHelper.Result.ViewName.Should().BeEmpty();
+    }
+
+    [Test]
+    public void it_should_retain_the_team_name_entered_by_the_user() {
+      resultHelper.Model.Name.Should().Be(viewModel.Name);
+    }
+
+    [Test]
+    public void it_should_retain_the_schedule_priority_entered_by_the_user() {
+      resultHelper.Model.SchedulePriority.Should().Be(viewModel.SchedulePriority);
+    }
+
+    [Test]
+    public void it_should_retain_the_player_selection_by_the_user() {
+      resultHelper.Model.Players.Any(p => p.IsSelected).Should().BeFalse();
+    }
+
+    [Test]
+    public void it_should_indicate_an_error() {
+      resultHelper.Result.ViewData.ModelState.IsValid.Should().BeFalse();
+    }
+
+    [Test]
+    public void it_should_indicate_the_error_was_related_to_the_name_field() {
+      resultHelper.Result.ViewData.ModelState.ContainsKey("Name").Should().BeTrue();
+    }
+  }
 }

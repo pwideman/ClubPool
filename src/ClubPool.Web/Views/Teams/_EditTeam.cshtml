@@ -25,7 +25,7 @@
       <ul>
         @foreach (var player in Model.Players) {
           <li>
-            <input type="checkbox" name="Players" @if (player.IsSelected) { @Html.Raw(@"checked=""checked""") } value="@player.Id" id="player@(player.Id)" />
+            <input type="checkbox" name="SelectedPlayers" @if (player.IsSelected) { @Html.Raw(@"checked=""checked""") } value="@player.Id" id="player@(player.Id)" />
             <label for="player@(player.Id)">@player.Name</label>
           </li>
         }

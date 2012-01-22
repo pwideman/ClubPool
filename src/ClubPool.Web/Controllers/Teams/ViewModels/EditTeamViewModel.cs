@@ -25,5 +25,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
 
     [Min(1)]
     public int Id { get; set; }
+
+    public int[] SelectedPlayers { get; set; }
   }
 }

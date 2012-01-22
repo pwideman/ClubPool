@@ -23,20 +23,7 @@ namespace ClubPool.Web.Controllers.Teams.ViewModels
     public int DivisionId { get; set; }
 
     public string DivisionName { get; set; }
+
+    public int[] SelectedPlayers { get; set; }
   }
-
-  public class CreateTeamPostViewModel
-  {
-    [Min(1)]
-    public int DivisionId { get; set; }
-
-    [Required(ErrorMessage = "Required")]
-    public string Name { get; set; }
-
-    public int[] Players { get; set; }
-
-    [Min(0)]
-    public int SchedulePriority { get; set; }
-  }
-
 }
