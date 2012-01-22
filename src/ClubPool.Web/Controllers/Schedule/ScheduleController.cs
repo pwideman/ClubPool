@@ -12,8 +12,8 @@ namespace ClubPool.Web.Controllers.Schedule
 {
   public class ScheduleController : BaseController
   {
-    protected IRepository repository;
-    protected IAuthenticationService authService;
+    private IRepository repository;
+    private IAuthenticationService authService;
 
     public ScheduleController(IRepository repo, IAuthenticationService authService) {
       Arg.NotNull(repo, "repo");

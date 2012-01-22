@@ -11,8 +11,8 @@ namespace ClubPool.Web.Controllers.Standings
 {
   public class StandingsController : BaseController
   {
-    protected IRepository repository;
-    protected IAuthenticationService authService;
+    private IRepository repository;
+    private IAuthenticationService authService;
 
     public StandingsController(IRepository repo, IAuthenticationService authService) {
       Arg.NotNull(repo, "repo");
