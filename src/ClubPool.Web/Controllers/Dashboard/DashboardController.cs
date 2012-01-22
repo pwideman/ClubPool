@@ -7,13 +7,14 @@ using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Controllers.Dashboard.ViewModels;
 using ClubPool.Web.Controllers.Dashboard.SidebarGadgets;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Dashboard
 {
   public class DashboardController : BaseController
   {
-    protected IAuthenticationService authenticationService;
-    protected IRepository repository;
+    private IAuthenticationService authenticationService;
+    private IRepository repository;
 
     public DashboardController(IAuthenticationService authSvc,
       IRepository repository) {
@@ -26,7 +27,6 @@ namespace ClubPool.Web.Controllers.Dashboard
     }
 
     [Authorize]
-    // needs transaction
     public ActionResult Index(int? id) {
       var principal = authenticationService.GetCurrentPrincipal();
       User user = null;
@@ -45,14 +45,128 @@ namespace ClubPool.Web.Controllers.Dashboard
       }
       var currentSeason = repository.All<Season>().Single(s => s.IsActive);
       var team = repository.All<Team>().SingleOrDefault(t => t.Division.Season.Id == currentSeason.Id && t.Players.Select(p => p.Id).Contains(user.Id));
-      var viewModel = new IndexViewModel(user, team, repository);
+      var viewModel = CreateIndexViewModel(user, team, repository);
 
       var sidebarGadgetCollection = GetSidebarGadgetCollectionForIndex();
       ViewData[GlobalViewDataProperty.SidebarGadgetCollection] = sidebarGadgetCollection;
       return View(viewModel);
     }
 
-    protected SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
+    private IndexViewModel CreateIndexViewModel(User user, Team team, IRepository repository) {
+      var model = new IndexViewModel();
+      model.UserIsAdmin = user.IsInRole(Roles.Administrators);
+      model.UserFullName = user.FullName;
+      model.SkillLevelCalculation = new SkillLevelCalculationViewModel(user, repository);
+      if (null != team) {
+        model.CurrentSeasonStats = GetCurrentSeasonStatsViewModel(user, team);
+        model.HasCurrentSeasonStats = model.CurrentSeasonStats != null;
+        model.LastMeetStats = GetLastMeetStats(user, team);
+        model.HasLastMeetStats = model.LastMeetStats != null;
+        model.SeasonResults = GetSeasonResults(user, team);
+        model.HasSeasonResults = model.SeasonResults != null;
+      }
+      return model;
+    }
+
+    private IEnumerable<SeasonResultViewModel> GetSeasonResults(User user, Team team) {
+      List<SeasonResultViewModel> results = null;
+      var matches = from m in team.Division.Meets
+                    where m.Teams.Contains(team) && m.IsComplete
+                    orderby m.Week descending
+                    from match in m.Matches
+                    where match.Players.Where(p => p.Player == user).Any()
+                    select match;
+      if (matches.Any()) {
+        results = new List<SeasonResultViewModel>();
+        foreach (var match in matches) {
+          var result = new SeasonResultViewModel() {
+            Player = match.Players.Where(p => p.Player != user).First().Player.FullName,
+            Team = match.Meet.Teams.Where(t => t != team).First().Name,
+            Win = match.Winner == user
+          };
+          results.Add(result);
+        }
+      }
+      return results;
+    }
+
+    private LastMeetViewModel GetLastMeetStats(User user, Team team) {
+      LastMeetViewModel viewModel = null;
+      var meet = (from m in team.Division.Meets
+                  where m.Teams.Contains(team) && m.IsComplete
+                  orderby m.Week descending
+                  select m).FirstOrDefault();
+      if (null != meet) {
+        viewModel = CreateLastMeetViewModel(meet, team);
+      }
+      return viewModel;
+    }
+
+    private StatsViewModel GetCurrentSeasonStatsViewModel(User user, Team team) {
+      var vm = new StatsViewModel();
+      var skillLevel = user.SkillLevels.Where(sl => sl.GameType == team.Division.Season.GameType).FirstOrDefault();
+      if (null != skillLevel) {
+        vm.SkillLevel = skillLevel.Value;
+      }
+      vm.TeamId = team.Id;
+      vm.TeamName = team.Name;
+      var teammate = team.Players.Where(p => p != user).Single();
+      vm.TeammateName = teammate.FullName;
+      vm.TeammateId = teammate.Id;
+      var winsAndLosses = team.GetWinsAndLossesForPlayer(user);
+      vm.PersonalRecord = GetRecordText(winsAndLosses[0], winsAndLosses[1]);
+      winsAndLosses = team.GetWinsAndLosses();
+      vm.TeamRecord = GetRecordText(winsAndLosses[0], winsAndLosses[1]);
+      return vm;
+    }
+
+    private string GetRecordText(int wins, int losses) {
+      var pct = GetWinPercentage(wins, losses);
+      return string.Format("{0} - {1} ({2})", wins, losses, pct.ToString(".00"));
+    }
+
+    private double GetWinPercentage(int wins, int losses) {
+      return (wins + losses > 0) ? ((double)wins / (double)(wins + losses)) : 0;
+    }
+
+    private LastMeetViewModel CreateLastMeetViewModel(Meet meet, Team team) {
+      var model = new LastMeetViewModel();
+      model.OpponentTeam = meet.Teams.Where(t => t != team).Single().Name;
+      var matches = new List<LastMatchViewModel>();
+      foreach (var match in meet.Matches) {
+        var matchvm = CreateLastMatchViewModel(match);
+        matches.Add(matchvm);
+      }
+      model.Matches = matches;
+      return model;
+    }
+
+    private LastMatchViewModel CreateLastMatchViewModel(Match match) {
+      var model = new LastMatchViewModel();
+      if (!match.IsForfeit) {
+        var results = new List<MatchResultViewModel>();
+        foreach (var result in match.Results) {
+          var resultvm = new MatchResultViewModel(result);
+          resultvm.Winner = match.Winner == result.Player;
+          results.Add(resultvm);
+        }
+        model.Results = results;
+      }
+      else {
+        // this match was a forfeit, create results to display
+        var results = new List<MatchResultViewModel>();
+        foreach (var matchPlayer in match.Players) {
+          var result = new MatchResultViewModel();
+          result.Player = matchPlayer.Player.FullName;
+          result.Winner = match.Winner == matchPlayer.Player;
+          results.Add(result);
+        }
+        model.Results = results;
+      }
+      return model;
+    }
+
+    private SidebarGadgetCollection GetSidebarGadgetCollectionForIndex() {
       var sidebarGadgetCollection = new SidebarGadgetCollection();
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
         var alertsGadget = new AlertsSidebarGadget();
@@ -61,7 +175,7 @@ namespace ClubPool.Web.Controllers.Dashboard
       return sidebarGadgetCollection;
     }
 
-    protected bool userHasAlerts() {
+    private bool userHasAlerts() {
       var hasAlerts = false;
       // unapproved users alert
       if (authenticationService.GetCurrentPrincipal().IsInRole(Roles.Administrators)) {
@@ -71,12 +185,11 @@ namespace ClubPool.Web.Controllers.Dashboard
     }
 
     [Authorize]
-    // needs transaction
     public ActionResult AlertsGadget() {
       return PartialView(GetAlertsViewModel());
     }
 
-    protected AlertsViewModel GetAlertsViewModel() {
+    private AlertsViewModel GetAlertsViewModel() {
       var warnings = new List<Alert>();
       var errors = new List<Alert>();
       var notifications = new List<Alert>();
@@ -87,18 +200,6 @@ namespace ClubPool.Web.Controllers.Dashboard
           var url = Url.Action("Unapproved", "Users");
           warnings.Add(new Alert(string.Format("There are {0} users awaiting approval", unapprovedQuery.Count()), url, AlertType.Warning));
         }
-      }
-      if (false) {
-        // add dummy errors
-        errors.Add(new Alert("Temp dummy error alert", "", AlertType.Error));
-        errors.Add(new Alert("Temp dummy error alert with really long message that will wrap", "", AlertType.Error));
-        errors.Add(new Alert("Temp dummy error alert", "", AlertType.Error));
-        // add dummy warning
-        warnings.Add(new Alert("Temp dummy warning alert with really long message that will wrap", "", AlertType.Warning));
-        // add dummy notification
-        notifications.Add(new Alert("Temp dummy notification alert", "", AlertType.Notification));
-        notifications.Add(new Alert("Temp dummy notification alert with really long message that will wrap", "", AlertType.Notification));
-        notifications.Add(new Alert("Temp dummy notification alert", "", AlertType.Notification));
       }
       return new AlertsViewModel(notifications, warnings, errors);
     }

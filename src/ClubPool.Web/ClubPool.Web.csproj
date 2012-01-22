@@ -148,7 +148,7 @@
     <Compile Include="Controllers\Dashboard\DashboardController.cs" />
     <Compile Include="Controllers\Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
     <Compile Include="Controllers\Dashboard\ViewModels\AlertsViewModel.cs" />
-    <Compile Include="Controllers\Dashboard\ViewModels\IndexViewModel.cs" />
+    <Compile Include="Controllers\Dashboard\ViewModels\IndexViewModels.cs" />
     <Compile Include="Controllers\Divisions\DivisionsController.cs" />
     <Compile Include="Controllers\Divisions\ViewModels\CreateDivisionViewModel.cs" />
     <Compile Include="Controllers\Divisions\ViewModels\DivisionViewModel.cs" />
