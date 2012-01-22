@@ -417,7 +417,7 @@
     <Content Include="Views\Contact\_ContactView.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Contact\EmailSuccess.cshtml" />
+    <Content Include="Views\Contact\EmailSent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Contact\Player.cshtml" />

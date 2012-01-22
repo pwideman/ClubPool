@@ -27,22 +27,5 @@ namespace ClubPool.Web.Controllers.Contact.ViewModels
     [Required]
     [DisplayName("Body:")]
     public string Body { get; set; }
-
-    public ContactViewModel() {
-
-    }
-
-    public ContactViewModel(User player, User sender) {
-      Id = player.Id;
-      Name = player.FullName;
-      ReplyToAddress = sender.Email;
-    }
-
-    public ContactViewModel(Team team, User sender) {
-      Id = team.Id;
-      Name = team.Name;
-      ReplyToAddress = sender.Email;
-    }
-
   }
 }

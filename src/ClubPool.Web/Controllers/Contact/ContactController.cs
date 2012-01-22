@@ -40,7 +40,11 @@ namespace ClubPool.Web.Controllers.Contact
         return HttpNotFound();
       }
       var sender = repository.Get<User>(authenticationService.GetCurrentPrincipal().UserId);
-      var viewModel = new ContactViewModel(team, sender);
+      var viewModel = new ContactViewModel() {
+        Id = team.Id,
+        Name = team.Name,
+        ReplyToAddress = sender.Email
+      };
       return View(viewModel);
     }
 
@@ -64,7 +68,7 @@ namespace ClubPool.Web.Controllers.Contact
         viewModel.Subject,
         viewModel.Body);
 
-      return View("EmailSuccess");
+      return RedirectToAction("EmailSent");
     }
 
     [HttpGet]
@@ -75,7 +79,11 @@ namespace ClubPool.Web.Controllers.Contact
         return HttpNotFound();
       }
       var sender = repository.Get<User>(authenticationService.GetCurrentPrincipal().UserId);
-      var viewModel = new ContactViewModel(player, sender);
+      var viewModel = new ContactViewModel() {
+        Id = player.Id,
+        Name = player.FullName,
+        ReplyToAddress = sender.Email
+      };
       return View(viewModel);
     }
 
@@ -99,7 +107,13 @@ namespace ClubPool.Web.Controllers.Contact
         viewModel.Subject,
         viewModel.Body);
 
-      return View("EmailSuccess");
+      return RedirectToAction("EmailSent");
+    }
+
+    [HttpGet]
+    [Authorize]
+    public ActionResult EmailSent() {
+      return View();
     }
   }
 }
