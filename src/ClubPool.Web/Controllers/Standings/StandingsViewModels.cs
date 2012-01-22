@@ -3,33 +3,33 @@ using System.Linq;
 
 using ClubPool.Web.Models;
 
-namespace ClubPool.Web.Controllers.CurrentSeason.ViewModels
+namespace ClubPool.Web.Controllers.Standings
 {
-  public class CurrentSeasonStandingsViewModel
+  public class SeasonStandingsViewModel
   {
     public string Name { get; set; }
-    public IEnumerable<StandingsDivisionViewModel> Divisions { get; set; }
+    public IEnumerable<DivisionStandingsViewModel> Divisions { get; set; }
     public bool HasDivisions { get; set; }
-    public IEnumerable<StandingsPlayerViewModel> AllPlayers { get; set; }
+    public IEnumerable<PlayerStandingsViewModel> AllPlayers { get; set; }
   }
 
-  public class StandingsDivisionViewModel
+  public class DivisionStandingsViewModel
   {
     public int Id { get; set; }
     public string Name { get; set; }
-    public IEnumerable<StandingsTeamViewModel> Teams { get; set; }
-    public IEnumerable<StandingsPlayerViewModel> Players { get; set; }
+    public IEnumerable<TeamStandingsViewModel> Teams { get; set; }
+    public IEnumerable<PlayerStandingsViewModel> Players { get; set; }
     public bool HasTeams { get; set; }
     public bool HasPlayers { get; set; }
   }
 
-  public class StandingsTeamViewModel : StandingsViewModelBase
+  public class TeamStandingsViewModel : StandingsViewModelBase
   {
-    public StandingsPlayerViewModel Player1 { get; set; }
-    public StandingsPlayerViewModel Player2 { get; set; }
+    public PlayerStandingsViewModel Player1 { get; set; }
+    public PlayerStandingsViewModel Player2 { get; set; }
   }
 
-  public class StandingsPlayerViewModel : StandingsViewModelBase
+  public class PlayerStandingsViewModel : StandingsViewModelBase
   {
     public int SkillLevel { get; set; }
   }

@@ -115,6 +115,8 @@
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Controllers\Schedule\ScheduleController.cs" />
     <Compile Include="Controllers\Schedule\ScheduleViewModels.cs" />
+    <Compile Include="Controllers\Standings\StandingsController.cs" />
+    <Compile Include="Controllers\Standings\StandingsViewModels.cs" />
     <Compile Include="Infrastructure\Arg.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
@@ -143,8 +145,6 @@
     <Compile Include="Controllers\Contact\ContactController.cs" />
     <Compile Include="Controllers\Contact\ViewModels\ContactViewModel.cs" />
     <Compile Include="Controllers\ControllerEnums.cs" />
-    <Compile Include="Controllers\CurrentSeason\CurrentSeasonController.cs" />
-    <Compile Include="Controllers\CurrentSeason\ViewModels\CurrentSeasonStandingsViewModel.cs" />
     <Compile Include="Controllers\Dashboard\DashboardController.cs" />
     <Compile Include="Controllers\Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
     <Compile Include="Controllers\Dashboard\ViewModels\AlertsViewModel.cs" />
@@ -403,10 +403,7 @@
     <Content Include="Views\Dashboard\AlertsGadget.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\CurrentSeason\Standings.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CurrentSeason\_StandingsPlayer.cshtml" />
+    <Content Include="Views\Standings\_StandingsPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Contact\Team.cshtml" />
@@ -537,7 +534,9 @@
   <ItemGroup>
     <Content Include="Views\Matches\UserHistory.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Standings\Index.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Schedule\Index.cshtml" />
   </ItemGroup>
