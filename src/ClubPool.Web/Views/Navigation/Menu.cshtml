@@ -12,12 +12,12 @@
   </li>
   }
   @if (Model.UserIsLoggedIn && Model.HasActiveSeason) {
-  <li><a href="#">@Model.ActiveSeasonName</a>
+  <li><a href="#">Current Season: @Model.ActiveSeasonName</a>
     <ul>
       @if (Model.HasCurrentTeam) {
       <li>@Html.ActionLink("My Team", "Details", "Teams", new { id = Model.CurrentTeamId }, null)</li>
       }
-      <li>@Html.ActionLink("Schedule", "Schedule", "CurrentSeason")</li>
+      <li>@Html.ActionLink("Schedule", "Index", "Schedule")</li>
       <li>@Html.ActionLink("Standings", "Standings", "CurrentSeason")</li>
     </ul>
   </li>

@@ -7,7 +7,6 @@ using ClubPool.Web.Models;
 using ClubPool.Web.Controllers.CurrentSeason.ViewModels;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Infrastructure;
-using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.CurrentSeason
 {
@@ -23,53 +22,6 @@ namespace ClubPool.Web.Controllers.CurrentSeason
       repository = repo;
       this.authService = authService;
     }
-
-    [Authorize]
-    [HttpGet]
-    public ActionResult Schedule() {
-      var user = repository.Get<User>(authService.GetCurrentPrincipal().UserId);
-      var season = repository.All<Season>().SingleOrDefault(s => s.IsActive);
-      if (null == season) {
-        return ErrorView("There is no current season");
-      }
-      else {
-        var viewModel = CreateCurrentSeasonScheduleViewModel(season, user);
-        return View(viewModel);
-      }
-    }
-
-    private CurrentSeasonScheduleViewModel CreateCurrentSeasonScheduleViewModel(Season season, User user) {
-      var model = new CurrentSeasonScheduleViewModel();
-      model.Name = season.Name;
-      if (season.Divisions.Count() > 0) {
-        model.HasDivisions = true;
-        var divisions = new List<ScheduleDivisionViewModel>();
-        foreach (var division in season.Divisions) {
-          divisions.Add(CreateScheduleDivisionViewModel(division, user));
-        }
-        model.Divisions = divisions;
-      }
-      else {
-        model.HasDivisions = false;
-      }
-      return model;
-    }
-
-    private ScheduleDivisionViewModel CreateScheduleDivisionViewModel(Division division, User user) {
-      var model = new ScheduleDivisionViewModel();
-      model.Id = division.Id;
-      model.Name = division.Name;
-      if (division.Meets.Count() > 0) {
-        model.HasSchedule = true;
-        var team = division.Teams.Where(t => t.Players.Contains(user)).SingleOrDefault();
-        model.Schedule = new ScheduleViewModel(division.Meets, division.StartingDate, team);
-      }
-      else {
-        model.HasSchedule = false;
-      }
-      return model;
-    }
-
 
     [Authorize]
     [HttpGet]

@@ -113,6 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
+    <Compile Include="Controllers\Schedule\ScheduleController.cs" />
+    <Compile Include="Controllers\Schedule\ScheduleViewModels.cs" />
     <Compile Include="Infrastructure\Arg.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
@@ -142,7 +144,6 @@
     <Compile Include="Controllers\Contact\ViewModels\ContactViewModel.cs" />
     <Compile Include="Controllers\ControllerEnums.cs" />
     <Compile Include="Controllers\CurrentSeason\CurrentSeasonController.cs" />
-    <Compile Include="Controllers\CurrentSeason\ViewModels\CurrentSeasonScheduleViewModel.cs" />
     <Compile Include="Controllers\CurrentSeason\ViewModels\CurrentSeasonStandingsViewModel.cs" />
     <Compile Include="Controllers\Dashboard\DashboardController.cs" />
     <Compile Include="Controllers\Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
@@ -402,9 +403,6 @@
     <Content Include="Views\Dashboard\AlertsGadget.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\CurrentSeason\Schedule.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\CurrentSeason\Standings.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -538,6 +536,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Matches\UserHistory.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Schedule\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
