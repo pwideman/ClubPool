@@ -26,7 +26,7 @@
   <li><a href="#">My</a>
     <ul>
       <li>@Html.ActionLink("Home", "Index", "Dashboard")</li>
-      <li>@Html.ActionLink("Match History", "UserHistory", "Matches", new { id = Model.UserId }, null)</li>
+      <li>@Html.ActionLink("Match History", "Index", "UserMatchHistory", new { id = Model.UserId }, null)</li>
       <li>@Html.ActionLink("Member Info", "Edit", "Users", new { id = Model.UserId }, null)</li>
     </ul>
   </li>

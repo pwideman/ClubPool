@@ -114,10 +114,12 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Controllers\Divisions\ViewModels.cs" />
+    <Compile Include="Controllers\UserMatchHistory\UserMatchHistoryController.cs" />
     <Compile Include="Controllers\Schedule\ScheduleController.cs" />
     <Compile Include="Controllers\Schedule\ScheduleViewModels.cs" />
     <Compile Include="Controllers\Standings\StandingsController.cs" />
     <Compile Include="Controllers\Standings\StandingsViewModels.cs" />
+    <Compile Include="Controllers\UserMatchHistory\ViewModels.cs" />
     <Compile Include="Infrastructure\Arg.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
@@ -156,7 +158,6 @@
     <Compile Include="Controllers\Matches\MatchesController.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchResponseViewModel.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchViewModel.cs" />
-    <Compile Include="Controllers\Matches\ViewModels\UserHistoryViewModel.cs" />
     <Compile Include="Controllers\Meets\MeetsController.cs" />
     <Compile Include="Controllers\Meets\ViewModels\MeetViewModel.cs" />
     <Compile Include="Controllers\Meets\ViewModels\PlayerViewModel.cs" />
@@ -526,13 +527,13 @@
     <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Matches\UserHistory.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Standings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Schedule\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\UserMatchHistory\Index.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

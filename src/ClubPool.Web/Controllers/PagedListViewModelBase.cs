@@ -8,6 +8,10 @@ namespace ClubPool.Web.Controllers
 {
   public abstract class PagedListViewModelBase<TSource, TResult> : PagedListViewModelBase
   {
+    public PagedListViewModelBase() {
+
+    }
+
     public PagedListViewModelBase(IQueryable<TSource> source, int page, int pageSize, Func<TSource, TResult> converter) {
       Total = source.Count();
       TotalPages = (int)Math.Ceiling((double)Total / (double)pageSize);
