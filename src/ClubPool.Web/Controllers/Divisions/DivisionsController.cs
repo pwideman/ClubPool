@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 
 using ClubPool.Web.Models;
-using ClubPool.Web.Controllers.Divisions.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Web.Infrastructure;
 
@@ -115,8 +114,19 @@ namespace ClubPool.Web.Controllers.Divisions
       if (null == division) {
         return HttpNotFound();
       }
-      var viewModel = new EditDivisionViewModel(division);
+      var viewModel = CreateEditDivisionViewModel(division);
       return View(viewModel);
+    }
+
+    private EditDivisionViewModel CreateEditDivisionViewModel(Division division) {
+      var model = new EditDivisionViewModel() {
+        Id = division.Id,
+        Version = division.EncodedVersion,
+        SeasonName = division.Season.Name,
+        Name = division.Name,
+        StartingDate = division.StartingDate.ToShortDateString()
+      };
+      return model;
     }
 
     [HttpPost]

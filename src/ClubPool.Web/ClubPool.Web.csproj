@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
+    <Compile Include="Controllers\Divisions\ViewModels.cs" />
     <Compile Include="Controllers\Schedule\ScheduleController.cs" />
     <Compile Include="Controllers\Schedule\ScheduleViewModels.cs" />
     <Compile Include="Controllers\Standings\StandingsController.cs" />
@@ -150,9 +151,6 @@
     <Compile Include="Controllers\Dashboard\ViewModels\AlertsViewModel.cs" />
     <Compile Include="Controllers\Dashboard\ViewModels\IndexViewModels.cs" />
     <Compile Include="Controllers\Divisions\DivisionsController.cs" />
-    <Compile Include="Controllers\Divisions\ViewModels\CreateDivisionViewModel.cs" />
-    <Compile Include="Controllers\Divisions\ViewModels\DivisionViewModel.cs" />
-    <Compile Include="Controllers\Divisions\ViewModels\EditDivisionViewModel.cs" />
     <Compile Include="Controllers\Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Home\ViewModels\AboutViewModel.cs" />

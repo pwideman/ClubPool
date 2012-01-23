@@ -9,7 +9,7 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Divisions.ViewModels;
+using ClubPool.Web.Controllers.Divisions;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Divisions.when_asked_for_the_edit_view
@@ -86,7 +86,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_edit_a_division
       division.SetVersionTo(1);
       repository.Setup(r => r.Get<Division>(division.Id)).Returns(division);
 
-      viewModel = new EditDivisionViewModel(division);
+      viewModel = CreateEditDivisionViewModel(division);
       viewModel.Name = "NewName";
       viewModel.StartingDate = "11/30/2010";
     }
@@ -131,7 +131,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_edit_a_division
       division.SetIdTo(1);
       division.SetVersionTo(1);
 
-      viewModel = new EditDivisionViewModel(division);
+      viewModel = CreateEditDivisionViewModel(division);
     }
 
     public override void When() {
@@ -165,7 +165,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_edit_a_division
       division.SetVersionTo(2);
       repository.Setup(r => r.Get<Division>(division.Id)).Returns(division);
 
-      viewModel = new EditDivisionViewModel(division);
+      viewModel = CreateEditDivisionViewModel(division);
       viewModel.Version = DomainModelHelper.ConvertIntVersionToString(1);
     }
 
@@ -271,7 +271,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_edit_a_division
       division.SetVersionTo(1);
       repository.Setup(r => r.Get<Division>(division.Id)).Returns(division);
 
-      viewModel = new EditDivisionViewModel(division);
+      viewModel = CreateEditDivisionViewModel(division);
       viewModel.Name = duplicateName;
     }
 

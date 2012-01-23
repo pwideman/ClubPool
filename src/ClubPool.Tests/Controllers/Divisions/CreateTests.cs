@@ -7,7 +7,7 @@ using NUnit.Framework;
 using FluentAssertions;
 
 using ClubPool.Web.Models;
-using ClubPool.Web.Controllers.Divisions.ViewModels;
+using ClubPool.Web.Controllers.Divisions;
 using ClubPool.Testing;
 
 namespace ClubPool.Tests.Controllers.Divisions.when_asked_for_the_create_view
