@@ -153,10 +153,6 @@
     <Compile Include="Controllers\Divisions\DivisionsController.cs" />
     <Compile Include="Controllers\Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
-    <Compile Include="Controllers\Home\ViewModels\AboutViewModel.cs" />
-    <Compile Include="Controllers\Home\ViewModels\IndexViewModel.cs" />
-    <Compile Include="Controllers\Home\ViewModels\RegulationsViewModel.cs" />
-    <Compile Include="Controllers\Home\ViewModels\RulesViewModel.cs" />
     <Compile Include="Controllers\Matches\MatchesController.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchResponseViewModel.cs" />
     <Compile Include="Controllers\Matches\ViewModels\EditMatchViewModel.cs" />

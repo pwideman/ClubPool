@@ -7,7 +7,6 @@ using FluentAssertions;
 using ClubPool.Testing;
 
 using ClubPool.Web.Controllers.Home;
-using ClubPool.Web.Controllers.Home.ViewModels;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Configuration;
 using ClubPool.Web.Infrastructure.Configuration;
@@ -32,14 +31,14 @@ namespace ClubPool.Tests.Controllers.Home
   [TestFixture]
   public class when_asked_for_the_default_view_when_user_is_not_logged_in : HomeControllerTest
   {
-    private ViewResultHelper<IndexViewModel> resultHelper;
+    private ViewResultHelper resultHelper;
 
     public override void  Given() {
       authenticationService.Setup(svc => svc.IsLoggedIn()).Returns(false);
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index());
+      resultHelper = new ViewResultHelper(controller.Index());
     }
 
     [Test]
