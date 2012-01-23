@@ -5,7 +5,7 @@ using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Dashboard.ViewModels
 {
-  public class IndexViewModel : ViewModelBase
+  public class IndexViewModel
   {
     public bool UserIsAdmin { get; set; }
     public string UserFullName { get; set; }
