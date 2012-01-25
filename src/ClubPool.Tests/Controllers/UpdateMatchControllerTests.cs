@@ -8,18 +8,17 @@ using Moq;
 
 using ClubPool.Testing;
 using ClubPool.Web.Infrastructure;
-using ClubPool.Web.Controllers.Matches;
-using ClubPool.Web.Controllers.Matches.ViewModels;
+using ClubPool.Web.Controllers.UpdateMatch;
 using ClubPool.Web.Models;
 
-namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
+namespace ClubPool.Tests.Controllers.UpdateMatch.when_asked_to_update_match_results
 {
-  public abstract class MatchesControllerTest : SpecificationContext
+  public abstract class UpdateMatchControllerTest : SpecificationContext
   {
-    protected MatchesController controller;
+    protected UpdateMatchController controller;
     protected MockAuthenticationService authService;
-    protected JsonResultHelper<EditMatchResponseViewModel> resultHelper;
-    protected EditMatchViewModel viewModel;
+    protected JsonResultHelper<UpdateMatchResponseViewModel> resultHelper;
+    protected UpdateMatchViewModel viewModel;
     protected Web.Models.Match match;
     protected User player1;
     protected User player2;
@@ -30,7 +29,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
     public override void EstablishContext() {
       var repository = new Mock<IRepository>();
       authService = AuthHelper.CreateMockAuthenticationService();
-      controller = new MatchesController(repository.Object, authService);
+      controller = new UpdateMatchController(repository.Object, authService);
 
       loggedInUser = new User("admin", "pass", "first", "last", "email");
       loggedInUser.SetIdTo(3);
@@ -83,7 +82,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
       player2.UpdateSkillLevel(GameType.EightBall, repository.Object);
       player2SkillLevel = player2.SkillLevels.Where(sl => sl.GameType == GameType.EightBall).First().Value;
 
-      viewModel = new EditMatchViewModel() {
+      viewModel = new UpdateMatchViewModel() {
         Id = match.Id,
         IsForfeit = false,
         Player1Id = player1.Id,
@@ -101,13 +100,13 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
     }
 
     public override void When() {
-      resultHelper = new JsonResultHelper<EditMatchResponseViewModel>(controller.Edit(viewModel));
+      resultHelper = new JsonResultHelper<UpdateMatchResponseViewModel>(controller.Index(viewModel));
     }
 
   }
 
   [TestFixture]
-  public class with_an_invalid_view_model : MatchesControllerTest
+  public class with_an_invalid_view_model : UpdateMatchControllerTest
   {
     public override void Given() {
       controller.ModelState.AddModelError("Id", new Exception("Test"));
@@ -125,7 +124,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class with_an_invalid_date : MatchesControllerTest
+  public class with_an_invalid_date : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Date = "abc";
@@ -143,7 +142,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class with_an_invalid_time : MatchesControllerTest
+  public class with_an_invalid_time : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Time = "abc";
@@ -161,7 +160,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class with_player1_defensive_shots_greater_than_innings : MatchesControllerTest
+  public class with_player1_defensive_shots_greater_than_innings : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Player1DefensiveShots = 21;
@@ -179,7 +178,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class with_player2_defensive_shots_greater_than_innings : MatchesControllerTest
+  public class with_player2_defensive_shots_greater_than_innings : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Player2DefensiveShots = 21;
@@ -197,7 +196,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class and_the_winner_has_less_than_two_wins : MatchesControllerTest
+  public class and_the_winner_has_less_than_two_wins : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Player1Wins = 1;
@@ -215,7 +214,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class for_a_nonexistant_match : MatchesControllerTest
+  public class for_a_nonexistant_match : UpdateMatchControllerTest
   {
     private HttpNotFoundResultHelper notFoundResultHelper;
 
@@ -224,7 +223,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
     }
 
     public override void When() {
-      notFoundResultHelper = new HttpNotFoundResultHelper(controller.Edit(viewModel));
+      notFoundResultHelper = new HttpNotFoundResultHelper(controller.Index(viewModel));
     }
 
     [Test]
@@ -234,7 +233,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class and_player1_is_not_a_match_player : MatchesControllerTest
+  public class and_player1_is_not_a_match_player : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Player1Id = loggedInUser.Id;
@@ -252,7 +251,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class and_player1_is_invalid : MatchesControllerTest
+  public class and_player1_is_invalid : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Player1Id = 10;
@@ -270,7 +269,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class and_the_logged_in_user_does_not_have_permission : MatchesControllerTest
+  public class and_the_logged_in_user_does_not_have_permission : UpdateMatchControllerTest
   {
     public override void Given() {
       loggedInUser.RemoveAllRoles();
@@ -288,7 +287,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class and_player2_is_not_a_match_player : MatchesControllerTest
+  public class and_player2_is_not_a_match_player : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Player2Id = loggedInUser.Id;
@@ -306,7 +305,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class and_player2_is_invalid : MatchesControllerTest
+  public class and_player2_is_invalid : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.Player2Id = 10;
@@ -324,7 +323,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class and_the_match_is_forfeited : MatchesControllerTest
+  public class and_the_match_is_forfeited : UpdateMatchControllerTest
   {
     public override void Given() {
       viewModel.IsForfeit = true;
@@ -367,7 +366,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class with_valid_input : MatchesControllerTest
+  public class with_valid_input : UpdateMatchControllerTest
   {
     [Test]
     public void it_should_return_success_true() {
@@ -438,7 +437,7 @@ namespace ClubPool.Tests.Controllers.Matches.when_asked_to_edit_match_results
   }
 
   [TestFixture]
-  public class by_a_match_player : MatchesControllerTest
+  public class by_a_match_player : UpdateMatchControllerTest
   {
     public override void Given() {
       authService.MockPrincipal.MockIdentity.Name = player1.Username;

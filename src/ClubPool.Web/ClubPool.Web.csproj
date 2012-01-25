@@ -114,6 +114,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Controllers\Divisions\ViewModels.cs" />
+    <Compile Include="Controllers\UpdateMatch\UpdateMatchController.cs" />
+    <Compile Include="Controllers\UpdateMatch\ViewModels.cs" />
     <Compile Include="Controllers\UserMatchHistory\UserMatchHistoryController.cs" />
     <Compile Include="Controllers\Schedule\ScheduleController.cs" />
     <Compile Include="Controllers\Schedule\ScheduleViewModels.cs" />
@@ -155,9 +157,6 @@
     <Compile Include="Controllers\Divisions\DivisionsController.cs" />
     <Compile Include="Controllers\Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
-    <Compile Include="Controllers\Matches\MatchesController.cs" />
-    <Compile Include="Controllers\Matches\ViewModels\EditMatchResponseViewModel.cs" />
-    <Compile Include="Controllers\Matches\ViewModels\EditMatchViewModel.cs" />
     <Compile Include="Controllers\Meets\MeetsController.cs" />
     <Compile Include="Controllers\Meets\ViewModels\MeetViewModel.cs" />
     <Compile Include="Controllers\Meets\ViewModels\PlayerViewModel.cs" />

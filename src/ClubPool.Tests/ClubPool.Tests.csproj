@@ -57,7 +57,7 @@
     <Compile Include="Controllers\Divisions\DivisionsControllerTest.cs" />
     <Compile Include="Controllers\Divisions\EditTests.cs" />
     <Compile Include="Controllers\HomeControllerTests.cs" />
-    <Compile Include="Controllers\MatchesControllerTests.cs" />
+    <Compile Include="Controllers\UpdateMatchControllerTests.cs" />
     <Compile Include="Controllers\MeetsControllerTests.cs" />
     <Compile Include="Controllers\Seasons\ChangeActive.cs" />
     <Compile Include="Controllers\Seasons\Create.cs" />

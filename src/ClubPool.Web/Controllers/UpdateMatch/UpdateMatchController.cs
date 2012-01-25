@@ -5,16 +5,15 @@ using System.Web.Mvc;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Models;
 using ClubPool.Web.Services.Authentication;
-using ClubPool.Web.Controllers.Matches.ViewModels;
 
-namespace ClubPool.Web.Controllers.Matches
+namespace ClubPool.Web.Controllers.UpdateMatch
 {
-  public class MatchesController : BaseController
+  public class UpdateMatchController : BaseController
   {
     protected IRepository repository;
     protected IAuthenticationService authService;
 
-    public MatchesController(IRepository repository,
+    public UpdateMatchController(IRepository repository,
       IAuthenticationService authService) {
 
       Arg.NotNull(repository, "repository");
@@ -27,9 +26,9 @@ namespace ClubPool.Web.Controllers.Matches
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(EditMatchViewModel viewModel) {
+    public ActionResult Index(UpdateMatchViewModel viewModel) {
       if (!ModelState.IsValid) {
-        return Json(new EditMatchResponseViewModel(false, "Validation errors", ModelState));
+        return Json(new UpdateMatchResponseViewModel(false, "Validation errors", ModelState));
       }
       else {
         // we must perform some manual validation as well
@@ -37,15 +36,15 @@ namespace ClubPool.Web.Controllers.Matches
           // verify that a valid date & time were entered
           DateTime tempDate;
           if (!DateTime.TryParse(viewModel.Date, out tempDate)) {
-            return Json(new EditMatchResponseViewModel(false, "Enter a valid date"));
+            return Json(new UpdateMatchResponseViewModel(false, "Enter a valid date"));
           }
           if (!DateTime.TryParse(viewModel.Time, out tempDate)) {
-            return Json(new EditMatchResponseViewModel(false, "Enter a valid time"));
+            return Json(new UpdateMatchResponseViewModel(false, "Enter a valid time"));
           }
           // verify that neither player's defensive shots are > innings
           if (viewModel.Player1DefensiveShots > viewModel.Player1Innings ||
               viewModel.Player2DefensiveShots > viewModel.Player2Innings) {
-                return Json(new EditMatchResponseViewModel(false, "Defensive shots cannot be greater than innings"));
+            return Json(new UpdateMatchResponseViewModel(false, "Defensive shots cannot be greater than innings"));
           }
           // verify that the winner has >= 2 wins
           int winnerWins = 0;
@@ -56,7 +55,7 @@ namespace ClubPool.Web.Controllers.Matches
             winnerWins = viewModel.Player2Wins;
           }
           if (winnerWins < 2) {
-            return Json(new EditMatchResponseViewModel(false, "Winner must have at least 2 wins"));
+            return Json(new UpdateMatchResponseViewModel(false, "Winner must have at least 2 wins"));
           }
         }
       }
@@ -70,16 +69,16 @@ namespace ClubPool.Web.Controllers.Matches
       var currentPrincipal = authService.GetCurrentPrincipal();
       var loggedInUser = repository.All<User>().Single(u => u.Username.Equals(currentPrincipal.Identity.Name));
       if (!match.Meet.UserCanEnterMatchResults(loggedInUser)) {
-        return Json(new EditMatchResponseViewModel(false, "You do not have permission to enter results for this match"));
+        return Json(new UpdateMatchResponseViewModel(false, "You do not have permission to enter results for this match"));
       }
 
       var player1 = repository.Get<User>(viewModel.Player1Id);
       if (null == player1 || !match.Players.Where(p => p.Player == player1).Any()) {
-        return Json(new EditMatchResponseViewModel(false, "Player 1 is not a valid player for this match"));
+        return Json(new UpdateMatchResponseViewModel(false, "Player 1 is not a valid player for this match"));
       }
       var player2 = repository.Get<User>(viewModel.Player2Id);
       if (null == player2 || !match.Players.Where(p => p.Player == player2).Any()) {
-        return Json(new EditMatchResponseViewModel(false, "Player 2 is not a valid player for this match"));
+        return Json(new UpdateMatchResponseViewModel(false, "Player 2 is not a valid player for this match"));
       }
 
       if (match.IsComplete) {
@@ -114,7 +113,7 @@ namespace ClubPool.Web.Controllers.Matches
       var meet = match.Meet;
       meet.IsComplete = !meet.Matches.Where(m => !m.IsComplete).Any();
       repository.SaveChanges();
-      return Json(new EditMatchResponseViewModel(true));
+      return Json(new UpdateMatchResponseViewModel(true));
     }
   }
 }
