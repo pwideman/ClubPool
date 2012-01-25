@@ -27,37 +27,9 @@ namespace ClubPool.Web.Controllers.UpdateMatch
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Index(UpdateMatchViewModel viewModel) {
-      if (!ModelState.IsValid) {
-        return Json(new UpdateMatchResponseViewModel(false, "Validation errors", ModelState));
-      }
-      else {
-        // we must perform some manual validation as well
-        if (!viewModel.IsForfeit) {
-          // verify that a valid date & time were entered
-          DateTime tempDate;
-          if (!DateTime.TryParse(viewModel.Date, out tempDate)) {
-            return Json(new UpdateMatchResponseViewModel(false, "Enter a valid date"));
-          }
-          if (!DateTime.TryParse(viewModel.Time, out tempDate)) {
-            return Json(new UpdateMatchResponseViewModel(false, "Enter a valid time"));
-          }
-          // verify that neither player's defensive shots are > innings
-          if (viewModel.Player1DefensiveShots > viewModel.Player1Innings ||
-              viewModel.Player2DefensiveShots > viewModel.Player2Innings) {
-            return Json(new UpdateMatchResponseViewModel(false, "Defensive shots cannot be greater than innings"));
-          }
-          // verify that the winner has >= 2 wins
-          int winnerWins = 0;
-          if (viewModel.Winner == viewModel.Player1Id) {
-            winnerWins = viewModel.Player1Wins;
-          }
-          else {
-            winnerWins = viewModel.Player2Wins;
-          }
-          if (winnerWins < 2) {
-            return Json(new UpdateMatchResponseViewModel(false, "Winner must have at least 2 wins"));
-          }
-        }
+      var errorViewModel = ValidateModelState(viewModel);
+      if (null != errorViewModel) {
+        return Json(errorViewModel);
       }
 
       var match = repository.Get<Match>(viewModel.Id);
@@ -65,22 +37,24 @@ namespace ClubPool.Web.Controllers.UpdateMatch
         return HttpNotFound();
       }
 
-      // authorize only admins, officers, and players involved in this meet
-      var currentPrincipal = authService.GetCurrentPrincipal();
-      var loggedInUser = repository.All<User>().Single(u => u.Username.Equals(currentPrincipal.Identity.Name));
-      if (!match.Meet.UserCanEnterMatchResults(loggedInUser)) {
-        return Json(new UpdateMatchResponseViewModel(false, "You do not have permission to enter results for this match"));
-      }
-
       var player1 = repository.Get<User>(viewModel.Player1Id);
-      if (null == player1 || !match.Players.Where(p => p.Player == player1).Any()) {
-        return Json(new UpdateMatchResponseViewModel(false, "Player 1 is not a valid player for this match"));
-      }
       var player2 = repository.Get<User>(viewModel.Player2Id);
-      if (null == player2 || !match.Players.Where(p => p.Player == player2).Any()) {
-        return Json(new UpdateMatchResponseViewModel(false, "Player 2 is not a valid player for this match"));
+      errorViewModel = VerifyUserCanUpdateMatch(match, player1, player2);
+      if (null != errorViewModel) {
+        return Json(errorViewModel);
       }
 
+      UpdateMatchFromViewModel(viewModel, match, player1, player2);
+
+      var gameType = match.Meet.Division.Season.GameType;
+      player1.UpdateSkillLevel(gameType, repository);
+      player2.UpdateSkillLevel(gameType, repository);
+
+      repository.SaveChanges();
+      return Json(new UpdateMatchResponseViewModel(true));
+    }
+
+    private void UpdateMatchFromViewModel(UpdateMatchViewModel viewModel, Match match, User player1, User player2) {
       if (match.IsComplete) {
         var results = match.Results.ToList();
         foreach (var result in results) {
@@ -106,14 +80,64 @@ namespace ClubPool.Web.Controllers.UpdateMatch
           viewModel.Player2Wins);
         match.AddResult(matchResult);
       }
-      var gameType = match.Meet.Division.Season.GameType;
-      player1.UpdateSkillLevel(gameType, repository);
-      player2.UpdateSkillLevel(gameType, repository);
       // set meet to complete if all matches are complete
       var meet = match.Meet;
       meet.IsComplete = !meet.Matches.Where(m => !m.IsComplete).Any();
-      repository.SaveChanges();
-      return Json(new UpdateMatchResponseViewModel(true));
+    }
+
+    private UpdateMatchResponseViewModel VerifyUserCanUpdateMatch(Match match, User player1, User player2) {
+      // authorize only admins, officers, and players involved in this meet
+      var currentPrincipal = authService.GetCurrentPrincipal();
+      var loggedInUser = repository.All<User>().Single(u => u.Username.Equals(currentPrincipal.Identity.Name));
+      if (!match.Meet.UserCanEnterMatchResults(loggedInUser)) {
+        return new UpdateMatchResponseViewModel(false, "You do not have permission to enter results for this match");
+      }
+
+      if (null == player1 || !match.Players.Where(p => p.Player == player1).Any()) {
+        return new UpdateMatchResponseViewModel(false, "Player 1 is not a valid player for this match");
+      }
+      if (null == player2 || !match.Players.Where(p => p.Player == player2).Any()) {
+        return new UpdateMatchResponseViewModel(false, "Player 2 is not a valid player for this match");
+      }
+
+      return null;
+    }
+
+    private UpdateMatchResponseViewModel ValidateModelState(UpdateMatchViewModel viewModel) {
+      if (!ModelState.IsValid) {
+        return new UpdateMatchResponseViewModel(false, "Validation errors", ModelState);
+      }
+      else {
+        // we must perform some manual validation as well
+        // this should maybe be moved to the view model itself?
+        if (!viewModel.IsForfeit) {
+          // verify that a valid date & time were entered
+          DateTime tempDate;
+          if (!DateTime.TryParse(viewModel.Date, out tempDate)) {
+            return new UpdateMatchResponseViewModel(false, "Enter a valid date");
+          }
+          if (!DateTime.TryParse(viewModel.Time, out tempDate)) {
+            return new UpdateMatchResponseViewModel(false, "Enter a valid time");
+          }
+          // verify that neither player's defensive shots are > innings
+          if (viewModel.Player1DefensiveShots > viewModel.Player1Innings ||
+              viewModel.Player2DefensiveShots > viewModel.Player2Innings) {
+            return new UpdateMatchResponseViewModel(false, "Defensive shots cannot be greater than innings");
+          }
+          // verify that the winner has >= 2 wins
+          int winnerWins = 0;
+          if (viewModel.Winner == viewModel.Player1Id) {
+            winnerWins = viewModel.Player1Wins;
+          }
+          else {
+            winnerWins = viewModel.Player2Wins;
+          }
+          if (winnerWins < 2) {
+            return new UpdateMatchResponseViewModel(false, "Winner must have at least 2 wins");
+          }
+        }
+      }
+      return null;
     }
   }
 }
