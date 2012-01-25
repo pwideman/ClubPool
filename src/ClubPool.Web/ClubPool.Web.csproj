@@ -114,6 +114,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Controllers\Divisions\ViewModels.cs" />
+    <Compile Include="Controllers\Scoresheet\ScoresheetController.cs" />
+    <Compile Include="Controllers\Scoresheet\ViewModels.cs" />
     <Compile Include="Controllers\UpdateMatch\UpdateMatchController.cs" />
     <Compile Include="Controllers\UpdateMatch\ViewModels.cs" />
     <Compile Include="Controllers\UserMatchHistory\UserMatchHistoryController.cs" />
@@ -160,7 +162,6 @@
     <Compile Include="Controllers\Meets\MeetsController.cs" />
     <Compile Include="Controllers\Meets\ViewModels\MeetViewModel.cs" />
     <Compile Include="Controllers\Meets\ViewModels\PlayerViewModel.cs" />
-    <Compile Include="Controllers\Meets\ViewModels\ScoresheetViewModel.cs" />
     <Compile Include="Controllers\Navigation\NavigationController.cs" />
     <Compile Include="Controllers\Navigation\ViewModels\MenuViewModel.cs" />
     <Compile Include="Controllers\PagedListViewModelBase.cs" />
@@ -298,6 +299,7 @@
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Views\Scoresheet\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\base.less" />
@@ -473,9 +475,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Teams\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Meets\Scoresheet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Meets\View.cshtml" />

@@ -34,12 +34,5 @@ namespace ClubPool.Web.Controllers.Meets
       viewModel.AllowUserToEnterResults = meet.UserCanEnterMatchResults(loggedInUser);
       return View(viewModel);
     }
-
-    [Authorize]
-    public ActionResult Scoresheet(int id) {
-      var meet = repository.Get<Meet>(id);
-      var viewModel = new ScoresheetViewModel(meet);
-      return View(viewModel);
-    }
   }
 }
