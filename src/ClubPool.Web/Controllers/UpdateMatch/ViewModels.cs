@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
@@ -50,13 +51,8 @@ namespace ClubPool.Web.Controllers.UpdateMatch
   {
     public IEnumerable<ValidationResultViewModel> ValidationResults { get; set; }
 
-    public UpdateMatchResponseViewModel()
-      : base() {
+    public UpdateMatchResponseViewModel(bool success) {
       ValidationResults = new List<ValidationResultViewModel>();
-    }
-
-    public UpdateMatchResponseViewModel(bool success)
-      : this() {
       Success = success;
     }
 
