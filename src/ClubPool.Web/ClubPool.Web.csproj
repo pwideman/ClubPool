@@ -116,6 +116,7 @@
     <Compile Include="Controllers\Divisions\ViewModels.cs" />
     <Compile Include="Controllers\Scoresheet\ScoresheetController.cs" />
     <Compile Include="Controllers\Scoresheet\ViewModels.cs" />
+    <Compile Include="Controllers\Seasons\ViewModels.cs" />
     <Compile Include="Controllers\UpdateMatch\UpdateMatchController.cs" />
     <Compile Include="Controllers\UpdateMatch\ViewModels.cs" />
     <Compile Include="Controllers\UserMatchHistory\UserMatchHistoryController.cs" />
@@ -165,13 +166,10 @@
     <Compile Include="Controllers\Navigation\ViewModels.cs" />
     <Compile Include="Controllers\PagedListViewModelBase.cs" />
     <Compile Include="Controllers\Seasons\SeasonsController.cs" />
-    <Compile Include="Controllers\Seasons\ViewModels\ChangeActiveViewModel.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\CreateSeasonViewModel.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\DivisionViewModel.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\EditSeasonViewModel.cs" />
-    <Compile Include="Controllers\Seasons\ViewModels\IndexViewModel.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\PlayerViewModel.cs" />
-    <Compile Include="Controllers\Seasons\ViewModels\SeasonSummaryViewModel.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\SeasonViewModel.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\TeamViewModel.cs" />
     <Compile Include="Controllers\Shared\SidebarGadgets\LoginSidebarGadget.cs" />

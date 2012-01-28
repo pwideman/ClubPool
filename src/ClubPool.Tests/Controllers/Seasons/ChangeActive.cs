@@ -8,7 +8,7 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Seasons.ViewModels;
+using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Seasons

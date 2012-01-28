@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 
 using ClubPool.Web.Models;
@@ -20,12 +21,20 @@ namespace ClubPool.Web.Controllers.Seasons
 
     [Authorize(Roles = Roles.Administrators)]
     public ActionResult Index(int? page) {
-      int pageSize = 10;
       var query = repository.All<Season>().OrderByDescending(s => s.IsActive).ThenByDescending(s => s.Name);
-                  //orderby s.IsActive descending, s.Name descending;
-                  //select new SeasonSummaryViewModel { Season = s };
-      var viewModel = new IndexViewModel(query, page.GetValueOrDefault(1), pageSize, (s) => new SeasonSummaryViewModel(s));
+      var viewModel = CreateIndexViewModel(query, page.GetValueOrDefault(1));
       return View(viewModel);
+    }
+
+    private IndexViewModel CreateIndexViewModel(IQueryable<Season> seasons, int page) {
+      var model = new IndexViewModel();
+      InitializePagedListViewModel(model, seasons, page, 10, (s) => new SeasonSummaryViewModel() {
+        Id = s.Id,
+        Name = s.Name,
+        IsActive = s.IsActive,
+        CanDelete = s.CanDelete()
+      });
+      return model;
     }
 
     [HttpGet]
@@ -136,7 +145,10 @@ namespace ClubPool.Web.Controllers.Seasons
       if (null != activeSeason) {
         viewModel.CurrentActiveSeasonName = activeSeason.Name;
       }
-      viewModel.InactiveSeasons = repository.All<Season>().Where(s => !s.IsActive).ToList().Select(s => new SeasonSummaryViewModel(s));
+      viewModel.InactiveSeasons = repository.All<Season>().Where(s => !s.IsActive).ToList().Select(s => new SeasonSummaryViewModel() {
+        Id = s.Id,
+        Name = s.Name
+      });
       return View(viewModel);
     }
 
