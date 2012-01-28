@@ -160,8 +160,7 @@
     <Compile Include="Controllers\Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Meets\MeetsController.cs" />
-    <Compile Include="Controllers\Meets\ViewModels\MeetViewModel.cs" />
-    <Compile Include="Controllers\Meets\ViewModels\PlayerViewModel.cs" />
+    <Compile Include="Controllers\Meets\ViewModels.cs" />
     <Compile Include="Controllers\Navigation\NavigationController.cs" />
     <Compile Include="Controllers\Navigation\ViewModels\MenuViewModel.cs" />
     <Compile Include="Controllers\PagedListViewModelBase.cs" />

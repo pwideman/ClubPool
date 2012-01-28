@@ -9,7 +9,6 @@ using Moq;
 using ClubPool.Testing;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers.Meets;
-using ClubPool.Web.Controllers.Meets.ViewModels;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Meets.when_asked_for_the_view_action
