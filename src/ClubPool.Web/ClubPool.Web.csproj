@@ -162,7 +162,7 @@
     <Compile Include="Controllers\Meets\MeetsController.cs" />
     <Compile Include="Controllers\Meets\ViewModels.cs" />
     <Compile Include="Controllers\Navigation\NavigationController.cs" />
-    <Compile Include="Controllers\Navigation\ViewModels\MenuViewModel.cs" />
+    <Compile Include="Controllers\Navigation\ViewModels.cs" />
     <Compile Include="Controllers\PagedListViewModelBase.cs" />
     <Compile Include="Controllers\Seasons\SeasonsController.cs" />
     <Compile Include="Controllers\Seasons\ViewModels\ChangeActiveViewModel.cs" />

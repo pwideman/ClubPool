@@ -1,10 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Authentication;
-using ClubPool.Web.Controllers.Navigation.ViewModels;
 
 namespace ClubPool.Web.Controllers.Navigation
 {

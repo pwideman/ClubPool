@@ -9,7 +9,6 @@ using Moq;
 using ClubPool.Testing;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers.Navigation;
-using ClubPool.Web.Controllers.Navigation.ViewModels;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Navigation.when_asked_for_the_menu

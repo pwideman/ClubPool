@@ -1,5 +1,6 @@
-﻿
-namespace ClubPool.Web.Controllers.Navigation.ViewModels
+﻿using System;
+
+namespace ClubPool.Web.Controllers.Navigation
 {
   public class MenuViewModel
   {
