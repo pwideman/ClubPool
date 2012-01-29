@@ -94,15 +94,29 @@ namespace ClubPool.Web.Controllers.Teams
         return HttpNotFound();
       }
       var division = team.Division;
-      if (division.Meets.Any()) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "The team cannot be deleted";
+      var completedMatchesQuery = from meet in division.Meets
+                                  from match in meet.Matches
+                                  where meet.Teams.Contains(team) && match.IsComplete
+                                  select match;
+      if (completedMatchesQuery.Any()) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The team has completed matches, so it cannot be deleted";
       }
       else {
-        division.RemoveTeam(team);
-        repository.Delete(team);
+        DeleteTeam(team);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was deleted";
       }
       return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+    }
+
+    private void DeleteTeam(Team team) {
+      var division = team.Division;
+      var meets = division.Meets.Where(m => m.Teams.Contains(team)).ToList();
+      foreach (var meet in meets) {
+        division.Meets.Remove(meet);
+        repository.Delete(meet);
+      }
+      division.Teams.Remove(team);
+      repository.Delete(team);
     }
 
     [HttpGet]

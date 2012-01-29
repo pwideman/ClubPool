@@ -16,10 +16,16 @@ namespace ClubPool.Web.Controllers.Seasons.ViewModels
       Id = team.Id;
       Name = team.Name;
       Players = team.Players.Select(p => new PlayerViewModel(p)).ToList();
+      var completedMatchesQuery = from meet in team.Division.Meets
+                                  from match in meet.Matches
+                                  where meet.Teams.Contains(team) && match.IsComplete
+                                  select match;
+      CanDelete = !completedMatchesQuery.Any();
     }
 
     public int Id { get; set; }
     public string Name { get; set; }
+    public bool CanDelete { get; set; }
     public IEnumerable<PlayerViewModel> Players { get; set; }
   }
 }

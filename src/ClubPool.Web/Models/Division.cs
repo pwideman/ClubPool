@@ -44,32 +44,23 @@ namespace ClubPool.Web.Models
     }
 
     public virtual bool HasCompletedMatches() {
-      return Meets.Where(m => m.Matches.Where(match => match.IsComplete).Any()).Any();
+      var completedMatchesQuery = from meet in Meets
+                                  from match in meet.Matches
+                                  where match.IsComplete
+                                  select match;
+      return completedMatchesQuery.Any();
     }
 
     public virtual void AddTeam(Team team) {
       Arg.NotNull(team, "team");
 
       if (Meets.Any()) {
-        throw new Exception("This division already has a schedule, teams cannot be added or removed");
+        throw new Exception("This division already has a schedule, teams cannot be added");
       }
 
       if (!Teams.Contains(team)) {
         Teams.Add(team);
         team.Division = this;
-      }
-    }
-
-    public virtual void RemoveTeam(Team team) {
-      Arg.NotNull(team, "team");
-
-      if (Meets.Any()) {
-        throw new Exception("This division already has a schedule, teams cannot be added or removed");
-      }
-
-      if (Teams.Contains(team)) {
-        Teams.Remove(team);
-        team.Division = null;
       }
     }
 

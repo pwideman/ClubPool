@@ -86,7 +86,7 @@
                   </a>
                 </td>
                 <td class="action-column">
-                  @if (!division.HasSchedule) {
+                  @if (team.CanDelete) {
                     using (var form = Html.BeginForm("Delete", "Teams", new { id = team.Id }, FormMethod.Post, new { @class = "invisible" })) {
                       <input type="image" value="Delete" alt="Delete" src="@Url.ContentImageUrl("delete-medium.png")"/>
                       @Html.AntiForgeryToken()
