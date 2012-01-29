@@ -113,7 +113,6 @@ namespace ClubPool.Web.Controllers.Users
       }
     }
 
-    [HttpGet]
     public ActionResult LoginStatus() {
       var principal = authenticationService.GetCurrentPrincipal();
       var viewModel = new LoginStatusViewModel() {
@@ -202,15 +201,13 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpGet]
     public ActionResult SignUp() {
-      var vm = new SignUpViewModel();
-      vm.SiteName = configService.GetConfig().SiteName;
-      return View(vm);
+      return View(new CreateViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     [CaptchaValidation("captcha")]
-    public ActionResult SignUp(SignUpViewModel viewModel, bool captchaValid) {
+    public ActionResult SignUp(CreateViewModel viewModel, bool captchaValid) {
       if (!captchaValid) {
         ModelState.AddModelError("captcha", "Incorrect. Try again.");
         return View(viewModel);
@@ -231,7 +228,12 @@ namespace ClubPool.Web.Controllers.Users
         ErrorSignal.FromCurrentContext().Raise(e);
       }
       repository.SaveChanges();
-      return View("SignUpComplete");
+      return RedirectToAction("SignUpComplete");
+    }
+
+    [HttpGet]
+    public ActionResult SignUpComplete() {
+      return View();
     }
 
     protected void SendNewUserAwaitingApprovalEmail(User newUser) {

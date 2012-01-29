@@ -15,16 +15,16 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
   [TestFixture]
   public class with_an_invalid_view_model : UsersControllerTest
   {
-    private ViewResultHelper<SignUpViewModel> resultHelper;
-    private SignUpViewModel viewModel;
+    private ViewResultHelper<CreateViewModel> resultHelper;
+    private CreateViewModel viewModel;
 
     public override void Given() {
-      viewModel = new SignUpViewModel();
+      viewModel = new CreateViewModel();
       controller.ModelState.AddModelError("Username", new Exception("test"));
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
+      resultHelper = new ViewResultHelper<CreateViewModel>(controller.SignUp(viewModel, true));
     }
 
     [Test]
@@ -41,12 +41,12 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
   [TestFixture]
   public class with_duplicate_username : UsersControllerTest
   {
-    private ViewResultHelper<SignUpViewModel> resultHelper;
-    private SignUpViewModel viewModel;
+    private ViewResultHelper<CreateViewModel> resultHelper;
+    private CreateViewModel viewModel;
     private string username = "TestUser";
 
     public override void Given() {
-      viewModel = new SignUpViewModel();
+      viewModel = new CreateViewModel();
       viewModel.Username = username;
       viewModel.Password = "test";
       viewModel.ConfirmPassword = "test";
@@ -58,7 +58,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
+      resultHelper = new ViewResultHelper<CreateViewModel>(controller.SignUp(viewModel, true));
     }
 
     [Test]
@@ -80,12 +80,12 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
   [TestFixture]
   public class with_duplicate_email : UsersControllerTest
   {
-    private ViewResultHelper<SignUpViewModel> resultHelper;
-    private SignUpViewModel viewModel;
+    private ViewResultHelper<CreateViewModel> resultHelper;
+    private CreateViewModel viewModel;
     private string email = "TestEmail@email.com";
 
     public override void Given() {
-      viewModel = new SignUpViewModel();
+      viewModel = new CreateViewModel();
       viewModel.Username = "test";
       viewModel.Password = "test";
       viewModel.ConfirmPassword = "test";
@@ -97,7 +97,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, true));
+      resultHelper = new ViewResultHelper<CreateViewModel>(controller.SignUp(viewModel, true));
     }
 
     [Test]
@@ -119,14 +119,14 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
   [TestFixture]
   public class with_valid_info : UsersControllerTest
   {
-    private ViewResultHelper<object> resultHelper;
-    private SignUpViewModel viewModel;
+    private RedirectToRouteResultHelper resultHelper;
+    private CreateViewModel viewModel;
     private User user;
     private string username = "TestUser";
     private string userEmail = "test@test.com";
 
     public override void Given() {
-      viewModel = new SignUpViewModel();
+      viewModel = new CreateViewModel();
       viewModel.Username = username;
       viewModel.Password = "test";
       viewModel.ConfirmPassword = "test";
@@ -146,12 +146,12 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<object>(controller.SignUp(viewModel, true));
+      resultHelper = new RedirectToRouteResultHelper(controller.SignUp(viewModel, true));
     }
 
     [Test]
     public void it_should_return_the_SignUpComplete_view() {
-      resultHelper.Result.ViewName.Should().Be("SignUpComplete");
+      resultHelper.ShouldRedirectTo("SignUpComplete");
     }
 
     [Test]
@@ -163,17 +163,17 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_sign_up_a_new_user
   [TestFixture]
   public class and_the_captcha_is_invalid : UsersControllerTest
   {
-    private ViewResultHelper<SignUpViewModel> resultHelper;
-    private SignUpViewModel viewModel;
+    private ViewResultHelper<CreateViewModel> resultHelper;
+    private CreateViewModel viewModel;
     private string username = "TestUser";
 
     public override void Given() {
-      viewModel = new SignUpViewModel();
+      viewModel = new CreateViewModel();
       viewModel.Username = username;
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<SignUpViewModel>(controller.SignUp(viewModel, false));
+      resultHelper = new ViewResultHelper<CreateViewModel>(controller.SignUp(viewModel, false));
     }
 
     [Test]

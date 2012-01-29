@@ -194,7 +194,6 @@
     <Compile Include="Controllers\Users\ViewModels\RecoverUsernameViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\ResetPasswordViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\RoleViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\SignUpViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UserSummaryViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UserViewModelBase.cs" />
