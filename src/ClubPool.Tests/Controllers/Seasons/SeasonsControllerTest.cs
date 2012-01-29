@@ -9,7 +9,6 @@ using Moq;
 using ClubPool.Testing;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers.Seasons;
-using ClubPool.Web.Controllers.Seasons.ViewModels;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Seasons

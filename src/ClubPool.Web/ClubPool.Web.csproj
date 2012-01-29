@@ -166,10 +166,6 @@
     <Compile Include="Controllers\Navigation\ViewModels.cs" />
     <Compile Include="Controllers\PagedListViewModelBase.cs" />
     <Compile Include="Controllers\Seasons\SeasonsController.cs" />
-    <Compile Include="Controllers\Seasons\ViewModels\DivisionViewModel.cs" />
-    <Compile Include="Controllers\Seasons\ViewModels\PlayerViewModel.cs" />
-    <Compile Include="Controllers\Seasons\ViewModels\SeasonViewModel.cs" />
-    <Compile Include="Controllers\Seasons\ViewModels\TeamViewModel.cs" />
     <Compile Include="Controllers\Shared\SidebarGadgets\LoginSidebarGadget.cs" />
     <Compile Include="Controllers\Shared\ViewModels\AjaxUpdateResponseViewModel.cs" />
     <Compile Include="Controllers\Shared\ViewModels\ScheduleViewModel.cs" />

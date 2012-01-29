@@ -3,9 +3,10 @@ using System.Linq;
 using System.Web.Mvc;
 
 using ClubPool.Web.Models;
-using ClubPool.Web.Controllers.Seasons.ViewModels;
+using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Seasons
 {
@@ -134,7 +135,7 @@ namespace ClubPool.Web.Controllers.Seasons
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The season was deleted successfully.";
       }
       else {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = 
+        TempData[GlobalViewDataProperty.PageErrorMessage] =
           "There are completed matches in this season, it cannot be deleted.";
       }
 
@@ -161,7 +162,7 @@ namespace ClubPool.Web.Controllers.Seasons
     [ValidateAntiForgeryToken]
     public ActionResult ChangeActive(int id) {
       var newActiveSeason = repository.Get<Season>(id);
-      
+
       if (null == newActiveSeason) {
         return HttpNotFound();
       }
@@ -189,8 +190,53 @@ namespace ClubPool.Web.Controllers.Seasons
       if (null == season) {
         return HttpNotFound();
       }
-      var viewModel = new SeasonViewModel(season);
+      var viewModel = CreateSeasonViewModel(season);
       return View(viewModel);
+    }
+
+    private SeasonViewModel CreateSeasonViewModel(Season season) {
+      var model = new SeasonViewModel() {
+        Id = season.Id,
+        Name = season.Name,
+        Divisions = season.Divisions.Select(d => CreateDivisionViewModel(d)).ToList()
+      };
+      return model;
+    }
+
+    private DivisionViewModel CreateDivisionViewModel(Division division) {
+      var model = new DivisionViewModel();
+      model.Id = division.Id;
+      model.Name = division.Name;
+      model.StartingDate = division.StartingDate;
+      model.CanDelete = division.CanDelete();
+      if (division.Meets.Any()) {
+        model.Schedule = new ScheduleViewModel(division.Meets, division.StartingDate);
+        model.HasSchedule = true;
+        if (division.Meets.Where(m => m.Matches.Where(match => match.IsComplete).Any()).Any()) {
+          model.HasCompletedMatches = true;
+        }
+      }
+      model.Teams = division.Teams.Select(t => CreateTeamViewModel(t)).ToList();
+      if (model.Teams.Count() > 1) {
+        model.HasEnoughTeamsForSchedule = true;
+      }
+      else {
+        model.HasEnoughTeamsForSchedule = false;
+      }
+      return model;
+    }
+
+    private TeamViewModel CreateTeamViewModel(Team team) {
+      var model = new TeamViewModel();
+      model.Id = team.Id;
+      model.Name = team.Name;
+      model.Players = team.Players.Select(p => new PlayerViewModel() { Id = p.Id, Name = p.FullName }).ToList();
+      var completedMatchesQuery = from meet in team.Division.Meets
+                                  from match in meet.Matches
+                                  where meet.Teams.Contains(team) && match.IsComplete
+                                  select match;
+      model.CanDelete = !completedMatchesQuery.Any();
+      return model;
     }
 
   }

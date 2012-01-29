@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Seasons
 {
@@ -44,5 +45,38 @@ namespace ClubPool.Web.Controllers.Seasons
     public string Name { get; set; }
   }
 
+  public class SeasonViewModel
+  {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public IEnumerable<DivisionViewModel> Divisions { get; set; }
+  }
+
+  public class DivisionViewModel
+  {
+    public int Id { get; set; }
+    public DateTime StartingDate { get; set; }
+    public string Name { get; set; }
+    public bool CanDelete { get; set; }
+    public bool HasSchedule { get; set; }
+    public bool HasEnoughTeamsForSchedule { get; set; }
+    public bool HasCompletedMatches { get; set; }
+    public IEnumerable<TeamViewModel> Teams { get; set; }
+    public ScheduleViewModel Schedule { get; set; }
+  }
+
+  public class TeamViewModel
+  {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public bool CanDelete { get; set; }
+    public IEnumerable<PlayerViewModel> Players { get; set; }
+  }
+
+  public class PlayerViewModel
+  {
+    public int Id { get; set; }
+    public string Name { get; set; }
+  }
 
 }
