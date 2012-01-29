@@ -16,7 +16,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
   [TestFixture]
   public class with_valid_inputs : UsersControllerTest
   {
-    private ViewResultHelper resultHelper;
+    private RedirectToRouteResultHelper resultHelper;
     private RecoverUsernameViewModel viewModel;
     private string email = "test@email.com";
     private string username = "testusername";
@@ -38,12 +38,12 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel, true));
+      resultHelper = new RedirectToRouteResultHelper(controller.RecoverUsername(viewModel, true));
     }
 
     [Test]
     public void it_should_return_the_recover_username_complete_view() {
-      resultHelper.Result.ViewName.Should().Be("RecoverUsernameComplete");
+      resultHelper.ShouldRedirectTo("RecoverUsernameComplete");
     }
 
     [Test]
@@ -61,7 +61,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
   public class for_a_nonexistent_email : UsersControllerTest
   {
     private RecoverUsernameViewModel viewModel;
-    private ViewResultHelper resultHelper;
+    private RedirectToRouteResultHelper resultHelper;
     private string emailTo;
     private string testEmail = "bad@email.com";
 
@@ -74,12 +74,12 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper(controller.RecoverUsername(viewModel, true));
+      resultHelper = new RedirectToRouteResultHelper(controller.RecoverUsername(viewModel, true));
     }
 
     [Test]
     public void it_should_return_the_recover_username_complete_view() {
-      resultHelper.Result.ViewName.Should().Be("RecoverUsernameComplete");
+      resultHelper.ShouldRedirectTo("RecoverUsernameComplete");
     }
 
     [Test]

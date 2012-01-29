@@ -17,7 +17,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_reset_a_password
   [TestFixture]
   public class with_valid_input : UsersControllerTest
   {
-    private ViewResultHelper resultHelper;
+    private RedirectToRouteResultHelper resultHelper;
     private ResetPasswordViewModel viewModel;
     private string username = "test";
     private string token = "testtoken";
@@ -42,12 +42,12 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_reset_a_password
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel, true));
+      resultHelper = new RedirectToRouteResultHelper(controller.ResetPassword(viewModel, true));
     }
 
     [Test]
     public void it_should_return_the_reset_password_complete_view() {
-      resultHelper.Result.ViewName.Should().Be("ResetPasswordComplete");
+      resultHelper.ShouldRedirectTo("ResetPasswordComplete");
     }
 
     [Test]
@@ -65,19 +65,19 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_reset_a_password
   public class for_a_nonexistent_username : UsersControllerTest
   {
     private ResetPasswordViewModel viewModel;
-    private ViewResultHelper resultHelper;
+    private RedirectToRouteResultHelper resultHelper;
 
     public override void Given() {
       viewModel = new ResetPasswordViewModel() { Username = "bad" };
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper(controller.ResetPassword(viewModel, true));
+      resultHelper = new RedirectToRouteResultHelper(controller.ResetPassword(viewModel, true));
     }
 
     [Test]
     public void it_should_return_the_reset_password_complete_view() {
-      resultHelper.Result.ViewName.Should().Be("ResetPasswordComplete");
+      resultHelper.ShouldRedirectTo("ResetPasswordComplete");
     }
 
     [Test]

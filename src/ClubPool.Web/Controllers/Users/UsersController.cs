@@ -176,7 +176,12 @@ namespace ClubPool.Web.Controllers.Users
       }
       // always go to the complete page, we don't want potential attackers to be able to
       // discover valid usernames through this interface
-      return View("ResetPasswordComplete");
+      return RedirectToAction("ResetPasswordComplete");
+    }
+
+    [HttpGet]
+    public ActionResult ResetPasswordComplete() {
+      return View();
     }
 
     [HttpGet]
@@ -597,7 +602,12 @@ namespace ClubPool.Web.Controllers.Users
       }
       var siteName = configService.GetConfig().SiteName;
       emailService.SendSystemEmail(viewModel.Email, string.Format("{0} Username Assistance", siteName), body);
-      return View("RecoverUsernameComplete");
+      return RedirectToAction("RecoverUsernameComplete");
+    }
+
+    [HttpGet]
+    public ActionResult RecoverUsernameComplete() {
+      return View();
     }
   }
 }
