@@ -65,13 +65,13 @@ namespace ClubPool.Testing
 
     public string Controller {
       get {
-        return Result.RouteValues.ContainsKey("Controller") ? Result.RouteValues["Controller"].ToString() : null;
+        return Result.ControllerName();
       }
     }
 
     public string Action {
       get {
-        return Result.RouteValues["Action"].ToString();
+        return Result.ActionName();
       }
     }
 

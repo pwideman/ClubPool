@@ -39,11 +39,11 @@ namespace ClubPool.Testing
     }
 
     public static string ControllerName(this RedirectToRouteResult result) {
-      return result.RouteValues["Controller"].ToString();
+      return result.RouteValues.ContainsKey("Controller") ? result.RouteValues["Controller"].ToString() : null;
     }
 
     public static string ActionName(this RedirectToRouteResult result) {
-      return result.RouteValues["Action"].ToString();
+      return result.RouteValues.ContainsKey("Action") ? result.RouteValues["Action"].ToString() : null;
     }
 
   }
