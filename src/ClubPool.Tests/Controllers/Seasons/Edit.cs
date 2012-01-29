@@ -8,7 +8,7 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Seasons.ViewModels;
+using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Seasons
@@ -51,7 +51,11 @@ namespace ClubPool.Tests.Controllers.Seasons.when_asked_to_edit_a_season
       season.SetIdTo(1);
       season.SetVersionTo(1);
 
-      viewModel = new EditSeasonViewModel(season);
+      viewModel = new EditSeasonViewModel() {
+        Id = season.Id,
+        Name = season.Name,
+        Version = season.EncodedVersion
+      };
       viewModel.Name = name;
 
       repository.Setup(r => r.Get<Season>(season.Id)).Returns(season);
@@ -146,7 +150,9 @@ namespace ClubPool.Tests.Controllers.Seasons.when_asked_to_edit_a_season
       season.SetIdTo(id);
       season.SetVersionTo(version);
 
-      viewModel = new EditSeasonViewModel(season);
+      viewModel = new EditSeasonViewModel() {
+        Id = season.Id,
+      };
       viewModel.Version = DomainModelHelper.ConvertIntVersionToString(1);
       viewModel.Name = name;
 
@@ -182,7 +188,10 @@ namespace ClubPool.Tests.Controllers.Seasons.when_asked_to_edit_a_season
         season.SetVersionTo(1);
         seasons.Add(season);
       }
-      viewModel = new EditSeasonViewModel(seasons[0]);
+      viewModel = new EditSeasonViewModel() {
+        Id = seasons[0].Id,
+        Version = seasons[0].EncodedVersion
+      };
       viewModel.Name = seasons[1].Name;
 
       repository.Setup(r => r.Get<Season>(seasons[0].Id)).Returns(seasons[0]);

@@ -66,7 +66,11 @@ namespace ClubPool.Web.Controllers.Seasons
       if (null == season) {
         return HttpNotFound();
       }
-      var viewModel = new EditSeasonViewModel(season);
+      var viewModel = new EditSeasonViewModel() {
+        Id = season.Id,
+        Name = season.Name,
+        Version = season.EncodedVersion
+      };
       return View(viewModel);
     }
 
