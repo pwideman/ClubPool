@@ -5,8 +5,6 @@ using System.ComponentModel;
 
 using DataAnnotationsExtensions;
 
-using ClubPool.Web.Controllers.Teams.ViewModels;
-
 namespace ClubPool.Web.Controllers.Teams
 {
   public abstract class TeamViewModel
@@ -80,4 +78,14 @@ namespace ClubPool.Web.Controllers.Teams
     public int OpponentPlayerWins { get; set; }
     public bool Win { get; set; }
   }
+
+  public class UpdateNameViewModel
+  {
+    [Min(1)]
+    public int Id { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+  }
+
 }

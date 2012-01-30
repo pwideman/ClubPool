@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Collections.Generic;
 
 using ClubPool.Web.Services.Authentication;
-using ClubPool.Web.Controllers.Teams.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
