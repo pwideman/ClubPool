@@ -32,7 +32,7 @@ namespace ClubPool.Web.Controllers.Teams
       if (null == division) {
         return HttpNotFound();
       }
-      var viewModel = new CreateTeamViewModel(repository, division);
+      var viewModel = BuildCreateTeamViewModel(repository, division);
       return View(viewModel);
     }
 
@@ -43,30 +43,14 @@ namespace ClubPool.Web.Controllers.Teams
       var division = repository.Get<Division>(viewModel.DivisionId);
 
       if (!ModelState.IsValid) {
-        var newViewModel = new CreateTeamViewModel(repository, division);
-        newViewModel.Name = viewModel.Name;
-        newViewModel.SchedulePriority = viewModel.SchedulePriority;
-        if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
-          foreach (var playerId in viewModel.SelectedPlayers) {
-            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-            playerModel.IsSelected = true;
-          }
-        }
+        var newViewModel = BuildCreateTeamViewModel(repository, division, viewModel);
         return View(newViewModel);
       }
 
       // verify that the team name is not already used
       if (division.TeamNameIsInUse(viewModel.Name)) {
         ModelState.AddModelErrorFor<CreateTeamViewModel>(m => m.Name, "This name is already in use");
-        var newViewModel = new CreateTeamViewModel(repository, division);
-        newViewModel.Name = viewModel.Name;
-        newViewModel.SchedulePriority = viewModel.SchedulePriority;
-        if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
-          foreach (var playerId in viewModel.SelectedPlayers) {
-            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-            playerModel.IsSelected = true;
-          }
-        }
+        var newViewModel = BuildCreateTeamViewModel(repository, division, viewModel);
         return View(newViewModel);
       }
 
@@ -85,38 +69,71 @@ namespace ClubPool.Web.Controllers.Teams
       return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
     }
 
-    [HttpPost]
-    [Authorize(Roles = Roles.Administrators)]
-    [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id) {
-      var team = repository.Get<Team>(id);
-      if (null == team) {
-        return HttpNotFound();
+    private CreateTeamViewModel BuildCreateTeamViewModel(IRepository repository, Division division, CreateTeamViewModel viewModel = null) {
+      var model = new CreateTeamViewModel();
+      model.DivisionId = division.Id;
+      model.DivisionName = division.Name;
+
+      // load available players
+      model.Players = GetAvailablePlayers(division.Season);
+
+      if (null != viewModel) {
+        CopyTeamViewModel(viewModel, model);
       }
-      var division = team.Division;
-      var completedMatchesQuery = from meet in division.Meets
-                                  from match in meet.Matches
-                                  where meet.Teams.Contains(team) && match.IsComplete
-                                  select match;
-      if (completedMatchesQuery.Any()) {
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "The team has completed matches, so it cannot be deleted";
-      }
-      else {
-        DeleteTeam(team);
-        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was deleted";
-      }
-      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+      return model;
     }
 
-    private void DeleteTeam(Team team) {
-      var division = team.Division;
-      var meets = division.Meets.Where(m => m.Teams.Contains(team)).ToList();
-      foreach (var meet in meets) {
-        division.Meets.Remove(meet);
-        repository.Delete(meet);
+    private EditTeamViewModel BuildEditTeamViewModel(IRepository repository, Team team, EditTeamViewModel viewModel = null) {
+      var model = new EditTeamViewModel();
+      model.Id = team.Id;
+      model.Version = team.EncodedVersion;
+      model.Name = team.Name;
+
+      var availablePlayers = GetAvailablePlayers(team.Division.Season);
+
+      // get team players and merge with available players
+      var teamPlayers = team.Players.Select(p => new PlayerViewModel {
+        Id = p.Id,
+        Name = p.FullName,
+        Username = p.Username,
+        Email = p.Email,
+        IsSelected = viewModel == null
+      }).ToList();
+      // always add them to the top so they are most visible
+      availablePlayers.InsertRange(0, teamPlayers);
+      model.Players = availablePlayers;
+      model.SchedulePriority = team.SchedulePriority;
+
+      if (null != viewModel) {
+        CopyTeamViewModel(viewModel, model);
       }
-      division.Teams.Remove(team);
-      repository.Delete(team);
+
+      return model;
+    }
+
+    private void CopyTeamViewModel(TeamViewModel source, TeamViewModel copy) {
+      copy.Name = source.Name;
+      copy.SchedulePriority = source.SchedulePriority;
+      if (null != source.SelectedPlayers && source.SelectedPlayers.Length > 0) {
+        foreach (var playerId in source.SelectedPlayers) {
+          copy.Players.Single(p => p.Id == playerId).IsSelected = true;
+        }
+      }
+    }
+
+    private List<PlayerViewModel> GetAvailablePlayers(Season season) {
+      var sql = "select * from clubpool.Users where IsApproved = 1 and id not in " +
+        "(select distinct u.id from clubpool.Users u, clubpool.TeamsUsers tp, clubpool.Teams t, clubpool.Divisions d, clubpool.Seasons s where " +
+        "u.Id = tp.User_Id and s.id in (select Season_Id from clubpool.Divisions where Id in " +
+        "(select Division_Id from clubpool.Teams where id = tp.Team_Id)) and s.Id = @p0)" +
+        "order by LastName, FirstName";
+      var availablePlayers = repository.SqlQuery<User>(sql, season.Id).Select(u => new PlayerViewModel() {
+        Id = u.Id,
+        Name = u.FullName,
+        Username = u.Username,
+        Email = u.Email
+      }).ToList();
+      return availablePlayers;
     }
 
     [HttpGet]
@@ -126,7 +143,7 @@ namespace ClubPool.Web.Controllers.Teams
       if (null == team) {
         return HttpNotFound();
       }
-      var viewModel = new EditTeamViewModel(repository, team);
+      var viewModel = BuildEditTeamViewModel(repository, team);
       return View(viewModel);
     }
 
@@ -144,32 +161,16 @@ namespace ClubPool.Web.Controllers.Teams
       if (viewModel.Version != team.EncodedVersion) {
         return EditRedirectForConcurrency(viewModel.Id);
       }
-      
+
       if (!ModelState.IsValid) {
-        var newViewModel = new EditTeamViewModel(repository, team, false);
-        newViewModel.Name = viewModel.Name;
-        newViewModel.SchedulePriority = viewModel.SchedulePriority;
-        if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
-          foreach (var playerId in viewModel.SelectedPlayers) {
-            var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-            playerModel.IsSelected = true;
-          }
-        }
+        var newViewModel = BuildEditTeamViewModel(repository, team, viewModel);
         return View(newViewModel);
       }
 
       if (team.Name != viewModel.Name) {
         if (team.Division.TeamNameIsInUse(viewModel.Name)) {
           ModelState.AddModelErrorFor<EditTeamViewModel>(m => m.Name, "Name is already in use");
-          var newViewModel = new EditTeamViewModel(repository, team, false);
-          newViewModel.Name = viewModel.Name;
-          newViewModel.SchedulePriority = viewModel.SchedulePriority;
-          if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
-            foreach (var playerId in viewModel.SelectedPlayers) {
-              var playerModel = newViewModel.Players.Single(p => p.Id == playerId);
-              playerModel.IsSelected = true;
-            }
-          }
+          var newViewModel = BuildEditTeamViewModel(repository, team, viewModel);
           return View(newViewModel);
         }
         team.Name = viewModel.Name;
@@ -178,25 +179,7 @@ namespace ClubPool.Web.Controllers.Teams
       team.SchedulePriority = viewModel.SchedulePriority;
 
       if (null != viewModel.SelectedPlayers && viewModel.SelectedPlayers.Length > 0) {
-        var newPlayers = new List<User>();
-        foreach (var playerId in viewModel.SelectedPlayers) {
-          var player = repository.Get<User>(playerId);
-          newPlayers.Add(player);
-        }
-        // first remove all players that aren't in the view model's players list
-        var teamPlayers = team.Players.ToList();
-        foreach (var teamPlayer in teamPlayers) {
-          if (!newPlayers.Contains(teamPlayer)) {
-            RemovePlayer(team, teamPlayer);
-          }
-        }
-
-        // now add all new players to the team
-        foreach (var newPlayer in newPlayers) {
-          if (!team.Players.Contains(newPlayer)) {
-            AddPlayer(team, newPlayer);
-          }
-        }
+        UpdatePlayers(team, viewModel.SelectedPlayers);
       }
       else {
         RemoveAllPlayers(team);
@@ -212,7 +195,28 @@ namespace ClubPool.Web.Controllers.Teams
       return RedirectToAction("View", "Seasons", new { id = team.Division.Season.Id });
     }
 
-    public virtual void AddPlayer(Team team, User player) {
+    private void UpdatePlayers(Team team, int[] players) {
+      var newPlayers = new List<User>();
+      foreach (var playerId in players) {
+        var player = repository.Get<User>(playerId);
+        newPlayers.Add(player);
+      }
+      // first remove all players that aren't in the view model's players list
+      var teamPlayers = team.Players.ToList();
+      foreach (var teamPlayer in teamPlayers) {
+        if (!newPlayers.Contains(teamPlayer)) {
+          RemovePlayer(team, teamPlayer);
+        }
+      }
+      // now add all new players to the team
+      foreach (var newPlayer in newPlayers) {
+        if (!team.Players.Contains(newPlayer)) {
+          AddPlayer(team, newPlayer);
+        }
+      }
+    }
+
+    private void AddPlayer(Team team, User player) {
       if (!team.Players.Contains(player)) {
         team.Players.Add(player);
         // add this player to meets
@@ -263,6 +267,40 @@ namespace ClubPool.Web.Controllers.Teams
       TempData[GlobalViewDataProperty.PageErrorMessage] =
         "This team was updated by another user while you were viewing this page. Enter your changes again.";
       return RedirectToAction("Edit", new { id = id });
+    }
+
+    [HttpPost]
+    [Authorize(Roles = Roles.Administrators)]
+    [ValidateAntiForgeryToken]
+    public ActionResult Delete(int id) {
+      var team = repository.Get<Team>(id);
+      if (null == team) {
+        return HttpNotFound();
+      }
+      var division = team.Division;
+      var completedMatchesQuery = from meet in division.Meets
+                                  from match in meet.Matches
+                                  where meet.Teams.Contains(team) && match.IsComplete
+                                  select match;
+      if (completedMatchesQuery.Any()) {
+        TempData[GlobalViewDataProperty.PageErrorMessage] = "The team has completed matches, so it cannot be deleted";
+      }
+      else {
+        DeleteTeam(team);
+        TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was deleted";
+      }
+      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+    }
+
+    private void DeleteTeam(Team team) {
+      var division = team.Division;
+      var meets = division.Meets.Where(m => m.Teams.Contains(team)).ToList();
+      foreach (var meet in meets) {
+        division.Meets.Remove(meet);
+        repository.Delete(meet);
+      }
+      division.Teams.Remove(team);
+      repository.Delete(team);
     }
 
     [Authorize]

@@ -8,7 +8,7 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Tests.Controllers.Teams;
-using ClubPool.Web.Controllers.Teams.ViewModels;
+using ClubPool.Web.Controllers.Teams;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_create_view

@@ -117,6 +117,7 @@
     <Compile Include="Controllers\Scoresheet\ScoresheetController.cs" />
     <Compile Include="Controllers\Scoresheet\ViewModels.cs" />
     <Compile Include="Controllers\Seasons\ViewModels.cs" />
+    <Compile Include="Controllers\Teams\ViewModels.cs" />
     <Compile Include="Controllers\UpdateMatch\UpdateMatchController.cs" />
     <Compile Include="Controllers\UpdateMatch\ViewModels.cs" />
     <Compile Include="Controllers\UserMatchHistory\UserMatchHistoryController.cs" />
@@ -173,11 +174,7 @@
     <Compile Include="Controllers\SidebarGadgetBase.cs" />
     <Compile Include="Controllers\SidebarGadgetCollection.cs" />
     <Compile Include="Controllers\Teams\TeamsController.cs" />
-    <Compile Include="Controllers\Teams\ViewModels\CreateTeamViewModel.cs" />
     <Compile Include="Controllers\Teams\ViewModels\DetailsViewModel.cs" />
-    <Compile Include="Controllers\Teams\ViewModels\EditTeamViewModel.cs" />
-    <Compile Include="Controllers\Teams\ViewModels\PlayerViewModel.cs" />
-    <Compile Include="Controllers\Teams\ViewModels\TeamViewModel.cs" />
     <Compile Include="Controllers\Teams\ViewModels\UpdateNameViewModel.cs" />
     <Compile Include="Controllers\Users\UsersController.cs" />
     <Compile Include="Controllers\Users\ViewModels\CreateViewModel.cs" />
