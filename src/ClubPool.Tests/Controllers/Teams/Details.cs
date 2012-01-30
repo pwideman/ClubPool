@@ -8,7 +8,7 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Web.Models;
-using ClubPool.Web.Controllers.Teams.ViewModels;
+using ClubPool.Web.Controllers.Teams;
 
 namespace ClubPool.Tests.Controllers.Teams
 {
@@ -59,7 +59,11 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_for_the_details_view
 
     public override void Given() {
       authService.MockPrincipal.User = adminUser;
-      numberOfSeasonResults = meets.Where(m => m.Teams.Contains(team) && m.Matches.Where(match => match.IsComplete).Any()).Count();
+      numberOfSeasonResults = (from meet in meets
+                               where meet.Teams.Contains(team)
+                               from match in meet.Matches
+                               where match.IsComplete
+                               select match).Count();
     }
 
     public override void When() {

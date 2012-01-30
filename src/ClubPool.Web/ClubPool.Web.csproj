@@ -174,7 +174,6 @@
     <Compile Include="Controllers\SidebarGadgetBase.cs" />
     <Compile Include="Controllers\SidebarGadgetCollection.cs" />
     <Compile Include="Controllers\Teams\TeamsController.cs" />
-    <Compile Include="Controllers\Teams\ViewModels\DetailsViewModel.cs" />
     <Compile Include="Controllers\Teams\ViewModels\UpdateNameViewModel.cs" />
     <Compile Include="Controllers\Users\UsersController.cs" />
     <Compile Include="Controllers\Users\ViewModels\CreateViewModel.cs" />

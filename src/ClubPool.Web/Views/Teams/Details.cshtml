@@ -1,4 +1,4 @@
-﻿@model ClubPool.Web.Controllers.Teams.ViewModels.DetailsViewModel
+﻿@model ClubPool.Web.Controllers.Teams.DetailsViewModel
 
 @{
     ViewBag.Title = "Team Details";
@@ -51,17 +51,15 @@
         </tr>
       </thead>
       <tbody class="meet">        
-      @foreach (var meet in Model.SeasonResults) {
-        foreach (var match in meet.Matches) {
+      @foreach (var match in Model.SeasonResults) {
         <tr @Html.Raw(match.Win ? "class=\"winner\"" : "")>
-          <td>@meet.Opponent</td>
+          <td>@match.OpponentTeamName</td>
           <td>@match.OpponentPlayerName</td>
           <td>@match.OpponentPlayerWins</td>
           <td>@match.TeamPlayerName</td>
           <td>@match.TeamPlayerWins</td>
           <td>@(match.Win ? "W" : "L")</td>
         </tr>
-        }
       }
       </tbody>
     </table>

@@ -5,6 +5,8 @@ using System.ComponentModel;
 
 using DataAnnotationsExtensions;
 
+using ClubPool.Web.Controllers.Teams.ViewModels;
+
 namespace ClubPool.Web.Controllers.Teams
 {
   public abstract class TeamViewModel
@@ -49,4 +51,33 @@ namespace ClubPool.Web.Controllers.Teams
     public bool IsSelected { get; set; }
   }
 
+  public class DetailsViewModel
+  {
+    public int Id { get; set; }
+    public bool CanUpdateName { get; set; }
+    public string Name { get; set; }
+    public IEnumerable<DetailsPlayerViewModel> Players { get; set; }
+    public string Record { get; set; }
+    public string Rank { get; set; }
+    public IEnumerable<DetailsMatchViewModel> SeasonResults { get; set; }
+    public bool HasSeasonResults { get; set; }
+    public string Email { get; set; }
+  }
+
+  public class DetailsPlayerViewModel
+  {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int EightBallSkillLevel { get; set; }
+  }
+
+  public class DetailsMatchViewModel
+  {
+    public string TeamPlayerName { get; set; }
+    public int TeamPlayerWins { get; set; }
+    public string OpponentTeamName { get; set; }
+    public string OpponentPlayerName { get; set; }
+    public int OpponentPlayerWins { get; set; }
+    public bool Win { get; set; }
+  }
 }

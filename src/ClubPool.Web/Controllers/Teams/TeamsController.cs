@@ -310,13 +310,112 @@ namespace ClubPool.Web.Controllers.Teams
       if (null == team) {
         return HttpNotFound();
       }
-      var viewModel = new DetailsViewModel(team);
+      var viewModel = BuildDetailsViewModel(team);
       viewModel.CanUpdateName = UserCanUpdateTeamName(user, team);
       return View(viewModel);
     }
 
     protected bool UserCanUpdateTeamName(User user, Team team) {
       return user.IsInRole(Roles.Administrators) || user.IsInRole(Roles.Officers) || team.Players.Contains(user);
+    }
+
+    private DetailsViewModel BuildDetailsViewModel(Team team) {
+      var model = new DetailsViewModel();
+      model.Id = team.Id;
+      model.Name = team.Name;
+      model.Record = GetRecord(team);
+      var players = new List<DetailsPlayerViewModel>();
+      model.Email = "";
+      foreach (var player in team.Players) {
+        players.Add(BuildDetailsPlayerViewModel(player));
+        if (model.Email.Length > 0) {
+          model.Email += ",";
+        }
+        model.Email += player.Email;
+      }
+      model.Players = players;
+      model.Rank = CalculateRank(team);
+      var teamMeets = team.Division.Meets.Where(m => m.Teams.Contains(team) && m.Matches.Where(match => match.IsComplete).Any())
+                                         .OrderByDescending(m => m.Week);
+      if (teamMeets.Any()) {
+        model.HasSeasonResults = true;
+        var seasonResults = new List<DetailsMatchViewModel>();
+        foreach (var meet in teamMeets) {
+          seasonResults.AddRange(BuildDetailsMatchViewModels(meet, team));
+        }
+        model.SeasonResults = seasonResults;
+      }
+      else {
+        model.HasSeasonResults = false;
+      }
+      return model;
+    }
+
+    private string GetRecord(Team team) {
+      var winsAndLosses = team.GetWinsAndLosses();
+      var wins = winsAndLosses[0];
+      var losses = winsAndLosses[1];
+      var total = wins + losses;
+      double winPct = 0;
+      if (total > 0) {
+        winPct = (double)wins / (double)total;
+      }
+      return string.Format("{0} - {1} ({2:.00})", wins, losses, winPct);
+    }
+
+    private string CalculateRank(Team team) {
+      var division = team.Division;
+      var q = division.Teams.OrderByDescending(t => t.GetWinPercentage()).Select((o, i) => new { Rank = i, Team = o }).ToArray();
+      var rank = q.Where(o => o.Team == team).Select(o => o.Rank).Single();
+      var tied = false;
+      var myWinPct = team.GetWinPercentage();
+      if (rank > 0) {
+        while (rank > 0 && q[rank - 1].Team.GetWinPercentage() == myWinPct) {
+          rank--;
+        }
+      }
+      if (rank < (q.Length - 1)) {
+        tied = (q[rank + 1].Team.GetWinPercentage() == myWinPct);
+      }
+      return (tied ? "T" : "") + (rank + 1).ToString();
+    }
+
+    private DetailsPlayerViewModel BuildDetailsPlayerViewModel(User player) {
+      var model = new DetailsPlayerViewModel();
+      model.Id = player.Id;
+      model.Name = player.FullName;
+      var skillLevel = player.SkillLevels.Where(sl => sl.GameType == GameType.EightBall).FirstOrDefault();
+      if (null != skillLevel) {
+        model.EightBallSkillLevel = skillLevel.Value;
+      }
+      return model;
+    }
+
+    private List<DetailsMatchViewModel> BuildDetailsMatchViewModels(Meet meet, Team team) {
+      var opponentTeamName = meet.Teams.Where(t => t != team).Single().Name;
+      var matches = new List<DetailsMatchViewModel>();
+      foreach (var match in meet.Matches.Where(m => m.IsComplete)) {
+        var matchViewModel = BuildDetailsMatchViewModel(match, team);
+        matchViewModel.OpponentTeamName = opponentTeamName;
+        matches.Add(matchViewModel);
+      }
+      return matches;
+    }
+
+    private DetailsMatchViewModel BuildDetailsMatchViewModel(Match match, Team team) {
+      var model = new DetailsMatchViewModel();
+      var teamPlayer = match.Players.Where(p => p.Team == team).Single().Player;
+      model.TeamPlayerName = teamPlayer.FullName;
+      var oppPlayer = match.Players.Where(p => p.Player != teamPlayer).Single().Player;
+      model.OpponentPlayerName = oppPlayer.FullName;
+      model.Win = match.Winner == teamPlayer;
+      if (!match.IsForfeit) {
+        var teamResult = match.Results.Where(r => r.Player == teamPlayer).Single();
+        model.TeamPlayerWins = teamResult.Wins;
+        var oppResult = match.Results.Where(r => r != teamResult).Single();
+        model.OpponentPlayerWins = oppResult.Wins;
+      }
+      return model;
     }
 
     [Authorize]
