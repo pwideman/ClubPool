@@ -1,4 +1,4 @@
-﻿@model ClubPool.Web.Controllers.Users.ViewModels.LoginViewModel
+﻿@model ClubPool.Web.Controllers.Login.LoginViewModel
 
 @{
     ViewBag.Title = "Login";
@@ -9,11 +9,11 @@
   <span>Login</span>
 </div>
 @if (TempData.ContainsKey(GlobalViewDataProperty.PageErrorMessage)) {
-  Html.Partial("_ErrorMessage");
+  @Html.Partial("_ErrorMessage")
 }
 <div>
   <div class="form-content login-form corner">
-    @using (var form = Html.BeginForm("Login", "Users", FormMethod.Post, new { @class = "normal", id = "loginForm" })) {
+    @using (var form = Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "normal", id = "loginForm" })) {
       @Html.Partial("_LoginControl")
     }
   </div>

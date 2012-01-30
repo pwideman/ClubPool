@@ -7,7 +7,7 @@ namespace ClubPool.Web.Controllers.Shared.SidebarGadgets
 
     public LoginSidebarGadget() {
       Action = "LoginGadget";
-      Controller = "Users";
+      Controller = "Login";
     }
 
   }

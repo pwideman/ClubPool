@@ -81,54 +81,6 @@ namespace ClubPool.Web.Controllers.Users
     }
 
     [HttpGet]
-    public ActionResult Login(string returnUrl) {
-      if (authenticationService.IsLoggedIn()) {
-        if (null != returnUrl && !string.IsNullOrEmpty(returnUrl)) {
-          return Redirect(returnUrl);
-        }
-        else {
-          return RedirectToAction("Index", "Dashboard");
-        }
-      }
-      else {
-        return View(new LoginViewModel() { ReturnUrl = returnUrl });
-      }
-    }
-
-    [HttpPost]
-    public ActionResult Login(LoginViewModel viewModel) {
-      if (membershipService.ValidateUser(viewModel.Username, viewModel.Password)) {
-        authenticationService.LogIn(viewModel.Username, viewModel.StayLoggedIn);
-        if (!string.IsNullOrEmpty(viewModel.ReturnUrl)) {
-          return this.Redirect(viewModel.ReturnUrl);
-        }
-        else {
-          return RedirectToAction("Index", "Dashboard");
-        }
-      }
-      else {
-        viewModel.Password = "";
-        TempData[GlobalViewDataProperty.PageErrorMessage] = "Invalid username/password";
-        return View(viewModel);
-      }
-    }
-
-    public ActionResult LoginStatus() {
-      var principal = authenticationService.GetCurrentPrincipal();
-      var viewModel = new LoginStatusViewModel() {
-        UserIsLoggedIn = principal.Identity.IsAuthenticated
-      };
-      if (viewModel.UserIsLoggedIn) {
-        viewModel.Username = principal.Identity.Name;
-      }
-      return PartialView(viewModel);
-    }
-
-    public ActionResult LoginGadget() {
-      return PartialView(new LoginViewModel());
-    }
-
-    [HttpGet]
     public ActionResult AccountHelp() {
       return View();
     }
@@ -196,12 +148,6 @@ namespace ClubPool.Web.Controllers.Users
       // if we got here, the token is not valid
       TempData[GlobalViewDataProperty.PageErrorMessage] = "The reset password link that you clicked on is invalid, enter your information again";
       return RedirectToAction("ResetPassword");
-    }
-
-    [HttpGet]
-    public ActionResult Logout() {
-      authenticationService.LogOut();
-      return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]

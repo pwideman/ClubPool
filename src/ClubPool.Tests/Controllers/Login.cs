@@ -8,13 +8,32 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Users;
-using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.Login;
+using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Services.Membership;
 
-namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_login_view
+namespace ClubPool.Tests.Controllers.Login
+{
+  public class LoginControllerTest : SpecificationContext
+  {
+    protected LoginController controller;
+    protected Mock<IRepository> repository;
+    protected MockAuthenticationService authenticationService;
+    protected Mock<IMembershipService> membershipService;
+
+    public override void EstablishContext() {
+      repository = new Mock<IRepository>();
+      authenticationService = AuthHelper.CreateMockAuthenticationService();
+      membershipService = new Mock<IMembershipService>();
+      controller = new LoginController(authenticationService, membershipService.Object, repository.Object);
+    }
+  }
+}
+
+namespace ClubPool.Tests.Controllers.Login.when_asked_for_the_login_view
 {
   [TestFixture]
-  public class and_the_user_is_not_logged_in : UsersControllerTest
+  public class and_the_user_is_not_logged_in : LoginControllerTest
   {
     private ViewResultHelper<LoginViewModel> resultHelper;
     private string returnUrl;
@@ -50,7 +69,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_login_view
   }
 
   [TestFixture]
-  public class and_the_user_is_logged_in : UsersControllerTest
+  public class and_the_user_is_logged_in : LoginControllerTest
   {
     private RedirectToRouteResultHelper resultHelper;
 
@@ -69,10 +88,10 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_login_view
   }
 }
 
-namespace ClubPool.Tests.Controllers.Users.when_asked_to_login
+namespace ClubPool.Tests.Controllers.Login.when_asked_to_login
 {
   [TestFixture]
-  public class with_a_return_url_and_authentication_is_successful : UsersControllerTest
+  public class with_a_return_url_and_authentication_is_successful : LoginControllerTest
   {
     private RedirectResultHelper resultHelper;
     private string username = "TestUser";
@@ -102,7 +121,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_login
   }
 
   [TestFixture]
-  public class without_a_return_url_and_authentication_is_successful : UsersControllerTest
+  public class without_a_return_url_and_authentication_is_successful : LoginControllerTest
   {
     private RedirectToRouteResultHelper resultHelper;
     private string username = "TestUser";
@@ -130,7 +149,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_login
   }
 
   [TestFixture]
-  public class and_authentication_is_unsuccessful : UsersControllerTest
+  public class and_authentication_is_unsuccessful : LoginControllerTest
   {
     private ViewResultHelper<LoginViewModel> resultHelper;
     private string username = "TestUser";
@@ -166,10 +185,10 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_login
   }
 }
 
-namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_login_status_view
+namespace ClubPool.Tests.Controllers.Login.when_asked_for_the_login_status_view
 {
   [TestFixture]
-  public class and_the_user_is_not_logged_in : UsersControllerTest
+  public class and_the_user_is_not_logged_in : LoginControllerTest
   {
     private PartialViewResultHelper<LoginStatusViewModel> resultHelper;
 
@@ -193,7 +212,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_login_status_view
   }
 
   [TestFixture]
-  public class and_the_user_is_logged_in : UsersControllerTest
+  public class and_the_user_is_logged_in : LoginControllerTest
   {
     private PartialViewResultHelper<LoginStatusViewModel> resultHelper;
     private string username = "TestUser";
@@ -220,10 +239,10 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_login_status_view
   }
 }
 
-namespace ClubPool.Tests.Controllers.Users
+namespace ClubPool.Tests.Controllers.Login
 {
   [TestFixture]
-  public class when_asked_to_logout : UsersControllerTest
+  public class when_asked_to_logout : LoginControllerTest
   {
     private RedirectToRouteResultHelper resultHelper;
 
@@ -247,7 +266,7 @@ namespace ClubPool.Tests.Controllers.Users
   }
 
   [TestFixture]
-  public class when_asked_for_the_login_sidebar_gadget : UsersControllerTest
+  public class when_asked_for_the_login_sidebar_gadget : LoginControllerTest
   {
     private PartialViewResultHelper<LoginViewModel> resultHelper;
 

@@ -1,7 +1,0 @@
-﻿@model ClubPool.Web.Controllers.Users.ViewModels.LoginStatusViewModel
-
-@if (Model.UserIsLoggedIn) {
-  <text>@Model.Username</text> @Html.ActionLink("logout", "Logout", "Users")
-} else {
-  @:not logged in @Html.ActionLink("login", "Login", "Users")
-}

@@ -114,6 +114,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Controllers\Divisions\ViewModels.cs" />
+    <Compile Include="Controllers\Login\LoginController.cs" />
+    <Compile Include="Controllers\Login\ViewModels.cs" />
     <Compile Include="Controllers\Scoresheet\ScoresheetController.cs" />
     <Compile Include="Controllers\Scoresheet\ViewModels.cs" />
     <Compile Include="Controllers\Seasons\ViewModels.cs" />
@@ -179,8 +181,6 @@
     <Compile Include="Controllers\Users\ViewModels\CreateViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\EditViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\IndexViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\LoginStatusViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\LoginViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\RecoverUsernameViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\ResetPasswordViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\RoleViewModel.cs" />
@@ -286,6 +286,7 @@
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui.css" />
     <Content Include="Views\Scoresheet\Index.cshtml" />
+    <Content Include="Views\Login\LoginGadget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\base.less" />
@@ -360,22 +361,10 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\LoginStatus.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Navigation\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\LoginGadget.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Users\Login.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Users\_LoginControl.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Dashboard\Index.cshtml" />
@@ -517,6 +506,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\UserMatchHistory\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\_LoginControl.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\LoginStatus.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

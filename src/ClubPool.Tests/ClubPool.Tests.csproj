@@ -77,7 +77,7 @@
     <Compile Include="Controllers\Users\EditGet.cs" />
     <Compile Include="Controllers\Users\EditPost.cs" />
     <Compile Include="Controllers\Users\Index.cs" />
-    <Compile Include="Controllers\Users\Login.cs" />
+    <Compile Include="Controllers\Login.cs" />
     <Compile Include="Controllers\Users\RecoverUsername.cs" />
     <Compile Include="Controllers\Users\ResetPassword.cs" />
     <Compile Include="Controllers\Users\SignUp.cs" />
