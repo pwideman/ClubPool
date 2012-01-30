@@ -135,6 +135,7 @@
     <Compile Include="Infrastructure\EntityFramework\Repository.cs" />
     <Compile Include="Infrastructure\GlobalViewBagFilter.cs" />
     <Compile Include="Infrastructure\IDbContext.cs" />
+    <Compile Include="Infrastructure\IRouteRegistrar.cs" />
     <Compile Include="Infrastructure\PagingExtensions.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Models\Division.cs" />

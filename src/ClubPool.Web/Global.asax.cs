@@ -33,12 +33,19 @@ namespace ClubPool.Web
     public static void RegisterRoutes(RouteCollection routes)
     {
       routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+      var routeRegistrars = DependencyResolver.Current.GetServices<IRouteRegistrar>();
+      foreach (var routeRegistrar in routeRegistrars) {
+        routeRegistrar.RegisterRoutes(routes);
+      }
+
+      // must do the default route last, otherwise it overrides everything else
       routes.MapRoute(
         "Default", // Route name
         "{controller}/{action}/{id}", // URL with parameters
         new { controller = "Home", action = "Index", id = UrlParameter.Optional }  // Parameter defaults
       );
-    }
+   }
 
     protected void Application_Start() {
       Database.SetInitializer<ClubPoolContext>(null);
@@ -65,6 +72,9 @@ namespace ClubPool.Web
       builder.RegisterAssemblyTypes(assembly)
         .Where(t => t.Namespace.Contains("Services"))
         .AsImplementedInterfaces();
+      builder.RegisterAssemblyTypes(assembly)
+        .Where(t => t.IsAssignableTo<IRouteRegistrar>())
+        .As<IRouteRegistrar>();
 
       builder.RegisterControllers(assembly);
 
