@@ -11,7 +11,7 @@ using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Dashboard
 {
-  public class DashboardController : BaseController
+  public class DashboardController : BaseController, IRouteRegistrar
   {
     private IAuthenticationService authenticationService;
     private IRepository repository;
@@ -26,8 +26,12 @@ namespace ClubPool.Web.Controllers.Dashboard
       this.repository = repository;
     }
 
+    public void RegisterRoutes(System.Web.Routing.RouteCollection routes) {
+      routes.MapRoute("dashboard", "dashboard/{id}", new { Controller = "Dashboard", Action = "Dashboard", id = UrlParameter.Optional });
+    }
+
     [Authorize]
-    public ActionResult Index(int? id) {
+    public ActionResult Dashboard(int? id) {
       var principal = authenticationService.GetCurrentPrincipal();
       User user = null;
       if (id.HasValue) {
@@ -52,8 +56,8 @@ namespace ClubPool.Web.Controllers.Dashboard
       return View(viewModel);
     }
 
-    private IndexViewModel CreateIndexViewModel(User user, Team team, IRepository repository) {
-      var model = new IndexViewModel();
+    private DashboardViewModel CreateIndexViewModel(User user, Team team, IRepository repository) {
+      var model = new DashboardViewModel();
       model.UserIsAdmin = user.IsInRole(Roles.Administrators);
       model.UserFullName = user.FullName;
       model.SkillLevelCalculation = new SkillLevelCalculationViewModel(user, repository);

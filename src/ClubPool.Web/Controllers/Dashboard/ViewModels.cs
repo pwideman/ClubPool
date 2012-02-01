@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 using ClubPool.Web.Controllers.Shared.ViewModels;
 
-namespace ClubPool.Web.Controllers.Dashboard.ViewModels
+namespace ClubPool.Web.Controllers.Dashboard
 {
-  public class IndexViewModel
+  public class DashboardViewModel
   {
     public bool UserIsAdmin { get; set; }
     public string UserFullName { get; set; }
@@ -46,5 +46,4 @@ namespace ClubPool.Web.Controllers.Dashboard.ViewModels
     public string Player { get; set; }
     public bool Win { get; set; }
   }
-
 }

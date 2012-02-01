@@ -37,7 +37,7 @@ namespace ClubPool.Web.Controllers.Login
           return Redirect(returnUrl);
         }
         else {
-          return RedirectToAction("Index", "Dashboard");
+          return RedirectToAction("Dashboard", "Dashboard");
         }
       }
       else {
@@ -53,7 +53,7 @@ namespace ClubPool.Web.Controllers.Login
           return this.Redirect(viewModel.ReturnUrl);
         }
         else {
-          return RedirectToAction("Index", "Dashboard");
+          return RedirectToAction("Dashboard", "Dashboard");
         }
       }
       else {

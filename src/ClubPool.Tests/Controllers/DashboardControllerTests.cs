@@ -53,7 +53,7 @@ namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
   [TestFixture]
   public class for_nonadmin_user_with_current_season_stats : DashboardControllerTest
   {
-    private ViewResultHelper<IndexViewModel> resultHelper;
+    private ViewResultHelper<DashboardViewModel> resultHelper;
     private User user;
     private int skillLevel;
     private User teammate;
@@ -76,7 +76,7 @@ namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(null));
+      resultHelper = new ViewResultHelper<DashboardViewModel>(controller.Dashboard(null));
     }
 
     [Test]
@@ -164,14 +164,14 @@ namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
   [TestFixture]
   public class for_admin_user_who_is_not_in_current_season : DashboardControllerTest
   {
-    private ViewResultHelper<IndexViewModel> resultHelper;
+    private ViewResultHelper<DashboardViewModel> resultHelper;
 
     public override void  Given() {
       authenticationService.MockPrincipal.User = adminUser;
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(null));
+      resultHelper = new ViewResultHelper<DashboardViewModel>(controller.Dashboard(null));
     }
 
     [Test]
@@ -205,7 +205,7 @@ namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
     }
 
     public override void When() {
-      resultHelper = new HttpNotFoundResultHelper(controller.Index(users[0].Id));
+      resultHelper = new HttpNotFoundResultHelper(controller.Dashboard(users[0].Id));
     }
 
     [Test]
@@ -217,7 +217,7 @@ namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
   [TestFixture]
   public class for_a_different_user_by_admin_user : DashboardControllerTest
   {
-    private ViewResultHelper<IndexViewModel> resultHelper;
+    private ViewResultHelper<DashboardViewModel> resultHelper;
     private User user;
 
     public override void Given() {
@@ -226,7 +226,7 @@ namespace ClubPool.Tests.Controllers.Dashboard.when_asked_for_the_default_view
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<IndexViewModel>(controller.Index(user.Id));
+      resultHelper = new ViewResultHelper<DashboardViewModel>(controller.Dashboard(user.Id));
     }
 
     [Test]

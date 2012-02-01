@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
+    <Compile Include="Controllers\Dashboard\ViewModels.cs" />
     <Compile Include="Controllers\Divisions\ViewModels.cs" />
     <Compile Include="Controllers\Login\LoginController.cs" />
     <Compile Include="Controllers\Login\ViewModels.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="Controllers\Dashboard\DashboardController.cs" />
     <Compile Include="Controllers\Dashboard\SidebarGadgets\AlertsSidebarGadget.cs" />
     <Compile Include="Controllers\Dashboard\ViewModels\AlertsViewModel.cs" />
-    <Compile Include="Controllers\Dashboard\ViewModels\IndexViewModels.cs" />
     <Compile Include="Controllers\Divisions\DivisionsController.cs" />
     <Compile Include="Controllers\Extensions\ModelStateDictionaryExtensions.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
@@ -367,7 +367,7 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Dashboard\AlertsGadget.cshtml" />

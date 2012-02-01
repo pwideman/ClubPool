@@ -83,7 +83,7 @@ namespace ClubPool.Tests.Controllers.Login.when_asked_for_the_login_view
 
     [Test]
     public void it_should_redirect_to_the_dashboard_view() {
-      resultHelper.ShouldRedirectTo("index", "dashboard");
+      resultHelper.ShouldRedirectTo("dashboard", "dashboard");
     }
   }
 }
@@ -144,7 +144,7 @@ namespace ClubPool.Tests.Controllers.Login.when_asked_to_login
 
     [Test]
     public void it_should_redirect_to_the_dashboard_view() {
-      resultHelper.ShouldRedirectTo("index", "dashboard");
+      resultHelper.ShouldRedirectTo("dashboard", "dashboard");
     }
   }
 
