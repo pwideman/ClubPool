@@ -8,7 +8,7 @@ using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Scoresheet
 {
-  public class ScoresheetController : Controller
+  public class ScoresheetController : Controller, IRouteRegistrar
   {
     private IRepository repository;
 
@@ -18,7 +18,7 @@ namespace ClubPool.Web.Controllers.Scoresheet
     }
 
     [Authorize]
-    public ActionResult Index(int id) {
+    public ActionResult Scoresheet(int id) {
       var meet = repository.Get<Meet>(id);
       var viewModel = CreateScoresheetViewModel(meet);
       return View(viewModel);
@@ -100,5 +100,8 @@ namespace ClubPool.Web.Controllers.Scoresheet
       return model;
     }
 
+    public void RegisterRoutes(System.Web.Routing.RouteCollection routes) {
+      routes.MapRoute("scoresheet", "scoresheet/{id}", new { Controller = "Scoresheet", Action = "Scoresheet", id = UrlParameter.Optional });
+    }
   }
 }

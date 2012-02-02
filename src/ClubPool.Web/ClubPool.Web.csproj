@@ -285,7 +285,7 @@
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Views\Scoresheet\Index.cshtml" />
+    <Content Include="Views\Scoresheet\Scoresheet.cshtml" />
     <Content Include="Views\Login\LoginGadget.cshtml" />
   </ItemGroup>
   <ItemGroup>
