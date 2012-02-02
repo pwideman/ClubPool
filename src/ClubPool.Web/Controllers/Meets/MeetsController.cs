@@ -9,7 +9,7 @@ using ClubPool.Web.Services.Authentication;
 
 namespace ClubPool.Web.Controllers.Meets
 {
-  public class MeetsController : BaseController
+  public class MeetsController : BaseController, IRouteRegistrar
   {
     protected IRepository repository;
     protected IAuthenticationService authService;
@@ -139,5 +139,8 @@ namespace ClubPool.Web.Controllers.Meets
       return model;
     }
 
+    public void RegisterRoutes(System.Web.Routing.RouteCollection routes) {
+      routes.MapRoute("viewmeet", "meets/{id}", new { Controller = "Meets", Action = "View" });
+    }
   }
 }
