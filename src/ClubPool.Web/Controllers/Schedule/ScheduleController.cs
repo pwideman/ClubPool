@@ -10,7 +10,7 @@ using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Schedule
 {
-  public class ScheduleController : BaseController
+  public class ScheduleController : BaseController, IRouteRegistrar
   {
     private IRepository repository;
     private IAuthenticationService authService;
@@ -25,7 +25,7 @@ namespace ClubPool.Web.Controllers.Schedule
 
     [Authorize]
     [HttpGet]
-    public ActionResult Index() {
+    public ActionResult Schedule() {
       var user = repository.Get<User>(authService.GetCurrentPrincipal().UserId);
       var season = repository.All<Season>().SingleOrDefault(s => s.IsActive);
       if (null == season) {
@@ -67,6 +67,10 @@ namespace ClubPool.Web.Controllers.Schedule
         model.HasSchedule = false;
       }
       return model;
+    }
+
+    public void RegisterRoutes(System.Web.Routing.RouteCollection routes) {
+      routes.MapRoute("schedule", "schedule", new { Controller = "Schedule", Action = "Schedule" });
     }
   }
 }

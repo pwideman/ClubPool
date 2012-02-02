@@ -502,7 +502,7 @@
     <Content Include="Views\Standings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Schedule\Index.cshtml" />
+    <Content Include="Views\Schedule\Schedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\UserMatchHistory\Index.cshtml" />

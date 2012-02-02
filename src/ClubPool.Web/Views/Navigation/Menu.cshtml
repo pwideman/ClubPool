@@ -17,7 +17,7 @@
       @if (Model.HasCurrentTeam) {
       <li>@Html.ActionLink("My Team", "Details", "Teams", new { id = Model.CurrentTeamId }, null)</li>
       }
-      <li>@Html.ActionLink("Schedule", "Index", "Schedule")</li>
+      <li>@Html.ActionLink("Schedule", "Schedule", "Schedule")</li>
       <li>@Html.ActionLink("Standings", "Index", "Standings")</li>
     </ul>
   </li>
