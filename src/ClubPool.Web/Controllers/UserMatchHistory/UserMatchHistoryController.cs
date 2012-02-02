@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Web.Controllers.UserMatchHistory
 {
-  public class UserMatchHistoryController : BaseController
+  public class UserMatchHistoryController : BaseController, IRouteRegistrar
   {
     protected IRepository repository;
 
@@ -16,9 +17,13 @@ namespace ClubPool.Web.Controllers.UserMatchHistory
       this.repository = repository;
     }
 
+    public void RegisterRoutes(RouteCollection routes) {
+      routes.MapRoute("UserMatchHistory", "usermatchhistory/{id}", new { Controller = "UserMatchHistory", Action = "UserMatchHistory" });
+    }
+
     [HttpGet]
     [Authorize]
-    public ActionResult Index(int id, int? page) {
+    public ActionResult UserMatchHistory(int id, int? page) {
       var user = repository.Get<User>(id);
       if (null == user) {
         return HttpNotFound();

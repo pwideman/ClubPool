@@ -505,7 +505,7 @@
     <Content Include="Views\Schedule\Schedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\UserMatchHistory\Index.cshtml" />
+    <Content Include="Views\UserMatchHistory\UserMatchHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />
