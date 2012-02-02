@@ -9,7 +9,7 @@ using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Standings
 {
-  public class StandingsController : BaseController
+  public class StandingsController : BaseController, IRouteRegistrar
   {
     private IRepository repository;
     private IAuthenticationService authService;
@@ -24,7 +24,7 @@ namespace ClubPool.Web.Controllers.Standings
 
     [Authorize]
     [HttpGet]
-    public ActionResult Index() {
+    public ActionResult Standings() {
       var user = repository.Get<User>(authService.GetCurrentPrincipal().UserId);
       var season = repository.All<Season>().SingleOrDefault(s => s.IsActive);
       if (null == season) {
@@ -60,7 +60,7 @@ namespace ClubPool.Web.Controllers.Standings
       return model;
     }
 
-    public DivisionStandingsViewModel CreateDivisionStandingsViewModel(Division division, User userToHighlight) {
+    private DivisionStandingsViewModel CreateDivisionStandingsViewModel(Division division, User userToHighlight) {
       var model = new DivisionStandingsViewModel();
       model.Id = division.Id;
       model.Name = division.Name;
@@ -164,7 +164,7 @@ namespace ClubPool.Web.Controllers.Standings
 
     [Authorize]
     [HttpGet]
-    public ActionResult DownloadAllPlayersStandings() {
+    public ActionResult Download() {
       var season = repository.All<Season>().SingleOrDefault(s => s.IsActive);
       if (null == season) {
         return ErrorView("There is no current season");
@@ -183,5 +183,8 @@ namespace ClubPool.Web.Controllers.Standings
       }
     }
 
+    public void RegisterRoutes(System.Web.Routing.RouteCollection routes) {
+      routes.MapRoute("standings", "standings", new { Controller = "Standings", Action = "Standings" });
+    }
   }
 }
