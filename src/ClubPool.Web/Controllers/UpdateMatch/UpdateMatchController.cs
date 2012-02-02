@@ -8,7 +8,7 @@ using ClubPool.Web.Services.Authentication;
 
 namespace ClubPool.Web.Controllers.UpdateMatch
 {
-  public class UpdateMatchController : BaseController
+  public class UpdateMatchController : BaseController, IRouteRegistrar
   {
     protected IRepository repository;
     protected IAuthenticationService authService;
@@ -23,10 +23,14 @@ namespace ClubPool.Web.Controllers.UpdateMatch
       this.authService = authService;
     }
 
+    public void RegisterRoutes(System.Web.Routing.RouteCollection routes) {
+      routes.MapRoute("UpateMatch", "updatematch", new { Controller = "UpdateMatch", Action = "UpdateMatch" });
+    }
+
     [HttpPost]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public ActionResult Index(UpdateMatchViewModel viewModel) {
+    public ActionResult UpdateMatch(UpdateMatchViewModel viewModel) {
       var errorViewModel = ValidateModelState(viewModel);
       if (null != errorViewModel) {
         return Json(errorViewModel);

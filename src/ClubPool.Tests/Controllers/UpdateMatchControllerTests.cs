@@ -100,7 +100,7 @@ namespace ClubPool.Tests.Controllers.UpdateMatch.when_asked_to_update_match_resu
     }
 
     public override void When() {
-      resultHelper = new JsonResultHelper<UpdateMatchResponseViewModel>(controller.Index(viewModel));
+      resultHelper = new JsonResultHelper<UpdateMatchResponseViewModel>(controller.UpdateMatch(viewModel));
     }
 
   }
@@ -223,7 +223,7 @@ namespace ClubPool.Tests.Controllers.UpdateMatch.when_asked_to_update_match_resu
     }
 
     public override void When() {
-      notFoundResultHelper = new HttpNotFoundResultHelper(controller.Index(viewModel));
+      notFoundResultHelper = new HttpNotFoundResultHelper(controller.UpdateMatch(viewModel));
     }
 
     [Test]

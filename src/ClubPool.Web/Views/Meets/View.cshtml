@@ -89,7 +89,7 @@
 </table>
 
 <div id="enter_results_window">
-@using (var form = Html.BeginForm("Index", "UpdateMatch", FormMethod.Post, new { id = "enter_results_form" })) {
+@using (var form = Html.BeginForm("UpdateMatch", "UpdateMatch", FormMethod.Post, new { id = "enter_results_form" })) {
   @Html.AntiForgeryToken()
   <input type="hidden" name="Id" id="match_id" />
   <input type="hidden" name="Player1Id" id="Player1Id" />
