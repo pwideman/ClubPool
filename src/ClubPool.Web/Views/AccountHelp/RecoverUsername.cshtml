@@ -1,4 +1,4 @@
-﻿@model ClubPool.Web.Controllers.Users.ViewModels.RecoverUsernameViewModel
+﻿@model ClubPool.Web.Controllers.AccountHelp.RecoverUsernameViewModel
 @using ClubPool.Web.Controls.Captcha
 
 @{
@@ -17,7 +17,7 @@
 <h5>Recover Username</h5>
 <p>Enter the email address registered for the lost username below. An email containing all registered usernames for that
 address will be sent.</p>
-@using (var form = Html.BeginForm("RecoverUsername", "Users", FormMethod.Post)) {
+@using (var form = Html.BeginForm("RecoverUsername", "AccountHelp", FormMethod.Post)) {
   @Html.AntiForgeryToken()
   <div>Email: @Html.TextBoxFor(m => m.Email, new { @class = "email" })</div>
   <div style="padding: 10px 0px;">

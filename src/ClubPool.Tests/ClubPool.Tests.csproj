@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AccountHelp\AccountHelp.cs" />
     <Compile Include="Controllers\DashboardControllerTests.cs" />
     <Compile Include="Controllers\Divisions\CreateTests.cs" />
     <Compile Include="Controllers\Divisions\DeleteTests.cs" />
@@ -78,8 +79,8 @@
     <Compile Include="Controllers\Users\EditPost.cs" />
     <Compile Include="Controllers\Users\Index.cs" />
     <Compile Include="Controllers\Login.cs" />
-    <Compile Include="Controllers\Users\RecoverUsername.cs" />
-    <Compile Include="Controllers\Users\ResetPassword.cs" />
+    <Compile Include="Controllers\AccountHelp\RecoverUsername.cs" />
+    <Compile Include="Controllers\AccountHelp\ResetPassword.cs" />
     <Compile Include="Controllers\Users\SignUp.cs" />
     <Compile Include="Controllers\Users\Unapproved.cs" />
     <Compile Include="Controllers\Users\UsersControllerTest.cs" />

@@ -9,13 +9,13 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.AccountHelp;
 using ClubPool.Web.Models;
 
-namespace ClubPool.Tests.Controllers.Users.when_asked_to_reset_a_password
+namespace ClubPool.Tests.Controllers.AccountHelp.when_asked_to_reset_a_password
 {
   [TestFixture]
-  public class with_valid_input : UsersControllerTest
+  public class with_valid_input : AccountHelpControllerTest
   {
     private RedirectToRouteResultHelper resultHelper;
     private ResetPasswordViewModel viewModel;
@@ -62,7 +62,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_reset_a_password
   }
 
   [TestFixture]
-  public class for_a_nonexistent_username : UsersControllerTest
+  public class for_a_nonexistent_username : AccountHelpControllerTest
   {
     private ResetPasswordViewModel viewModel;
     private RedirectToRouteResultHelper resultHelper;
@@ -87,7 +87,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_reset_a_password
   }
 
   [TestFixture]
-  public class with_an_invalid_view_model : UsersControllerTest
+  public class with_an_invalid_view_model : AccountHelpControllerTest
   {
     private ResetPasswordViewModel viewModel;
     private ViewResultHelper<ResetPasswordViewModel> resultHelper;
@@ -112,7 +112,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_reset_a_password
   }
 
   [TestFixture]
-  public class with_an_invalid_captcha : UsersControllerTest
+  public class with_an_invalid_captcha : AccountHelpControllerTest
   {
     private ResetPasswordViewModel viewModel;
     private ViewResultHelper<ResetPasswordViewModel> resultHelper;

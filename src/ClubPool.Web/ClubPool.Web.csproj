@@ -113,6 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
+    <Compile Include="Controllers\AccountHelp\AccountHelpController.cs" />
+    <Compile Include="Controllers\AccountHelp\ViewModels.cs" />
     <Compile Include="Controllers\Dashboard\ViewModels.cs" />
     <Compile Include="Controllers\Divisions\ViewModels.cs" />
     <Compile Include="Controllers\Login\LoginController.cs" />
@@ -181,8 +183,6 @@
     <Compile Include="Controllers\Users\ViewModels\CreateViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\EditViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\IndexViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\RecoverUsernameViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\ResetPasswordViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\RoleViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UserSummaryViewModel.cs" />
@@ -454,19 +454,19 @@
     <Content Include="Views\Meets\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\AccountHelp.cshtml" />
+    <Content Include="Views\AccountHelp\AccountHelp.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\RecoverUsername.cshtml" />
+    <Content Include="Views\AccountHelp\RecoverUsername.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\RecoverUsernameComplete.cshtml" />
+    <Content Include="Views\AccountHelp\RecoverUsernameComplete.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\ResetPassword.cshtml" />
+    <Content Include="Views\AccountHelp\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\ResetPasswordComplete.cshtml" />
+    <Content Include="Views\AccountHelp\ResetPasswordComplete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Users\SignUp.cshtml" />

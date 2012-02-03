@@ -8,13 +8,13 @@ using NUnit.Framework;
 using FluentAssertions;
 
 using ClubPool.Testing;
-using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.AccountHelp;
 using ClubPool.Web.Models;
 
-namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
+namespace ClubPool.Tests.Controllers.AccountHelp.when_asked_to_recover_username
 {
   [TestFixture]
-  public class with_valid_inputs : UsersControllerTest
+  public class with_valid_inputs : AccountHelpControllerTest
   {
     private RedirectToRouteResultHelper resultHelper;
     private RecoverUsernameViewModel viewModel;
@@ -58,7 +58,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
   }
 
   [TestFixture]
-  public class for_a_nonexistent_email : UsersControllerTest
+  public class for_a_nonexistent_email : AccountHelpControllerTest
   {
     private RecoverUsernameViewModel viewModel;
     private RedirectToRouteResultHelper resultHelper;
@@ -89,7 +89,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
   }
 
   [TestFixture]
-  public class with_an_invalid_view_model : UsersControllerTest
+  public class with_an_invalid_view_model : AccountHelpControllerTest
   {
     private RecoverUsernameViewModel viewModel;
     private ViewResultHelper<RecoverUsernameViewModel> resultHelper;
@@ -115,7 +115,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_to_recover_username
   }
 
   [TestFixture]
-  public class with_an_invalid_captcha : UsersControllerTest
+  public class with_an_invalid_captcha : AccountHelpControllerTest
   {
     private RecoverUsernameViewModel viewModel;
     private ViewResultHelper<RecoverUsernameViewModel> resultHelper;
