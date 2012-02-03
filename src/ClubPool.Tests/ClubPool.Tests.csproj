@@ -82,7 +82,7 @@
     <Compile Include="Controllers\AccountHelp\RecoverUsername.cs" />
     <Compile Include="Controllers\AccountHelp\ResetPassword.cs" />
     <Compile Include="Controllers\Users\SignUp.cs" />
-    <Compile Include="Controllers\Users\Unapproved.cs" />
+    <Compile Include="Controllers\UnapprovedUsers.cs" />
     <Compile Include="Controllers\Users\UsersControllerTest.cs" />
     <Compile Include="Controllers\Users\View.cs" />
     <Compile Include="Models\UserTests.cs" />

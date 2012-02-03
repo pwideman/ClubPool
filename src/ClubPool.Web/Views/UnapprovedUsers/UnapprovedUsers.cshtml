@@ -1,4 +1,4 @@
-﻿@model ClubPool.Web.Controllers.Users.ViewModels.UnapprovedViewModel
+﻿@model ClubPool.Web.Controllers.UnapprovedUsers.UnapprovedUsersViewModel
 
 @{
     ViewBag.Title = "Users Awaiting Approval";
@@ -10,7 +10,7 @@
 </div>
 @if (Model.UnapprovedUsers.Any()) {
   <p class="heading">The following users have signed up and are awaiting approval. Approve them to give them access to the website.</p>
-  using (var form = Html.BeginForm("Approve", "Users")) {
+  using (var form = Html.BeginForm("ApproveUsers", "UnapprovedUsers")) {
     @Html.AntiForgeryToken()
     <table style="width: 600px;" class="domain-list" id="unapproved_users">
       <thead>

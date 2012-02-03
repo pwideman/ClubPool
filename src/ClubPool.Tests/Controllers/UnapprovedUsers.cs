@@ -7,16 +7,41 @@ using NUnit.Framework;
 using FluentAssertions;
 
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.UnapprovedUsers;
 using ClubPool.Testing;
 using ClubPool.Web.Models;
+using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Services.Membership;
+using ClubPool.Web.Services.Messaging;
+using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 
-namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_unapproved_users_view
+namespace ClubPool.Tests.Controllers.UnapprovedUsers
+{
+  public class UnapprovedUsersControllerTest : SpecificationContext
+  {
+    protected UnapprovedUsersController controller;
+    protected Mock<IRepository> repository;
+    protected Mock<IEmailService> emailService;
+    protected Mock<IConfigurationService> configService;
+
+    public override void EstablishContext() {
+      repository = new Mock<IRepository>();
+      emailService = new Mock<IEmailService>();
+      configService = new Mock<IConfigurationService>();
+      var config = new ClubPoolConfiguration("test", "test", "test@test.com", "test", false);
+      configService.Setup(c => c.GetConfig()).Returns(config);
+      controller = new UnapprovedUsersController(repository.Object, emailService.Object, configService.Object);
+    }
+  }
+}
+
+namespace ClubPool.Tests.Controllers.UnapprovedUsers.when_asked_for_the_unapproved_users_view
 {
   [TestFixture]
-  public class and_there_are_none : UsersControllerTest
+  public class and_there_are_none : UnapprovedUsersControllerTest
   {
-    private ViewResultHelper<UnapprovedViewModel> resultHelper;
+    private ViewResultHelper<UnapprovedUsersViewModel> resultHelper;
     private IList<User> users;
 
     public override void Given() {
@@ -25,7 +50,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_unapproved_users_v
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<UnapprovedViewModel>(controller.Unapproved());
+      resultHelper = new ViewResultHelper<UnapprovedUsersViewModel>(controller.UnapprovedUsers());
     }
 
     [Test]
@@ -35,9 +60,9 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_unapproved_users_v
   }
 
   [TestFixture]
-  public class and_there_are_some : UsersControllerTest
+  public class and_there_are_some : UnapprovedUsersControllerTest
   {
-    private ViewResultHelper<UnapprovedViewModel> resultHelper;
+    private ViewResultHelper<UnapprovedUsersViewModel> resultHelper;
     private IList<User> users;
 
     public override void Given() {
@@ -50,7 +75,7 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_unapproved_users_v
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<UnapprovedViewModel>(controller.Unapproved());
+      resultHelper = new ViewResultHelper<UnapprovedUsersViewModel>(controller.UnapprovedUsers());
     }
 
     [Test]
@@ -60,10 +85,10 @@ namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_unapproved_users_v
   }
 }
 
-namespace ClubPool.Tests.Controllers.Users
+namespace ClubPool.Tests.Controllers.UnapprovedUsers
 {
   [TestFixture]
-  public class when_asked_to_approve_users : UsersControllerTest
+  public class when_asked_to_approve_users : UnapprovedUsersControllerTest
   {
     private RedirectToRouteResultHelper resultHelper;
     private IList<User> users;
@@ -84,7 +109,7 @@ namespace ClubPool.Tests.Controllers.Users
     }
 
     public override void When() {
-      resultHelper = new RedirectToRouteResultHelper(controller.Approve(new int[] { 1, 2 }));
+      resultHelper = new RedirectToRouteResultHelper(controller.ApproveUsers(new int[] { 1, 2 }));
     }
 
     [Test]
@@ -100,7 +125,7 @@ namespace ClubPool.Tests.Controllers.Users
 
     [Test]
     public void it_should_redirect_to_the_unapproved_users_view() {
-      resultHelper.ShouldRedirectTo("unapproved");
+      resultHelper.ShouldRedirectTo("unapprovedusers");
     }
 
     [Test]

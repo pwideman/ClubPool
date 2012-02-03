@@ -123,6 +123,8 @@
     <Compile Include="Controllers\Scoresheet\ViewModels.cs" />
     <Compile Include="Controllers\Seasons\ViewModels.cs" />
     <Compile Include="Controllers\Teams\ViewModels.cs" />
+    <Compile Include="Controllers\UnapprovedUsers\UnapprovedUsersController.cs" />
+    <Compile Include="Controllers\UnapprovedUsers\ViewModels.cs" />
     <Compile Include="Controllers\UpdateMatch\UpdateMatchController.cs" />
     <Compile Include="Controllers\UpdateMatch\ViewModels.cs" />
     <Compile Include="Controllers\UserMatchHistory\UserMatchHistoryController.cs" />
@@ -184,7 +186,6 @@
     <Compile Include="Controllers\Users\ViewModels\EditViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\IndexViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\RoleViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\UnapprovedViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UserSummaryViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UserViewModelBase.cs" />
     <Compile Include="Controllers\Users\ViewModels\ViewViewModel.cs" />
@@ -478,7 +479,7 @@
     <Content Include="Views\Users\SignUpComplete.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\Unapproved.cshtml" />
+    <Content Include="Views\UnapprovedUsers\UnapprovedUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Users\Index.cshtml" />
