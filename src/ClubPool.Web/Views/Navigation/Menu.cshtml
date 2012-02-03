@@ -25,7 +25,7 @@
   @if (Model.UserIsLoggedIn) {
   <li><a href="#">My</a>
     <ul>
-      <li>@Html.ActionLink("Home", "Dashboard", "Dashboard")</li>
+      <li>@Html.ActionLink("Home", "Dashboard", "Dashboard", new { id = Model.UserId }, null)</li>
       <li>@Html.ActionLink("Match History", "UserMatchHistory", "UserMatchHistory", new { id = Model.UserId }, null)</li>
       <li>@Html.ActionLink("Member Info", "Edit", "Users", new { id = Model.UserId }, null)</li>
     </ul>
