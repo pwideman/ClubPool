@@ -20,6 +20,9 @@ namespace ClubPool.Web.Controllers.Scoresheet
     [Authorize]
     public ActionResult Scoresheet(int id) {
       var meet = repository.Get<Meet>(id);
+      if (null == meet) {
+        return HttpNotFound();
+      }
       var viewModel = CreateScoresheetViewModel(meet);
       return View(viewModel);
     }
