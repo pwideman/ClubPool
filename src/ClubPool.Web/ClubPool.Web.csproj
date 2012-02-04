@@ -192,7 +192,6 @@
     <Compile Include="Controls\Captcha\HtmlHelperExtensions.cs" />
     <Compile Include="Controls\Captcha\LineNoiseLevel.cs" />
     <Compile Include="Infrastructure\ContentExtensions.cs" />
-    <Compile Include="Infrastructure\Binders\ModelBinder.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

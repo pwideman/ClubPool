@@ -10,7 +10,6 @@ using Autofac;
 using Autofac.Integration.Mvc;
 
 using ClubPool.Web.Infrastructure;
-using ClubPool.Web.Infrastructure.Binders;
 using ClubPool.Web.Infrastructure.EntityFramework;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Models;
@@ -49,8 +48,6 @@ namespace ClubPool.Web
 
     protected void Application_Start() {
       Database.SetInitializer<ClubPoolContext>(null);
-
-      ModelBinders.Binders.DefaultBinder = new ModelBinder();
 
       InitializeServiceLocator();
 
