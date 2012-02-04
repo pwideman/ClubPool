@@ -42,7 +42,7 @@ namespace ClubPool.Web.Controllers
     public IEnumerable<TResult> Items { get; set; }
   }
 
-  public abstract class PagedListViewModelBase : ViewModelBase
+  public abstract class PagedListViewModelBase
   {
     public int CurrentPage { get; set; }
     public int First { get; set; }

@@ -183,7 +183,6 @@
     <Compile Include="Controllers\SidebarGadgetCollection.cs" />
     <Compile Include="Controllers\Teams\TeamsController.cs" />
     <Compile Include="Controllers\Users\UsersController.cs" />
-    <Compile Include="Controllers\ViewModelBase.cs" />
     <Compile Include="Controls\Captcha\BackgroundNoiseLevel.cs" />
     <Compile Include="Controls\Captcha\CaptchaImage.cs" />
     <Compile Include="Controls\Captcha\CaptchaImageHandler.cs" />
