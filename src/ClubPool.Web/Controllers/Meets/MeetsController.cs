@@ -23,21 +23,21 @@ namespace ClubPool.Web.Controllers.Meets
     }
 
     [Authorize]
-    public ActionResult View(int id) {
+    public ActionResult Details(int id) {
       var meet = repository.Get<Meet>(id);
       if (null == meet) {
         return HttpNotFound();
       }
 
-      var viewModel = CreateMeetViewModel(meet);
+      var viewModel = CreateDetailsViewModel(meet);
       var username = authService.GetCurrentPrincipal().Identity.Name;
       var loggedInUser = repository.All<User>().Single(u => u.Username.Equals(username));
       viewModel.AllowUserToEnterResults = meet.UserCanEnterMatchResults(loggedInUser);
       return View(viewModel);
     }
 
-    private MeetViewModel CreateMeetViewModel(Meet meet) {
-      var model = new MeetViewModel();
+    private DetailsViewModel CreateDetailsViewModel(Meet meet) {
+      var model = new DetailsViewModel();
       model.Id = meet.Id;
       model.ScheduledWeek = meet.Week + 1;
       model.ScheduledDate = meet.Division.StartingDate.AddDays(meet.Week * 7).ToShortDateString();
@@ -140,7 +140,7 @@ namespace ClubPool.Web.Controllers.Meets
     }
 
     public void RegisterRoutes(System.Web.Routing.RouteCollection routes) {
-      routes.MapRoute("viewmeet", "meets/{id}", new { Controller = "Meets", Action = "View" });
+      routes.MapRoute("viewmeet", "meets/{id}", new { Controller = "Meets", Action = "Details" });
     }
   }
 }

@@ -444,7 +444,7 @@
     <Content Include="Views\Teams\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Meets\View.cshtml" />
+    <Content Include="Views\Meets\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\AccountHelp\AccountHelp.cshtml" />

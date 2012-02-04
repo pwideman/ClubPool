@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ClubPool.Web.Controllers.Meets
 {
-  public class MeetViewModel
+  public class DetailsViewModel
   {
     public int Id { get; set; }
     public int ScheduledWeek { get; set; }

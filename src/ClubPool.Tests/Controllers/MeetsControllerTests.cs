@@ -19,7 +19,7 @@ namespace ClubPool.Tests.Controllers.Meets.when_asked_for_the_view_action
     protected MockAuthenticationService authenticationService;
     protected Meet meet;
     protected User loggedInUser;
-    protected ViewResultHelper<MeetViewModel> resultHelper;
+    protected ViewResultHelper<DetailsViewModel> resultHelper;
 
     public override void EstablishContext() {
       var repository = new Mock<IRepository>();
@@ -49,7 +49,7 @@ namespace ClubPool.Tests.Controllers.Meets.when_asked_for_the_view_action
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<MeetViewModel>(controller.View(meet.Id));
+      resultHelper = new ViewResultHelper<DetailsViewModel>(controller.Details(meet.Id));
     }
   }
 
@@ -59,7 +59,7 @@ namespace ClubPool.Tests.Controllers.Meets.when_asked_for_the_view_action
     private HttpNotFoundResultHelper notFoundResultHelper;
 
     public override void When() {
-      notFoundResultHelper = new HttpNotFoundResultHelper(controller.View(0));
+      notFoundResultHelper = new HttpNotFoundResultHelper(controller.Details(0));
     }
 
     [Test]
