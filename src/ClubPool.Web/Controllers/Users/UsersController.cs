@@ -49,7 +49,6 @@ namespace ClubPool.Web.Controllers.Users
 
     [Authorize(Roles=Roles.Administrators)]
     public ActionResult Index(int? page, string q) {
-      int pageSize = 10;
       IQueryable<User> userQuery;
       if (!string.IsNullOrEmpty(q)) {
         q = HttpUtility.UrlDecode(q);
@@ -73,11 +72,25 @@ namespace ClubPool.Web.Controllers.Users
       else {
         userQuery = repository.All<User>().OrderBy(u => u.LastName).ThenBy(u => u.FirstName);
       }
-      var viewModel = new IndexViewModel(userQuery, page.GetValueOrDefault(1), pageSize, (u) => new UserSummaryViewModel(u));
+      var viewModel = BuildIndexViewModel(userQuery, page.GetValueOrDefault(1));
       if (!string.IsNullOrEmpty(q)) {
         viewModel.SearchQuery = q;
       }
       return View(viewModel);
+    }
+
+    private IndexViewModel BuildIndexViewModel(IQueryable<User> query, int page) {
+      var model = new IndexViewModel();
+      InitializePagedListViewModel(model, query, page, 10, (u) => new UserSummaryViewModel() {
+        Id = u.Id,
+        Name = u.FullName,
+        Username = u.Username,
+        Email = u.Email,
+        IsApproved = u.IsApproved,
+        IsLocked = u.IsLocked,
+        Roles = u.Roles.Select(r => r.Name).ToArray()
+      });
+      return model;
     }
 
     [HttpGet]

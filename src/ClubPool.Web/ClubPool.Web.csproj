@@ -133,6 +133,7 @@
     <Compile Include="Controllers\Standings\StandingsController.cs" />
     <Compile Include="Controllers\Standings\StandingsViewModels.cs" />
     <Compile Include="Controllers\UserMatchHistory\ViewModels.cs" />
+    <Compile Include="Controllers\Users\ViewModels.cs" />
     <Compile Include="Infrastructure\Arg.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
@@ -184,9 +185,7 @@
     <Compile Include="Controllers\Users\UsersController.cs" />
     <Compile Include="Controllers\Users\ViewModels\CreateViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\EditViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\IndexViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\RoleViewModel.cs" />
-    <Compile Include="Controllers\Users\ViewModels\UserSummaryViewModel.cs" />
     <Compile Include="Controllers\Users\ViewModels\UserViewModelBase.cs" />
     <Compile Include="Controllers\Users\ViewModels\ViewViewModel.cs" />
     <Compile Include="Controllers\ViewModelBase.cs" />
