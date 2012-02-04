@@ -58,6 +58,7 @@
     <Compile Include="Controllers\Divisions\Context.cs" />
     <Compile Include="Controllers\Divisions\Edit.cs" />
     <Compile Include="Controllers\Home.cs" />
+    <Compile Include="Controllers\Schedule.cs" />
     <Compile Include="Controllers\UpdateMatch.cs" />
     <Compile Include="Controllers\Meets.cs" />
     <Compile Include="Controllers\Seasons\ChangeActive.cs" />
