@@ -9,7 +9,6 @@ using Moq;
 using ClubPool.Testing;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controllers.Scoresheet;
-using ClubPool.Web.Controllers;
 using ClubPool.Web.Models;
 
 namespace ClubPool.Tests.Controllers.Scoresheet
