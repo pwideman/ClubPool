@@ -51,27 +51,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountHelp\AccountHelp.cs" />
-    <Compile Include="Controllers\DashboardControllerTests.cs" />
-    <Compile Include="Controllers\Divisions\CreateTests.cs" />
-    <Compile Include="Controllers\Divisions\DeleteTests.cs" />
-    <Compile Include="Controllers\Divisions\DivisionsControllerTest.cs" />
-    <Compile Include="Controllers\Divisions\EditTests.cs" />
-    <Compile Include="Controllers\HomeControllerTests.cs" />
-    <Compile Include="Controllers\UpdateMatchControllerTests.cs" />
-    <Compile Include="Controllers\MeetsControllerTests.cs" />
+    <Compile Include="Controllers\AccountHelp\Context.cs" />
+    <Compile Include="Controllers\Dashboard.cs" />
+    <Compile Include="Controllers\Divisions\Create.cs" />
+    <Compile Include="Controllers\Divisions\Delete.cs" />
+    <Compile Include="Controllers\Divisions\Context.cs" />
+    <Compile Include="Controllers\Divisions\Edit.cs" />
+    <Compile Include="Controllers\Home.cs" />
+    <Compile Include="Controllers\UpdateMatch.cs" />
+    <Compile Include="Controllers\Meets.cs" />
     <Compile Include="Controllers\Seasons\ChangeActive.cs" />
     <Compile Include="Controllers\Seasons\Create.cs" />
     <Compile Include="Controllers\Seasons\Delete.cs" />
     <Compile Include="Controllers\Seasons\Edit.cs" />
     <Compile Include="Controllers\Seasons\Index.cs" />
-    <Compile Include="Controllers\Seasons\SeasonsControllerTest.cs" />
+    <Compile Include="Controllers\Seasons\Context.cs" />
     <Compile Include="Controllers\Seasons\Details.cs" />
     <Compile Include="Controllers\Teams\Create.cs" />
     <Compile Include="Controllers\Teams\Delete.cs" />
     <Compile Include="Controllers\Teams\Details.cs" />
     <Compile Include="Controllers\Teams\Edit.cs" />
-    <Compile Include="Controllers\Teams\TeamsControllerTest.cs" />
+    <Compile Include="Controllers\Teams\Context.cs" />
     <Compile Include="Controllers\Teams\UpdateName.cs" />
     <Compile Include="Controllers\Users\Create.cs" />
     <Compile Include="Controllers\Users\Delete.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="Controllers\AccountHelp\ResetPassword.cs" />
     <Compile Include="Controllers\Users\SignUp.cs" />
     <Compile Include="Controllers\UnapprovedUsers.cs" />
-    <Compile Include="Controllers\Users\UsersControllerTest.cs" />
+    <Compile Include="Controllers\Users\Context.cs" />
     <Compile Include="Controllers\Users\Details.cs" />
     <Compile Include="Models\UserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,7 +106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\NavigationControllerTests.cs" />
+    <Compile Include="Controllers\Navigation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
