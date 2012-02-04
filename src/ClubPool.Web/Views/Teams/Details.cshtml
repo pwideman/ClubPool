@@ -25,7 +25,7 @@
         Players:
         <ul>
           @foreach (var player in Model.Players) {
-            <li>@Html.ActionLink(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel), "View", "Users", new { id = player.Id}, null)</li>
+            <li>@Html.ActionLink(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel), "Details", "Users", new { id = player.Id}, null)</li>
           }
         </ul>
       </li>

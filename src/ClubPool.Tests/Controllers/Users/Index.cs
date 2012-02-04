@@ -8,7 +8,6 @@ using FluentAssertions;
 
 using ClubPool.Testing;
 using ClubPool.Web.Models;
-using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Web.Controllers.Users;
 
 namespace ClubPool.Tests.Controllers.Users.when_asked_for_the_default_view

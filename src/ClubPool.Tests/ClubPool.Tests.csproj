@@ -84,7 +84,7 @@
     <Compile Include="Controllers\Users\SignUp.cs" />
     <Compile Include="Controllers\UnapprovedUsers.cs" />
     <Compile Include="Controllers\Users\UsersControllerTest.cs" />
-    <Compile Include="Controllers\Users\View.cs" />
+    <Compile Include="Controllers\Users\Details.cs" />
     <Compile Include="Models\UserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Membership\ClubPoolMembershipServiceSpecificationContext.cs" />

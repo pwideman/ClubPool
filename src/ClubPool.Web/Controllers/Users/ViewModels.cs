@@ -9,6 +9,7 @@ using DataAnnotationsExtensions;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Users
 {
@@ -95,6 +96,21 @@ namespace ClubPool.Web.Controllers.Users
   {
     public int Id { get; set; }
     public string Name { get; set; }
+  }
+
+  public class DetailsViewModel
+  {
+    public string[] Roles { get; set; }
+    public string Username { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public bool IsApproved { get; set; }
+    public bool IsLocked { get; set; }
+    public int SkillLevel { get; set; }
+    public bool HasSkillLevel { get; set; }
+    public bool ShowAdminProperties { get; set; }
+    public int Id { get; set; }
+    public SkillLevelCalculationViewModel SkillLevelCalculation { get; set; }
   }
 
 }

@@ -54,7 +54,7 @@
       }
       <tr class="first @firstWinnerClass" id="@(match.Id)_1">
         <td>@matchIndex</td>
-        <td>@Html.ActionLink(match.Player1.Name, "View", "Users", new { id = match.Player1.Id }, null)</td>
+        <td>@Html.ActionLink(match.Player1.Name, "Details", "Users", new { id = match.Player1.Id }, null)</td>
         <td id="@(match.Id)_p1innings">@match.Player1.Innings</td>
         <td id="@(match.Id)_p1defshots">@match.Player1.DefensiveShots</td>
         <td id="@(match.Id)_p1wins">@match.Player1.Wins</td>
@@ -62,7 +62,7 @@
       </tr>
       <tr class="second @secondWinnerClass" id="@(match.Id)_2">
         <td></td>
-        <td>@Html.ActionLink(match.Player2.Name, "View", "Users", new { id = match.Player2.Id }, null)</td>
+        <td>@Html.ActionLink(match.Player2.Name, "Details", "Users", new { id = match.Player2.Id }, null)</td>
         <td id="@(match.Id)_p2innings">@match.Player2.Innings</td>
         <td id="@(match.Id)_p2defshots">@match.Player2.DefensiveShots</td>
         <td id="@(match.Id)_p2wins">@match.Player2.Wins</td>

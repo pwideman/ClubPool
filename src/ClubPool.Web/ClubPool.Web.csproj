@@ -183,7 +183,6 @@
     <Compile Include="Controllers\SidebarGadgetCollection.cs" />
     <Compile Include="Controllers\Teams\TeamsController.cs" />
     <Compile Include="Controllers\Users\UsersController.cs" />
-    <Compile Include="Controllers\Users\ViewModels\ViewViewModel.cs" />
     <Compile Include="Controllers\ViewModelBase.cs" />
     <Compile Include="Controls\Captcha\BackgroundNoiseLevel.cs" />
     <Compile Include="Controls\Captcha\CaptchaImage.cs" />
@@ -486,7 +485,7 @@
     <Content Include="Views\Users\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Users\View.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_SkillLevelCalculationView.cshtml" />

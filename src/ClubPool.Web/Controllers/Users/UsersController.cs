@@ -13,9 +13,9 @@ using ClubPool.Web.Services.Configuration;
 using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Messaging;
-using ClubPool.Web.Controllers.Users.ViewModels;
 using ClubPool.Web.Controllers.Extensions;
 using ClubPool.Web.Models;
+using ClubPool.Web.Controllers.Shared.ViewModels;
 
 namespace ClubPool.Web.Controllers.Users
 {
@@ -199,7 +199,6 @@ namespace ClubPool.Web.Controllers.Users
       model.ShowPassword = CanEditUserPassword(currentPrincipal, user);
       return model;
     }
-
 
     // TODO: These 4 CanEdit* methods should really be in some type of service,
     // maybe the AuthenticationService?
@@ -398,16 +397,37 @@ namespace ClubPool.Web.Controllers.Users
 
     [HttpGet]
     [Authorize]
-    public ActionResult View(int id) {
+    public ActionResult Details(int id) {
       var user = repository.Get<User>(id);
       if (null == user) {
         return HttpNotFound();
       }
 
-      var viewModel = new ViewViewModel(user, repository);
+      var viewModel = BuildDetailsViewModel(user);
       var principal = authenticationService.GetCurrentPrincipal();
       viewModel.ShowAdminProperties = principal.IsInRole(Roles.Administrators);
       return View(viewModel);
+    }
+
+    private DetailsViewModel BuildDetailsViewModel(User user) {
+      var model = new DetailsViewModel {
+        Id = user.Id,
+        Username = user.Username,
+        Name = user.FullName,
+        Email = user.Email,
+        IsApproved = user.IsApproved,
+        IsLocked = user.IsLocked,
+        Roles = user.Roles.Select(r => r.Name).ToArray()
+      };
+      if (user.SkillLevels.Any()) {
+        model.SkillLevel = user.SkillLevels.Single(sl => sl.GameType == GameType.EightBall).Value;
+        model.SkillLevelCalculation = new SkillLevelCalculationViewModel(user, repository);
+        model.HasSkillLevel = true;
+      }
+      else {
+        model.HasSkillLevel = false;
+      }
+      return model;
     }
   }
 }
