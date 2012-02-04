@@ -76,6 +76,7 @@
     <Compile Include="Controllers\Teams\Edit.cs" />
     <Compile Include="Controllers\Teams\Context.cs" />
     <Compile Include="Controllers\Teams\UpdateName.cs" />
+    <Compile Include="Controllers\UserMatchHistory.cs" />
     <Compile Include="Controllers\Users\Create.cs" />
     <Compile Include="Controllers\Users\Delete.cs" />
     <Compile Include="Controllers\Users\EditGet.cs" />
