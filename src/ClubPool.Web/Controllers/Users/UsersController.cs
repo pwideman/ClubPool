@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using System.Text;
-using System.Collections.Generic;
 using System.Web;
 
 using Elmah;
@@ -200,8 +199,6 @@ namespace ClubPool.Web.Controllers.Users
       return model;
     }
 
-    // TODO: These 4 CanEdit* methods should really be in some type of service,
-    // maybe the AuthenticationService?
     protected bool CanEditUser(ClubPoolPrincipal principal, User user) {
       // admins & officers can edit the basic properties of all users,
       // normal users can edit their own basic properties
@@ -245,7 +242,6 @@ namespace ClubPool.Web.Controllers.Users
     [Authorize]
     [ValidateAntiForgeryToken]
     public ActionResult Edit(EditViewModel viewModel) {
-      var usernameChanged = false;
       var authTicketChanged = false;
       var previousUsername = "";
       try {
@@ -259,62 +255,26 @@ namespace ClubPool.Web.Controllers.Users
         }
 
         var currentPrincipal = authenticationService.GetCurrentPrincipal();
-        var canEditUser = CanEditUser(currentPrincipal, user);
-        if (!canEditUser) {
+        if (!CanEditUser(currentPrincipal, user)) {
           return ErrorView("You are not authorized to edit this user");
         }
-        var canEditStatus = CanEditUserStatus(currentPrincipal, user);
-        var canEditRoles = CanEditUserRoles(currentPrincipal, user);
-        var canEditPassword = CanEditUserPassword(currentPrincipal, user);
-        var editingSelf = currentPrincipal.UserId == user.Id;
-
-        // must reset these in case we redisplay the form
-        viewModel.ShowStatus = canEditStatus;
-        viewModel.ShowRoles = canEditRoles;
-        if (canEditRoles) {
-          viewModel.AvailableRoles = repository.All<Role>().Select(r => new RoleViewModel { Id = r.Id, Name = r.Name }).ToList();
-        }
-        viewModel.ShowPassword = canEditPassword;
-
 
         if (!ModelState.IsValid) {
           return View(viewModel);
         }
 
-        if (!user.Username.Equals(viewModel.Username)) {
-          // verify that the new username is not in use
-          if (membershipService.UsernameIsInUse(viewModel.Username)) {
-            ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
-            return View(viewModel);
+        var canEditStatus = CanEditUserStatus(currentPrincipal, user);
+        var canEditRoles = CanEditUserRoles(currentPrincipal, user);
+        var canEditPassword = CanEditUserPassword(currentPrincipal, user);
+        previousUsername = user.Username;
+        if (!TryUpdateUser(user, viewModel, canEditStatus, canEditRoles, canEditPassword)) {
+          viewModel.ShowStatus = canEditStatus;
+          viewModel.ShowRoles = canEditRoles;
+          if (canEditRoles) {
+            viewModel.AvailableRoles = repository.All<Role>().Select(r => new RoleViewModel { Id = r.Id, Name = r.Name }).ToList();
           }
-          previousUsername = user.Username;
-          user.Username = viewModel.Username;
-          usernameChanged = true;
-        }
-        if (!user.Email.Equals(viewModel.Email)) {
-          // verify that the new email is not in use
-          if (membershipService.EmailIsInUse(viewModel.Email)) {
-            ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
-            return View(viewModel);
-          }
-          user.Email = viewModel.Email;
-        }
-        user.FirstName = viewModel.FirstName;
-        user.LastName = viewModel.LastName;
-        if (canEditStatus) {
-          user.IsApproved = viewModel.IsApproved;
-          user.IsLocked = viewModel.IsLocked;
-        }
-        if (canEditRoles) {
-          user.RemoveAllRoles();
-          if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
-            foreach (int roleId in viewModel.Roles) {
-              user.AddRole(repository.Get<Role>(roleId));
-            }
-          }
-        }
-        if (canEditPassword && null != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password.Trim())) {
-          user.Password = membershipService.EncodePassword(viewModel.Password, user.PasswordSalt);
+          viewModel.ShowPassword = canEditPassword;
+          return View(viewModel);
         }
 
         try {
@@ -325,8 +285,8 @@ namespace ClubPool.Web.Controllers.Users
         }
 
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The user was updated successfully";
-        if (editingSelf && usernameChanged) {
-          // we must update the auth ticket
+        if (currentPrincipal.UserId == user.Id && previousUsername != user.Username) {
+          // if editing self and updating the username, we must update the auth ticket
           // using LogIn to do this will reset the persistent cookie
           // setting to false, which is not ideal but the other way
           // would be more complicated than its worth
@@ -342,6 +302,43 @@ namespace ClubPool.Web.Controllers.Users
         }
         throw;
       }
+    }
+
+    private bool TryUpdateUser(User user, EditViewModel viewModel, bool canEditStatus, bool canEditRoles, bool canEditPassword) {
+      if (!user.Username.Equals(viewModel.Username)) {
+        // verify that the new username is not in use
+        if (membershipService.UsernameIsInUse(viewModel.Username)) {
+          ModelState.AddModelErrorFor<EditViewModel>(m => m.Username, "The username is already in use");
+          return false;
+        }
+        user.Username = viewModel.Username;
+      }
+      if (!user.Email.Equals(viewModel.Email)) {
+        // verify that the new email is not in use
+        if (membershipService.EmailIsInUse(viewModel.Email)) {
+          ModelState.AddModelErrorFor<EditViewModel>(m => m.Email, "The email address is already in use");
+          return false;
+        }
+        user.Email = viewModel.Email;
+      }
+      user.FirstName = viewModel.FirstName;
+      user.LastName = viewModel.LastName;
+      if (canEditStatus) {
+        user.IsApproved = viewModel.IsApproved;
+        user.IsLocked = viewModel.IsLocked;
+      }
+      if (canEditRoles) {
+        user.RemoveAllRoles();
+        if (null != viewModel.Roles && viewModel.Roles.Length > 0) {
+          foreach (int roleId in viewModel.Roles) {
+            user.AddRole(repository.Get<Role>(roleId));
+          }
+        }
+      }
+      if (canEditPassword && null != viewModel.Password && !string.IsNullOrEmpty(viewModel.Password.Trim())) {
+        user.Password = membershipService.EncodePassword(viewModel.Password, user.PasswordSalt);
+      }
+      return true;
     }
 
     private ActionResult EditRedirectForConcurrency(int id) {
