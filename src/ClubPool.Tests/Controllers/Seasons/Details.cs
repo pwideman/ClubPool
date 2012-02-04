@@ -11,12 +11,12 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Controllers.Seasons;
 using ClubPool.Web.Models;
 
-namespace ClubPool.Tests.Controllers.Seasons.when_asked_for_the_detail_view
+namespace ClubPool.Tests.Controllers.Seasons.when_asked_for_the_details_view
 {
   [TestFixture]
   public class for_a_valid_season : SeasonsControllerTest
   {
-    private ViewResultHelper<SeasonViewModel> resultHelper;
+    private ViewResultHelper<DetailsViewModel> resultHelper;
     private Season season;
 
     public override void Given() {
@@ -27,7 +27,7 @@ namespace ClubPool.Tests.Controllers.Seasons.when_asked_for_the_detail_view
     }
 
     public override void When() {
-      resultHelper = new ViewResultHelper<SeasonViewModel>(controller.View(season.Id));
+      resultHelper = new ViewResultHelper<DetailsViewModel>(controller.Details(season.Id));
     }
 
     [Test]
@@ -47,7 +47,7 @@ namespace ClubPool.Tests.Controllers.Seasons.when_asked_for_the_detail_view
     private HttpNotFoundResultHelper resultHelper;
 
     public override void When() {
-      resultHelper = new HttpNotFoundResultHelper(controller.View(0));
+      resultHelper = new HttpNotFoundResultHelper(controller.Details(0));
     }
 
     [Test]

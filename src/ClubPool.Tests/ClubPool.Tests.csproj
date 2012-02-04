@@ -66,7 +66,7 @@
     <Compile Include="Controllers\Seasons\Edit.cs" />
     <Compile Include="Controllers\Seasons\Index.cs" />
     <Compile Include="Controllers\Seasons\SeasonsControllerTest.cs" />
-    <Compile Include="Controllers\Seasons\View.cs" />
+    <Compile Include="Controllers\Seasons\Details.cs" />
     <Compile Include="Controllers\Teams\Create.cs" />
     <Compile Include="Controllers\Teams\Delete.cs" />
     <Compile Include="Controllers\Teams\Details.cs" />

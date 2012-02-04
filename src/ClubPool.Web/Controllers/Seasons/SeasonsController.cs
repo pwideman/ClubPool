@@ -185,17 +185,17 @@ namespace ClubPool.Web.Controllers.Seasons
 
     [HttpGet]
     [Authorize(Roles = Roles.Administrators)]
-    public ActionResult View(int id) {
+    public ActionResult Details(int id) {
       var season = repository.Get<Season>(id);
       if (null == season) {
         return HttpNotFound();
       }
-      var viewModel = CreateSeasonViewModel(season);
+      var viewModel = CreateDetailsViewModel(season);
       return View(viewModel);
     }
 
-    private SeasonViewModel CreateSeasonViewModel(Season season) {
-      var model = new SeasonViewModel() {
+    private DetailsViewModel CreateDetailsViewModel(Season season) {
+      var model = new DetailsViewModel() {
         Id = season.Id,
         Name = season.Name,
         Divisions = season.Divisions.Select(d => CreateDivisionViewModel(d)).ToList()

@@ -119,7 +119,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_to_create_a_team
 
     [Test]
     public void it_should_redirect_to_the_view_season_view() {
-      resultHelper.ShouldRedirectTo("view", "seasons");
+      resultHelper.ShouldRedirectTo("details", "seasons");
     }
   }
 
@@ -171,7 +171,7 @@ namespace ClubPool.Tests.Controllers.Teams.when_asked_to_create_a_team
 
     [Test]
     public void it_should_redirect_to_the_view_season_view() {
-      resultHelper.ShouldRedirectTo("view", "seasons");
+      resultHelper.ShouldRedirectTo("details", "seasons");
     }
   }
 

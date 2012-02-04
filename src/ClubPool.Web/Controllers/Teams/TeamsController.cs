@@ -66,7 +66,7 @@ namespace ClubPool.Web.Controllers.Teams
       repository.SaveOrUpdate(team);
       repository.SaveChanges();
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was created successfully";
-      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+      return RedirectToAction("Details", "Seasons", new { id = division.Season.Id });
     }
 
     private CreateTeamViewModel BuildCreateTeamViewModel(IRepository repository, Division division, CreateTeamViewModel viewModel = null) {
@@ -192,7 +192,7 @@ namespace ClubPool.Web.Controllers.Teams
         return EditRedirectForConcurrency(viewModel.Id);
       }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was updated";
-      return RedirectToAction("View", "Seasons", new { id = team.Division.Season.Id });
+      return RedirectToAction("Details", "Seasons", new { id = team.Division.Season.Id });
     }
 
     private void UpdatePlayers(Team team, int[] players) {
@@ -289,7 +289,7 @@ namespace ClubPool.Web.Controllers.Teams
         DeleteTeam(team);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The team was deleted";
       }
-      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+      return RedirectToAction("Details", "Seasons", new { id = division.Season.Id });
     }
 
     private void DeleteTeam(Team team) {

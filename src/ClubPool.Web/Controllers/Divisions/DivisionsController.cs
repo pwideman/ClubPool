@@ -65,7 +65,7 @@ namespace ClubPool.Web.Controllers.Divisions
       // I hate doing this here because theoretically /divisions/create could be called
       // from anywhere, but I don't know what else to do now. Same comment applies for all
       // redirects in this controller
-      return RedirectToAction("View", "Seasons", new { id = season.Id });
+      return RedirectToAction("Details", "Seasons", new { id = season.Id });
     }
 
     [HttpPost]
@@ -84,7 +84,7 @@ namespace ClubPool.Web.Controllers.Divisions
         DeleteDivision(division);
         TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was deleted";
       }
-      return RedirectToAction("View", "Seasons", new { id = seasonId });
+      return RedirectToAction("Details", "Seasons", new { id = seasonId });
     }
 
     private void DeleteDivision(Division division) {
@@ -170,7 +170,7 @@ namespace ClubPool.Web.Controllers.Divisions
         return EditRedirectForConcurrency(viewModel.Id);
       }
       TempData[GlobalViewDataProperty.PageNotificationMessage] = "The division was updated";
-      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+      return RedirectToAction("Details", "Seasons", new { id = division.Season.Id });
     }
 
     private ActionResult EditRedirectForConcurrency(int id) {
@@ -194,7 +194,7 @@ namespace ClubPool.Web.Controllers.Divisions
         TempData[GlobalViewDataProperty.PageErrorMessage] = e.Message;
       }
       repository.SaveChanges();
-      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+      return RedirectToAction("Details", "Seasons", new { id = division.Season.Id });
     }
 
     [HttpPost]
@@ -205,7 +205,7 @@ namespace ClubPool.Web.Controllers.Divisions
       if (!division.HasCompletedMatches()) {
         DeleteDivisionMeets(division);
       }
-      return RedirectToAction("View", "Seasons", new { id = division.Season.Id });
+      return RedirectToAction("Details", "Seasons", new { id = division.Season.Id });
     }
   }
 

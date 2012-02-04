@@ -35,7 +35,7 @@
   <li><a href="#">Admin</a>
     <ul>
       @if (Model.HasActiveSeason) {
-      <li>@Html.ActionLink("Active Season", "View", "Seasons", new { id = Model.ActiveSeasonId }, null)</li>
+      <li>@Html.ActionLink("Active Season", "Details", "Seasons", new { id = Model.ActiveSeasonId }, null)</li>
       }
       <li>@Html.ActionLink("Users", "Index", "Users")</li>
       <li>@Html.ActionLink("Seasons", "Index", "Seasons")</li>

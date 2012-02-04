@@ -112,7 +112,7 @@ namespace ClubPool.Tests.Controllers.Divisions.when_asked_to_create_a_division
 
     [Test]
     public void it_should_redirect_to_the_view_season_view() {
-      redirectResultHelper.ShouldRedirectTo("view", "seasons");
+      redirectResultHelper.ShouldRedirectTo("details", "seasons");
     }
   }
 

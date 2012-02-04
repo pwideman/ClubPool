@@ -32,7 +32,7 @@
     @foreach (var item in Model.Items) {
       <tr>
         <td>@item.Id</td>
-        <td>@Html.ActionLink(item.Name, "View", "Seasons", new { id = item.Id }, null)</td>
+        <td>@Html.ActionLink(item.Name, "Details", "Seasons", new { id = item.Id }, null)</td>
         <td>
           @if (item.IsActive) {
             @Html.ContentImage("check-medium.png", "Current")

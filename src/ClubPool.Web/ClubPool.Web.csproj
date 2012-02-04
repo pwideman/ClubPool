@@ -414,7 +414,7 @@
     <Content Include="Views\Seasons\ChangeActive.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Seasons\View.cshtml" />
+    <Content Include="Views\Seasons\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_ScheduleView.cshtml" />
