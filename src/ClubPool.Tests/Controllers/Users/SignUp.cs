@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using FluentAssertions;
 
-using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.Users;
 using ClubPool.Testing;
 using ClubPool.Web.Models;
 

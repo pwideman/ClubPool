@@ -175,17 +175,29 @@ namespace ClubPool.Web.Controllers.Users
       if (!canEditUser) {
         return ErrorView("You are not authorized to edit this user");
       }
-      var canEditStatus = CanEditUserStatus(currentPrincipal, user);
-      var canEditRoles = CanEditUserRoles(currentPrincipal, user);
-      var canEditPassword = CanEditUserPassword(currentPrincipal, user);
-      var viewModel = new EditViewModel(user);
-      viewModel.ShowStatus = canEditStatus;
-      viewModel.ShowRoles = canEditRoles;
-      viewModel.ShowPassword = canEditPassword;
-      if (canEditRoles) {
-        viewModel.LoadAvailableRoles(repository);
-      }
+      var viewModel = BuildEditViewModel(user, currentPrincipal);
       return View(viewModel);
+    }
+
+    private EditViewModel BuildEditViewModel(User user, ClubPoolPrincipal currentPrincipal) {
+      var model = new EditViewModel {
+        Id = user.Id,
+        FirstName = user.FirstName,
+        LastName = user.LastName,
+        Email = user.Email,
+        IsApproved = user.IsApproved,
+        IsLocked = user.IsLocked,
+        Username = user.Username,
+        Version = user.EncodedVersion,
+        Roles = user.Roles.Select(r => r.Id).ToArray()
+      };
+      model.ShowStatus = CanEditUserStatus(currentPrincipal, user);
+      model.ShowRoles = CanEditUserRoles(currentPrincipal, user);
+      if (model.ShowRoles) {
+        model.AvailableRoles = repository.All<Role>().Select(r => new RoleViewModel { Id = r.Id, Name = r.Name }).ToList();
+      }
+      model.ShowPassword = CanEditUserPassword(currentPrincipal, user);
+      return model;
     }
 
 
@@ -260,8 +272,10 @@ namespace ClubPool.Web.Controllers.Users
         // must reset these in case we redisplay the form
         viewModel.ShowStatus = canEditStatus;
         viewModel.ShowRoles = canEditRoles;
+        if (canEditRoles) {
+          viewModel.AvailableRoles = repository.All<Role>().Select(r => new RoleViewModel { Id = r.Id, Name = r.Name }).ToList();
+        }
         viewModel.ShowPassword = canEditPassword;
-        viewModel.LoadAvailableRoles(repository);
 
 
         if (!ModelState.IsValid) {

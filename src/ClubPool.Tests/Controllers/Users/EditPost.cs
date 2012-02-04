@@ -9,7 +9,7 @@ using FluentAssertions;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Controllers;
-using ClubPool.Web.Controllers.Users.ViewModels;
+using ClubPool.Web.Controllers.Users;
 using ClubPool.Testing;
 
 namespace ClubPool.Tests.Controllers.Users
