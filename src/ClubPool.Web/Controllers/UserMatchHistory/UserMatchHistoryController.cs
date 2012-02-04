@@ -30,7 +30,7 @@ namespace ClubPool.Web.Controllers.UserMatchHistory
       }
 
       // doing this with EF is extremely slow
-      var sql = "select * from clubpool.matches where id in (select m.Id from clubpool.matches m, clubpool.matchplayers p where p.Player_Id = @p0 and p.Match_Id = m.Id) order by DatePlayed desc";
+      var sql = "select * from clubpool.matches where IsComplete = 1 and id in (select m.Id from clubpool.matches m, clubpool.matchplayers p where p.Player_Id = @p0 and p.Match_Id = m.Id) order by DatePlayed desc";
       var userMatchesQuery = repository.SqlQuery<Match>(sql, user.Id);
       var viewModel = CreateUserHistoryViewModel(user, userMatchesQuery, page.GetValueOrDefault(1));
 
@@ -61,19 +61,17 @@ namespace ClubPool.Web.Controllers.UserMatchHistory
       var players = match.Players.ToArray();
       model.Player1 = players[0].Player.FullName;
       model.Player2 = players[1].Player.FullName;
-      if (match.IsComplete) {
-        model.Winner = match.Winner.FullName;
-        if (!match.IsForfeit) {
-          model.Date = match.DatePlayed.Value;
-          var results = match.Results.Where(r => r.Player == players[0].Player).Single();
-          model.Player1Innings = results.Innings;
-          model.Player1DefensiveShots = results.DefensiveShots;
-          model.Player1Wins = results.Wins;
-          results = match.Results.Where(r => r.Player == players[1].Player).Single();
-          model.Player2Innings = results.Innings;
-          model.Player2DefensiveShots = results.DefensiveShots;
-          model.Player2Wins = results.Wins;
-        }
+      model.Winner = match.Winner.FullName;
+      if (!match.IsForfeit) {
+        model.Date = match.DatePlayed.Value;
+        var results = match.Results.Where(r => r.Player == players[0].Player).Single();
+        model.Player1Innings = results.Innings;
+        model.Player1DefensiveShots = results.DefensiveShots;
+        model.Player1Wins = results.Wins;
+        results = match.Results.Where(r => r.Player == players[1].Player).Single();
+        model.Player2Innings = results.Innings;
+        model.Player2DefensiveShots = results.DefensiveShots;
+        model.Player2Wins = results.Wins;
       }
       return model;
     }
