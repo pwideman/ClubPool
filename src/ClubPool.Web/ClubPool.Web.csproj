@@ -435,9 +435,6 @@
     <Content Include="Views\Teams\_EditTeam.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Teams\_PlayerListView.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Teams\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
