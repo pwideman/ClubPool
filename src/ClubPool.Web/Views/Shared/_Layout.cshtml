@@ -6,7 +6,6 @@
     <title>@if (!string.IsNullOrWhiteSpace(ViewBag.Title)) { @(ViewBag.Title + " - ") } @ViewBag.SiteName</title>
     <meta charset="utf-8" />
     @Html.Stylesheet("site.less")
-    @Html.Stylesheet("jqueryui.css")
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
     @Html.ScriptInclude("jquery.validate.min.js")
@@ -49,6 +48,5 @@
         }
       }
     </div>
-    <div id="footer"></div>
   </body>
 </html>

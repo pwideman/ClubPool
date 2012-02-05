@@ -1,0 +1,31 @@
+﻿table.standings-table {
+  margin-top: 8px;
+  thead {
+    font-size: 90%;
+    tr {
+      th {
+        background-color: @light_blue;
+        text-align: center;
+        border: 1px solid @standard_blue;
+        padding: 6px;
+        white-space: nowrap;
+      }
+    }
+  }
+  tbody {
+    font-size: 80%;
+    tr {
+      td {
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #CCC;
+      }
+    }
+    tr.highlight {
+      background-color: @yellow_highlight !important;
+    }
+    tr.alt {
+      background-color: @alt_row_color;
+    }
+  }
+}

@@ -87,7 +87,7 @@
                 </td>
                 <td class="action-column">
                   @if (team.CanDelete) {
-                    using (var form = Html.BeginForm("Delete", "Teams", new { id = team.Id }, FormMethod.Post, new { @class = "invisible" })) {
+                    using (var form = Html.BeginForm("Delete", "Teams", new { id = team.Id }, FormMethod.Post, new { @class = "inline" })) {
                       <input type="image" value="Delete" alt="Delete" src="@Url.ContentImageUrl("delete-medium.png")"/>
                       @Html.AntiForgeryToken()
                     }

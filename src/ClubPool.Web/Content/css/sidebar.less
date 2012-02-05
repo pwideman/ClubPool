@@ -1,0 +1,71 @@
+﻿.sidebar-corner
+{
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+}
+
+.sidebar-container
+{
+  width: 230px;
+  margin-right: -290px;
+  padding: 0;
+  text-align: center;
+}
+
+div.sidebar
+{
+  background: #E2E2E2;
+  padding: 6px 6px 2px 6px;
+}
+
+.sidebar-gadget
+{
+  margin-bottom: 4px;
+  .sidebar-corner;
+}
+
+div.sidebar-gadget-title
+{
+  padding: 6px;
+}
+
+span.sidebar-gadget-title-text
+{
+  padding: 2px; vertical-align: top;
+  color: @dark_blue;
+}
+
+div.sidebar-form-gadget
+{
+  .sidebar-gadget;
+  /*border: 1px solid @standard_blue;*/
+  background-color: @light_blue;
+  padding: 4px;
+  font-size: 90%;
+  
+  div.form-row {
+    padding-right: 8px;
+    min-height: 34px;
+
+    span.form-label-left {
+      width: 60px;
+      padding-right: 4px;
+      margin-top: 8px;
+    }
+
+    div.form-input {
+      input {
+        width: 100px;
+        height: 16px;
+      }
+    }
+  }
+
+  button {
+    padding: 0px;
+    width: 100px;
+    height: 25px;
+    /*margin-left: 55px;*/
+  }
+}

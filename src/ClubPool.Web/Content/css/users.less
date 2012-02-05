@@ -1,0 +1,68 @@
+﻿div.add-user-form, div.edit-user-form
+{
+  span.form-label-left {
+    width: 140px;
+  }
+}
+
+// details
+
+div.userinfo-tabs {
+  display: inline-block;
+  min-width: 600px;
+  .ie7fix;
+}
+
+div.userinfo-tab {
+  div.details-row {
+    padding: 6px;
+    min-height: 20px;
+    div.details-label {
+      display: inline-block;
+      width: 120px;
+      text-align: right;
+      .ie7fix;
+    }
+    div.details-data {
+      display: inline-block;
+      .ie7fix;
+    }
+    div.email {
+      img {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  fieldset {
+    border: 1px solid @standard_blue;
+    width: 80%;
+    margin: 8px 6px;
+    .corner(4px);
+  }
+}
+
+div#slc-tab {
+  font-size: 80%;
+}
+
+// index
+
+div.users-search-container {
+  margin: 4px;
+  input.users-search-input {
+    width: 200px;
+    border: 1px solid @standard_blue;
+    .corner(4px);
+    padding: 4px;
+  }
+  img.users-search-icon {
+    margin-left: 6px;
+    vertical-align: top;
+    cursor: pointer;
+  }
+}
+
+div.users-list-container {
+  margin: 12px 4px;
+}

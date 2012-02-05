@@ -1,0 +1,163 @@
+﻿div.form-header
+{
+  padding: 10px 0 10px 0;
+  border-bottom: solid 1px black;
+  margin: 0 10px 10px 10px;
+  text-align: center;
+}
+
+div.form-content
+{
+  padding: 8px;
+  background-color: @light_blue;
+  display: inline-block;
+  .ie7fix;
+  .corner;
+}
+
+fieldset
+{
+  border: 0;
+}
+
+form.normal {
+  div.form-row {
+    padding-right: 10px;
+    min-height: 54px;
+  }
+  div.form-row-short {
+    min-height: 0;
+    margin: 10px 0;
+  }
+}
+
+span.form-label-left
+{
+  display: inline-block;
+  width: 180px;
+  text-align: right;
+  padding-right: 8px;
+  vertical-align: top;
+  margin-top: 8px;
+  .ie7fix;
+}
+
+span.required
+{
+  font-size: 110%;
+  color: Red;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+span.form-sublabel {
+  font-size: 80%;
+}
+
+div.form-input
+{
+  display: inline-block;
+  padding: 0;
+  vertical-align: top;
+  .ie7fix;
+
+  input[type="text"], input[type="password"]
+  {
+    width: 221px;
+    border: 1px solid @standard_blue;
+    height: 25px;
+    padding: 2px;
+    margin: 1px;
+    display: block;
+    .corner(4px);
+  }
+
+  input.short {
+    width: 104px;
+  }
+}
+
+button, input.submit-button
+{
+  clear:both;
+  text-align:center;
+  font-weight:bold;
+  padding: 6px;
+}
+
+form.normal {
+  button {
+    padding: 6px 20px 6px 20px;
+  }
+}
+
+
+div.form-row-span
+{
+  text-align: center;
+  padding: 2px;
+  
+  input
+  {
+    vertical-align: sub;
+  }
+}
+
+div.form-checkbox-list
+{
+  display: inline-block;
+  .corner(4px);
+  border: 1px solid lightgrey;
+  background-color: @extralight_blue;
+  padding: 8px;
+  .ie7fix;
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0
+  }
+}
+
+div.simple-user-list
+{
+  display: inline-block;
+  .corner(6px);
+  border: 1px solid lightgrey;
+  background-color: white;
+  padding: 8px;
+  max-height: 300px;
+  width: 200px;
+  overflow: auto;
+  .ie7fix;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline;
+  }
+}
+
+div.submit-row
+{
+  text-align: center;
+  padding: 6px 0 6px 0;
+}
+
+div.form-row input.error, input.input-validation-error
+{
+  border: 2px solid red !important;
+  background-color: @error_background_color;
+  color: @error_foreground;
+  margin: 0 !important;
+}
+
+span.field-validation-error
+{
+  color: @error_foreground;
+  font-size: 80%;
+}
+
+form.inline {
+  display: inline;
+}

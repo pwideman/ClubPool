@@ -1,0 +1,70 @@
+﻿div.dashboard {
+  width: 99%;
+  font-size: .9em;
+}
+div.dashboard-column-left {
+  width: 320px;
+}
+div.dashboard-column-right {
+  width: 500px;
+}
+div.dashboard-item-container {
+  display: inline-block;
+  vertical-align: top;
+  .ie7fix;
+  div.dashboard-item {
+    border: 2px solid @medium_blue;
+    .corner(8px);
+    vertical-align: top;
+    margin: 6px;
+    text-align: center;
+    div.dashboard-item-header {
+      .topcorner(4px);
+      background-color: @medium_blue;
+      text-align: center;
+      color: black;
+      padding: 6px 24px;
+      font-weight: bold;
+      font-size: 110%;
+    }
+    div.dashboard-item-content {
+      padding: 8px;
+      text-align: center;
+      margin: auto;
+      overflow: hidden;
+      ul {
+        text-align: left;
+        list-style-type: none;
+        padding: 0;
+      }
+      table {
+        tbody {
+          td {
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
+      }
+      table#lastmeet {
+        tbody {
+          tr.match {
+            border-bottom: 1px solid @standard_blue;
+          }
+          tr.player {
+            border-bottom: 1px dashed #CCCCCC;
+          }
+        }
+      }
+      table#season_results {
+        tbody {
+          tr {
+            border-bottom: 1px dashed #CCCCCC;
+          }
+          tr.last {
+            border-bottom: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}

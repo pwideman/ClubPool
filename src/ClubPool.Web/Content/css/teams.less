@@ -1,0 +1,90 @@
+﻿// details
+
+input.team-name {
+  color: #114884;
+  margin: 2px;
+  font-size: 160%;
+  font-weight: normal;
+  border: 1px solid white;
+  width: auto;
+  padding: 6px;
+}
+
+input.team-name:focus {
+  outline: 2px solid @focus_highlight;
+  border: 1px solid white !important;
+}
+
+input.team-name:hover {
+  border: 1px solid;
+  border-color: gray #CCCCCC #CCCCCC gray;
+}
+
+p.team-details-email {
+  margin-left: 6px;
+  img {
+    vertical-align: middle;
+  }
+}
+
+div.container {
+  border: 2px solid @medium_blue;
+  .corner(8px);
+  margin: 6px;
+  text-align: center;
+  display: inline-block;
+  .ie7fix;
+  div.header {
+    .topcorner(4px);
+    background-color: @medium_blue;
+    text-align: center;
+    color: black;
+    padding: 6px 24px;
+    font-weight: bold;
+    font-size: 110%;
+  }
+  div.content {
+    padding: 8px 24px;
+    text-align: center;
+    margin: auto;
+  }
+}
+
+ul#team-details {
+  text-align: left;
+  list-style-type: none;
+  padding: 0;
+  li {
+    padding: 4px 0;
+  }
+}
+
+table#season-results-table {
+  margin: auto;
+  thead {
+    tr {
+      th {
+        padding: 4px 8px;
+        border-bottom: 2px solid @dark_blue;
+      }
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px dashed #CCCCCC;
+      td {
+        text-align: center;
+        padding: 6px;
+      }
+    }
+    tr.winner {
+      background-color: @yellow_highlight;
+    }
+    tr.last {
+      border-bottom: 0;
+    }
+  }
+  tbody.meet {
+    border-bottom: 3px double @standard_blue;
+  }
+}

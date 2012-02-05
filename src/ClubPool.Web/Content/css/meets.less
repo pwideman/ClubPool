@@ -1,0 +1,156 @@
+﻿// details
+
+table.match-details {
+  border: 0;
+  margin: 20px 10px;
+
+  thead {
+    th {
+      color: @dark_blue;
+      border-bottom: 2px solid @dark_blue;
+      padding: 0 12px 10px 12px;
+    }
+  }
+
+  tbody {
+    td {
+      height: 20px;
+      padding: 8px 16px;
+      text-align: center;
+
+      img.enter-results-link {
+        cursor: pointer;
+      }
+
+      div.status {
+        display: inline-block;
+        .ie7fix;
+        img {
+          vertical-align: middle;
+        }
+      }
+
+    }
+    tr.first {
+      border-bottom: 1px solid lightgray;
+      td {
+        padding-top: 10px;
+      }
+    }
+    tr.second {
+      border-bottom: 1px solid black;
+    }
+    tr.status {
+      border-bottom: 2px solid @standard_blue;
+      td {
+        padding-bottom: 20px;
+        height: 30px;
+      }
+      td.status {
+        text-align: left;
+      }
+      td.error {
+        color: red;
+      }
+    }
+    tr.winner {
+      background-color: @yellow_highlight;
+    }
+  }
+}
+
+div#enter_results_window {
+  display: none;
+
+  table {
+    thead {
+      tr {
+        th {
+          padding: 4px 8px;
+          border-bottom: 1px solid @dark_blue;
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          text-align: center;
+          padding: 6px;
+          input.integer-input {
+            width: 30px;
+          }
+        }
+        td.name {
+          min-width: 120px;
+        }
+        td.date-time {
+          padding-left: 10px;
+          min-width: 120px;
+          text-align: left;
+          input {
+            width: 80px;
+            margin-right: 6px;
+          }
+        }
+      }
+      tr.results {
+        td {
+          border-bottom: 1px solid lightgray;
+          input.error {
+            border: 2px solid red;
+          }
+        }
+      }
+      tr.forfeit {
+        border-bottom: 1px solid black;
+        td {
+          padding-left: 20px;
+          text-align: left;
+        }
+      }
+      tr.status {
+        td {
+          text-align: center;
+          img {
+            vertical-align: text-bottom;
+          }
+        }
+        td.error {
+          color: red;
+          div {
+            text-align: left;
+            display: inline-block;
+            .ie7fix;
+          }
+        }
+      }
+    }
+  }
+}
+
+div#enter_results_waiting_indicator {
+  display: none;
+  margin-left: 180px;
+  img {
+    vertical-align: middle;
+  }
+}
+
+div.action-button-row-small {
+  div.action-button {
+    cursor: pointer;
+    padding: 4px;
+    border: 2px solid @light_blue;
+    background-color: @extralight_blue;
+    .corner(4px);
+    color: black;
+    img {
+      vertical-align: middle;
+    }
+  }
+  div.action-button:hover {
+    color: @dark_blue;
+    background-color: @light_blue;
+    border-color: @medium_blue;
+  }
+}
