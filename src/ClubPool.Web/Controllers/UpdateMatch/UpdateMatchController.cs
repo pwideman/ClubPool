@@ -49,12 +49,14 @@ namespace ClubPool.Web.Controllers.UpdateMatch
       }
 
       UpdateMatchFromViewModel(viewModel, match, player1, player2);
+      // must save here to get new match results in DB, for calculation below
+      repository.SaveChanges();
 
       var gameType = match.Meet.Division.Season.GameType;
       player1.UpdateSkillLevel(gameType, repository);
       player2.UpdateSkillLevel(gameType, repository);
-
       repository.SaveChanges();
+
       return Json(new UpdateMatchResponseViewModel(true));
     }
 
