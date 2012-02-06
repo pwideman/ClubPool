@@ -30,11 +30,6 @@ namespace ClubPool.Web.Infrastructure
         GetContentUrl(helper.ViewContext.RequestContext, "~/content/css/" + cssFile)));
     }
 
-    public static MvcHtmlString ScriptInclude(this HtmlHelper helper, string jsFile) {
-      return new MvcHtmlString(string.Format("<script type=\"text/javascript\" src=\"{0}\" ></script>\n", 
-        GetContentUrl(helper.ViewContext.RequestContext, "~/scripts/" + jsFile)));
-    }
-
     private static string GetContentUrl(RequestContext context, string path) {
       var url = new UrlHelper(context);
       return url.Content(path);
