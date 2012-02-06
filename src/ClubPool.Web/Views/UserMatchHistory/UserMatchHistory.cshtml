@@ -49,9 +49,10 @@
 <p>This user has no match history.</p>
 }
 
-@Html.ScriptInclude("jquery.query.js")
+@section PageScript {
 <script type="text/javascript">
   $(function () {
     $("tbody.content tr:odd").addClass("alt");
   });
 </script>
+}

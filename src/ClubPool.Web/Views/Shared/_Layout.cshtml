@@ -6,19 +6,6 @@
     <title>@if (!string.IsNullOrWhiteSpace(ViewBag.Title)) { @(ViewBag.Title + " - ") } @ViewBag.SiteName</title>
     <meta charset="utf-8" />
     @Html.Stylesheet("site.less")
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
-    @Html.ScriptInclude("jquery.validate.min.js")
-    @Html.ScriptInclude("jquery.validate.unobtrusive.min.js")
-    @Html.ScriptInclude("jquery.event.hover-1.0.js")
-    @Html.ScriptInclude("supersubs.js")
-    @Html.ScriptInclude("superfish.js")
-    @Html.ScriptInclude("jquery.cookie.js")
-    @Html.ScriptInclude("clubpool.js")
-
-    
-    @* At bottom to facilitate other JS files to be loaded before page-by-page JS is loaded *@
-    @RenderSection("Head", false)
   </head>
   <body>
     <div id="header">
@@ -48,5 +35,23 @@
         }
       }
     </div>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+    @(Bundle.JavaScript()
+      .Add("~/scripts/jquery.validate.js")
+      .Add("~/scripts/jquery.validate.unobtrusive.js")
+      .Add("~/scripts/jquery.event.hover-1.0.js")
+      .Add("~/scripts/jquery.alphanumeric.js")
+      .Add("~/scripts/jquery.form.js")
+      .Add("~/scripts/jquery.ui.timepicker-0.0.3.min.js")
+      .Add("~/scripts/jquery.cookie.js")
+      .Add("~/scripts/jquery.query.js")
+      .Add("~/scripts/jquery.placeholder.js")
+      .Add("~/scripts/supersubs.js")
+      .Add("~/scripts/superfish.js")
+      .Add("~/scripts/clubpool.js")
+      .Add("~/scripts/meets.js")
+      .MvcRender("~/scripts/combined_#.js"))
+    @RenderSection("PageScript", false)
   </body>
 </html>

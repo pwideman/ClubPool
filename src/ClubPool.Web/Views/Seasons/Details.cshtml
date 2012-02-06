@@ -146,8 +146,7 @@
   Html.RenderPartial("_NotificationMessage");
 }
 
-@Html.ScriptInclude("jquery.alphanumeric.js")
-
+@section PageScript {
 <script type="text/javascript">
   $(function () {
     $("tbody.content tr:odd").addClass("alt");
@@ -163,3 +162,4 @@
     $(".schedule-byes").numeric();
   });
 </script>
+}

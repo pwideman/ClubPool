@@ -68,9 +68,10 @@ else if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) {
   Html.RenderPartial("_NotificationMessage");
 }
 
-@Html.ScriptInclude("jquery.query.js")
+@section PageScript {
 <script type="text/javascript">
   $(function () {
     $("tbody.content tr:odd").addClass("alt");
   });
 </script>
+}

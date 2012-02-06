@@ -67,8 +67,9 @@
 </div>
 }
 
+@section PageScript {
+
 @if (Model.CanUpdateName) {
-@Html.ScriptInclude("jquery.form.js")
 
 <script type="text/javascript">
   var currentTeamName = "@Model.Name";
@@ -128,3 +129,4 @@
     $("#season-results-table tbody:last").removeClass("meet").find("tr:last").addClass("last");
   });
 </script>
+}
