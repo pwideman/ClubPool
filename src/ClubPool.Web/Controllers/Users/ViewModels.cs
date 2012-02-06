@@ -113,4 +113,17 @@ namespace ClubPool.Web.Controllers.Users
     public SkillLevelCalculationViewModel SkillLevelCalculation { get; set; }
   }
 
+  public class VerifySkillLevelsViewModel
+  {
+    public bool HasUpdates { get; set; }
+    public IEnumerable<SkillLevelUpdateViewModel> Updates { get; set; }
+  }
+
+  public class SkillLevelUpdateViewModel
+  {
+    public string Name { get; set; }
+    public int PreviousSkillLevel { get; set; }
+    public int NewSkillLevel { get; set; }
+  }
+
 }

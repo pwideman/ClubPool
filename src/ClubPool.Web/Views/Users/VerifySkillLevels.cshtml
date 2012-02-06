@@ -1,0 +1,22 @@
+﻿@model ClubPool.Web.Controllers.Users.VerifySkillLevelsViewModel
+
+@{
+    ViewBag.Title = "Verify Skill Levels";
+}
+
+<div class="heading">
+  <span>Verify Skill Levels</span>
+</div>
+
+@if (Model.HasUpdates) {
+  <p>The following skill levels were updated:</p>
+  <ul>
+    @foreach(var update in Model.Updates) {
+      <li>@update.Name: @update.NewSkillLevel (@update.PreviousSkillLevel)</li>
+    }
+  </ul>
+}
+else {
+  <p>All skill levels were valid, no updates required.</p>
+}
+

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Text;
@@ -425,6 +426,31 @@ namespace ClubPool.Web.Controllers.Users
         model.HasSkillLevel = false;
       }
       return model;
+    }
+
+    [HttpGet]
+    [Authorize]
+    public ActionResult VerifySkillLevels() {
+      var users = repository.All<User>();
+      var viewModel = new VerifySkillLevelsViewModel();
+      var updates = new List<SkillLevelUpdateViewModel>();
+      foreach (var user in users) {
+        var oldsl = user.SkillLevels.SingleOrDefault(sl => sl.GameTypeValue == (int)GameType.EightBall);
+        if (null != oldsl) {
+          var oldslv = oldsl.Value;
+          user.UpdateSkillLevel(GameType.EightBall, repository);
+          var newsl = user.SkillLevels.Single(sl => sl.GameTypeValue == (int)GameType.EightBall).Value;
+          if (oldslv != newsl) {
+            updates.Add(new SkillLevelUpdateViewModel { Name = user.FullName, NewSkillLevel = newsl, PreviousSkillLevel = oldslv });
+          }
+        }
+      }
+      if (updates.Any()) {
+        repository.SaveChanges();
+        viewModel.HasUpdates = true;
+        viewModel.Updates = updates;
+      }
+      return View(viewModel);
     }
   }
 }

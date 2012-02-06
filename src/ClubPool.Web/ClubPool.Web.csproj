@@ -312,6 +312,7 @@
     <Content Include="Views\Scoresheet\Scoresheet.cshtml" />
     <Content Include="Views\Login\LoginGadget.cshtml" />
     <Content Include="Views\Teams\_EditTeamScript.cshtml" />
+    <Content Include="Views\Users\VerifySkillLevels.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\base.less" />
