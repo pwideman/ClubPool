@@ -29,3 +29,4 @@ _ReSharper*/
 src/ClubPool.sln.docstates
 src/ClubPool.Web/App_Data/*
 src/ClubPool.Web/ClubPool.Web.Publish.xml
+src/ClubPool.Web/Scripts/combined_*.js
