@@ -89,6 +89,8 @@ namespace ClubPool.Web.Controllers.UpdateMatch
       // set meet to complete if all matches are complete
       var meet = match.Meet;
       meet.IsComplete = !meet.Matches.Where(m => !m.IsComplete).Any();
+      // must do this because EF is stupid
+      var d = meet.Division;
     }
 
     private UpdateMatchResponseViewModel VerifyUserCanUpdateMatch(Match match, User player1, User player2) {
