@@ -287,6 +287,7 @@
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
+    <Content Include="Scripts\teams.js" />
     <Content Include="Scripts\scriptRegistrar.js" />
     <Content Include="Scripts\meets.js" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
@@ -313,7 +314,6 @@
     <Content Include="Content\themes\base\jquery-ui.css" />
     <Content Include="Views\Scoresheet\Scoresheet.cshtml" />
     <Content Include="Views\Login\LoginGadget.cshtml" />
-    <Content Include="Views\Teams\_EditTeamScript.cshtml" />
     <Content Include="Views\Users\VerifySkillLevels.cshtml" />
   </ItemGroup>
   <ItemGroup>
