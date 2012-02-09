@@ -164,6 +164,7 @@
     <Compile Include="Infrastructure\IRouteRegistrar.cs" />
     <Compile Include="Infrastructure\PagingExtensions.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
+    <Compile Include="Infrastructure\ScriptExtensions.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\GameType.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
+    <Content Include="Scripts\scriptRegistrar.js" />
     <Content Include="Scripts\meets.js" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />

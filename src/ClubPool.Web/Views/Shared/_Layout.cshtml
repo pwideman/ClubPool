@@ -50,8 +50,11 @@
       .Add("~/scripts/supersubs.js")
       .Add("~/scripts/superfish.js")
       .Add("~/scripts/clubpool.js")
+      .Add("~/scripts/scriptRegistrar.js")
       .Add("~/scripts/meets.js")
+      .Add("~/scripts/teams.js")
       .MvcRender("~/scripts/combined_#.js"))
     @RenderSection("PageScript", false)
+    @Html.RenderRegisteredScriptViews()
   </body>
 </html>
