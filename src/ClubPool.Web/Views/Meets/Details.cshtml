@@ -4,6 +4,8 @@
     ViewBag.Title = "Match Details";
 }
 
+@{Html.RegisterScriptView("meets/details");}
+
 <div class="heading">
   <span>Match Details</span>
 </div>
@@ -161,9 +163,5 @@
   }
   var calendarImageUrl = "@Url.ContentImageUrl("calendar.gif")";
   var loadingImageUrl = "@Url.ContentImageUrl("loading-small.gif")";
-
-  $(function() {
-    initializeMeetsDetailsView();
-  });
 </script>
 }
