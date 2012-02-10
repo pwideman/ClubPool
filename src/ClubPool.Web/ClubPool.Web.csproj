@@ -288,12 +288,12 @@
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
-    <Content Include="Views\Schedule\schedule.js" />
-    <Content Include="Views\Dashboard\dashboard.js" />
+    <Content Include="Views\Schedule\scripts.js" />
+    <Content Include="Views\Dashboard\scripts.js" />
     <Content Include="Views\Seasons\scripts.js" />
-    <Content Include="Views\Teams\teams.js" />
+    <Content Include="Views\Teams\scripts.js" />
     <Content Include="Scripts\scriptRegistrar.js" />
-    <Content Include="Views\Meets\meets.js" />
+    <Content Include="Views\Meets\scripts.js" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
