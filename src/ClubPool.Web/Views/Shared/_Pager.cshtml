@@ -1,5 +1,7 @@
 ﻿@model ClubPool.Web.Controllers.PagedListViewModelBase
 
+@{Html.RegisterScriptView("shared/_pager");}
+
 <span class="pager-info">Showing @Model.First - @Model.Last of @Model.Total</span>
 @if (Model.TotalPages > 1) {
   <ul class="pager">
@@ -23,14 +25,4 @@
     <li class="next disabled">Next »</li><li class="last disabled">Last »</li>
   }
   </ul>
-}
-
-@section PageScript {
-<script type="text/javascript">
-  $(function () {
-    $(".pagelink").click(function () {
-      location.assign($.query.set("page", $(this).data("page")));
-    });
-  });
-</script>
 }
