@@ -165,6 +165,7 @@
     <Compile Include="Infrastructure\PagingExtensions.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Infrastructure\ScriptExtensions.cs" />
+    <Compile Include="Infrastructure\ScriptViewRegistrar.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\GameType.cs" />

@@ -64,6 +64,7 @@ namespace ClubPool.Web
 
       builder.RegisterType<Repository>().As<IRepository>();
       builder.Register<Lazy<DbContext>>(c => new Lazy<DbContext>(() => new ClubPoolContext())).InstancePerHttpRequest();
+      builder.Register<ScriptViewRegistrar>(c => new ScriptViewRegistrar()).InstancePerHttpRequest();
 
       var assembly = typeof(MvcApplication).Assembly;
       builder.RegisterAssemblyTypes(assembly)

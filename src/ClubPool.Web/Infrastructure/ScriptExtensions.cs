@@ -10,20 +10,18 @@ namespace ClubPool.Web.Infrastructure
 {
   public static class ScriptExtensions
   {
-    private static List<string> registrations = new List<string>();
-
     public static void RegisterScriptView(this HtmlHelper helper, string viewName) {
-      if (!registrations.Contains(viewName)) {
-        registrations.Add(viewName);
-      }
+      var registrar = DependencyResolver.Current.GetService<ScriptViewRegistrar>();
+      registrar.RegisterScriptView(viewName);
     }
 
     public static MvcHtmlString RenderRegisteredScriptViews(this HtmlHelper helper) {
-      if (registrations.Any()) {
+      var registrar = DependencyResolver.Current.GetService<ScriptViewRegistrar>();
+      if (registrar.HasRegisteredScriptViews) {
         var tagFormat = @"<script type=""text/javascript"">$(function(){{{0}}})</script>";
         var registrationFormat = @"$.scriptRegistrar.initViewScript(""{0}"");";
         var scripts = new StringBuilder();
-        foreach (var viewName in registrations) {
+        foreach (var viewName in registrar.GetScriptViews()) {
           scripts.Append(string.Format(registrationFormat, viewName));
         }
         return MvcHtmlString.Create(string.Format(tagFormat, scripts.ToString()));
