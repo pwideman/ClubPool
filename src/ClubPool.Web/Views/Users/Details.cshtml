@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "User Details";
+    Html.RegisterScriptView("users/details");
 }
 
 <h4>User Information</h4>
@@ -50,13 +51,4 @@
   </div>
   }
 </div>
-
-@section PageScript {
-<script type="text/javascript">
-  $(document).ready(function () {
-    $("#tabs").tabs();
-  });
-  $("#skill_level_calc tr:last").addClass("last");
-</script>
-}
 

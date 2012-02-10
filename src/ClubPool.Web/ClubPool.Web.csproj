@@ -322,6 +322,7 @@
     <Content Include="Views\Login\LoginGadget.cshtml" />
     <Content Include="Views\UnapprovedUsers\scripts.js" />
     <Content Include="Views\UserMatchHistory\scripts.js" />
+    <Content Include="Views\Users\scripts.js" />
     <Content Include="Views\Users\VerifySkillLevels.cshtml" />
   </ItemGroup>
   <ItemGroup>
