@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = Model.Name;
+    Html.RegisterScriptView("seasons/details");
 }
 
 <div class="heading">
@@ -144,22 +145,4 @@
 }
 @if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) {
   Html.RenderPartial("_NotificationMessage");
-}
-
-@section PageScript {
-<script type="text/javascript">
-  $(function () {
-    $("tbody.content tr:odd").addClass("alt");
-    $("#divisiontabs").tabs({
-      cookie: {}
-    });
-    $(".division-details-tabs").tabs({
-      cookie: {}
-    });
-    $(".submit-form-link").click(function () {
-      $(this).parents("form:first").submit();
-    });
-    $(".schedule-byes").numeric();
-  });
-</script>
 }
