@@ -289,10 +289,10 @@
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
     <Content Include="Views\Schedule\schedule.js" />
-    <Content Include="Scripts\dashboard.js" />
-    <Content Include="Scripts\teams.js" />
+    <Content Include="Views\Dashboard\dashboard.js" />
+    <Content Include="Views\Teams\teams.js" />
     <Content Include="Scripts\scriptRegistrar.js" />
-    <Content Include="Scripts\meets.js" />
+    <Content Include="Views\Meets\meets.js" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
