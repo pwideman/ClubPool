@@ -320,6 +320,7 @@
     <Content Include="Content\themes\base\jquery-ui.css" />
     <Content Include="Views\Scoresheet\Scoresheet.cshtml" />
     <Content Include="Views\Login\LoginGadget.cshtml" />
+    <Content Include="Views\UnapprovedUsers\scripts.js" />
     <Content Include="Views\Users\VerifySkillLevels.cshtml" />
   </ItemGroup>
   <ItemGroup>

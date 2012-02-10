@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Users Awaiting Approval";
+    Html.RegisterScriptView("unapprovedusers");
 }
 
 <div class="heading">
@@ -51,16 +52,4 @@
       <li>@user.Item1 (@user.Item2)</li>
     }
   </ul>
-}
-
-@section PageScript {
-<script type="text/javascript">
-  $(function () {
-    $("#approveall").click(function () {
-      var approved = $(this).attr("checked");
-      $("input[name=userids]").attr("checked", approved);
-    });
-    $("#unapproved_users tbody.content tr:odd").addClass("alt");
-  });
-</script>
 }
