@@ -1,6 +1,5 @@
-﻿(function (scriptRegistrar) {
-  scriptRegistrar.registerViewScript("meets/details", function () {
-    console.log("meets/details script running");
+﻿(function (sr) {
+  sr.registerViewScript("meets/details", function () {
     // preload images
     var loadingImage = new Image(16, 16);
     loadingImage.src = loadingImageUrl;
@@ -26,11 +25,6 @@
     // create ajax form
     $("#enter_results_form").ajaxForm({
       success: function (response, status, xhr, form) {
-        $log("ajax form submit success:");
-        $log("response: ", response);
-        $log("status: ", status);
-        $log("xhr: ", xhr);
-        $log("form: ", form);
         $waiting_on_submit = false;
         $("#enter_results_form_status").html("");
         if (xhr.status === 200) {
@@ -67,10 +61,6 @@
         }
       },
       error: function (xhr, status, error) {
-        $log("ajax form submit error:");
-        $log("error: ", error);
-        $log("status: ", status);
-        $log("xhr: ", xhr);
         $waiting_on_submit = false;
         $("#enter_results_form_status").html("The server encountered an error processing your request, try again").addClass("error");
       },
@@ -259,4 +249,4 @@
       });
     }
   });
-})($scriptRegistrar);
+})($.scriptRegistrar);

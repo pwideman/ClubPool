@@ -1,22 +1,22 @@
-﻿var $scriptRegistrar = (function () {
-  var my = {};
+﻿(function () {
+  var sr = {};
   var registrations = {};
 
-  my.registerViewScript = function (name, fn) {
+  sr.registerViewScript = function (name, fn) {
     if (!registrations[name]) {
       registrations[name] = [];
     }
     registrations[name].push(fn);
   };
 
-  my.initViewScript = function (name) {
+  sr.initViewScript = function (name) {
     if (registrations[name]) {
       var scripts = registrations[name];
-      for (var i=0; i < scripts.length; i++) {
+      for (var i = 0; i < scripts.length; i++) {
         scripts[i]();
       }
     }
   }
 
-  return my;
-} ());
+  $.scriptRegistrar = sr;
+} ($));

@@ -21,7 +21,7 @@ namespace ClubPool.Web.Infrastructure
     public static MvcHtmlString RenderRegisteredScriptViews(this HtmlHelper helper) {
       if (registrations.Any()) {
         var tagFormat = @"<script type=""text/javascript"">$(function(){{{0}}})</script>";
-        var registrationFormat = @"$scriptRegistrar.initViewScript(""{0}"");";
+        var registrationFormat = @"$.scriptRegistrar.initViewScript(""{0}"");";
         var scripts = new StringBuilder();
         foreach (var viewName in registrations) {
           scripts.Append(string.Format(registrationFormat, viewName));
