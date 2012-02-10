@@ -2,6 +2,7 @@
 
 @{
   ViewBag.Title = "Users";
+  Html.RegisterScriptView("users/index");
 }
 
 <div class="heading">
@@ -91,34 +92,4 @@
 }
 else if (TempData.ContainsKey(GlobalViewDataProperty.PageNotificationMessage)) {
   Html.RenderPartial("_NotificationMessage");
-}
-
-@section PageScript {
-<script type="text/javascript">
-  $(function () {
-    $("tbody.content tr:odd").addClass("alt");
-    $("#q").placeholder().keypress(function (e) {
-      if (e.keyCode === 13) {
-        doSearch($(this).val());
-      }
-    });
-    $("#users-search-icon").click(function(e) {
-      doSearch($("#q").val());
-    });
-  });
-
-  function doSearch(query) {
-    if (query !== $.query.get("q")) {
-      var search = "";
-      if (query) {
-        search = $.query.set("q", query).remove("page");
-      }
-      else {
-        search = $.query.remove("q").remove("page");
-      }
-      var newurl = location.origin + location.pathname + search;
-      location.assign(newurl);
-    }
-  }
-</script>
 }
