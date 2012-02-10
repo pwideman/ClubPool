@@ -1,7 +1,8 @@
 ﻿@model ClubPool.Web.Controllers.Schedule.SeasonScheduleViewModel
 
 @{
-    ViewBag.Title = "Schedule";
+  ViewBag.Title = "Schedule";
+  Html.RegisterScriptView("schedule");
 }
 
 <h4>@Model.Name Schedule</h4>
@@ -26,12 +27,4 @@
   </div>
   }
 </div>
-}
-
-@section PageScript {
-<script type="text/javascript">
-  $(function () {
-    $("#divisiontabs").tabs();
-  });
-</script>
 }

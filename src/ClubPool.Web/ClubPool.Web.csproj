@@ -287,6 +287,7 @@
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
+    <Content Include="Views\Schedule\schedule.js" />
     <Content Include="Scripts\dashboard.js" />
     <Content Include="Scripts\teams.js" />
     <Content Include="Scripts\scriptRegistrar.js" />
