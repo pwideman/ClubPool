@@ -1,4 +1,5 @@
 ﻿(function (sr) {
+  // details
   sr.registerViewScript("seasons/details", function () {
     $("tbody.content tr:odd").addClass("alt");
     $("#divisiontabs").tabs({
@@ -12,4 +13,10 @@
     });
     $(".schedule-byes").numeric();
   });
+
+  // index
+  sr.registerViewScript("seasons/index", function () {
+    $("tbody.content tr:odd").addClass("alt");
+  });
+
 })($.scriptRegistrar);
