@@ -292,6 +292,7 @@
     <Content Include="Views\Dashboard\scripts.js" />
     <Content Include="Views\Seasons\scripts.js" />
     <Content Include="Views\Shared\scripts.js" />
+    <Content Include="Views\Standings\scripts.js" />
     <Content Include="Views\Teams\scripts.js" />
     <Content Include="Scripts\scriptRegistrar.js" />
     <Content Include="Views\Meets\scripts.js" />

@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Standings";
+    Html.RegisterScriptView("standings");
 }
 
 <h4>@Model.Name Standings</h4>
@@ -112,14 +113,4 @@
     </table>
   </div>
 </div>
-}
-
-@section PageScript {
-<script type="text/javascript">
-  $(function () {
-    $("#divisiontabs").tabs();
-    $(".division-standings-tabs").tabs();
-    $("table tbody tr:odd").addClass("alt");
-  });
-</script>
 }
