@@ -11,18 +11,18 @@
   });
 
   // details - if user can edit name
-  sr.registerViewScript("teams/details.editname", function () {
+  sr.registerViewScript("teams/details.editname", function (model) {
     // declare formOpts explicitly, since we need to use it in two different places
     var formOpts = {
       success: function (response, status, xhr, form) {
         if (xhr.status === 200) {
           if (response.Success) {
-            $currentTeamName = $("#name").val();
+            model.currentTeamName = $("#name").val();
             $("#name").effect("highlight", 1500);
           }
           else {
             $("#name").ajaxUpdateError({ message: response.Message });
-            $("#name").val($currentTeamName);
+            $("#name").val(model.currentTeamName);
           }
         }
       },
@@ -31,7 +31,7 @@
       },
       beforeSubmit: function () {
         var valid = $("#update_name_form").validate().form();
-        var different = $("#name").val() != $currentTeamName;
+        var different = $("#name").val() != model.currentTeamName;
         var ret = valid && different;
         $("#name").ajaxUpdateError("close");
         return ret;
@@ -40,7 +40,7 @@
 
     // set up team name text box event handlers
     $("#name").blur(saveName).focus(function (e) {
-      $currentTeamName = $(this).val();
+      model.currentTeamName = $(this).val();
     });
     // create ajax form
     $("#update_name_form").ajaxForm(formOpts);
