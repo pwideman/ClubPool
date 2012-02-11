@@ -127,12 +127,14 @@
   }
 </div>
 
+@section PageScript {
 <script type="text/javascript">
-  // initialize some variables needed to enter match results
-  var $matches = {};
+// initialize some variables needed to enter match results
+(function(model) {
+  var matches = {};
   @foreach(var match in Model.Matches) {
   <text>
-  $matches["@match.Id"] = {
+  matches["@match.Id"] = {
     id: @match.Id,
     isComplete: @match.IsComplete.ToString().ToLower(),
     datePlayed: "@match.DatePlayed",
@@ -159,6 +161,9 @@
   };
   </text>
   }
-  var calendarImageUrl = "@Url.ContentImageUrl("calendar.gif")";
-  var loadingImageUrl = "@Url.ContentImageUrl("loading-small.gif")";
+  model.matches = matches;
+  model.calendarImageUrl = "@Url.ContentImageUrl("calendar.gif")";
+  model.loadingImageUrl = "@Url.ContentImageUrl("loading-small.gif")";
+})($model);
 </script>
+}

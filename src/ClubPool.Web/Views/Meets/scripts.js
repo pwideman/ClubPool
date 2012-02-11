@@ -1,10 +1,10 @@
 ﻿(function (sr) {
-  sr.registerViewScript("meets/details", function () {
+  sr.registerViewScript("meets/details", function (model) {
     // preload images
     var loadingImage = new Image(16, 16);
-    loadingImage.src = loadingImageUrl;
+    loadingImage.src = model.loadingImageUrl;
     var calendarImage = new Image(16, 16);
-    calendarImage.src = calendarImageUrl;
+    calendarImage.src = model.calendarImageUrl;
 
     var $current_match_id = null;
     var $current_match_status = null;
@@ -14,7 +14,7 @@
     // set up date & time controls
     $("input.datepicker").datepicker({
       showOn: 'button',
-      buttonImage: calendarImageUrl,
+      buttonImage: model.calendarImageUrl,
       buttonImageOnly: true
     });
     $("input.timepicker").timepicker({
@@ -68,7 +68,7 @@
         var valid = $("#enter_results_form").validate().form();
         if (valid) {
           $("#enter_results_form_status").removeClass("error")
-          .html('<img src="' + loadingImageUrl + '" alt="Loading" title="Loading"/>&nbsp;Please wait...');
+          .html('<img src="' + model.loadingImageUrl + '" alt="Loading" title="Loading"/>&nbsp;Please wait...');
           $waiting_on_submit = true;
         }
         return valid;
@@ -111,7 +111,7 @@
 
     // add click event handler to enter results image links
     $(".enter-results-link").click(function () {
-      var match = $matches[this.id];
+      var match = model.matches[this.id];
       $current_match_id = this.id;
       $current_match_rows = $("tr[id^='" + $current_match_id + "_']");
       $current_match_status = $("#" + match.id + "_status");
@@ -161,7 +161,7 @@
         player.wins = form.find("[name='Player" + playerIndex + "Wins']").val() || 0;
       }
       var form = $("#enter_results_form");
-      var match = $matches[id];
+      var match = model.matches[id];
       match.isComplete = true;
       match.isForfeit = form.find("[name='IsForfeit']").attr("checked");
       if (match.isForfeit) {
