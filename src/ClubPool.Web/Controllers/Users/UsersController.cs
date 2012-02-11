@@ -9,7 +9,7 @@ using Elmah;
 
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controls.Captcha;
-using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Messaging;
@@ -25,25 +25,25 @@ namespace ClubPool.Web.Controllers.Users
     protected IMembershipService membershipService;
     protected IRepository repository;
     protected IEmailService emailService;
-    protected IConfigurationService configService;
+    protected ClubPoolConfiguration config;
 
     public UsersController(IAuthenticationService authSvc, 
       IMembershipService membershipSvc, 
       IEmailService emailSvc,
-      IConfigurationService configService,
+      ClubPoolConfiguration config,
       IRepository repository)
     {
 
       Arg.NotNull(authSvc, "authSvc");
       Arg.NotNull(membershipSvc, "membershipSvc");
       Arg.NotNull(emailSvc, "emailSvc");
-      Arg.NotNull(configService, "configService");
+      Arg.NotNull(config, "config");
       Arg.NotNull(repository, "repository");
 
       authenticationService = authSvc;
       membershipService = membershipSvc;
       emailService = emailSvc;
-      this.configService = configService;
+      this.config = config;
       this.repository = repository;
     }
 
@@ -134,7 +134,7 @@ namespace ClubPool.Web.Controllers.Users
       var administrators = repository.All<Role>().Single(r => r.Name.Equals(Roles.Administrators)).Users;
       if (administrators.Any()) {
         var adminEmailAddresses = administrators.Select(u => u.Email).ToList();
-        var siteName = configService.GetConfig().SiteName;
+        var siteName = config.SiteName;
         var subject = string.Format("New user sign up at {0}", siteName);
         var body = new StringBuilder();
         body.AppendFormat("A new user has signed up at {0} and needs admin approval:{1}{1}", siteName, Environment.NewLine);

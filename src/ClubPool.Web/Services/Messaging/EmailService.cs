@@ -8,7 +8,6 @@ using System.Configuration;
 
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.Configuration;
-using ClubPool.Web.Services.Configuration;
 
 namespace ClubPool.Web.Services.Messaging
 {
@@ -18,10 +17,9 @@ namespace ClubPool.Web.Services.Messaging
     protected string systemEmailAddress;
     protected string systemEmailPassword;
 
-    public EmailService(IConfigurationService configService) {
-      Arg.NotNull(configService, "configService");
+    public EmailService(ClubPoolConfiguration config) {
+      Arg.NotNull(config, "config");
 
-      var config = configService.GetConfig();
       smtpHost = config.SmtpHost;
       systemEmailAddress = config.SystemEmailAddress;
       systemEmailPassword = config.SystemEmailPassword;

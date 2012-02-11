@@ -221,8 +221,6 @@
     <Compile Include="Services\Authentication\ClubPoolPrincipal.cs" />
     <Compile Include="Services\Authentication\IAuthenticationService.cs" />
     <Compile Include="Services\Authentication\FormsAuthenticationService.cs" />
-    <Compile Include="Services\Configuration\ConfigurationService.cs" />
-    <Compile Include="Services\Configuration\IConfigurationService.cs" />
     <Compile Include="Services\Membership\IMembershipService.cs" />
     <Content Include="Content\css\corners.less" />
     <Content Include="Content\css\sidebar.less" />

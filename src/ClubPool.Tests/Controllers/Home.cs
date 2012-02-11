@@ -8,7 +8,6 @@ using ClubPool.Testing;
 
 using ClubPool.Web.Controllers.Home;
 using ClubPool.Web.Services.Authentication;
-using ClubPool.Web.Services.Configuration;
 using ClubPool.Web.Infrastructure.Configuration;
 
 namespace ClubPool.Tests.Controllers.Home
@@ -17,14 +16,18 @@ namespace ClubPool.Tests.Controllers.Home
   {
     protected HomeController controller;
     protected Mock<IAuthenticationService> authenticationService;
-    protected Mock<IConfigurationService> configService;
 
     public override void EstablishContext() {
       authenticationService = new Mock<IAuthenticationService>();
-      configService = new Mock<IConfigurationService>();
-      configService.Setup(s => s.GetConfig()).Returns(new ClubPoolConfiguration("test", "test", "test", null, false));
+      var config = new ClubPoolConfiguration {
+        SiteName = "test",
+        SmtpHost = "test",
+        SystemEmailAddress = "test@test.com",
+        SystemEmailPassword = "test",
+        UseRescues = false
+      };
 
-      controller = new HomeController(authenticationService.Object, configService.Object);
+      controller = new HomeController(authenticationService.Object, config);
     }
   }
 

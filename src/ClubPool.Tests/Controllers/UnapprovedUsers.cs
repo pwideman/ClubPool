@@ -13,7 +13,6 @@ using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Messaging;
-using ClubPool.Web.Services.Configuration;
 using ClubPool.Web.Infrastructure.Configuration;
 
 namespace ClubPool.Tests.Controllers.UnapprovedUsers
@@ -23,15 +22,18 @@ namespace ClubPool.Tests.Controllers.UnapprovedUsers
     protected UnapprovedUsersController controller;
     protected Mock<IRepository> repository;
     protected Mock<IEmailService> emailService;
-    protected Mock<IConfigurationService> configService;
 
     public override void EstablishContext() {
       repository = new Mock<IRepository>();
       emailService = new Mock<IEmailService>();
-      configService = new Mock<IConfigurationService>();
-      var config = new ClubPoolConfiguration("test", "test", "test@test.com", "test", false);
-      configService.Setup(c => c.GetConfig()).Returns(config);
-      controller = new UnapprovedUsersController(repository.Object, emailService.Object, configService.Object);
+      var config = new ClubPoolConfiguration {
+        SiteName = "test",
+        SmtpHost = "test",
+        SystemEmailAddress = "test@test.com",
+        SystemEmailPassword = "test",
+        UseRescues = false
+      };
+      controller = new UnapprovedUsersController(repository.Object, emailService.Object, config);
     }
   }
 }

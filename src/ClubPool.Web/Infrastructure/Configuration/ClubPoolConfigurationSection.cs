@@ -10,7 +10,13 @@ namespace ClubPool.Web.Infrastructure.Configuration
   {
     public static ClubPoolConfiguration GetConfig() {
       var section = ConfigurationManager.GetSection("clubPool") as ClubPoolConfigurationSection;
-      return new ClubPoolConfiguration(section.SiteName, section.SmtpHost, section.SystemEmailAddress, section.SystemEmailPassword, section.UseRescues);
+      return new ClubPoolConfiguration {
+        SiteName = section.SiteName,
+        SmtpHost = section.SmtpHost,
+        SystemEmailAddress = section.SystemEmailAddress,
+        SystemEmailPassword = section.SystemEmailPassword,
+        UseRescues = section.UseRescues
+      };
     }
 
     [ConfigurationProperty("smtpHost")]

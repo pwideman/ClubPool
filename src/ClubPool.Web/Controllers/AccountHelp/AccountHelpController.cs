@@ -10,7 +10,7 @@ using ClubPool.Web.Controllers;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Controls.Captcha;
 using ClubPool.Web.Models;
-using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Services.Messaging;
@@ -23,24 +23,24 @@ namespace ClubPool.Web.Controllers.AccountHelp
     private IMembershipService membershipService;
     private IRepository repository;
     private IEmailService emailService;
-    private IConfigurationService configService;
+    private ClubPoolConfiguration config;
 
     public AccountHelpController(IAuthenticationService authSvc,
       IMembershipService membershipSvc,
       IEmailService emailSvc,
-      IConfigurationService configService,
+      ClubPoolConfiguration config,
       IRepository repository)
     {
       Arg.NotNull(authSvc, "authSvc");
       Arg.NotNull(membershipSvc, "membershipSvc");
       Arg.NotNull(emailSvc, "emailSvc");
-      Arg.NotNull(configService, "configService");
+      Arg.NotNull(config, "config");
       Arg.NotNull(repository, "repository");
 
       authenticationService = authSvc;
       membershipService = membershipSvc;
       emailService = emailSvc;
-      this.configService = configService;
+      this.config = config;
       this.repository = repository;
     }
 
@@ -86,7 +86,7 @@ namespace ClubPool.Web.Controllers.AccountHelp
         // we found a user, send the email containing reset token
         token = membershipService.GeneratePasswordResetToken(user);
         var helper = new UrlHelper(((MvcHandler)HttpContext.CurrentHandler).RequestContext);
-        var siteName = configService.GetConfig().SiteName;
+        var siteName = config.SiteName;
         var url = helper.Action("ValidatePasswordResetToken", "AccountHelp", new { token = token }, HttpContext.Request.Url.Scheme);
         var body = string.Format("You have requested to reset your password at {0}. Click the following link to be logged into your" +
           " account and taken to the member info page, where you can change your password. The link is valid for 24 hours.{1}{1}" +
@@ -149,7 +149,7 @@ namespace ClubPool.Web.Controllers.AccountHelp
         }
         body = bodysb.ToString();
       }
-      var siteName = configService.GetConfig().SiteName;
+      var siteName = config.SiteName;
       emailService.SendSystemEmail(viewModel.Email, string.Format("{0} Username Assistance", siteName), body);
       return RedirectToAction("RecoverUsernameComplete");
     }

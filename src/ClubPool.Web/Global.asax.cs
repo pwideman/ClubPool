@@ -13,7 +13,7 @@ using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Infrastructure.EntityFramework;
 using ClubPool.Web.Services.Authentication;
 using ClubPool.Web.Models;
-using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 
 namespace ClubPool.Web
 {
@@ -26,7 +26,7 @@ namespace ClubPool.Web
     {
       filters.Add(new ElmahHandleErrorLoggerFilter());
       filters.Add(new HandleErrorAttribute());
-      filters.Add(new GlobalViewBagFilter(DependencyResolver.Current.GetService<IConfigurationService>()));
+      filters.Add(new GlobalViewBagFilter(DependencyResolver.Current.GetService<ClubPoolConfiguration>()));
     }
 
     public static void RegisterRoutes(RouteCollection routes)
@@ -49,7 +49,7 @@ namespace ClubPool.Web
     protected void Application_Start() {
       Database.SetInitializer<ClubPoolContext>(null);
 
-      InitializeServiceLocator();
+      InitializeServiceLocator(GetConfig());
 
       AreaRegistration.RegisterAllAreas();
 
@@ -57,7 +57,13 @@ namespace ClubPool.Web
       RegisterRoutes(RouteTable.Routes);
     }
 
-    protected virtual void InitializeServiceLocator() {
+    private ClubPoolConfiguration GetConfig() {
+      var config = ClubPoolConfigurationSection.GetConfig();
+      config.AppRootPath = AppDomain.CurrentDomain.BaseDirectory;
+      return config;
+    }
+
+    protected virtual void InitializeServiceLocator(ClubPoolConfiguration config) {
       var builder = new ContainerBuilder();
       // set up the ServiceLocator earlier so that we can use it in
       // ComponentRegistrar
@@ -65,6 +71,7 @@ namespace ClubPool.Web
       builder.RegisterType<Repository>().As<IRepository>();
       builder.Register<Lazy<DbContext>>(c => new Lazy<DbContext>(() => new ClubPoolContext())).InstancePerHttpRequest();
       builder.Register<ScriptViewRegistrar>(c => new ScriptViewRegistrar()).InstancePerHttpRequest();
+      builder.RegisterInstance(config);
 
       var assembly = typeof(MvcApplication).Assembly;
       builder.RegisterAssemblyTypes(assembly)

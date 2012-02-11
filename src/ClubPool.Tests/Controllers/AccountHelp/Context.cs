@@ -8,7 +8,6 @@ using ClubPool.Web.Controllers.AccountHelp;
 using ClubPool.Web.Infrastructure;
 using ClubPool.Web.Services.Membership;
 using ClubPool.Web.Services.Messaging;
-using ClubPool.Web.Services.Configuration;
 using ClubPool.Web.Infrastructure.Configuration;
 
 namespace ClubPool.Tests.Controllers.AccountHelp
@@ -20,18 +19,21 @@ namespace ClubPool.Tests.Controllers.AccountHelp
     protected MockAuthenticationService authenticationService;
     protected Mock<IMembershipService> membershipService;
     protected Mock<IEmailService> emailService;
-    protected Mock<IConfigurationService> configService;
 
     public override void EstablishContext() {
       repository = new Mock<IRepository>();
       authenticationService = AuthHelper.CreateMockAuthenticationService();
       membershipService = new Mock<IMembershipService>();
       emailService = new Mock<IEmailService>();
-      configService = new Mock<IConfigurationService>();
-      var config = new ClubPoolConfiguration("test", "test", "test@test.com", "test", false);
-      configService.Setup(c => c.GetConfig()).Returns(config);
+      var config = new ClubPoolConfiguration {
+        SiteName = "test",
+        SmtpHost = "test",
+        SystemEmailAddress = "test@test.com",
+        SystemEmailPassword = "test",
+        UseRescues = false
+      };
       controller = new AccountHelpController(authenticationService, membershipService.Object,
-        emailService.Object, configService.Object, repository.Object);
+        emailService.Object, config, repository.Object);
     }
   }
 }

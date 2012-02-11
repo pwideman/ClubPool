@@ -9,7 +9,7 @@ using Elmah;
 
 using ClubPool.Web.Models;
 using ClubPool.Web.Infrastructure;
-using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 using ClubPool.Web.Services.Messaging;
 
 namespace ClubPool.Web.Controllers.UnapprovedUsers
@@ -18,12 +18,12 @@ namespace ClubPool.Web.Controllers.UnapprovedUsers
   {
     private IRepository repository;
     private IEmailService emailService;
-    private IConfigurationService configService;
+    private ClubPoolConfiguration config;
 
-    public UnapprovedUsersController(IRepository repository, IEmailService emailService, IConfigurationService configService) {
+    public UnapprovedUsersController(IRepository repository, IEmailService emailService, ClubPoolConfiguration config) {
       this.repository = repository;
       this.emailService = emailService;
-      this.configService = configService;
+      this.config = config;
     }
 
     public void RegisterRoutes(RouteCollection routes) {
@@ -51,7 +51,7 @@ namespace ClubPool.Web.Controllers.UnapprovedUsers
       var users = repository.All<User>().Where(u => userIds.Contains(u.Id));
       if (users.Any()) {
         bool saveComplete = false;
-        var siteName = configService.GetConfig().SiteName;
+        var siteName = config.SiteName;
         var emailSubject = string.Format("{0} account approved", siteName);
         var helper = new UrlHelper(((MvcHandler)HttpContext.CurrentHandler).RequestContext);
         var url = helper.Action("Login", "Users", null, HttpContext.Request.Url.Scheme);

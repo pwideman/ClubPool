@@ -3,7 +3,7 @@ using System.Web.Mvc;
 
 using ClubPool.Web.Controllers.Shared.SidebarGadgets;
 using ClubPool.Web.Services.Authentication;
-using ClubPool.Web.Services.Configuration;
+using ClubPool.Web.Infrastructure.Configuration;
 using ClubPool.Web.Infrastructure;
 
 namespace ClubPool.Web.Controllers.Home
@@ -11,14 +11,14 @@ namespace ClubPool.Web.Controllers.Home
   public class HomeController : BaseController
   {
     private IAuthenticationService authenticationService;
-    private IConfigurationService configService;
+    private ClubPoolConfiguration config;
 
-    public HomeController(IAuthenticationService authSvc, IConfigurationService configService) {
+    public HomeController(IAuthenticationService authSvc, ClubPoolConfiguration config) {
       Arg.NotNull(authSvc, "authSvc");
-      Arg.NotNull(configService, "configService");
+      Arg.NotNull(config, "configService");
 
       authenticationService = authSvc;
-      this.configService = configService;
+      this.config = config;
     }
 
     [HttpGet]
