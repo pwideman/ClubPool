@@ -1,7 +1,14 @@
 ﻿@model ClubPool.Web.Controllers.Teams.DetailsViewModel
 
 @{
-    ViewBag.Title = "Team Details";
+  ViewBag.Title = "Team Details";
+  Html.RegisterScriptView("teams/details");
+  if (Model.CanUpdateName) {
+    Html.RegisterScriptView("teams/details.editname");
+    <script type="text/javascript">
+      var $currentTeamName = "@Model.Name";
+    </script>
+  }
 }
 
 @if (Model.CanUpdateName) {
@@ -10,7 +17,8 @@
     @Html.HiddenFor(m => m.Id)
     <p><input type="text" id="name" name="name" class="team-name required" size="30" value="@Model.Name" title="Click to edit team name, enter or tab out to save"/></p>
   }
-} else {
+}
+else {
   <h4>@Model.Name</h4>
 }
 <p class="team-details-email">
@@ -25,7 +33,7 @@
         Players:
         <ul>
           @foreach (var player in Model.Players) {
-            <li>@Html.ActionLink(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel), "Details", "Users", new { id = player.Id}, null)</li>
+            <li>@Html.ActionLink(string.Format("{0} ({1})", player.Name, player.EightBallSkillLevel), "Details", "Users", new { id = player.Id }, null)</li>
           }
         </ul>
       </li>
@@ -65,68 +73,4 @@
     </table>
   </div>
 </div>
-}
-
-@section PageScript {
-
-@if (Model.CanUpdateName) {
-
-<script type="text/javascript">
-  var currentTeamName = "@Model.Name";
-  // declare formOpts explicitly, since we need to use it in two different places
-  var formOpts = {
-    success: function (response, status, xhr, form) {
-      if (xhr.status === 200) {
-        if (response.Success) {
-          currentTeamName = $("#name").val();
-          $("#name").effect("highlight", 1500);
-        }
-        else {
-          $("#name").ajaxUpdateError({ message: response.Message });
-          $("#name").val(currentTeamName);
-        }
-      }
-    },
-    error: function (xhr, status, error) {
-      $("#name").ajaxUpdateError({ message: "An error occurred on the server while saving your changes, try again" });
-    },
-    beforeSubmit: function () {
-      $log("beforeSubmit");
-      var valid = $("#update_name_form").validate().form();
-      $log("valid: " + valid);
-      var different = $("#name").val() != currentTeamName;
-      $log("different: " + different);
-      var ret = valid && different;
-      $log("returning: " + ret);
-      $("#name").ajaxUpdateError("close");
-      return ret;
-    }
-  };
-
-  $(function () {
-    // set up team name text box event handlers
-    $("#name").blur(saveName).focus(function (e) {
-      currentTeamName = $(this).val();
-    });
-    // create ajax form
-    $("#update_name_form").ajaxForm(formOpts);
-
-    // set up validation
-    $("#update_name_form").validate({
-      errorPlacement: function () { }
-    });
-  });
-
-  function saveName() {
-    $("#update_name_form").ajaxSubmit(formOpts);
-  }
-</script>
-}
-
-<script type="text/javascript">
-  $(function () {
-    // style table
-    $("#season-results-table tbody:last").removeClass("meet").find("tr:last").addClass("last");
-  });
-</script>
 }
