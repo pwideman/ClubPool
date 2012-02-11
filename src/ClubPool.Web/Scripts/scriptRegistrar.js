@@ -13,7 +13,7 @@
     if (registrations[name]) {
       var scripts = registrations[name];
       for (var i = 0; i < scripts.length; i++) {
-        scripts[i]();
+        scripts[i]($model);
       }
     }
   }
