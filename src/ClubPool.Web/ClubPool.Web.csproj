@@ -141,6 +141,7 @@
     <Compile Include="Controllers\UserMatchHistory\ViewModels.cs" />
     <Compile Include="Controllers\Users\ViewModels.cs" />
     <Compile Include="Infrastructure\Arg.cs" />
+    <Compile Include="Infrastructure\AssetExtensions.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
     <Compile Include="Infrastructure\CustomExceptions.cs" />
@@ -280,7 +281,7 @@
     <None Include="Views\Navigation\scripts.js" />
     <None Include="Views\Schedule\scripts.js" />
     <None Include="Views\Dashboard\scripts.js" />
-    <Content Include="Scripts\jquery\jquery.min.js" />
+    <Content Include="Content\assets\jquery.min.js" />
     <Content Include="Scripts\site.min.js" />
     <None Include="Views\Seasons\scripts.js" />
     <None Include="Views\Shared\scripts.js" />
