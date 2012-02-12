@@ -349,7 +349,7 @@
     <Content Include="Content\css\jquery-ui-timepicker.less" />
     <Content Include="Content\css\menu.less" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\clubpool.js" />
+    <Content Include="Scripts\utils.js" />
     <Content Include="Scripts\jquerycore\jquery-1.4.4.js" />
     <Content Include="Scripts\jquerycore\jquery-ui.min.js" />
     <Content Include="Scripts\lib\jquery.alphanumeric.js" />
