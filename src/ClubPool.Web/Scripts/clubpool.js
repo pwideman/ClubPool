@@ -1,9 +1,4 @@
-﻿// initialise plugins
-$(function () {
-  $(".notification").effect("fade", { easing: "easeInExpo" }, 5000);
-});
-
-function $log(text, obj) {
+﻿function $log(text, obj) {
   if (window.console && console.log) {
     console.log(text);
     if (obj) {

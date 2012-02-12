@@ -1,4 +1,5 @@
-﻿<div class="ui-state-highlight ui-corner-all message notification">
+﻿@{Html.RegisterScriptView("shared/_notification");}
+<div class="ui-state-highlight ui-corner-all message notification">
   <p><span class="ui-icon ui-icon-info message-icon"></span>
   @TempData[GlobalViewDataProperty.PageNotificationMessage]
   </p>
