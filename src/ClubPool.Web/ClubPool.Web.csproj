@@ -285,9 +285,9 @@
     <Content Include="Views\Teams\scripts.js" />
     <Content Include="Scripts\scriptregistrar.js" />
     <Content Include="Views\Meets\scripts.js" />
-    <Content Include="Scripts\jquerycore\jquery-1.4.4-vsdoc.js" />
-    <Content Include="Scripts\jquerycore\jquery-1.4.4.min.js" />
-    <Content Include="Scripts\jquerycore\jquery-ui.js" />
+    <Content Include="Scripts\jquery\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery\jquery-ui.js" />
     <Content Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\lib\jquery.validate.unobtrusive.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -332,8 +332,8 @@
     <Content Include="Content\css\menu.less" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\utils.js" />
-    <Content Include="Scripts\jquerycore\jquery-1.4.4.js" />
-    <Content Include="Scripts\jquerycore\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery\jquery-ui.min.js" />
     <Content Include="Scripts\lib\jquery.alphanumeric.js" />
     <Content Include="Scripts\lib\jquery.cookie.js" />
     <Content Include="Scripts\lib\jquery.event.hover-1.0.js" />
