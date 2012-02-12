@@ -556,6 +556,21 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <Target Name="BeforeBuild">
   </Target>
+  <UsingTask TaskName="AjaxMin" AssemblyFile="$(MSBuildProjectDirectory)\..\..\lib\AjaxMinTask.dll" />
+  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
+    <ItemGroup>
+      <AllScripts Include="Views\**\scripts.js;Scripts\*.js;Scripts\lib\*.js" />
+    </ItemGroup>
+    <ReadLinesFromFile File="%(AllScripts.Identity)">
+      <Output TaskParameter="Lines" ItemName="jsLines" />
+    </ReadLinesFromFile>
+    <WriteLinesToFile File="Scripts\site.js" Lines="@(JsLines)" Overwrite="true" />
+    <ItemGroup>
+      <SiteJs Include="Scripts\site.js" />
+    </ItemGroup>
+    <AjaxMin JsSourceFiles="@(SiteJs)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" Clobber="true" />
+    <Delete Files="Scripts\site.js" />
+  </Target>
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'" DependsOnTargets="CleanWebsitesPackage;CleanWebsitesPackageTempDir;CleanWebsitesTransformParametersFiles;">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
