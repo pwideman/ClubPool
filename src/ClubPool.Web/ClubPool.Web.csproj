@@ -304,7 +304,7 @@
     <Content Include="Content\css\menu.less" />
     <Content Include="Global.asax" />
     <None Include="Scripts\utils.js" />
-    <Content Include="Scripts\jquery\jquery-ui.min.js" />
+    <Content Include="Content\assets\jquery-ui.min.js" />
     <None Include="Scripts\lib\jquery.alphanumeric.js" />
     <None Include="Scripts\lib\jquery.cookie.js" />
     <None Include="Scripts\lib\jquery.event.hover-1.0.js" />
