@@ -289,7 +289,6 @@
     <None Include="Views\Meets\scripts.js" />
     <Content Include="Scripts\jquery\jquery-1.4.4-vsdoc.js" />
     <Content Include="Scripts\jquery\jquery-1.4.4.min.js" />
-    <Content Include="Scripts\jquery\jquery-ui.js" />
     <None Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\lib\jquery.validate.unobtrusive.js" />
     <Content Include="Views\Scoresheet\Scoresheet.cshtml" />
