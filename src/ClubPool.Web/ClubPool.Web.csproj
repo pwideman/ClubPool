@@ -558,8 +558,9 @@
   </Target>
   <UsingTask TaskName="AjaxMin" AssemblyFile="$(MSBuildProjectDirectory)\..\..\lib\AjaxMinTask.dll" />
   <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
+    <Delete Files="Scripts\site.min.js" />
     <ItemGroup>
-      <AllScripts Include="Views\**\scripts.js;Scripts\*.js;Scripts\lib\*.js" />
+      <AllScripts Include="Scripts\lib\*.js;Scripts\*.js;Views\**\scripts.js" />
     </ItemGroup>
     <ReadLinesFromFile File="%(AllScripts.Identity)">
       <Output TaskParameter="Lines" ItemName="jsLines" />
