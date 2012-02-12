@@ -1,5 +1,7 @@
 ﻿@model ClubPool.Web.Controllers.Navigation.MenuViewModel
 
+@{Html.RegisterScriptView("navigation/menu");}
+
 <ul class="sf-menu">
   <li>@Html.ActionLink("Home", "Index", "Home")</li>
   <li>@Html.ActionLink("Login", "Login", "Login")</li>
