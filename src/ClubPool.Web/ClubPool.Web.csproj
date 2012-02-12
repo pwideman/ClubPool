@@ -280,6 +280,7 @@
     <None Include="Views\Navigation\scripts.js" />
     <None Include="Views\Schedule\scripts.js" />
     <None Include="Views\Dashboard\scripts.js" />
+    <Content Include="Scripts\jquery\jquery.min.js" />
     <Content Include="Scripts\site.min.js" />
     <None Include="Views\Seasons\scripts.js" />
     <None Include="Views\Shared\scripts.js" />
@@ -287,8 +288,6 @@
     <None Include="Views\Teams\scripts.js" />
     <None Include="Scripts\scriptregistrar.js" />
     <None Include="Views\Meets\scripts.js" />
-    <Content Include="Scripts\jquery\jquery-1.4.4-vsdoc.js" />
-    <Content Include="Scripts\jquery\jquery-1.4.4.min.js" />
     <None Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\lib\jquery.validate.unobtrusive.js" />
     <Content Include="Views\Scoresheet\Scoresheet.cshtml" />
@@ -304,7 +303,6 @@
     <Content Include="Content\css\menu.less" />
     <Content Include="Global.asax" />
     <None Include="Scripts\utils.js" />
-    <Content Include="Scripts\jquery\jquery-1.4.4.js" />
     <Content Include="Scripts\jquery\jquery-ui.min.js" />
     <None Include="Scripts\lib\jquery.alphanumeric.js" />
     <None Include="Scripts\lib\jquery.cookie.js" />
