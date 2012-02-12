@@ -19,6 +19,7 @@ namespace ClubPool.Web.Infrastructure
       var viewResult = filterContext.Result as ViewResult;
       if (null != viewResult) {
         viewResult.ViewBag.SiteName = config.SiteName;
+        viewResult.ViewBag.Browser = filterContext.HttpContext.Request.Browser.Id;
       }
     }
   }

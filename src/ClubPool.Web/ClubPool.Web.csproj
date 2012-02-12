@@ -270,6 +270,7 @@
     <Content Include="Content\Images\viewresults-medium.png" />
     <Content Include="Content\Images\viewresults-small.png" />
     <Content Include="Content\Images\warning-medium.png" />
+    <None Include="Content\css\jqueryui-custom.less" />
     <None Include="packages.config" />
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
@@ -300,21 +301,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\base.less" />
-    <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\css\images\ui-bg_flat_55_fbec88_40x100.png" />
-    <Content Include="Content\css\images\ui-bg_glass_75_d0e5f5_1x400.png" />
-    <Content Include="Content\css\images\ui-bg_glass_85_dfeffc_1x400.png" />
-    <Content Include="Content\css\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\css\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
-    <Content Include="Content\css\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
-    <Content Include="Content\css\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
-    <Content Include="Content\css\images\ui-icons_217bc0_256x240.png" />
-    <Content Include="Content\css\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\css\images\ui-icons_469bdd_256x240.png" />
-    <Content Include="Content\css\images\ui-icons_6da8d5_256x240.png" />
-    <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\css\images\ui-icons_d8e7f3_256x240.png" />
-    <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
     <Content Include="Content\css\jquery-ui-timepicker.less" />
     <Content Include="Content\css\menu.less" />
     <Content Include="Global.asax" />
@@ -337,7 +323,6 @@
     <Content Include="Content\css\scoresheet.less" />
     <Content Include="Content\css\site.less" />
     <Content Include="Views\Web.config" />
-    <Content Include="Content\css\jqueryui.less" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\_ViewStart.cshtml" />
