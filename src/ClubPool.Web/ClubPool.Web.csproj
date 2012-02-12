@@ -292,6 +292,7 @@
     <Compile Include="Services\Membership\ClubPoolMembershipService.cs" />
     <Compile Include="Services\Messaging\IEmailService.cs" />
     <Compile Include="Services\Messaging\EmailService.cs" />
+    <Content Include="Scripts\mvc.js" />
     <Content Include="Scripts\jquery.ajaxupdateerror.js" />
     <Content Include="Views\Navigation\scripts.js" />
     <Content Include="Views\Schedule\scripts.js" />

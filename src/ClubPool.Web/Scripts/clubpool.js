@@ -16,5 +16,3 @@ String.prototype.format = function () {
   }
   return s;
 };
-
-var $model = {};
