@@ -5,7 +5,7 @@
   <head>
     <title>@if (!string.IsNullOrWhiteSpace(ViewBag.Title)) { @(ViewBag.Title + " - ") } @ViewBag.SiteName</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/redmond/jquery-ui.css" />
+    @Html.JQueryUICss()
     @Html.Stylesheet("site.less")
     @if ("ie7" == ViewBag.Browser) { 
       <style type="text/css">
