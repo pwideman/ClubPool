@@ -37,24 +37,7 @@
     </div>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
-    @(Bundle.JavaScript()
-      .Add("~/scripts/lib/jquery.validate.js")
-      .Add("~/scripts/lib/jquery.validate.unobtrusive.js")
-      .Add("~/scripts/lib/jquery.event.hover-1.0.js")
-      .Add("~/scripts/lib/jquery.alphanumeric.js")
-      .Add("~/scripts/lib/jquery.form.js")
-      .Add("~/scripts/lib/jquery.ui.timepicker-0.0.3.js")
-      .Add("~/scripts/lib/jquery.cookie.js")
-      .Add("~/scripts/lib/jquery.query.js")
-      .Add("~/scripts/lib/jquery.placeholder.js")
-      .Add("~/scripts/lib/supersubs.js")
-      .Add("~/scripts/lib/superfish.js")
-      .Add("~/scripts/mvc.js")
-      .Add("~/scripts/jquery.ajaxupdateerror.js")
-      .Add("~/scripts/utils.js")
-      .Add("~/scripts/scriptregistrar.js")
-      .AddViewScripts()
-      .MvcRender("~/scripts/combined_#.js"))
+    @Html.RenderSiteScripts()
     @RenderSection("PageScript", false)
     @Html.RenderRegisteredScriptViews()
   </body>
