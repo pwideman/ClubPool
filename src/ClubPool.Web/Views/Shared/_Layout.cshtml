@@ -5,7 +5,6 @@
   <head>
     <title>@if (!string.IsNullOrWhiteSpace(ViewBag.Title)) { @(ViewBag.Title + " - ") } @ViewBag.SiteName</title>
     <meta charset="utf-8" />
-    @Html.JQueryUICss()
     @Html.Stylesheet("site.less")
     @if ("ie7" == ViewBag.Browser) { 
       <style type="text/css">
@@ -41,8 +40,6 @@
         }
       }
     </div>
-    @Html.JQuery()
-    @Html.JQueryUIScript()
     @Html.RenderSiteScripts()
     @RenderSection("PageScript", false)
     @Html.RenderRegisteredScriptViews()

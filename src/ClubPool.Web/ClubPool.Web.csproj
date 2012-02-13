@@ -141,7 +141,6 @@
     <Compile Include="Controllers\UserMatchHistory\ViewModels.cs" />
     <Compile Include="Controllers\Users\ViewModels.cs" />
     <Compile Include="Infrastructure\Arg.cs" />
-    <Compile Include="Infrastructure\AssetExtensions.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
     <Compile Include="Infrastructure\CustomExceptions.cs" />
@@ -211,22 +210,22 @@
     <Compile Include="Services\Authentication\IAuthenticationService.cs" />
     <Compile Include="Services\Authentication\FormsAuthenticationService.cs" />
     <Compile Include="Services\Membership\IMembershipService.cs" />
-    <Content Include="Content\assets\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\assets\images\ui-bg_flat_55_fbec88_40x100.png" />
-    <Content Include="Content\assets\images\ui-bg_glass_75_d0e5f5_1x400.png" />
-    <Content Include="Content\assets\images\ui-bg_glass_85_dfeffc_1x400.png" />
-    <Content Include="Content\assets\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\assets\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
-    <Content Include="Content\assets\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
-    <Content Include="Content\assets\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
-    <Content Include="Content\assets\images\ui-icons_217bc0_256x240.png" />
-    <Content Include="Content\assets\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\assets\images\ui-icons_469bdd_256x240.png" />
-    <Content Include="Content\assets\images\ui-icons_6da8d5_256x240.png" />
-    <Content Include="Content\assets\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\assets\images\ui-icons_d8e7f3_256x240.png" />
-    <Content Include="Content\assets\images\ui-icons_f9bd01_256x240.png" />
-    <Content Include="Content\assets\jquery-ui.css" />
+    <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\css\images\ui-bg_flat_55_fbec88_40x100.png" />
+    <Content Include="Content\css\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_85_dfeffc_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
+    <Content Include="Content\css\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="Content\css\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="Content\css\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_d8e7f3_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
+    <None Include="Content\css\jquery-ui.less" />
     <Content Include="Content\css\corners.less" />
     <Content Include="Content\css\sidebar.less" />
     <Content Include="Content\css\forms.less" />
@@ -297,7 +296,8 @@
     <None Include="Views\Navigation\scripts.js" />
     <None Include="Views\Schedule\scripts.js" />
     <None Include="Views\Dashboard\scripts.js" />
-    <Content Include="Content\assets\jquery.min.js" />
+    <None Include="Scripts\lib\jquery\jquery-1.7.1.js" />
+    <None Include="Scripts\lib\jquery\jquery-ui-1.8.17.custom.js" />
     <Content Include="Scripts\site.min.js" />
     <None Include="Views\Seasons\scripts.js" />
     <None Include="Views\Shared\scripts.js" />
@@ -320,7 +320,6 @@
     <Content Include="Content\css\menu.less" />
     <Content Include="Global.asax" />
     <None Include="Scripts\utils.js" />
-    <Content Include="Content\assets\jquery-ui.min.js" />
     <None Include="Scripts\lib\jquery.alphanumeric.js" />
     <None Include="Scripts\lib\jquery.cookie.js" />
     <None Include="Scripts\lib\jquery.event.hover-1.0.js" />
@@ -528,7 +527,7 @@
   <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
     <Delete Files="Scripts\site.min.js" />
     <ItemGroup>
-      <AllScripts Include="Scripts\lib\*.js;Scripts\*.js;Views\**\scripts.js" />
+      <AllScripts Include="Scripts\lib\jquery\*.js;Scripts\lib\*.js;Scripts\*.js;Views\**\scripts.js" />
     </ItemGroup>
     <ReadLinesFromFile File="%(AllScripts.Identity)">
       <Output TaskParameter="Lines" ItemName="jsLines" />

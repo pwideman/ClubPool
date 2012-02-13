@@ -35,6 +35,7 @@ namespace ClubPool.Web.Infrastructure
       var appPath = DependencyResolver.Current.GetService<Configuration.ClubPoolConfiguration>().AppRootPath;
       if (!forceRelease && HttpContext.Current.IsDebuggingEnabled) {
         var scripts = new List<string>();
+        AddScripts(scripts, Path.Combine(appPath, "scripts\\lib\\jquery"), "*.js");
         AddScripts(scripts, Path.Combine(appPath, "scripts\\lib"), "*.js", false);
         AddScripts(scripts, Path.Combine(appPath, "scripts"), "*.js", true);
         AddScripts(scripts, Path.Combine(appPath, "views"), "scripts.js", true, true);
