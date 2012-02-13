@@ -141,7 +141,7 @@
     <Compile Include="Controllers\UserMatchHistory\ViewModels.cs" />
     <Compile Include="Controllers\Users\ViewModels.cs" />
     <Compile Include="Infrastructure\Arg.cs" />
-    <Compile Include="Infrastructure\AssetExtensions.cs" />
+    <Compile Include="Infrastructure\AssetManager.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\ClubPoolConfigurationSection.cs" />
     <Compile Include="Infrastructure\CustomExceptions.cs" />
@@ -227,6 +227,8 @@
     <Content Include="Content\assets\images\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\assets\images\ui-icons_f9bd01_256x240.png" />
     <Content Include="Content\assets\jquery-ui.css" />
+    <None Include="Content\assets\jquery-ui.js" />
+    <None Include="Content\assets\jquery.js" />
     <Content Include="Content\css\corners.less" />
     <Content Include="Content\css\sidebar.less" />
     <Content Include="Content\css\forms.less" />

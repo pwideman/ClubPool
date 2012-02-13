@@ -34,5 +34,16 @@ namespace ClubPool.Web.Infrastructure
       var url = new UrlHelper(context);
       return url.Content(path);
     }
+
+    public static string AssetPath(this UrlHelper helper, string asset) {
+      var assetManager = DependencyResolver.Current.GetService<AssetManager>();
+      return assetManager.GetAssetPath(asset);
+    }
+
+    public static string LocalAssetPath(this UrlHelper helper, string asset) {
+      var assetManager = DependencyResolver.Current.GetService<AssetManager>();
+      return assetManager.GetLocalAssetPath(asset);
+    }
+
   }
 }

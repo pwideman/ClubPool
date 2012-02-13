@@ -5,7 +5,7 @@
   <head>
     <title>@if (!string.IsNullOrWhiteSpace(ViewBag.Title)) { @(ViewBag.Title + " - ") } @ViewBag.SiteName</title>
     <meta charset="utf-8" />
-    @Html.JQueryUICss()
+    <link rel="stylesheet" type="text/css" href="@Url.AssetPath("jqueryuicss")" />
     @Html.Stylesheet("site.less")
     @if ("ie7" == ViewBag.Browser) { 
       <style type="text/css">
@@ -41,8 +41,18 @@
         }
       }
     </div>
-    @Html.JQuery()
-    @Html.JQueryUIScript()
+    <script type="text/javascript" src="@Url.AssetPath("jquery")"></script>
+    <script type="text/javascript">
+      if (!window.jQuery) {
+        document.write(unescape("%3Cscript src='@Url.LocalAssetPath("jquery")' type='text/javascript'%3E%3C/script%3E"));
+      }
+    </script>
+    <script type="text/javascript" src="@Url.AssetPath("jqueryui")"></script>
+    <script type="text/javascript">
+      if (!$.ui) {
+        document.write(unescape("%3Cscript src='@Url.LocalAssetPath("jqueryui")' type='text/javascript'%3E%3C/script%3E"));
+      }
+    </script>
     @Html.RenderSiteScripts()
     @RenderSection("PageScript", false)
     @Html.RenderRegisteredScriptViews()

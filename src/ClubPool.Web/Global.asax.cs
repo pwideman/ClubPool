@@ -72,6 +72,7 @@ namespace ClubPool.Web
       builder.Register<Lazy<DbContext>>(c => new Lazy<DbContext>(() => new ClubPoolContext())).InstancePerHttpRequest();
       builder.Register<ScriptViewRegistrar>(c => new ScriptViewRegistrar()).InstancePerHttpRequest();
       builder.RegisterInstance(config);
+      builder.RegisterInstance(CreateAssetManager());
 
       var assembly = typeof(MvcApplication).Assembly;
       builder.RegisterAssemblyTypes(assembly)
@@ -85,6 +86,22 @@ namespace ClubPool.Web
 
       var container = builder.Build();
       DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+    }
+
+    private AssetManager CreateAssetManager() {
+      var manager = new AssetManager();
+      manager.AddAsset("jquery",
+        "~/content/assets/jquery.js",
+        "~/content/assets/jquery.min.js",
+        "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js");
+      manager.AddAsset("jqueryui",
+        "~/content/assets/jquery-ui.js",
+        "~/content/assets/jquery-ui.min.js",
+        "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js");
+      manager.AddAsset("jqueryuicss",
+        "~/content/assets/jquery-ui.css",
+        "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/redmond/jquery-ui.css");
+      return manager;
     }
 
     protected void Application_AuthenticateRequest(object sender, EventArgs e) {
