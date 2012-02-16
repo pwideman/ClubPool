@@ -30,6 +30,17 @@ namespace ClubPool.Web.Infrastructure
         GetContentUrl(helper.ViewContext.RequestContext, "~/content/css/" + cssFile)));
     }
 
+    public static MvcHtmlString RenderSiteStylesheet(this HtmlHelper helper, bool forceRelease = false) {
+      string css = null;
+      if (!forceRelease && helper.ViewContext.HttpContext.IsDebuggingEnabled) {
+        css = "site.less";
+      }
+      else {
+        css = "site.css";
+      }
+      return Stylesheet(helper, css);
+    }
+
     private static string GetContentUrl(RequestContext context, string path) {
       var url = new UrlHelper(context);
       return url.Content(path);

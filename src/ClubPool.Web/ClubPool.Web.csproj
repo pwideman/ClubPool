@@ -523,7 +523,7 @@
   <Target Name="BeforeBuild">
   </Target>
   <UsingTask TaskName="AjaxMin" AssemblyFile="$(MSBuildProjectDirectory)\..\..\lib\AjaxMinTask.dll" />
-  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
+  <Target Name="AfterBuild">
     <Delete Files="Scripts\site.min.js" />
     <ItemGroup>
       <AllScripts Include="Scripts\lib\jquery\*.js;Scripts\lib\*.js;Scripts\*.js;Views\**\scripts.js" />
@@ -537,6 +537,7 @@
     </ItemGroup>
     <AjaxMin JsSourceFiles="@(SiteJs)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" Clobber="true" />
     <Delete Files="Scripts\site.js" />
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.2.2.0\tool\dotless.compiler -m site.less site.css"/>
   </Target>
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'" DependsOnTargets="CleanWebsitesPackage;CleanWebsitesPackageTempDir;CleanWebsitesTransformParametersFiles;">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
