@@ -225,24 +225,25 @@
     <Content Include="Content\css\images\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\css\images\ui-icons_f9bd01_256x240.png" />
     <None Include="Content\css\jquery-ui.less" />
-    <Content Include="Content\css\corners.less" />
-    <Content Include="Content\css\sidebar.less" />
-    <Content Include="Content\css\forms.less" />
-    <Content Include="Content\css\alerts-gadget.less" />
-    <Content Include="Content\css\notification.less" />
-    <Content Include="Content\css\pager.less" />
-    <Content Include="Content\css\seasons.less" />
-    <Content Include="Content\css\meets.less" />
-    <Content Include="Content\css\users.less" />
-    <Content Include="Content\css\dashboard.less" />
-    <Content Include="Content\css\teams.less" />
-    <Content Include="Content\css\accounthelp.less" />
-    <Content Include="Content\css\standings.less" />
-    <Content Include="Content\css\schedule.less" />
-    <Content Include="Content\css\usermatchhistory.less" />
-    <Content Include="Content\css\contact.less" />
-    <Content Include="Content\css\home.less" />
-    <Content Include="Content\css\login.less" />
+    <None Include="Content\css\corners.less" />
+    <None Include="Content\css\sidebar.less" />
+    <None Include="Content\css\forms.less" />
+    <None Include="Content\css\alerts-gadget.less" />
+    <None Include="Content\css\notification.less" />
+    <None Include="Content\css\pager.less" />
+    <None Include="Content\css\seasons.less" />
+    <None Include="Content\css\meets.less" />
+    <None Include="Content\css\users.less" />
+    <None Include="Content\css\dashboard.less" />
+    <None Include="Content\css\teams.less" />
+    <None Include="Content\css\accounthelp.less" />
+    <None Include="Content\css\standings.less" />
+    <None Include="Content\css\schedule.less" />
+    <None Include="Content\css\usermatchhistory.less" />
+    <None Include="Content\css\contact.less" />
+    <None Include="Content\css\home.less" />
+    <None Include="Content\css\login.less" />
+    <Content Include="Content\css\site.css" />
     <Content Include="Content\Images\add-medium.png" />
     <Content Include="Content\Images\add-small.png" />
     <Content Include="Content\Images\adduser-large.png" />
@@ -314,9 +315,9 @@
     <Content Include="Views\Users\VerifySkillLevels.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\css\base.less" />
-    <Content Include="Content\css\jquery-ui-timepicker.less" />
-    <Content Include="Content\css\menu.less" />
+    <None Include="Content\css\base.less" />
+    <None Include="Content\css\jquery-ui-timepicker.less" />
+    <None Include="Content\css\menu.less" />
     <Content Include="Global.asax" />
     <None Include="Scripts\utils.js" />
     <None Include="Scripts\lib\jquery.alphanumeric.js" />
@@ -332,8 +333,8 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\css\scoresheet.less" />
-    <Content Include="Content\css\site.less" />
+    <None Include="Content\css\scoresheet.less" />
+    <None Include="Content\css\site.less" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -537,7 +538,7 @@
     </ItemGroup>
     <AjaxMin JsSourceFiles="@(SiteJs)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" Clobber="true" />
     <Delete Files="Scripts\site.js" />
-    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.2.2.0\tool\dotless.compiler -m site.less site.css"/>
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.2.2.0\tool\dotless.compiler -m site.less site.css" />
   </Target>
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'" DependsOnTargets="CleanWebsitesPackage;CleanWebsitesPackageTempDir;CleanWebsitesTransformParametersFiles;">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
