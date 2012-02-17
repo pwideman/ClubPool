@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Data.Entity;
+using System.Reflection;
 
 using Autofac;
 using Autofac.Integration.Mvc;
@@ -60,6 +61,7 @@ namespace ClubPool.Web
     private ClubPoolConfiguration GetConfig() {
       var config = ClubPoolConfigurationSection.GetConfig();
       config.AppRootPath = AppDomain.CurrentDomain.BaseDirectory;
+      config.AppVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
       return config;
     }
 

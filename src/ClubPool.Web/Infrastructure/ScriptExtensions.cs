@@ -33,7 +33,8 @@ namespace ClubPool.Web.Infrastructure
 
 
     public static MvcHtmlString RenderSiteScripts(this HtmlHelper helper, bool forceRelease = false) {
-      var appPath = DependencyResolver.Current.GetService<Configuration.ClubPoolConfiguration>().AppRootPath;
+      var config = DependencyResolver.Current.GetService<Configuration.ClubPoolConfiguration>();
+      var appPath = config.AppRootPath;
       if (!forceRelease && HttpContext.Current.IsDebuggingEnabled) {
         var scripts = new List<string>();
         AddScripts(scripts, Path.Combine(appPath, "scripts\\lib\\jquery"), "*.js");
@@ -45,7 +46,7 @@ namespace ClubPool.Web.Infrastructure
       else {
         // release
         return RenderScriptTags(new string[] { Path.Combine(appPath, 
-          string.Format("Scripts\\site-{0}.min.js", Assembly.GetExecutingAssembly().GetName().Version.ToString())) });
+          string.Format("Scripts\\site-{0}.min.js", config.AppVersion)) });
       }
     }
 

@@ -16,5 +16,6 @@ namespace ClubPool.Web.Infrastructure.Configuration
     public string SystemEmailAddress { get; set; }
     public string SystemEmailPassword { get; set; }
     public string AppRootPath { get; set; }
+    public string AppVersion { get; set; }
   }
 }
