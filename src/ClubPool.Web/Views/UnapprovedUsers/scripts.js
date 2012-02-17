@@ -1,5 +1,5 @@
 ﻿(function (sr) {
-  sr.registerViewScript("unapprovedusers", function () {
+  sr.registerViewScript("unapprovedusers/unapprovedusers", function () {
     $("#approveall").click(function () {
       var approved = $(this).attr("checked");
       $("input[name=userids]").attr("checked", approved);

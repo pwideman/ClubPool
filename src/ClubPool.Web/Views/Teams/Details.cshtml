@@ -2,7 +2,6 @@
 
 @{
   ViewBag.Title = "Team Details";
-  Html.RegisterScriptView("teams/details");
 }
 
 @if (Model.CanUpdateName) {
@@ -71,7 +70,7 @@ else {
 
 @section PageScript {
 @if (Model.CanUpdateName) {
-  Html.RegisterScriptView("teams/details.editname");
+  RegisterScript("teams/details.editname");
   <script type="text/javascript">
     $model.currentTeamName = "@Model.Name";
   </script>

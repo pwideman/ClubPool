@@ -1,7 +1,5 @@
 ﻿@model ClubPool.Web.Controllers.PagedListViewModelBase
 
-@{Html.RegisterScriptView("shared/_pager");}
-
 <span class="pager-info">Showing @Model.First - @Model.Last of @Model.Total</span>
 @if (Model.TotalPages > 1) {
   <ul class="pager">

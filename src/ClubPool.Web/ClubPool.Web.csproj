@@ -209,6 +209,7 @@
     <Compile Include="Services\Authentication\IAuthenticationService.cs" />
     <Compile Include="Services\Authentication\FormsAuthenticationService.cs" />
     <Compile Include="Services\Membership\IMembershipService.cs" />
+    <Compile Include="Views\ViewPages.cs" />
     <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\css\images\ui-bg_flat_55_fbec88_40x100.png" />
     <Content Include="Content\css\images\ui-bg_glass_75_d0e5f5_1x400.png" />

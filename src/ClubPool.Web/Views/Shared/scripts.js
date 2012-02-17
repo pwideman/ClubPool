@@ -7,7 +7,7 @@
   });
 
   // notification message
-  sr.registerViewScript("shared/_notification", function () {
+  sr.registerViewScript("shared/_notificationmessage", function () {
     $(".notification").effect("fade", { easing: "easeInExpo" }, 5000);
   });
 })($.scriptRegistrar);

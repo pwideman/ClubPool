@@ -10,11 +10,6 @@ namespace ClubPool.Web.Infrastructure
 {
   public static class ScriptExtensions
   {
-    public static void RegisterScriptView(this HtmlHelper helper, string viewName) {
-      var registrar = DependencyResolver.Current.GetService<ScriptViewRegistrar>();
-      registrar.RegisterScriptView(viewName);
-    }
-
     public static MvcHtmlString RenderRegisteredScriptViews(this HtmlHelper helper) {
       var registrar = DependencyResolver.Current.GetService<ScriptViewRegistrar>();
       if (registrar.HasRegisteredScriptViews) {
