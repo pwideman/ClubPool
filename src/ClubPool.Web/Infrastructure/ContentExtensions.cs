@@ -36,7 +36,7 @@ namespace ClubPool.Web.Infrastructure
         css = "site.less";
       }
       else {
-        css = "site.css";
+        css = string.Format("site-{0}.css", DependencyResolver.Current.GetService<Configuration.ClubPoolConfiguration>().AppVersion);
       }
       return Stylesheet(helper, css);
     }
