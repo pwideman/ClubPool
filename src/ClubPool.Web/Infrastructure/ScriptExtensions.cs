@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using System.IO;
+using System.Reflection;
 
 namespace ClubPool.Web.Infrastructure
 {
@@ -43,7 +44,8 @@ namespace ClubPool.Web.Infrastructure
       }
       else {
         // release
-        return RenderScriptTags(new string[] { Path.Combine(appPath, "Scripts\\site.min.js") });
+        return RenderScriptTags(new string[] { Path.Combine(appPath, 
+          string.Format("Scripts\\site-{0}.min.js", Assembly.GetExecutingAssembly().GetName().Version.ToString())) });
       }
     }
 
