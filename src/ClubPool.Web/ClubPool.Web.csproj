@@ -342,17 +342,17 @@
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\connectionstrings.config">
+    <None Include="Config\connectionstrings.config">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\clubpool.config">
+    <None Include="Config\clubpool.config">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\machinekey.config" />
+    <None Include="Config\machinekey.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.Debug.config">
@@ -371,7 +371,7 @@
     <Content Include="Views\Navigation\Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Dashboard\Dashboard.cshtml" />
@@ -398,7 +398,7 @@
     <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Regulations.cshtml" />
+    <None Include="Views\Home\Regulations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Rules.cshtml" />
