@@ -244,6 +244,7 @@
     <None Include="Content\css\contact.less" />
     <None Include="Content\css\home.less" />
     <None Include="Content\css\login.less" />
+    <Content Include="Content\css\scoresheet.css" />
     <Content Include="Content\css\site.css" />
     <Content Include="Content\Images\add-medium.png" />
     <Content Include="Content\Images\add-small.png" />
@@ -540,6 +541,7 @@
     <AjaxMin JsSourceFiles="@(SiteJs)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" Clobber="true" />
     <Delete Files="Scripts\site.js" />
     <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.2.2.0\tool\dotless.compiler -m site.less site.css" />
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.2.2.0\tool\dotless.compiler -m scoresheet.less scoresheet.css" />
   </Target>
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'" DependsOnTargets="CleanWebsitesPackage;CleanWebsitesPackageTempDir;CleanWebsitesTransformParametersFiles;">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />

@@ -31,12 +31,20 @@ namespace ClubPool.Web.Infrastructure
     }
 
     public static MvcHtmlString RenderSiteStylesheet(this HtmlHelper helper, bool forceRelease = false) {
+      return RenderStylesheet("site", helper, forceRelease);
+    }
+
+    public static MvcHtmlString RenderScoresheetStylesheet(this HtmlHelper helper, bool forceRelease = false) {
+      return RenderStylesheet("scoresheet", helper, forceRelease);
+    }
+
+    private static MvcHtmlString RenderStylesheet(string baseName, HtmlHelper helper, bool forceRelease) {
       string css = null;
       if (!forceRelease && helper.ViewContext.HttpContext.IsDebuggingEnabled) {
-        css = "site.less";
+        css = baseName + ".less";
       }
       else {
-        css = string.Format("site-{0}.css", DependencyResolver.Current.GetService<Configuration.ClubPoolConfiguration>().AppVersion);
+        css = string.Format("{0}-{1}.css", baseName, DependencyResolver.Current.GetService<Configuration.ClubPoolConfiguration>().AppVersion);
       }
       return Stylesheet(helper, css);
     }
