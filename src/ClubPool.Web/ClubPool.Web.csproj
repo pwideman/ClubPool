@@ -256,6 +256,9 @@
     <Content Include="Content\Images\calendar.gif" />
     <Content Include="Content\Images\check-medium.png" />
     <Content Include="Content\Images\check-small.png" />
+    <Content Include="Content\Images\circle-status-complete.gif" />
+    <Content Include="Content\Images\circle-status-notstarted.gif" />
+    <Content Include="Content\Images\circle-status-partial.gif" />
     <Content Include="Content\Images\delete-medium.png" />
     <Content Include="Content\Images\delete-small.png" />
     <Content Include="Content\Images\download-medium.png" />

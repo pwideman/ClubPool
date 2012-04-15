@@ -16,7 +16,18 @@
     @foreach (var meet in week.Meets) {
       <td @Html.Raw(meet.Highlight ? "class=\"highlight\"" : "")>
         @Html.ActionLink(meet.Team1Name + " vs " + meet.Team2Name, "Details", "Meets", new { id = meet.Id }, null)
-        <div class="schedule-links"><a href="@Url.Action("Scoresheet", "Scoresheet", new { id = meet.Id })">@Html.ContentImage("printer-medium.png", "Print a scoresheet")</a></div>
+        <div class="schedule-links">
+          <a href="@Url.Action("Scoresheet", "Scoresheet", new { id = meet.Id })">@Html.ContentImage("printer-medium.png", "Print a scoresheet")</a>
+          @if (meet.Status == ClubPool.Web.Controllers.Shared.ViewModels.MeetStatus.NotStarted) {
+            @Html.ContentImage("circle-status-notstarted.gif", "Not started")
+          }
+          else if (meet.Status == ClubPool.Web.Controllers.Shared.ViewModels.MeetStatus.Partial) { 
+            @Html.ContentImage("circle-status-partial.gif", "Incomplete")
+          }
+          else { 
+            @Html.ContentImage("circle-status-complete.gif", "Complete")
+          }
+        </div>
       </td>
     }
     </tr>
