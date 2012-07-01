@@ -1,8 +1,8 @@
-using DataAnnotationsExtensions.ClientValidation;
+﻿using DataAnnotationsExtensions.ClientValidation;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(ClubPool.Web.App_Start.RegisterClientValidationExtensions), "Start")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof($rootnamespace$.App_Start.RegisterClientValidationExtensions), "Start")]
  
-namespace ClubPool.Web.App_Start {
+namespace $rootnamespace$.App_Start {
     public static class RegisterClientValidationExtensions {
         public static void Start() {
             DataAnnotationsModelValidatorProviderExtensions.RegisterValidationExtensions();            
