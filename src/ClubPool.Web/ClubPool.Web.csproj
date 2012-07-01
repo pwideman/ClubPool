@@ -56,9 +56,9 @@
     <Reference Include="DataAnnotationsExtensions.ClientValidation">
       <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.0.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
     </Reference>
-    <Reference Include="dotless.Core, Version=1.2.2.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
+    <Reference Include="dotless.Core, Version=1.3.0.4, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotless.1.2.2.0\lib\dotless.Core.dll</HintPath>
+      <HintPath>..\packages\dotless.1.3.0.4\lib\dotless.Core.dll</HintPath>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14318.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -546,8 +546,8 @@
     </ItemGroup>
     <AjaxMin JsSourceFiles="@(SiteJs)" JsSourceExtensionPattern="\.js$" JsTargetExtension=".min.js" Clobber="true" />
     <Delete Files="Scripts\site.js" />
-    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.2.2.0\tool\dotless.compiler -m site.less site.css" />
-    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.2.2.0\tool\dotless.compiler -m scoresheet.less scoresheet.css" />
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.3.0.4\tool\dotless.compiler -m site.less site.css" />
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)\content\css" Command="..\..\..\packages\dotless.1.3.0.4\tool\dotless.compiler -m scoresheet.less scoresheet.css" />
   </Target>
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'" DependsOnTargets="CleanWebsitesPackage;CleanWebsitesPackageTempDir;CleanWebsitesTransformParametersFiles;">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
