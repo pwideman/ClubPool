@@ -30,4 +30,4 @@ src/ClubPool.sln.docstates
 src/ClubPool.Web/App_Data/*
 src/ClubPool.Web/ClubPool.Web.Publish.xml
 src/ClubPool.Web/Scripts/site.min.js
-src/ClubPool.Web/Content/css/site*.css
+src/ClubPool.Web/Content/css/*.css
