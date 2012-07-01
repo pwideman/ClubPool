@@ -136,13 +136,20 @@ namespace ClubPool.Web.Controllers.Divisions
       if (!ModelState.IsValid) {
         return View(viewModel);
       }
+      var division = repository.Get<Division>(viewModel.Id);
+
+      // loading the season name here serves two purposes:
+      // (1) reload the season name in case we have to redisplay the view due to error
+      // (2) lazily load the division.Season property, because EF is too stupid
+      // to update the division without Season being set, it thinks you're trying
+      // to set the season to null
+      viewModel.SeasonName = division.Season.Name;
+
       DateTime startingDate;
       if (!DateTime.TryParse(viewModel.StartingDate, out startingDate)) {
         ModelState.AddModelErrorFor<EditDivisionViewModel>(m => m.StartingDate, "Enter a valid date");
         return View(viewModel);
       }
-
-      var division = repository.Get<Division>(viewModel.Id);
 
       if (null == division) {
         TempData[GlobalViewDataProperty.PageErrorMessage] = "The division you were editing was deleted by another user";
@@ -157,6 +164,7 @@ namespace ClubPool.Web.Controllers.Divisions
         // verify that the new name is not already in use
         if (division.Season.DivisionNameIsInUse(viewModel.Name)) {
           ModelState.AddModelErrorFor<EditDivisionViewModel>(m => m.Name, "Name is in use");
+          viewModel.Name = division.Name;
           return View(viewModel);
         }
         division.Name = viewModel.Name;
