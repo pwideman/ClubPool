@@ -216,6 +216,7 @@
     <Compile Include="Services\Authentication\FormsAuthenticationService.cs" />
     <Compile Include="Services\Membership\IMembershipService.cs" />
     <Compile Include="Views\ViewPages.cs" />
+    <None Include="Content\css\divisions.less" />
     <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\css\images\ui-bg_flat_55_fbec88_40x100.png" />
     <Content Include="Content\css\images\ui-bg_glass_75_d0e5f5_1x400.png" />
@@ -318,6 +319,7 @@
     <None Include="Views\Meets\scripts.js" />
     <None Include="Scripts\lib\jquery.unobtrusive-ajax.js" />
     <None Include="Scripts\lib\jquery.validate.unobtrusive.js" />
+    <Content Include="Views\Divisions\scripts.js" />
     <Content Include="Views\Scoresheet\Scoresheet.cshtml" />
     <Content Include="Views\Login\LoginGadget.cshtml" />
     <None Include="Views\UnapprovedUsers\scripts.js" />

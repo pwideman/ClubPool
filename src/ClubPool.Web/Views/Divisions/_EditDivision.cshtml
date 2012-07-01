@@ -10,7 +10,9 @@
 <div class="form-row">
   <span class="form-label-left">@Html.LabelFor(m => m.StartingDate)</span>
   <div class="form-input">
-    @Html.TextBoxFor(m => m.StartingDate)
+    <div>
+    @Html.TextBoxFor(m => m.StartingDate, new { @class = "divisions-datepicker" })
+    </div>
     @Html.ValidationMessageFor(m => m.StartingDate)
   </div>
 </div>

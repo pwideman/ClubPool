@@ -41,6 +41,15 @@
       }
     </div>
     @Html.RenderSiteScripts()
+    <script>
+      // set up global model properties
+      (function(model) {
+        // date picker calendar image
+        model.calendarImageUrl = "@Url.ContentImageUrl("calendar.gif")";
+        // loading image
+        model.loadingImageUrl = "@Url.ContentImageUrl("loading-small.gif")";
+     })($model);
+    </script>
     @RenderSection("PageScript", false)
     @Html.RenderRegisteredScriptViews()
   </body>
