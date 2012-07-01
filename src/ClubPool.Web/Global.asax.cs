@@ -67,9 +67,6 @@ namespace ClubPool.Web
 
     protected virtual void InitializeServiceLocator(ClubPoolConfiguration config) {
       var builder = new ContainerBuilder();
-      // set up the ServiceLocator earlier so that we can use it in
-      // ComponentRegistrar
-
       builder.RegisterType<Repository>().As<IRepository>();
       builder.Register<Lazy<DbContext>>(c => new Lazy<DbContext>(() => new ClubPoolContext())).InstancePerHttpRequest();
       builder.Register<ScriptViewRegistrar>(c => new ScriptViewRegistrar()).InstancePerHttpRequest();
