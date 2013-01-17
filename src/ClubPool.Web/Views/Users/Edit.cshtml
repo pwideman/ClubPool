@@ -84,7 +84,7 @@
         @foreach (var role in Model.AvailableRoles) {
           <li>
             <input type="checkbox" name="Roles" id="Role@(role.Id)" value="@role.Id"
-            @if (Model.Roles.Contains(role.Id)) {
+            @if (null != Model.Roles && Model.Roles.Contains(role.Id)) {
               @:checked="checked"
             } />
             <label for="Role@(role.Id)">@role.Name</label>
